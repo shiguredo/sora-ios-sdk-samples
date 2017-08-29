@@ -1,0 +1,414 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E0A5C261F337A42004D9B5A /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C251F337A42004D9B5A /* WebRTC.framework */; };
+		0E0A5C281F337A4C004D9B5A /* SocketRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C271F337A4C004D9B5A /* SocketRocket.framework */; };
+		0E0A5C2A1F337A4F004D9B5A /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C291F337A4F004D9B5A /* SDWebImage.framework */; };
+		0E0A5C2C1F337A52004D9B5A /* Unbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C2B1F337A52004D9B5A /* Unbox.framework */; };
+		0E0A5C2E1F337A56004D9B5A /* Sora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C2D1F337A56004D9B5A /* Sora.framework */; };
+		0E7987F11F34CF9A004C9DDD /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7987F01F34CF9A004C9DDD /* SoraSDKManager.swift */; };
+		C552E2311F31C037002CC7FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E2281F31C037002CC7FD /* AppDelegate.swift */; };
+		C552E2321F31C037002CC7FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C552E2291F31C037002CC7FD /* Assets.xcassets */; };
+		C552E2331F31C037002CC7FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C552E22A1F31C037002CC7FD /* LaunchScreen.storyboard */; };
+		C552E2341F31C037002CC7FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C552E22C1F31C037002CC7FD /* Main.storyboard */; };
+		C552E2361F31C037002CC7FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C552E22F1F31C037002CC7FD /* InfoPlist.strings */; };
+		C552E23C1F31C15F002CC7FD /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E23B1F31C15F002CC7FD /* MainMenuViewController.swift */; };
+		C552E23E1F31C172002CC7FD /* PublisherConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E23D1F31C172002CC7FD /* PublisherConfigViewController.swift */; };
+		C552E2401F31C180002CC7FD /* SubscriberConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E23F1F31C180002CC7FD /* SubscriberConfigViewController.swift */; };
+		C552E2421F31C190002CC7FD /* PublisherVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E2411F31C190002CC7FD /* PublisherVideoViewController.swift */; };
+		C552E2441F31C19B002CC7FD /* SubscriberVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E2431F31C19B002CC7FD /* SubscriberVideoViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0E0A5C251F337A42004D9B5A /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
+		0E0A5C271F337A4C004D9B5A /* SocketRocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketRocket.framework; path = Carthage/Build/iOS/SocketRocket.framework; sourceTree = "<group>"; };
+		0E0A5C291F337A4F004D9B5A /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
+		0E0A5C2B1F337A52004D9B5A /* Unbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Unbox.framework; path = Carthage/Build/iOS/Unbox.framework; sourceTree = "<group>"; };
+		0E0A5C2D1F337A56004D9B5A /* Sora.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sora.framework; path = Carthage/Build/iOS/Sora.framework; sourceTree = "<group>"; };
+		0E7987F01F34CF9A004C9DDD /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
+		C552E2281F31C037002CC7FD /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C552E2291F31C037002CC7FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C552E22B1F31C037002CC7FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C552E22D1F31C037002CC7FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C552E22E1F31C037002CC7FD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C552E22F1F31C037002CC7FD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
+		C552E23B1F31C15F002CC7FD /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
+		C552E23D1F31C172002CC7FD /* PublisherConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherConfigViewController.swift; sourceTree = "<group>"; };
+		C552E23F1F31C180002CC7FD /* SubscriberConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriberConfigViewController.swift; sourceTree = "<group>"; };
+		C552E2411F31C190002CC7FD /* PublisherVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherVideoViewController.swift; sourceTree = "<group>"; };
+		C552E2431F31C19B002CC7FD /* SubscriberVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriberVideoViewController.swift; sourceTree = "<group>"; };
+		C5F184951F3092B500FC0980 /* RealTimeStreamingSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeStreamingSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C5F184921F3092B500FC0980 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E0A5C261F337A42004D9B5A /* WebRTC.framework in Frameworks */,
+				0E0A5C281F337A4C004D9B5A /* SocketRocket.framework in Frameworks */,
+				0E0A5C2C1F337A52004D9B5A /* Unbox.framework in Frameworks */,
+				0E0A5C2A1F337A4F004D9B5A /* SDWebImage.framework in Frameworks */,
+				0E0A5C2E1F337A56004D9B5A /* Sora.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E0A5C241F337A42004D9B5A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0E0A5C2D1F337A56004D9B5A /* Sora.framework */,
+				0E0A5C2B1F337A52004D9B5A /* Unbox.framework */,
+				0E0A5C291F337A4F004D9B5A /* SDWebImage.framework */,
+				0E0A5C271F337A4C004D9B5A /* SocketRocket.framework */,
+				0E0A5C251F337A42004D9B5A /* WebRTC.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C552E2271F31C037002CC7FD /* RealTimeStreamingSample */ = {
+			isa = PBXGroup;
+			children = (
+				C552E2381F31C0AF002CC7FD /* Classes */,
+				C552E2281F31C037002CC7FD /* AppDelegate.swift */,
+				C552E2291F31C037002CC7FD /* Assets.xcassets */,
+				C552E22A1F31C037002CC7FD /* LaunchScreen.storyboard */,
+				C552E22C1F31C037002CC7FD /* Main.storyboard */,
+				C552E22E1F31C037002CC7FD /* Info.plist */,
+				C552E22F1F31C037002CC7FD /* InfoPlist.strings */,
+			);
+			path = RealTimeStreamingSample;
+			sourceTree = "<group>";
+		};
+		C552E2381F31C0AF002CC7FD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C552E23B1F31C15F002CC7FD /* MainMenuViewController.swift */,
+				C552E23D1F31C172002CC7FD /* PublisherConfigViewController.swift */,
+				C552E2411F31C190002CC7FD /* PublisherVideoViewController.swift */,
+				C552E23F1F31C180002CC7FD /* SubscriberConfigViewController.swift */,
+				C552E2431F31C19B002CC7FD /* SubscriberVideoViewController.swift */,
+				0E7987F01F34CF9A004C9DDD /* SoraSDKManager.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		C5F1848C1F3092B500FC0980 = {
+			isa = PBXGroup;
+			children = (
+				C552E2271F31C037002CC7FD /* RealTimeStreamingSample */,
+				C5F184961F3092B500FC0980 /* Products */,
+				0E0A5C241F337A42004D9B5A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C5F184961F3092B500FC0980 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C5F184951F3092B500FC0980 /* RealTimeStreamingSample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C5F184941F3092B500FC0980 /* RealTimeStreamingSample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5F184A71F3092B500FC0980 /* Build configuration list for PBXNativeTarget "RealTimeStreamingSample" */;
+			buildPhases = (
+				C5F184911F3092B500FC0980 /* Sources */,
+				C5F184921F3092B500FC0980 /* Frameworks */,
+				C5F184931F3092B500FC0980 /* Resources */,
+				0E0A5C2F1F337A78004D9B5A /* [Carthage] Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RealTimeStreamingSample;
+			productName = LiveStreamingSample;
+			productReference = C5F184951F3092B500FC0980 /* RealTimeStreamingSample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C5F1848D1F3092B500FC0980 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = shiguredo;
+				TargetAttributes = {
+					C5F184941F3092B500FC0980 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = GNMLYV6KTU;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C5F184901F3092B500FC0980 /* Build configuration list for PBXProject "RealTimeStreamingSample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C5F1848C1F3092B500FC0980;
+			productRefGroup = C5F184961F3092B500FC0980 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C5F184941F3092B500FC0980 /* RealTimeStreamingSample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C5F184931F3092B500FC0980 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C552E2341F31C037002CC7FD /* Main.storyboard in Resources */,
+				C552E2321F31C037002CC7FD /* Assets.xcassets in Resources */,
+				C552E2331F31C037002CC7FD /* LaunchScreen.storyboard in Resources */,
+				C552E2361F31C037002CC7FD /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0E0A5C2F1F337A78004D9B5A /* [Carthage] Copy Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/WebRTC.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SocketRocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Unbox.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SDWebImage.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Sora.framework",
+			);
+			name = "[Carthage] Copy Frameworks";
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WebRTC.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SocketRocket.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Unbox.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SDWebImage.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sora.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C5F184911F3092B500FC0980 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C552E23C1F31C15F002CC7FD /* MainMenuViewController.swift in Sources */,
+				C552E2441F31C19B002CC7FD /* SubscriberVideoViewController.swift in Sources */,
+				0E7987F11F34CF9A004C9DDD /* SoraSDKManager.swift in Sources */,
+				C552E23E1F31C172002CC7FD /* PublisherConfigViewController.swift in Sources */,
+				C552E2311F31C037002CC7FD /* AppDelegate.swift in Sources */,
+				C552E2401F31C180002CC7FD /* SubscriberConfigViewController.swift in Sources */,
+				C552E2421F31C190002CC7FD /* PublisherVideoViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C552E22A1F31C037002CC7FD /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C552E22B1F31C037002CC7FD /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		C552E22C1F31C037002CC7FD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C552E22D1F31C037002CC7FD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C5F184A51F3092B500FC0980 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C5F184A61F3092B500FC0980 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C5F184A81F3092B500FC0980 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GNMLYV6KTU;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				INFOPLIST_FILE = RealTimeStreamingSample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.RealTimeStreamingSample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		C5F184A91F3092B500FC0980 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GNMLYV6KTU;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				INFOPLIST_FILE = RealTimeStreamingSample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.RealTimeStreamingSample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C5F184901F3092B500FC0980 /* Build configuration list for PBXProject "RealTimeStreamingSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5F184A51F3092B500FC0980 /* Debug */,
+				C5F184A61F3092B500FC0980 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C5F184A71F3092B500FC0980 /* Build configuration list for PBXNativeTarget "RealTimeStreamingSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5F184A81F3092B500FC0980 /* Debug */,
+				C5F184A91F3092B500FC0980 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C5F1848D1F3092B500FC0980 /* Project object */;
+}
