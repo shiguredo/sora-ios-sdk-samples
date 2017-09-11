@@ -2,18 +2,30 @@
 
 このリポジトリには、 [Sora iOS SDK](https://github.com/shiguredo/sora-ios-sdk) を利用したサンプルアプリを掲載しています。実際の利用シーンに即したサンプルをご用意しておりますので、目的に応じた Sora iOS SDK の使い方を簡単に学ぶことができます。
 
-## ビルド環境
+## About Support
+
+Support for Sora iOS SDK samples by Shiguredo Inc. are limited
+**ONLY in JAPANESE** through GitHub issues and there is no guarantee such
+as response time or resolution.
+
+## サポートについて
+
+Sora iOS SDK サンプル集に関する質問・要望・バグなどの報告は Issues の利用をお願いします。
+ただし、 Sora のライセンス契約の有無に関わらず、 Issue への応答時間と問題の解決を保証しませんのでご了承ください。
+
+Sora iOS SDK サンプル集に対する有償のサポートについては現在提供しておりません。
+
+## システム条件
 
 このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 1.2.3](https://github.com/shiguredo/sora-ios-sdk/releases/tag/1.2.3) を使用しています。
 
-サンプルアプリをビルドするには以下の環境が必要です。
-
-- iOS 10.0 以降がインストールされたデバイス (iPhone / iPad どちらにも対応しています)
-  - サンプルアプリはシミュレータでは動作が保証されません。必ず実機でご利用ください。
+- iOS 10.0 以降 (シミュレーターは非対応)
+- アーキテクチャ arm64, armv7
+- Mac OS X 10.12.6 以降
 - Xcode 8.3.3 以降
-  - サンプルアプリでは Swift 3.1 を使用しています。
-- carthage 0.23.0 以降
-  - サンプルアプリをビルドする際に必須となります。
+- Swift 3.1
+- Carthage 0.24.0 以降
+- WebRTC SFU Sora 17.08 以降
 
 ## サンプルの紹介
 
@@ -34,3 +46,7 @@
 
 このリポジトリに含まれる全てのリソースは Apache License Version 2.0 のもとで公開されています。
 詳細につきましては [LICENSE](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/LICENSE) ファイルをご参照ください。
+
+# Copyright
+
+Copyright 2017, Shiguredo Inc. and Masashi Ono (akisute)
