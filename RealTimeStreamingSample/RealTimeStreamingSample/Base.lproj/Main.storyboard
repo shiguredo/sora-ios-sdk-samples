@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HpD-kC-vSN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HpD-kC-vSN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,7 +14,7 @@
             <objects>
                 <navigationController id="HpD-kC-vSN" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="23b-39-h7H">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -83,10 +83,10 @@
                             <tableViewSection headerTitle="接続設定" id="jbh-wJ-IVo">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="E7J-DI-VRI">
-                                        <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E7J-DI-VRI" id="LuA-WW-aCv">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="VBc-Jt-Wsf">
@@ -122,24 +122,48 @@
                                         <rect key="frame" x="0.0" y="163" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XYO-nF-2Fo" id="SfC-VZ-bGr">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wvK-6D-2DN">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ovc-yN-LIy">
+                                                    <rect key="frame" x="20" y="7" width="335" height="29"/>
+                                                    <segments>
+                                                        <segment title="デフォルト"/>
+                                                        <segment title="VP9"/>
+                                                        <segment title="VP8"/>
+                                                        <segment title="H.264"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ovc-yN-LIy" firstAttribute="leading" secondItem="SfC-VZ-bGr" secondAttribute="leading" constant="20" id="2d4-bW-uRv"/>
+                                                <constraint firstItem="ovc-yN-LIy" firstAttribute="centerY" secondItem="SfC-VZ-bGr" secondAttribute="centerY" id="3OQ-QG-joR"/>
+                                                <constraint firstAttribute="trailing" secondItem="ovc-yN-LIy" secondAttribute="trailing" constant="20" id="vee-lA-YuV"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="54J-ei-d6B">
+                                        <rect key="frame" x="0.0" y="207" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="54J-ei-d6B" id="yck-SN-r9j">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZMJ-ft-eAK">
                                                     <rect key="frame" x="20" y="12" width="173.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="6q3-Uj-J1S">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Wa1-em-Xq4">
                                                     <rect key="frame" x="306" y="6" width="51" height="31"/>
                                                 </switch>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="6q3-Uj-J1S" secondAttribute="trailing" constant="20" id="A4v-xA-cfs"/>
-                                                <constraint firstItem="wvK-6D-2DN" firstAttribute="centerY" secondItem="SfC-VZ-bGr" secondAttribute="centerY" id="QJa-us-IlS"/>
-                                                <constraint firstItem="6q3-Uj-J1S" firstAttribute="centerY" secondItem="SfC-VZ-bGr" secondAttribute="centerY" id="auc-rJ-6RC"/>
-                                                <constraint firstItem="wvK-6D-2DN" firstAttribute="leading" secondItem="SfC-VZ-bGr" secondAttribute="leading" constant="20" id="qAX-k9-5vq"/>
+                                                <constraint firstItem="ZMJ-ft-eAK" firstAttribute="leading" secondItem="yck-SN-r9j" secondAttribute="leading" constant="20" id="cQT-ir-q78"/>
+                                                <constraint firstItem="ZMJ-ft-eAK" firstAttribute="centerY" secondItem="yck-SN-r9j" secondAttribute="centerY" id="ex1-Ee-soY"/>
+                                                <constraint firstAttribute="trailing" secondItem="Wa1-em-Xq4" secondAttribute="trailing" constant="20" id="lD9-Sx-lGI"/>
+                                                <constraint firstItem="Wa1-em-Xq4" firstAttribute="centerY" secondItem="yck-SN-r9j" secondAttribute="centerY" id="oCo-eq-cHB"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -148,10 +172,10 @@
                             <tableViewSection id="6w7-Zm-oCg">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="gdd-3W-Rc1">
-                                        <rect key="frame" x="0.0" y="383" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="427" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gdd-3W-Rc1" id="WEx-jY-ID4">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="配信を開始する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ljT-VN-ba8">
@@ -178,7 +202,8 @@
                     <navigationItem key="navigationItem" title="動画を配信する" id="hYu-zl-yWl"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="VBc-Jt-Wsf" id="KkQ-SW-TCG"/>
-                        <outlet property="snapshotSwitch" destination="6q3-Uj-J1S" id="IKE-w6-kdB"/>
+                        <outlet property="snapshotSwitch" destination="Wa1-em-Xq4" id="S9i-Wl-pEr"/>
+                        <outlet property="videoCodecSegmentedControl" destination="ovc-yN-LIy" id="VKi-H9-1LN"/>
                         <segue destination="x5x-UR-vhk" kind="show" identifier="Connect" id="DOX-MI-xY6"/>
                     </connections>
                 </tableViewController>
@@ -244,10 +269,10 @@
                             <tableViewSection headerTitle="接続設定" id="Gwb-12-BMN">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="OWv-QJ-dEX">
-                                        <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OWv-QJ-dEX" id="j0c-fB-Ed9">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャンネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gao-T4-7yo">
@@ -283,24 +308,48 @@
                                         <rect key="frame" x="0.0" y="163" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UMR-k0-Zn4" id="dnt-z0-RUe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v7I-kA-Ja7">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="9Na-UN-Dev">
+                                                    <rect key="frame" x="20" y="8" width="335" height="29"/>
+                                                    <segments>
+                                                        <segment title="デフォルト"/>
+                                                        <segment title="VP9"/>
+                                                        <segment title="VP8"/>
+                                                        <segment title="H.264"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="9Na-UN-Dev" firstAttribute="leading" secondItem="dnt-z0-RUe" secondAttribute="leading" constant="20" id="JeM-wz-aV1"/>
+                                                <constraint firstItem="9Na-UN-Dev" firstAttribute="centerY" secondItem="dnt-z0-RUe" secondAttribute="centerY" id="nJv-jJ-Osd"/>
+                                                <constraint firstAttribute="trailing" secondItem="9Na-UN-Dev" secondAttribute="trailing" constant="20" id="nO0-DK-KLp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="01k-ee-L2v">
+                                        <rect key="frame" x="0.0" y="207" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="01k-ee-L2v" id="qeR-wq-5t3">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mhN-DF-RoI">
                                                     <rect key="frame" x="20" y="12" width="173.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Tu5-BK-scP">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="WaM-q8-SQr">
                                                     <rect key="frame" x="306" y="6" width="51" height="31"/>
                                                 </switch>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Tu5-BK-scP" firstAttribute="centerY" secondItem="dnt-z0-RUe" secondAttribute="centerY" id="4LQ-iN-WOW"/>
-                                                <constraint firstItem="v7I-kA-Ja7" firstAttribute="leading" secondItem="dnt-z0-RUe" secondAttribute="leading" constant="20" id="Wbb-MZ-XtE"/>
-                                                <constraint firstItem="v7I-kA-Ja7" firstAttribute="centerY" secondItem="dnt-z0-RUe" secondAttribute="centerY" id="acr-8p-gBz"/>
-                                                <constraint firstAttribute="trailing" secondItem="Tu5-BK-scP" secondAttribute="trailing" constant="20" id="k0D-a8-vPz"/>
+                                                <constraint firstItem="mhN-DF-RoI" firstAttribute="leading" secondItem="qeR-wq-5t3" secondAttribute="leading" constant="20" id="5Az-hL-D0P"/>
+                                                <constraint firstItem="mhN-DF-RoI" firstAttribute="centerY" secondItem="qeR-wq-5t3" secondAttribute="centerY" id="66i-r1-Nfv"/>
+                                                <constraint firstItem="WaM-q8-SQr" firstAttribute="centerY" secondItem="qeR-wq-5t3" secondAttribute="centerY" id="mft-Ch-eW7"/>
+                                                <constraint firstAttribute="trailing" secondItem="WaM-q8-SQr" secondAttribute="trailing" constant="20" id="zb3-Wa-fgw"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -309,10 +358,10 @@
                             <tableViewSection id="lFa-li-hq1">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Fei-Ya-KuC">
-                                        <rect key="frame" x="0.0" y="367" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="411" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fei-Ya-KuC" id="fGj-sd-IWM">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wk9-yU-VOu">
@@ -339,7 +388,8 @@
                     <navigationItem key="navigationItem" title="他の配信を見る" id="woF-yn-XlT"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="qLa-ZW-6NF" id="OFn-WV-ARg"/>
-                        <outlet property="snapshotSwitch" destination="Tu5-BK-scP" id="eHw-m9-Qmk"/>
+                        <outlet property="snapshotSwitch" destination="WaM-q8-SQr" id="fHU-t6-Hd3"/>
+                        <outlet property="videoCodecSegmentedControl" destination="9Na-UN-Dev" id="qls-lW-pn7"/>
                         <segue destination="uGf-7K-xC9" kind="show" identifier="Connect" id="fRw-Q3-und"/>
                     </connections>
                 </tableViewController>

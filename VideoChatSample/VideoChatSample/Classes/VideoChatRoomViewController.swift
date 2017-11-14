@@ -7,16 +7,18 @@ import Sora
 class VideoChatRoomViewController: UIViewController {
     
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
-    fileprivate var downstreamVideoViews: [VideoView] = []
+    private var downstreamVideoViews: [VideoView] = []
     
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
-    fileprivate var upstreamVideoView: VideoView?
+    private var upstreamVideoView: VideoView?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
-        navigationItem.title = "チャット中: \(SoraSDKManager.shared.connection.mediaChannelId)"
+        if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+            navigationItem.title = "チャット中: \(mediaChannel.configuration.channelId)"
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -24,16 +26,18 @@ class VideoChatRoomViewController: UIViewController {
         
         // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
-        SoraSDKManager.shared.connection.mediaPublisher.onAddStream { [weak self] _ in
-            NSLog("mediaPublisher.onAddStream")
-            DispatchQueue.main.async {
-                self?.handleUpdateStreams()
+        if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+            mediaChannel.peerChannel.handlers.onAddStreamHandler = { [weak self] _ in
+                NSLog("mediaChannel.peerChannel.handlers.onAddStream")
+                DispatchQueue.main.async {
+                    self?.handleUpdateStreams()
+                }
             }
-        }
-        SoraSDKManager.shared.connection.mediaPublisher.onRemoveStream { [weak self] _ in
-            NSLog("mediaPublisher.onRemoveStream")
-            DispatchQueue.main.async {
-                self?.handleUpdateStreams()
+            mediaChannel.peerChannel.handlers.onRemoveStreamHandler = { [weak self] _ in
+                NSLog("mediaChannel.peerChannel.handlers.onRemoveStream")
+                DispatchQueue.main.async {
+                    self?.handleUpdateStreams()
+                }
             }
         }
         
@@ -45,9 +49,10 @@ class VideoChatRoomViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         // viewDidAppearで設定したコールバックを、対になるここで削除します。
-        SoraSDKManager.shared.connection.mediaPublisher.onAddStream { _ in }
-        SoraSDKManager.shared.connection.mediaPublisher.onRemoveStream { _ in }
-        SoraSDKManager.shared.connection.mediaPublisher.onDisconnect { _ in }
+        if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+            mediaChannel.peerChannel.handlers.onAddStreamHandler = nil
+            mediaChannel.peerChannel.handlers.onRemoveStreamHandler = nil
+        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -146,10 +151,12 @@ extension VideoChatRoomViewController {
     /**
      接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
      */
-    fileprivate func handleUpdateStreams() {
+    private func handleUpdateStreams() {
         
         // まずはmediaPublisherのmediaStreamを取得します。
-        let mediaStreams = SoraSDKManager.shared.connection.mediaPublisher.mediaStreams
+        guard let mediaStreams = SoraSDKManager.shared.currentMediaChannel?.streams else {
+            return
+        }
         
         // mediaPublisherのmediaStreamの0番目は、常に自分自身の配信になります。
         // それを利用して、mediaStreamを自分自身と、それ以外のユーザーのリストに分けます。
@@ -187,7 +194,7 @@ extension VideoChatRoomViewController {
         // このとき、VideoView.contentModeを変化させることで、描画モードを調整することができます。
         // 今回は枠に合わせてアスペクト比を保ったまま領域全体を埋めたいので、.scaleAspectFillを指定しています。
         if upstreamVideoView == nil {
-            let videoView = VideoView()
+            let videoView = VideoView(frame: .zero)
             videoView.contentMode = .scaleAspectFill
             videoView.layer.borderColor = UIColor.white.cgColor
             videoView.layer.borderWidth = 1.0
@@ -205,22 +212,11 @@ extension VideoChatRoomViewController {
      この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
      いずれの場合も含めます。
      */
-    fileprivate func handleDisconnect() {
-        
-        // mediaPublisherの切断時のコールバックを空にします。
-        // ここで空にしないと、このメソッドが無限に呼び出され続けてしまうおそれがあるためです。
-        SoraSDKManager.shared.connection.mediaPublisher.onDisconnect { _ in }
-        
-        // mediaPublisherから切断します。
-        // 切断処理が完了した（またはエラーで失敗した）ときのコールバックのタイミングで、前の画面に戻ります。
-        // エラー処理はここでは考慮していません。
-        SoraSDKManager.shared.connection.mediaPublisher.disconnect { _ in
-            DispatchQueue.main.async {
-                // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-                self.performSegue(withIdentifier: "Exit", sender: self)
-            }
-        }
-        
+    private func handleDisconnect() {
+        // 明示的に配信をストップしてから、画面を閉じるようにしています。
+        SoraSDKManager.shared.disconnect()
+        // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+        performSegue(withIdentifier: "Exit", sender: self)
     }
     
 }
@@ -235,7 +231,13 @@ extension VideoChatRoomViewController {
      */
     @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
         // フロントカメラ・バックカメラを入れ替える処理を行います。
-        SoraSDKManager.shared.connection.mediaPublisher.flipCameraPosition()
+        guard let mainStream = SoraSDKManager.shared.currentMediaChannel?.mainStream else {
+            return
+        }
+        guard let cameraVideoCapturer = mainStream.videoCapturer as? CameraVideoCapturer else {
+            return
+        }
+        cameraVideoCapturer.flip()
     }
     
     /**

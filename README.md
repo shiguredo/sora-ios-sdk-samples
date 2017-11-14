@@ -17,15 +17,15 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 1.2.3](https://github.com/shiguredo/sora-ios-sdk/releases/tag/1.2.3) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.0.0](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.0.0) を使用しています。
 
-- iOS 10.0 以降 (シミュレーターは非対応)
-- アーキテクチャ arm64, armv7
+- iOS 10.0 以降
+- アーキテクチャ arm64, armv7 (シミュレーターは非対応)
 - Mac OS X 10.12.6 以降
-- Xcode 8.3.3 以降
-- Swift 3.1
-- Carthage 0.24.0 以降
-- WebRTC SFU Sora 17.08 以降
+- Xcode 9.1 以降
+- Swift 4.0
+- Carthage 0.26.2 以降
+- WebRTC SFU Sora 17.10 以降
 
 ## サンプルの紹介
 
@@ -41,6 +41,18 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 [VideoChatSample (ビデオチャット)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/VideoChatSample)
 
 このサンプルでは、複数人が同時に参加できるビデオチャットアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+
+### DecoStreamingSample (デコ動画配信)
+
+[DecoStreamingSample (デコ動画配信)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/DecoStreamingSample)
+
+このサンプルでは、カメラで撮影した動画をクライアントサイドで加工して動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+
+### ScreenCastSample (スクリーンキャスト)
+
+[ScreenCastSample (スクリーンキャスト)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/ScreenCastSample)
+
+このサンプルでは、クライアントアプリの画面を動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
 ## ライセンス
 
