@@ -10,7 +10,6 @@
 		0E0A5C261F337A42004D9B5A /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C251F337A42004D9B5A /* WebRTC.framework */; };
 		0E0A5C281F337A4C004D9B5A /* SocketRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C271F337A4C004D9B5A /* SocketRocket.framework */; };
 		0E0A5C2A1F337A4F004D9B5A /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C291F337A4F004D9B5A /* SDWebImage.framework */; };
-		0E0A5C2C1F337A52004D9B5A /* Unbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C2B1F337A52004D9B5A /* Unbox.framework */; };
 		0E0A5C2E1F337A56004D9B5A /* Sora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E0A5C2D1F337A56004D9B5A /* Sora.framework */; };
 		0E7987F11F34CF9A004C9DDD /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7987F01F34CF9A004C9DDD /* SoraSDKManager.swift */; };
 		C552E2311F31C037002CC7FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552E2281F31C037002CC7FD /* AppDelegate.swift */; };
@@ -29,7 +28,6 @@
 		0E0A5C251F337A42004D9B5A /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
 		0E0A5C271F337A4C004D9B5A /* SocketRocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketRocket.framework; path = Carthage/Build/iOS/SocketRocket.framework; sourceTree = "<group>"; };
 		0E0A5C291F337A4F004D9B5A /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
-		0E0A5C2B1F337A52004D9B5A /* Unbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Unbox.framework; path = Carthage/Build/iOS/Unbox.framework; sourceTree = "<group>"; };
 		0E0A5C2D1F337A56004D9B5A /* Sora.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sora.framework; path = Carthage/Build/iOS/Sora.framework; sourceTree = "<group>"; };
 		0E7987F01F34CF9A004C9DDD /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
 		C552E2281F31C037002CC7FD /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,7 +51,6 @@
 			files = (
 				0E0A5C261F337A42004D9B5A /* WebRTC.framework in Frameworks */,
 				0E0A5C281F337A4C004D9B5A /* SocketRocket.framework in Frameworks */,
-				0E0A5C2C1F337A52004D9B5A /* Unbox.framework in Frameworks */,
 				0E0A5C2A1F337A4F004D9B5A /* SDWebImage.framework in Frameworks */,
 				0E0A5C2E1F337A56004D9B5A /* Sora.framework in Frameworks */,
 			);
@@ -66,7 +63,6 @@
 			isa = PBXGroup;
 			children = (
 				0E0A5C2D1F337A56004D9B5A /* Sora.framework */,
-				0E0A5C2B1F337A52004D9B5A /* Unbox.framework */,
 				0E0A5C291F337A4F004D9B5A /* SDWebImage.framework */,
 				0E0A5C271F337A4C004D9B5A /* SocketRocket.framework */,
 				0E0A5C251F337A42004D9B5A /* WebRTC.framework */,
@@ -146,12 +142,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = shiguredo;
 				TargetAttributes = {
 					C5F184941F3092B500FC0980 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = GNMLYV6KTU;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -197,7 +193,6 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/WebRTC.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SocketRocket.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Unbox.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SDWebImage.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sora.framework",
 			);
@@ -205,7 +200,6 @@
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WebRTC.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SocketRocket.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Unbox.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SDWebImage.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sora.framework",
 			);
@@ -262,7 +256,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -270,7 +266,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -313,7 +313,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -321,7 +323,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -351,7 +357,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = GNMLYV6KTU;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -363,7 +369,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.RealTimeStreamingSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -371,7 +377,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = GNMLYV6KTU;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -383,7 +389,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.RealTimeStreamingSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

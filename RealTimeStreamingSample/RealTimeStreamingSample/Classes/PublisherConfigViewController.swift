@@ -8,6 +8,8 @@ class PublisherConfigViewController: UITableViewController {
     
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
+    /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
     /// スナップショット機能の有効無効設定のスイッチです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var snapshotSwitch: UISwitch!
     
@@ -29,17 +31,20 @@ class PublisherConfigViewController: UITableViewController {
             return
         }
         
-        // 入力されたチャンネルIDをConnectionに設定します。
-        SoraSDKManager.shared.connection.mediaChannelId = channelId
-        // スナップショット機能の設定を配信側（mediaPublisher）に反映させます。
-        // 注意点として、スナップショット機能を使う場合には、以下の２点の設定が必要です。
-        // - Video配信を有効にし、コーデックをVP8に指定する
-        // - Audio配信を有効にする
-        // ただし何もしなければSDK側でこれらのデフォルト設定を満たすようにしてくれるため、ここでは何もしていません。
-        SoraSDKManager.shared.connection.mediaPublisher.mediaOption.snapshotEnabled = snapshotSwitch.isOn
+        // ユーザーが選択した設定をUIコントロールから取得します。
+        let videoCodec: VideoCodec
+        switch videoCodecSegmentedControl.selectedSegmentIndex {
+        case 0: videoCodec = .default
+        case 1: videoCodec = .vp9
+        case 2: videoCodec = .vp8
+        case 3: videoCodec = .h264
+        default: fatalError()
+        }
+        let snapshotEnabled = snapshotSwitch.isOn
         
-        // 配信側（mediaPublisher）に接続を行います。
-        // 注意点として、mediaPublisherに対してconnectを呼び出すと、その瞬間にSora SDKは
+        // 入力された設定を元にSoraへ接続を行います。
+        // この画面からは配信側に接続を行うため、role引数には .publisher を指定しています。
+        // 注意点として、connectを呼び出すと、その瞬間にSora SDKは
         // - デバイスのカメラ
         // - デバイスのマイク
         // に対するアクセスを要求します。このとき、Info.plist内に
@@ -49,31 +54,37 @@ class PublisherConfigViewController: UITableViewController {
         // （このサンプルではすでに設定済みです）
         // また設定がされていても、connectを呼び出した瞬間に、ユーザー許可を取るためのダイアログが表示されるので、
         // 突然暗黙的にconnectするのではなく、タップなどのユーザーのアクションに対して明示的にconnectを呼び出すことをおすすめします。
-        SoraSDKManager.shared.connection.mediaPublisher.connect { [weak self] error in
-            
+        SoraSDKManager.shared.connect(
+            channelId: channelId,
+            role: .publisher,
+            snapshotEnabled: snapshotEnabled,
+            videoCodec: videoCodec
+        ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-                NSLog("mediaPublisher error: \(error)")
+                NSLog("SoraSDKManager connection error: \(error)")
                 DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "接続に失敗しました", message: error.localizedDescription, preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "接続に失敗しました",
+                                                            message: error.localizedDescription,
+                                                            preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self?.present(alertController, animated: true, completion: nil)
                 }
             } else {
                 // errorがnilの場合は、接続に成功しています。
+                NSLog("SoraSDKManager connected.")
+                
                 // 次の配信画面に遷移します。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-                NSLog("mediaPublisher connected.")
                 DispatchQueue.main.async {
                     // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
                     self?.performSegue(withIdentifier: "Connect", sender: self)
                 }
             }
-            
         }
     }
     

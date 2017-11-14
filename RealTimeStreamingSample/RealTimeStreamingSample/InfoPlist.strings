@@ -1,3 +1,3 @@
 CFBundleDisplayName = "生放送配信";
-NSCameraUsageDescription = "SoraSDK の MediaPublisher を使用するためには、 Info.plist に NSCameraUsageDescription を設定する必要があります。";
-NSMicrophoneUsageDescription = "SoraSDK の MediaPublisher/MediaSubscriber を使用するためには、 Info.plist に NSMicrophoneUsageDescription を設定する必要があります。";
+NSCameraUsageDescription = "SoraSDK を使用するためには、 Info.plist に NSCameraUsageDescription を設定する必要があります。";
+NSMicrophoneUsageDescription = "SoraSDK を使用するためには、 Info.plist に NSMicrophoneUsageDescription を設定する必要があります。";
