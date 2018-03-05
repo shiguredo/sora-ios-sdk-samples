@@ -24,8 +24,8 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 - Mac OS X 10.12.6 以降
 - Xcode 9.1 以降
 - Swift 4.0
-- Carthage 0.26.2 以降
-- WebRTC SFU Sora 17.10 以降
+- Carthage 0.26.2 以降、または CocoaPods 1.3.1 以降
+- WebRTC SFU Sora 18.02 以降
 
 ## サンプルの紹介
 
@@ -61,4 +61,4 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 
 # Copyright
 
-Copyright 2017, Shiguredo Inc. and Masashi Ono (akisute)
+Copyright 2017-2018, Shiguredo Inc. and Masashi Ono (akisute)
