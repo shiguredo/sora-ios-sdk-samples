@@ -17,7 +17,7 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.0.0](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.0.0) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.1.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.1.1) を使用しています。
 
 - iOS 10.0 以降
 - アーキテクチャ arm64, armv7 (シミュレーターは非対応)
@@ -36,7 +36,6 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 [RealTimeStreamingSample (生放送配信)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/RealTimeStreamingSample)
 
 このサンプルでは、動画生放送の配信・視聴を行うアプリを Sora iOS SDK を用いて実装する方法を説明しています。
-また、スナップショット機能の使用方法についても解説しています。
 
 ### VideoChatSample (ビデオチャット)
 
