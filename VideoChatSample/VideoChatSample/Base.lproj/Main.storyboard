@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -67,7 +67,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="配信設定" footerTitle="ビデオチャットのようなマルチストリーム機能（複数人が同時に配信する機能）を利用するアプリでは、スナップショット機能を有効にすることはできません。" id="fXu-bU-AWH">
+                            <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデックを選択します。" id="fXu-bU-AWH">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KG5-jM-cSB">
                                         <rect key="frame" x="0.0" y="163" width="375" height="44"/>
@@ -93,37 +93,12 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="vai-zJ-7MC">
-                                        <rect key="frame" x="0.0" y="207" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vai-zJ-7MC" id="dAc-et-NEw">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1f-cR-cL2">
-                                                    <rect key="frame" x="20" y="12" width="173.5" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EzF-xJ-l0g">
-                                                    <rect key="frame" x="306" y="6" width="51" height="31"/>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="j1f-cR-cL2" firstAttribute="leading" secondItem="dAc-et-NEw" secondAttribute="leading" constant="20" id="6l1-UD-y06"/>
-                                                <constraint firstItem="j1f-cR-cL2" firstAttribute="centerY" secondItem="dAc-et-NEw" secondAttribute="centerY" id="Lho-zD-Yzg"/>
-                                                <constraint firstAttribute="trailing" secondItem="EzF-xJ-l0g" secondAttribute="trailing" constant="20" id="X6r-6r-TzK"/>
-                                                <constraint firstItem="EzF-xJ-l0g" firstAttribute="centerY" secondItem="dAc-et-NEw" secondAttribute="centerY" id="eT6-h7-bR4"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="331" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="255" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -153,11 +128,8 @@
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
-                        <outlet property="snapshotSwitch" destination="EzF-xJ-l0g" id="zgD-xy-V7k"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
-                        <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF">
-                            <nil key="action"/>
-                        </segue>
+                        <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-Vr-gaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
