@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Qew-Sz-X5Y">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Qew-Sz-X5Y">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -68,10 +68,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="配信設定" id="r05-D8-8q3">
-                                <string key="footerTitle">スナップショット機能を有効にすると、視聴者は動画の代わりにコマ送りの静止画を表示することができるようになります。これによってモバイル回線などの低速な通信環境でも快適に視聴を行うことができ、電池を節約することがてきます。
-
-配信者側がスナップショット機能を有効にしていても、実際にそれを利用するかどうかは視聴者側の設定次第になります。</string>
+                            <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデックを選択します。" id="r05-D8-8q3">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="eZZ-hr-Kb0">
                                         <rect key="frame" x="0.0" y="163" width="375" height="44"/>
@@ -97,38 +94,12 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="9in-uE-iXG">
-                                        <rect key="frame" x="0.0" y="207" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9in-uE-iXG" id="Z8W-di-ors">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PsX-7w-cG5">
-                                                    <rect key="frame" x="20" y="12" width="278" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="aOL-wp-4ox">
-                                                    <rect key="frame" x="306" y="6" width="51" height="31"/>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="PsX-7w-cG5" firstAttribute="centerY" secondItem="Z8W-di-ors" secondAttribute="centerY" id="K5D-8C-J7P"/>
-                                                <constraint firstItem="aOL-wp-4ox" firstAttribute="centerY" secondItem="Z8W-di-ors" secondAttribute="centerY" id="UzR-xb-2aV"/>
-                                                <constraint firstItem="aOL-wp-4ox" firstAttribute="leading" secondItem="PsX-7w-cG5" secondAttribute="trailing" constant="8" id="WMt-im-yAd"/>
-                                                <constraint firstAttribute="trailing" secondItem="aOL-wp-4ox" secondAttribute="trailing" constant="20" id="gTp-H7-WlF"/>
-                                                <constraint firstItem="PsX-7w-cG5" firstAttribute="leading" secondItem="Z8W-di-ors" secondAttribute="leading" constant="20" id="tmb-kg-mpz"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="h05-6K-0hc">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Ea7-op-r9J">
-                                        <rect key="frame" x="0.0" y="427" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="255" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ea7-op-r9J" id="dkJ-Rh-xjB">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -158,11 +129,8 @@
                     <navigationItem key="navigationItem" title="動画を配信する" id="FW6-Y7-rp4"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="u9h-FF-DeM" id="zdw-9S-ANq"/>
-                        <outlet property="snapshotSwitch" destination="aOL-wp-4ox" id="Jci-yY-HlO"/>
                         <outlet property="videoCodecSegmentedControl" destination="xyp-14-57D" id="jdA-Kr-PWL"/>
-                        <segue destination="xvX-rK-0JQ" kind="show" identifier="Connect" id="AOp-l7-znu">
-                            <nil key="action"/>
-                        </segue>
+                        <segue destination="xvX-rK-0JQ" kind="show" identifier="Connect" id="AOp-l7-znu"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZID-Bf-ZpV" userLabel="First Responder" sceneMemberID="firstResponder"/>
