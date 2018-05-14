@@ -17,7 +17,7 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.0.0](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.0.0) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.1.2](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.1.2) を使用しています。
 
 - iOS 10.0 以降
 - アーキテクチャ arm64, armv7 (シミュレーターは非対応)
