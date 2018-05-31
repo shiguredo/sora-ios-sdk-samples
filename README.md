@@ -36,7 +36,6 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 [RealTimeStreamingSample (生放送配信)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/RealTimeStreamingSample)
 
 このサンプルでは、動画生放送の配信・視聴を行うアプリを Sora iOS SDK を用いて実装する方法を説明しています。
-また、スナップショット機能の使用方法についても解説しています。
 
 ### VideoChatSample (ビデオチャット)
 

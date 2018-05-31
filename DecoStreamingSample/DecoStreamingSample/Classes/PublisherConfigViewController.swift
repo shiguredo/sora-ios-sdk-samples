@@ -10,8 +10,6 @@ class PublisherConfigViewController: UITableViewController {
     @IBOutlet var channelIdTextField: UITextField!
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
-    /// スナップショット機能の有効無効設定のスイッチです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var snapshotSwitch: UISwitch!
     
     /**
      行がタップされたときの処理を記述します。
@@ -40,7 +38,6 @@ class PublisherConfigViewController: UITableViewController {
         case 3: videoCodec = .h264
         default: fatalError()
         }
-        let snapshotEnabled = snapshotSwitch.isOn
         
         // 入力された設定を元にSoraへ接続を行います。
         // この画面からは配信側に接続を行うため、role引数には .publisher を指定しています。
@@ -49,7 +46,6 @@ class PublisherConfigViewController: UITableViewController {
         SoraSDKManager.shared.connect(
             channelId: channelId,
             role: .publisher,
-            snapshotEnabled: snapshotEnabled,
             videoCodec: videoCodec,
             videoCapturerOption: .custom
         ) { [weak self] error in

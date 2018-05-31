@@ -10,8 +10,6 @@ class ConfigViewController: UITableViewController {
     @IBOutlet var channelIdTextField: UITextField!
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
-    /// スナップショット機能の有効無効設定のスイッチです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var snapshotSwitch: UISwitch!
     
     /**
      行がタップされたときの処理を記述します。
@@ -44,7 +42,6 @@ class ConfigViewController: UITableViewController {
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、role引数には .group を指定しています。
         // これにより、内部的にSora Multistream接続オプションが有効になり、複数人で同意に配信する事が可能になります。
-        // また、role引数に .group を指定してMultistream接続オプションを有効にすると、スナップショット機能を使用することはできなくなります。
         SoraSDKManager.shared.connect(
             channelId: channelId,
             role: .group,

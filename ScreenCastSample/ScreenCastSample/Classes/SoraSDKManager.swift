@@ -41,7 +41,6 @@ class SoraSDKManager {
      */
     func connect(channelId: String,
                  role: Role,
-                 snapshotEnabled: Bool = false,
                  videoCodec: VideoCodec = .default,
                  videoCapturerOption: VideoCapturerDevice = .camera(settings: .default),
                  completionHandler: ((Error?) -> Void)?) {
@@ -59,12 +58,6 @@ class SoraSDKManager {
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
         configuration.videoCapturerDevice = videoCapturerOption
-        
-        // 注意点として、スナップショット機能 (configuration.snapshotEnabled) を使う場合には、以下の２点の設定が必要です。
-        // - Video配信を有効にし、コーデックをVP8に指定する
-        // - Audio配信を有効にする
-        // ただし何もしなければSDK側でこれらのデフォルト設定を満たすようにしてくれるため、ここでは何もしていません。
-        configuration.snapshotEnabled = snapshotEnabled
         
         // Soraに接続を試みます。
         Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
