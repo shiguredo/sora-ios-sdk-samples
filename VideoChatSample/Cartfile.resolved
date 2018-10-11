@@ -1,4 +1,3 @@
-github "shiguredo/SDWebImage" "4.2.2"
 github "shiguredo/SocketRocket" "0.5.1-carthage.1"
 github "shiguredo/sora-ios-sdk" "2.1.1"
 github "shiguredo/sora-webrtc-ios" "64.6.0"
