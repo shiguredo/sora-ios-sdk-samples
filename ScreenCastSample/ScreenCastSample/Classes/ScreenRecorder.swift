@@ -25,12 +25,12 @@ class ScreenRecorder {
         setupOutputBuffer()
         displayLink = CADisplayLink(target: self, selector: #selector(onDisplayLink(_:)))
         displayLink?.preferredFramesPerSecond = 15 // 15FPSで描画するように指定しています。
-        displayLink?.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
+        displayLink?.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
     }
     
     func stopCapture() {
         if let displayLink = displayLink {
-            displayLink.remove(from: RunLoop.main, forMode: RunLoopMode.commonModes)
+            displayLink.remove(from: RunLoop.main, forMode: RunLoop.Mode.common)
         }
         displayLink = nil
         firstTimestamp = 0
@@ -83,7 +83,7 @@ class ScreenRecorder {
                 self.firstTimestamp = displayLink.timestamp
             }
             let elapsed = displayLink.timestamp - self.firstTimestamp
-            let time = CMTimeMakeWithSeconds(elapsed, 1000)
+            let time = CMTimeMakeWithSeconds(elapsed, preferredTimescale: 1000)
             
             // UIWindowヒエラルキーをメインスレッド上でレンダリングさせ、その結果を待ちます。
             DispatchQueue.main.sync {

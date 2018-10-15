@@ -60,7 +60,7 @@ class SoraSDKManager {
         configuration.videoCapturerDevice = videoCapturerOption
         
         // Soraに接続を試みます。
-        Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
+        let _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
             // 接続に成功した場合は、mediaChannelに値が返され、errorがnilになります。
             // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
             self?.currentMediaChannel = mediaChannel

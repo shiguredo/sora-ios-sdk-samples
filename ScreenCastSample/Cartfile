@@ -1,6 +1,5 @@
 # Sora iOS SDK のセットアップ
 # Sora iOS SDK を使用するには、以下のフレームワークをCartfileに記述する必要があります。
-github "shiguredo/sora-ios-sdk" "2.1.3"
+github "shiguredo/sora-ios-sdk" "2.2.0"
 github "shiguredo/sora-webrtc-ios" "66.8.0"
 github "shiguredo/SocketRocket" "0.5.1-carthage.1"
-github "shiguredo/SDWebImage" "4.2.2"
