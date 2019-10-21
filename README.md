@@ -17,15 +17,15 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.1.2](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.1.2) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.6.0](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.6.0) を使用しています。
 
 - iOS 10.0 以降
-- アーキテクチャ arm64, armv7 (シミュレーターは非対応)
-- macOS 10.13.2 以降
-- Xcode 9.3
-- Swift 4.1
-- Carthage 0.29.0 以降、または CocoaPods 1.4.0 以降
-- WebRTC SFU Sora 18.04 以降
+- アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
+- macOS 10.15 以降
+- Xcode 11.1
+- Swift 5.1
+- Carthage 0.33.0 以降、または CocoaPods 1.6.1 以降
+- WebRTC SFU Sora 19.04.0 以降
 
 Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で取得できるバイナリに互換性がない可能性があります。詳しくはドキュメントを参照してください。
 
@@ -62,4 +62,4 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 
 # Copyright
 
-Copyright 2017-2018, Shiguredo Inc. and Masashi Ono (akisute)
+Copyright 2017-2019, Shiguredo Inc. and Masashi Ono (akisute)
