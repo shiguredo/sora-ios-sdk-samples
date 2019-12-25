@@ -218,7 +218,7 @@ class PublisherVideoViewController: UIViewController {
         }
         
         // captureSessionのセットアップが完了したので、最後にこのカメラキャプチャが出力する動画の向きを設定します。
-        self?.updateVideoOrientationUsingStatusBarOrientation()
+        self.updateVideoOrientationUsingStatusBarOrientation()
         
     }
     
