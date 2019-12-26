@@ -138,7 +138,7 @@ class VideoChatRoomViewController: UIViewController {
                                      y: size.height - floatingSize.height - 20.0,
                                      width: floatingSize.width,
                                      height: floatingSize.height)
-            view.bringSubview(toFront: videoView)
+            view.bringSubviewToFront(videoView)
         }
     }
     
