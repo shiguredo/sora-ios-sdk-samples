@@ -3,7 +3,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, '10.0'
 
-target 'ScreenCastSample' do
+target 'VideoChatSample' do
   use_frameworks!
   pod 'Sora'
 end
