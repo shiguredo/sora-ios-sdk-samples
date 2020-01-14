@@ -44,7 +44,8 @@ class ConfigViewController: UITableViewController {
         // これにより、内部的にSora Multistream接続オプションが有効になり、複数人で同意に配信する事が可能になります。
         SoraSDKManager.shared.connect(
             channelId: channelId,
-            role: .group,
+            role: .sendrecv,
+            multistreamEnabled: true,
             videoCodec: videoCodec
         ) { [weak self] error in
             if let error = error {
