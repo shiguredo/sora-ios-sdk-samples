@@ -113,7 +113,7 @@ class ScreenRecorder {
         
         let attributes = [
             kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-            kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue,
+            kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue as Any,
             kCVPixelBufferWidthKey: (inputViewSize.width * inputScale) as CFNumber,
             kCVPixelBufferHeightKey: (inputViewSize.height * inputScale) as CFNumber,
             kCVPixelBufferBytesPerRowAlignmentKey: (inputViewSize.width * inputScale * 4) as CFNumber,
