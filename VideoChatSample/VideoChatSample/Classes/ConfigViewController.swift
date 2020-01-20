@@ -40,11 +40,12 @@ class ConfigViewController: UITableViewController {
         }
         
         // 入力された設定を元にSoraへ接続を行います。
-        // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、role引数には .group を指定しています。
-        // これにより、内部的にSora Multistream接続オプションが有効になり、複数人で同意に配信する事が可能になります。
+        // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
+        // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
             channelId: channelId,
-            role: .group,
+            role: .sendrecv,
+            multistreamEnabled: true,
             videoCodec: videoCodec
         ) { [weak self] error in
             if let error = error {

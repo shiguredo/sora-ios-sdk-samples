@@ -45,7 +45,8 @@ class PublisherConfigViewController: UITableViewController {
         // videoCapturerOptionをカスタムに設定しておきます。
         SoraSDKManager.shared.connect(
             channelId: channelId,
-            role: .publisher,
+            role: .sendonly,
+            multistreamEnabled: false,
             videoCodec: videoCodec,
             videoCapturerOption: .custom
         ) { [weak self] error in
