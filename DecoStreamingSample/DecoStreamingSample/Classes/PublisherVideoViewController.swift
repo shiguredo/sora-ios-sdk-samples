@@ -229,11 +229,13 @@ class PublisherVideoViewController: UIViewController {
      そこで本サンプルでは最初の1回目の補正にのみ使用しています。
      */
     private func updateVideoOrientationUsingStatusBarOrientation() {
-        let statusBarOrientation = UIApplication.shared.statusBarOrientation
-        let videoOrientation = AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
-        for output in captureSession.outputs {
-            if let connection = output.connection(with: .video) {
-                connection.videoOrientation = videoOrientation
+        DispatchQueue.main.async {
+            let statusBarOrientation = UIApplication.shared.statusBarOrientation
+            let videoOrientation = AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
+            for output in self.captureSession.outputs {
+                if let connection = output.connection(with: .video) {
+                    connection.videoOrientation = videoOrientation
+                }
             }
         }
     }
