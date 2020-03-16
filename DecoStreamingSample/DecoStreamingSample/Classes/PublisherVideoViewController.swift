@@ -5,21 +5,25 @@ import Sora
 /**
  実際に動画を配信する画面です。
  */
-class PublisherVideoViewController: UIViewController {
+class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var filterPickerView: UIPickerView!
     
     /// 動画に適応できるフィルタの一覧です。ユーザーが選択できるように、事前に定義してあります。
-    private static let allFilters: [String: CIFilter] = {
-        let sepiaFilter = CIFilter(name: "CISepiaTone")!
-        let motionBlurFilter = CIFilter(name: "CIMotionBlur")!
-        let colorInvertFilter = CIFilter(name: "CIColorInvert")!
-        let colorMonochromeFilter = CIFilter(name: "CIColorMonochrome")!
-        let comicFilter = CIFilter(name: "CIComicEffect")!
+    private static let allFilters: [(String, CIFilter?)] = {
+        let sepiaFilter = CIFilter(name: "CISepiaTone")
+        let motionBlurFilter = CIFilter(name: "CIMotionBlur")
+        let colorInvertFilter = CIFilter(name: "CIColorInvert")
+        let colorMonochromeFilter = CIFilter(name: "CIColorMonochrome")
+        let comicFilter = CIFilter(name: "CIComicEffect")
         return [
-            "モーションブラー": motionBlurFilter,
-            "色反転": colorInvertFilter,
-            "モノクロ": colorMonochromeFilter,
-            "セピア調": sepiaFilter,
-            "マンガ調": comicFilter
+            ("フィルタなし", nil),
+            ("モーションブラー", motionBlurFilter),
+            ("色反転", colorInvertFilter),
+            ("モノクロ", colorMonochromeFilter),
+            ("セピア調", sepiaFilter),
+            ("マンガ調", comicFilter)
         ]
     }()
     
@@ -41,6 +45,18 @@ class PublisherVideoViewController: UIViewController {
         
         // videoViewの表示設定を行います。
         videoView.contentMode = .scaleAspectFill
+        
+        // iPad の場合はフィルタ選択の UI を変更します。
+        // UIAlertController の動作が不安定なためです。
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad:
+            navigationItem.rightBarButtonItems?.remove(editButton)
+            filterPickerView.delegate = self
+            filterPickerView.dataSource = self
+        default:
+            filterPickerView.isHidden = true
+            filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -145,12 +161,10 @@ class PublisherVideoViewController: UIViewController {
      */
     @IBAction func onFilterButton(_ sender: UIBarButtonItem) {
         let alertController = UIAlertController(title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
-        for (name, filter) in PublisherVideoViewController.allFilters.sorted(by: { $0.0 < $1.0 }) {
+        for (name, filter) in PublisherVideoViewController.allFilters {
             let action = UIAlertAction(title: name, style: .default) { [weak self] _ in self?.currentFilter = filter }
             alertController.addAction(action)
         }
-        let noFilterAction = UIAlertAction(title: "フィルタなし", style: .destructive) { [weak self] _ in self?.currentFilter = nil }
-        alertController.addAction(noFilterAction)
         present(alertController, animated: true, completion: nil)
     }
     
@@ -259,6 +273,27 @@ class PublisherVideoViewController: UIViewController {
                 connection.videoOrientation = videoOrientation
             }
         }
+    }
+    
+    // MARK: UIPickerView
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView,
+                    titleForRow row: Int,
+                    forComponent component: Int) -> String? {
+        PublisherVideoViewController.allFilters[row].0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView,
+                    numberOfRowsInComponent component: Int) -> Int {
+        PublisherVideoViewController.allFilters.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        currentFilter = PublisherVideoViewController.allFilters[row].1
     }
     
 }
