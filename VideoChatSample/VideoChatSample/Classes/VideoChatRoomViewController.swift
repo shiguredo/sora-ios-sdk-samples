@@ -160,11 +160,17 @@ extension VideoChatRoomViewController {
         
         // mediaPublisherのmediaStreamの0番目は、常に自分自身の配信になります。
         // それを利用して、mediaStreamを自分自身と、それ以外のユーザーのリストに分けます。
-        guard let upstream = mediaStreams.first else {
-            return
+        var upstream: MediaStream?
+        var downstreams: [MediaStream] = []
+        for stream in mediaStreams {
+            if let capturerStream = CameraVideoCapturer.shared.stream {
+                if stream.streamId == capturerStream.streamId {
+                    upstream = stream
+                    continue
+                }
+            }
+            downstreams.append(stream)
         }
-        // dropFirst()はArraySliceを返す関係上、このあとのロジックの都合が悪いので、Arrayに変換しています。
-        let downstreams = Array(mediaStreams.dropFirst())
         
         // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
         if downstreamVideoViews.count < downstreams.count {
@@ -201,7 +207,7 @@ extension VideoChatRoomViewController {
             view.addSubview(videoView)
             upstreamVideoView = videoView
         }
-        upstream.videoRenderer = upstreamVideoView
+        upstream?.videoRenderer = upstreamVideoView
         
         // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
         self.layoutVideoViews(for: self.view.bounds.size)
