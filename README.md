@@ -16,7 +16,7 @@ Sora iOS SDK サンプル集に対する有償のサポートについては現�
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2.6.0](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2.6.0) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2020.4](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2020.4) を使用しています。
 
 - iOS 10.0 以降
 - アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
@@ -32,32 +32,32 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 
 ### RealTimeStreamingSample (生放送配信)
 
-[RealTimeStreamingSample (生放送配信)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/RealTimeStreamingSample)
+[RealTimeStreamingSample (生放送配信)](/RealTimeStreamingSample)
 
 このサンプルでは、動画生放送の配信・視聴を行うアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
 ### VideoChatSample (ビデオチャット)
 
-[VideoChatSample (ビデオチャット)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/VideoChatSample)
+[VideoChatSample (ビデオチャット)](/VideoChatSample)
 
 このサンプルでは、複数人が同時に参加できるビデオチャットアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
 ### DecoStreamingSample (デコ動画配信)
 
-[DecoStreamingSample (デコ動画配信)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/DecoStreamingSample)
+[DecoStreamingSample (デコ動画配信)](/DecoStreamingSample)
 
 このサンプルでは、カメラで撮影した動画をクライアントサイドで加工して動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
 ### ScreenCastSample (スクリーンキャスト)
 
-[ScreenCastSample (スクリーンキャスト)](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/ScreenCastSample)
+[ScreenCastSample (スクリーンキャスト)](/ScreenCastSample)
 
 このサンプルでは、クライアントアプリの画面を動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
 ## ライセンス
 
 このリポジトリに含まれる全てのリソースは Apache License Version 2.0 のもとで公開されています。
-詳細につきましては [LICENSE](https://github.com/shiguredo/sora-ios-sdk-samples/tree/master/LICENSE) ファイルをご参照ください。
+詳細につきましては [LICENSE](/LICENSE) ファイルをご参照ください。
 
 # Copyright
 
