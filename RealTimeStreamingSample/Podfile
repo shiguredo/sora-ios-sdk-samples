@@ -5,5 +5,5 @@ platform :ios, '10.0'
 
 target 'RealTimeStreamingSample' do
   use_frameworks!
-  pod 'Sora', '2020.4'
+  pod 'Sora', '2020.4.1'
 end
