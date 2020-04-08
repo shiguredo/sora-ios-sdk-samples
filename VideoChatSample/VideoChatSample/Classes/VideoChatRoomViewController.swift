@@ -154,24 +154,15 @@ extension VideoChatRoomViewController {
     private func handleUpdateStreams() {
         
         // まずはmediaPublisherのmediaStreamを取得します。
-        guard let mediaStreams = SoraSDKManager.shared.currentMediaChannel?.streams else {
+        guard (SoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
             return
         }
         
-        // mediaPublisherのmediaStreamの0番目は、常に自分自身の配信になります。
-        // それを利用して、mediaStreamを自分自身と、それ以外のユーザーのリストに分けます。
-        var upstream: MediaStream?
-        var downstreams: [MediaStream] = []
-        for stream in mediaStreams {
-            if let capturerStream = CameraVideoCapturer.shared.stream {
-                if stream.streamId == capturerStream.streamId {
-                    upstream = stream
-                    continue
-                }
-            }
-            downstreams.append(stream)
-        }
-        
+        // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
+        // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
+        let upstream = SoraSDKManager.shared.currentMediaChannel?.senderStream
+        let downstreams = SoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+
         // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
         if downstreamVideoViews.count < downstreams.count {
             // 用意されているVideoViewの数が足りないので、新たに追加します。
