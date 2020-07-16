@@ -6,13 +6,16 @@
 
 We check PRs or Issues only when written in JAPANESE.
 In other languages, we won't be able to deal with them. Thank you for your understanding.
+## Discord
 
-## サポートについて
+https://discord.gg/Ac9fJ9S
 
-Sora iOS SDK サンプル集に関する質問・要望・バグなどの報告は Issues の利用をお願いします。
-ただし、 Sora のライセンス契約の有無に関わらず、 Issue への応答時間と問題の解決を保証しませんのでご了承ください。
+Sora iOS SDK サンプル集に関する質問・要望などの報告は Discord へお願いします。
 
-Sora iOS SDK サンプル集に対する有償のサポートについては現在提供しておりません。
+バグに関しても、 Discord へお願いします。
+ただし、 Sora のライセンス契約の有無に関わらず、応答時間と問題の解決を保証しませんのでご了承ください。
+
+Sora iOS SDK に対する有償のサポートについては提供しておりません。
 
 ## システム条件
 
@@ -62,3 +65,26 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 # Copyright
 
 Copyright 2017-2019, Shiguredo Inc. and Masashi Ono (akisute)
+
+
+## ライセンス
+
+Apache License 2.0
+
+```
+Copyright 2017-2018, Masashi Ono (akisute)
+Copyright 2017-2020, Shiguredo Inc.
+
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
