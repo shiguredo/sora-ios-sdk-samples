@@ -59,16 +59,6 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 
 ## ライセンス
 
-このリポジトリに含まれる全てのリソースは Apache License Version 2.0 のもとで公開されています。
-詳細につきましては [LICENSE](/LICENSE) ファイルをご参照ください。
-
-# Copyright
-
-Copyright 2017-2019, Shiguredo Inc. and Masashi Ono (akisute)
-
-
-## ライセンス
-
 Apache License 2.0
 
 ```
