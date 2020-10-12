@@ -228,10 +228,10 @@ extension VideoChatRoomViewController {
      */
     @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
         // フロントカメラ・バックカメラを入れ替える処理を行います。
-        guard let mainStream = SoraSDKManager.shared.currentMediaChannel?.mainStream else {
+        guard let senderStream = SoraSDKManager.shared.currentMediaChannel?.senderStream else {
             return
         }
-        guard let cameraVideoCapturer = mainStream.videoCapturer as? CameraVideoCapturer else {
+        guard let cameraVideoCapturer = senderStream.videoCapturer as? CameraVideoCapturer else {
             return
         }
         cameraVideoCapturer.flip()
