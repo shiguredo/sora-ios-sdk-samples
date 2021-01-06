@@ -8,9 +8,16 @@ class ConfigViewController: UITableViewController {
     
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
+    
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
     
+    @IBOutlet var spotlightSwitch: UISwitch!
+    
+    @IBOutlet var spotlightLegacySwitch: UISwitch!
+    
+    @IBOutlet var activeSpeakerLimitSegmentedControl: UISegmentedControl!
+
     /**
      行がタップされたときの処理を記述します。
      */
@@ -20,7 +27,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 2, indexPath.row == 0 else {
+        guard indexPath.section == 3, indexPath.row == 0 else {
             return
         }
         
@@ -39,6 +46,15 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
         
+        var spotlight: Configuration.Spotlight
+        if spotlightSwitch.isOn {
+            spotlight = spotlightLegacySwitch.isOn ? .legacy : .enabled
+        } else {
+            spotlight = .disabled
+        }
+        
+        let activeSpeakerLimit: Int = activeSpeakerLimitSegmentedControl.selectedSegmentIndex + 1
+        
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
@@ -46,7 +62,9 @@ class ConfigViewController: UITableViewController {
             channelId: channelId,
             role: .sendrecv,
             multistreamEnabled: true,
-            videoCodec: videoCodec
+            videoCodec: videoCodec,
+            spotlight: spotlight,
+            activeSpeakerLimit: activeSpeakerLimit
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
