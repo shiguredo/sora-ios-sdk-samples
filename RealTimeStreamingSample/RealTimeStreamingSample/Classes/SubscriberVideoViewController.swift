@@ -30,14 +30,14 @@ class SubscriberVideoViewController: UIViewController {
         
         // 視聴画面に遷移してきたら、この画面に遷移してきたということはすでにmediaSubscriberに接続が完了しているということなので、
         // videoViewをvideoRendererに設定することで、動画を画面に表示させます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = videoView
+        SoraSDKManager.shared.currentMediaChannel?.receiverStreams.first?.videoRenderer = videoView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // 視聴画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = nil
+        SoraSDKManager.shared.currentMediaChannel?.receiverStreams.first?.videoRenderer = nil
     }
     
     /**
