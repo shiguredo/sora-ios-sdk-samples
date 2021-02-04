@@ -115,7 +115,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         captureSession.startRunning()
         
         // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = videoView
+        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,7 +131,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         captureSession.stopRunning()
 
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = nil
+        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -335,7 +335,7 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
      */
     func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-            let mediaStream = mediaChannel.mainStream else {
+            let mediaStream = mediaChannel.senderStream else {
                 return
         }
         if let filter = currentFilter {

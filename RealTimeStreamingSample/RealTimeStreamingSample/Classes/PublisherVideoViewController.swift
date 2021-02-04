@@ -30,14 +30,14 @@ class PublisherVideoViewController: UIViewController {
         
         // 配信画面に遷移してきたら、この画面に遷移してきたということはすでに接続が完了しているということなので、
         // videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = videoView
+        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = nil
+        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
     }
     
     /**
@@ -46,10 +46,10 @@ class PublisherVideoViewController: UIViewController {
      */
     @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
         // フロントカメラ・バックカメラを入れ替える処理を行います。
-        guard let mainStream = SoraSDKManager.shared.currentMediaChannel?.mainStream else {
+        guard let senderStream = SoraSDKManager.shared.currentMediaChannel?.senderStream else {
             return
         }
-        guard let cameraVideoCapturer = mainStream.videoCapturer as? CameraVideoCapturer else {
+        guard let cameraVideoCapturer = senderStream.videoCapturer as? CameraVideoCapturer else {
             return
         }
         cameraVideoCapturer.flip()
