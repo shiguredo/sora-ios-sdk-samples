@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,9 @@
 		91941EC82624243E0062BF1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91941EC62624243E0062BF1D /* Main.storyboard */; };
 		91941ECA2624243E0062BF1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91941EC92624243E0062BF1D /* Assets.xcassets */; };
 		91941ECD2624243E0062BF1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91941ECB2624243E0062BF1D /* LaunchScreen.storyboard */; };
+		91941EE42624282E0062BF1D /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91941EE12624282E0062BF1D /* SoraSDKManager.swift */; };
+		91941EE52624282E0062BF1D /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91941EE22624282E0062BF1D /* ConfigViewController.swift */; };
+		91941EE62624282E0062BF1D /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91941EE32624282E0062BF1D /* VideoChatRoomViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		91941EC92624243E0062BF1D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91941ECC2624243E0062BF1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91941ECE2624243E0062BF1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91941EE12624282E0062BF1D /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
+		91941EE22624282E0062BF1D /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		91941EE32624282E0062BF1D /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 		91941EBF2624243E0062BF1D /* SoraLaboSample */ = {
 			isa = PBXGroup;
 			children = (
+				91941EE0262427E50062BF1D /* Classes */,
 				91941EC02624243E0062BF1D /* AppDelegate.swift */,
 				91941EC22624243E0062BF1D /* SceneDelegate.swift */,
 				91941EC42624243E0062BF1D /* ViewController.swift */,
@@ -65,6 +72,16 @@
 				91941ECE2624243E0062BF1D /* Info.plist */,
 			);
 			path = SoraLaboSample;
+			sourceTree = "<group>";
+		};
+		91941EE0262427E50062BF1D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				91941EE22624282E0062BF1D /* ConfigViewController.swift */,
+				91941EE12624282E0062BF1D /* SoraSDKManager.swift */,
+				91941EE32624282E0062BF1D /* VideoChatRoomViewController.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +155,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				91941EC52624243E0062BF1D /* ViewController.swift in Sources */,
+				91941EE62624282E0062BF1D /* VideoChatRoomViewController.swift in Sources */,
+				91941EE42624282E0062BF1D /* SoraSDKManager.swift in Sources */,
 				91941EC12624243E0062BF1D /* AppDelegate.swift in Sources */,
+				91941EE52624282E0062BF1D /* ConfigViewController.swift in Sources */,
 				91941EC32624243E0062BF1D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,6 +303,7 @@
 		};
 		91941ED22624243E0062BF1D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79440B9266C61EF882326913 /* Pods-SoraLaboSample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -302,6 +323,7 @@
 		};
 		91941ED32624243E0062BF1D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 070EE58DA579F33DEE8ED461 /* Pods-SoraLaboSample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
