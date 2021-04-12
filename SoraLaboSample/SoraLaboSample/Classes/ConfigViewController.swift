@@ -9,6 +9,8 @@ class ConfigViewController: UITableViewController {
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
     
+    @IBOutlet var roleButton: UIButton!
+
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
     
@@ -18,6 +20,39 @@ class ConfigViewController: UITableViewController {
     
     @IBOutlet var activeSpeakerLimitSegmentedControl: UISegmentedControl!
 
+    var configuration: Configuration!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // 接続設定の準備を行います。
+        configuration = Configuration(url: SoraSDKManager.targetURL, channelId: SoraSDKManager.channelId, role: .sendrecv, multistreamEnabled: true)
+
+        // 各ボタンの設定を行います。
+        configureRoleButton()
+    }
+    
+    // ロール選択ボタンの設定です。
+    func configureRoleButton() {
+        roleButton.setTitle("sendrecv", for: .normal)
+        let items = UIMenu(options: .displayInline, children: [
+            UIAction(title: "sendonly") { _ in
+                self.roleButton.setTitle("sendonly", for: .normal)
+                self.configuration.role = .sendonly
+            },
+            UIAction(title: "recvonly") { _ in
+                self.roleButton.setTitle("recvonly", for: .normal)
+                self.configuration.role = .recvonly
+            },
+            UIAction(title: "sendrecv") { _ in
+                self.roleButton.setTitle("sendrecv", for: .normal)
+                self.configuration.role = .sendrecv
+            },
+        ])
+        roleButton.menu = UIMenu(title: "", children: [items])
+        roleButton.showsMenuAsPrimaryAction = true
+    }
+    
     /**
      行がタップされたときの処理を記述します。
      */

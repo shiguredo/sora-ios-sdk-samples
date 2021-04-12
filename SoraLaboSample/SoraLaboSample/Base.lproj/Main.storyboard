@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,42 +22,37 @@
             </objects>
             <point key="canvasLocation" x="-4" y="166"/>
         </scene>
-        <!--ビデオチャットに参加-->
+        <!--Sora Labo に接続する-->
         <scene sceneID="dP0-qG-ZjG">
             <objects>
-                <tableViewController id="XQ9-0y-Y6c" customClass="ConfigViewController" customModule="VideoChatSample" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="XQ9-0y-Y6c" customClass="ConfigViewController" customModule="SoraLaboSample" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ctw-eU-DZo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="接続設定" id="0Rf-Eq-cRJ">
+                            <tableViewSection footerTitle="シグナリングキーとチャネルIDの指定はソースコードを変更してください。" id="0Rf-Eq-cRJ">
+                                <cells/>
+                            </tableViewSection>
+                            <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="oj7-Fl-M80">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
+                                        <rect key="frame" x="0.0" y="82" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oj7-Fl-M80" id="FFO-qy-WYA">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ShA-Zi-CkT">
-                                                    <rect key="frame" x="135" y="11" width="220" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャンネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VUT-cm-blp">
-                                                    <rect key="frame" x="20" y="11.5" width="103" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQp-k7-8lk">
+                                                    <rect key="frame" x="152.5" y="11.5" width="70" height="21"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ShA-Zi-CkT" firstAttribute="centerY" secondItem="FFO-qy-WYA" secondAttribute="centerY" id="2nP-PK-M6L"/>
-                                                <constraint firstAttribute="trailing" secondItem="ShA-Zi-CkT" secondAttribute="trailing" constant="20" id="Fqo-do-HHK"/>
-                                                <constraint firstItem="ShA-Zi-CkT" firstAttribute="leading" secondItem="VUT-cm-blp" secondAttribute="trailing" constant="12" id="OcE-fD-atT"/>
-                                                <constraint firstItem="VUT-cm-blp" firstAttribute="leading" secondItem="FFO-qy-WYA" secondAttribute="leading" constant="20" id="oBM-JW-DjA"/>
-                                                <constraint firstItem="VUT-cm-blp" firstAttribute="centerY" secondItem="FFO-qy-WYA" secondAttribute="centerY" id="xCG-hX-ac8"/>
+                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="centerX" secondItem="FHd-dF-Glf" secondAttribute="centerX" id="Gcn-4F-Ywz"/>
+                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="centerY" secondItem="FHd-dF-Glf" secondAttribute="centerY" id="yfV-9p-Y42"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -67,13 +61,46 @@
                             <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデックを選択します。" id="fXu-bU-AWH">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KG5-jM-cSB">
-                                        <rect key="frame" x="0.0" y="163" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="189.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KG5-jM-cSB" id="wuW-MK-FoO">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jHA-3S-8CN">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ロール" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VMs-TY-6G0">
+                                                    <rect key="frame" x="16" y="11.5" width="63" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63" id="IuH-oB-kIz"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="25y-4z-akM">
+                                                    <rect key="frame" x="279" y="5.5" width="80" height="33"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="WGS-NF-E4b"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="sendrecv"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="VMs-TY-6G0" firstAttribute="leading" secondItem="wuW-MK-FoO" secondAttribute="leadingMargin" id="6oe-w1-hMJ"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="25y-4z-akM" secondAttribute="trailing" id="BJi-2Y-iVo"/>
+                                                <constraint firstItem="25y-4z-akM" firstAttribute="centerY" secondItem="wuW-MK-FoO" secondAttribute="centerY" id="M57-zV-xdb"/>
+                                                <constraint firstItem="VMs-TY-6G0" firstAttribute="centerY" secondItem="wuW-MK-FoO" secondAttribute="centerY" id="gXX-AC-pOv"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="kig-pJ-esv">
+                                        <rect key="frame" x="0.0" y="233.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kig-pJ-esv" id="9Js-kE-bRW">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iap-2C-Z93">
                                                     <rect key="frame" x="20" y="6.5" width="335" height="32"/>
                                                     <segments>
                                                         <segment title="デフォルト"/>
@@ -84,9 +111,9 @@
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="jHA-3S-8CN" secondAttribute="trailing" constant="20" id="RJO-3N-nuM"/>
-                                                <constraint firstItem="jHA-3S-8CN" firstAttribute="leading" secondItem="wuW-MK-FoO" secondAttribute="leading" constant="20" id="RPY-zq-2ep"/>
-                                                <constraint firstItem="jHA-3S-8CN" firstAttribute="centerY" secondItem="wuW-MK-FoO" secondAttribute="centerY" id="tGp-3e-Ezm"/>
+                                                <constraint firstItem="iap-2C-Z93" firstAttribute="leading" secondItem="9Js-kE-bRW" secondAttribute="leading" constant="20" id="NYp-Ld-f7W"/>
+                                                <constraint firstItem="iap-2C-Z93" firstAttribute="centerY" secondItem="9Js-kE-bRW" secondAttribute="centerY" id="TiV-sD-VKg"/>
+                                                <constraint firstAttribute="trailing" secondItem="iap-2C-Z93" secondAttribute="trailing" constant="20" id="t32-h8-hx7"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -95,7 +122,7 @@
                             <tableViewSection headerTitle="スポットライト設定" footerTitle="スポットライトの設定を選択します。ビデオコーデックは VP8 または H.264 のみ有効です。" id="9vd-10-yNj">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="HXE-HV-5lK">
-                                        <rect key="frame" x="0.0" y="282.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="353" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HXE-HV-5lK" id="1Hh-aY-FlF">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -120,7 +147,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="XSC-pL-hI1">
-                                        <rect key="frame" x="0.0" y="326.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="397" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XSC-pL-hI1" id="v4h-Af-Wxb">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -146,7 +173,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="q8d-Ms-ucJ">
-                                        <rect key="frame" x="0.0" y="370.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="441" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="q8d-Ms-ucJ" id="TpD-aM-WKr">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -179,54 +206,29 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection id="2mW-ks-9Aa">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="478.5" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャットに入室する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQp-k7-8lk">
-                                                    <rect key="frame" x="109.5" y="11.5" width="156" height="21"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="centerX" secondItem="FHd-dF-Glf" secondAttribute="centerX" id="Gcn-4F-Ywz"/>
-                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="centerY" secondItem="FHd-dF-Glf" secondAttribute="centerY" id="yfV-9p-Y42"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="XQ9-0y-Y6c" id="ZUi-Be-c06"/>
                             <outlet property="delegate" destination="XQ9-0y-Y6c" id="45w-CT-sgg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
+                    <navigationItem key="navigationItem" title="Sora Labo に接続する" id="n9f-bV-9X1"/>
                     <connections>
                         <outlet property="activeSpeakerLimitSegmentedControl" destination="Caw-IX-pf0" id="2kq-oZ-8OL"/>
-                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
+                        <outlet property="roleButton" destination="25y-4z-akM" id="JGC-sG-E7X"/>
                         <outlet property="spotlightLegacySwitch" destination="ppP-bz-VWD" id="5Th-xY-5AA"/>
                         <outlet property="spotlightSwitch" destination="opU-z4-EL5" id="XVK-Zo-7TO"/>
-                        <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-Vr-gaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1017" y="166"/>
+            <point key="canvasLocation" x="1016.8" y="165.06746626686657"/>
         </scene>
         <!--チャット中: channel_id-->
         <scene sceneID="hlW-Xb-Uw7">
             <objects>
-                <viewController id="iOn-KG-Rc0" customClass="VideoChatRoomViewController" customModule="VideoChatSample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="iOn-KG-Rc0" customClass="VideoChatRoomViewController" customModule="SoraLaboSample" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9pm-c6-E2k"/>
                         <viewControllerLayoutGuide type="bottom" id="Ygh-iV-c9J"/>
