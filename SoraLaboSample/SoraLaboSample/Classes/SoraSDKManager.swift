@@ -19,7 +19,7 @@ class SoraSDKManager {
      デフォルトの接続先は Sora Labo です。
      またはお手元のSoraの接続先を指定してください。
      */
-    private static let targetURL: URL = URL(string: "wss://sora-labo.shiguredo.jp/signaling")!
+    static let targetURL: URL = URL(string: "wss://sora-labo.shiguredo.jp/signaling")!
     
     /**
      Sora Labo 用のシグナリングキーです。
@@ -27,14 +27,14 @@ class SoraSDKManager {
      Sora Labo のダッシュボードで発行されたシグナリングキーを指定してください。
      Sora Labo 以外のサーバに接続する場合は空のままで構いません。
      */
-    private static let signalingKey: String = ""
+    static let signalingKey: String = ""
 
     /**
      接続先のチャネルIDです。
      
      Sora Labo を利用する場合は "<GitHub ユーザー名>@ <任意の Room ID>" のフォーマットで指定してください。
      */
-    private static let channelId: String = "__username__@sora-labo-sample"
+    static let channelId: String = "__username__@sora-labo-sample"
 
     /**
      現在接続中のSora SDKのMediaChannelです。
