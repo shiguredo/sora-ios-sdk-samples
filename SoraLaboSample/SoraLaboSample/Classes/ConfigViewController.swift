@@ -42,25 +42,27 @@ class ConfigViewController: UITableViewController {
         // 各ボタンの設定を行います。
         channelIdLabel.text = SoraSDKManager.channelId
         
-        configureRoleButton()
+        configurePullDownMenu(roleButton, titles: ["sendrecv", "sendonly", "recvonly"])
+        configurePullDownMenu(videoCodecButton, titles: ["未指定", "VP8", "VP9", "H.264"])
+        configurePullDownMenu(videoBitRateButton, titles: ["未指定", "10", "30", "50", "100", "300", "500", "800", "1000", "1500", "2000", "2500", "3000", "5000", "10000", "15000"])
+        configurePullDownMenu(cameraFrameRateButton, titles: ["未指定", "60", "30", "24", "20", "15", "10"])
+        configurePullDownMenu(audioCodecButton, titles: ["未指定", "OPUS"])
+        configurePullDownMenu(audioBitRateButton, titles: ["未指定", "8", "16", "24", "32", "64", "96", "128", "256"])
+        configurePullDownMenu(simulcastRidButton, titles: ["未指定", "r0", "r1", "r2"])
+        configurePullDownMenu(spotlightNumberButton, titles: ["未指定", "1", "2", "3", "4", "5", "6", "7", "8"])
     }
     
-    // ロール選択ボタンの設定です。
-    func configureRoleButton() {
-        roleButton.setTitle("sendrecv", for: .normal)
-        let items = UIMenu(options: .displayInline, children: [
-            UIAction(title: "sendonly") { _ in
-                self.roleButton.setTitle("sendonly", for: .normal)
-            },
-            UIAction(title: "recvonly") { _ in
-                self.roleButton.setTitle("recvonly", for: .normal)
-            },
-            UIAction(title: "sendrecv") { _ in
-                self.roleButton.setTitle("sendrecv", for: .normal)
-            },
-        ])
-        roleButton.menu = UIMenu(title: "", children: [items])
-        roleButton.showsMenuAsPrimaryAction = true
+    // ボタンにプルダウンメニューを設定します。
+    func configurePullDownMenu(_ button: UIButton, titles: [String]) {
+        button.setTitle(titles[0], for: .normal)
+        let items = UIMenu(options: .displayInline,
+                           children:
+                            titles.map { title in
+            UIAction(title: title) { _ in
+                button.setTitle(title, for: .normal)
+            }})
+                                button.menu = UIMenu(title: "", children: [items])
+        button.showsMenuAsPrimaryAction = true
     }
     
     /**
