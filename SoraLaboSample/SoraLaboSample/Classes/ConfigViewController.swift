@@ -6,29 +6,42 @@ import Sora
  */
 class ConfigViewController: UITableViewController {
     
-    /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var channelIdTextField: UITextField!
-    
+    @IBOutlet var channelIdLabel: UILabel!
+
     @IBOutlet var roleButton: UIButton!
 
-    /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
-    
-    @IBOutlet var spotlightSwitch: UISwitch!
-    
-    @IBOutlet var spotlightLegacySwitch: UISwitch!
-    
-    @IBOutlet var activeSpeakerLimitSegmentedControl: UISegmentedControl!
+    @IBOutlet var multistreamEnabledSwitch: UISwitch!
 
-    var configuration: Configuration!
+    @IBOutlet var videoEnabledSwitch: UISwitch!
+
+    @IBOutlet var audioEnabledSwitch: UISwitch!
+
+    @IBOutlet var videoCodecButton: UIButton!
     
+    @IBOutlet var videoBitRateButton: UIButton!
+
+    @IBOutlet var audioCodecButton: UIButton!
+
+    @IBOutlet var audioBitRateButton: UIButton!
+
+    @IBOutlet var cameraResolutionButton: UIButton!
+
+    @IBOutlet var cameraFrameRateButton: UIButton!
+
+    @IBOutlet var simulcastEnabledSwitch: UISwitch!
+
+    @IBOutlet var simulcastRidButton: UIButton!
+
+    @IBOutlet var spotlightEnabledSwitch: UISwitch!
+    
+    @IBOutlet var spotlightNumberButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // 接続設定の準備を行います。
-        configuration = Configuration(url: SoraSDKManager.targetURL, channelId: SoraSDKManager.channelId, role: .sendrecv, multistreamEnabled: true)
 
         // 各ボタンの設定を行います。
+        channelIdLabel.text = SoraSDKManager.channelId
+        
         configureRoleButton()
     }
     
@@ -38,15 +51,12 @@ class ConfigViewController: UITableViewController {
         let items = UIMenu(options: .displayInline, children: [
             UIAction(title: "sendonly") { _ in
                 self.roleButton.setTitle("sendonly", for: .normal)
-                self.configuration.role = .sendonly
             },
             UIAction(title: "recvonly") { _ in
                 self.roleButton.setTitle("recvonly", for: .normal)
-                self.configuration.role = .recvonly
             },
             UIAction(title: "sendrecv") { _ in
                 self.roleButton.setTitle("sendrecv", for: .normal)
-                self.configuration.role = .sendrecv
             },
         ])
         roleButton.menu = UIMenu(title: "", children: [items])
@@ -62,44 +72,48 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 3, indexPath.row == 0 else {
-            return
-        }
-        
-        // チャンネルIDが入力されていない限り無視します。
-        guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
+        guard indexPath.section == 1, indexPath.row == 0 else {
             return
         }
         
         // ユーザーが選択した設定をUIコントロールから取得します。
+        
+        let role: Role
+        switch roleButton.currentTitle {
+        case "sendonly": role = .sendonly
+        case "recvonly": role = .recvonly
+        case "sendrecv": role = .sendrecv
+        default: fatalError()
+        }
+
         let videoCodec: VideoCodec
-        switch videoCodecSegmentedControl.selectedSegmentIndex {
-        case 0: videoCodec = .default
-        case 1: videoCodec = .vp9
-        case 2: videoCodec = .vp8
-        case 3: videoCodec = .h264
+        switch videoCodecButton.currentTitle {
+        case "未指定": videoCodec = .default
+        case "VP9": videoCodec = .vp9
+        case "VP8": videoCodec = .vp8
+        case "H.264": videoCodec = .h264
         default: fatalError()
         }
         
-        var spotlight: Configuration.Spotlight
-        if spotlightSwitch.isOn {
-            spotlight = spotlightLegacySwitch.isOn ? .legacy : .enabled
+        let spotlightNumber: Int?
+        if let text = spotlightNumberButton.currentTitle {
+            spotlightNumber = Int(text)
         } else {
-            spotlight = .disabled
+            spotlightNumber = nil
         }
-        
-        let activeSpeakerLimit: Int = activeSpeakerLimitSegmentedControl.selectedSegmentIndex + 1
         
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
-            channelId: channelId,
-            role: .sendrecv,
-            multistreamEnabled: true,
+            channelId: SoraSDKManager.channelId,
+            role: role,
+            multistreamEnabled: multistreamEnabledSwitch.isOn,
+            videoEnabled: videoEnabledSwitch.isOn,
+            audioEnabled: audioEnabledSwitch.isOn,
             videoCodec: videoCodec,
-            spotlight: spotlight,
-            activeSpeakerLimit: activeSpeakerLimit
+            spotlightEnabled: spotlightEnabledSwitch.isOn,
+            spotlightNumber: spotlightNumber
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
