@@ -116,7 +116,7 @@ class ConfigViewController: UITableViewController {
             spotlightNumber: spotlightNumber
         ) { [weak self] error in
             if let error = error {
-                // errorがnilでないばあいは、接続に失敗しています。
+                // errorがnilでない場合は、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
