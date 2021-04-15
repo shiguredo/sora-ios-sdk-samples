@@ -30,6 +30,7 @@
 		91941EE12624282E0062BF1D /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
 		91941EE22624282E0062BF1D /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		91941EE32624282E0062BF1D /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
+		91CA360A2628276A003EEBCB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +71,7 @@
 				91941EC92624243E0062BF1D /* Assets.xcassets */,
 				91941ECB2624243E0062BF1D /* LaunchScreen.storyboard */,
 				91941ECE2624243E0062BF1D /* Info.plist */,
+				91CA360A2628276A003EEBCB /* README.md */,
 			);
 			path = SoraLaboSample;
 			sourceTree = "<group>";
