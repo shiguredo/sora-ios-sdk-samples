@@ -17,7 +17,7 @@ class VideoChatRoomViewController: UIViewController {
         
         // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            navigationItem.title = "チャット中: \(mediaChannel.configuration.channelId)"
+            navigationItem.title = mediaChannel.configuration.channelId
         }
     }
     

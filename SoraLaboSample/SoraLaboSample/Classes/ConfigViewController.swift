@@ -7,45 +7,46 @@ import Sora
 class ConfigViewController: UITableViewController {
     
     @IBOutlet var channelIdLabel: UILabel!
-
+    
     @IBOutlet var roleButton: UIButton!
-
+    
     @IBOutlet var multistreamEnabledSwitch: UISwitch!
-
+    
     @IBOutlet var videoEnabledSwitch: UISwitch!
-
+    
     @IBOutlet var audioEnabledSwitch: UISwitch!
-
+    
     @IBOutlet var videoCodecButton: UIButton!
     
     @IBOutlet var videoBitRateButton: UIButton!
-
+    
     @IBOutlet var audioCodecButton: UIButton!
-
+    
     @IBOutlet var audioBitRateButton: UIButton!
-
+    
     @IBOutlet var cameraResolutionButton: UIButton!
-
+    
     @IBOutlet var cameraFrameRateButton: UIButton!
-
+    
     @IBOutlet var simulcastEnabledSwitch: UISwitch!
-
+    
     @IBOutlet var simulcastRidButton: UIButton!
-
+    
     @IBOutlet var spotlightEnabledSwitch: UISwitch!
     
     @IBOutlet var spotlightNumberButton: UIButton!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // 各ボタンの設定を行います。
         channelIdLabel.text = SoraSDKManager.channelId
         
         configurePullDownMenu(roleButton, titles: ["sendrecv", "sendonly", "recvonly"])
         configurePullDownMenu(videoCodecButton, titles: ["未指定", "VP8", "VP9", "H.264"])
         configurePullDownMenu(videoBitRateButton, titles: ["未指定", "10", "30", "50", "100", "300", "500", "800", "1000", "1500", "2000", "2500", "3000", "5000", "10000", "15000"])
-        configurePullDownMenu(cameraFrameRateButton, titles: ["未指定", "60", "30", "24", "20", "15", "10"])
+        configurePullDownMenu(cameraResolutionButton, titles: ["FHD", "HD", "VGA", "QVGA"])
+        configurePullDownMenu(cameraFrameRateButton, titles: ["60", "30", "24", "20", "15", "10"])
         configurePullDownMenu(audioCodecButton, titles: ["未指定", "OPUS"])
         configurePullDownMenu(audioBitRateButton, titles: ["未指定", "8", "16", "24", "32", "64", "96", "128", "256"])
         configurePullDownMenu(simulcastRidButton, titles: ["未指定", "r0", "r1", "r2"])
@@ -58,10 +59,10 @@ class ConfigViewController: UITableViewController {
         let items = UIMenu(options: .displayInline,
                            children:
                             titles.map { title in
-            UIAction(title: title) { _ in
-                button.setTitle(title, for: .normal)
-            }})
-                                button.menu = UIMenu(title: "", children: [items])
+                                UIAction(title: title) { _ in
+                                    button.setTitle(title, for: .normal)
+                                }})
+        button.menu = UIMenu(title: "", children: [items])
         button.showsMenuAsPrimaryAction = true
     }
     
@@ -87,13 +88,61 @@ class ConfigViewController: UITableViewController {
         case "sendrecv": role = .sendrecv
         default: fatalError()
         }
-
+        
         let videoCodec: VideoCodec
         switch videoCodecButton.currentTitle {
         case "未指定": videoCodec = .default
         case "VP9": videoCodec = .vp9
         case "VP8": videoCodec = .vp8
         case "H.264": videoCodec = .h264
+        default: fatalError()
+        }
+        
+        let videoBitRate: Int?
+        if let text = videoBitRateButton.currentTitle {
+            videoBitRate = Int(text)
+        } else {
+            videoBitRate = nil
+        }
+        
+        let cameraResolution: CameraVideoCapturer.Settings.Resolution
+        switch cameraResolutionButton.currentTitle {
+        case "FHD":
+            cameraResolution = .hd1080p
+        case "HD":
+            cameraResolution = .hd720p
+        case "VGA":
+            cameraResolution = .vga480p
+        case "QVGA":
+            cameraResolution = .qvga240p
+        default:
+            fatalError()
+        }
+        
+        let cameraFrameRate = Int(cameraFrameRateButton.currentTitle!)!
+        let cameraSettings = CameraVideoCapturer.Settings(resolution: cameraResolution, frameRate: cameraFrameRate, canStop: true)
+        let videoCapturerDevice = VideoCapturerDevice.camera(settings: cameraSettings)
+        
+        let audioCodec: AudioCodec
+        switch audioCodecButton.currentTitle {
+        case "未指定": audioCodec = .default
+        case "OPUS": audioCodec = .opus
+        default: fatalError()
+        }
+        
+        let audioBitRate: Int?
+        if let text = audioBitRateButton.currentTitle {
+            audioBitRate = Int(text)
+        } else {
+            audioBitRate = nil
+        }
+        
+        let simulcastRid: SimulcastRid?
+        switch simulcastRidButton.currentTitle {
+        case "未指定": simulcastRid = nil
+        case "r0": simulcastRid = .r0
+        case "r1": simulcastRid = .r1
+        case "r2": simulcastRid = .r2
         default: fatalError()
         }
         
@@ -105,8 +154,6 @@ class ConfigViewController: UITableViewController {
         }
         
         // 入力された設定を元にSoraへ接続を行います。
-        // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
-        // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
             channelId: SoraSDKManager.channelId,
             role: role,
@@ -114,6 +161,12 @@ class ConfigViewController: UITableViewController {
             videoEnabled: videoEnabledSwitch.isOn,
             audioEnabled: audioEnabledSwitch.isOn,
             videoCodec: videoCodec,
+            videoBitRate: videoBitRate,
+            videoCapturerDevice: videoCapturerDevice,
+            audioCodec: audioCodec,
+            audioBitRate: audioBitRate,
+            simulcastEnabled: simulcastEnabledSwitch.isOn,
+            simulcastRid: simulcastRid,
             spotlightEnabled: spotlightEnabledSwitch.isOn,
             spotlightNumber: spotlightNumber
         ) { [weak self] error in

@@ -70,7 +70,7 @@ class SoraSDKManager {
                  audioEnabled: Bool = true,
                  videoCodec: VideoCodec = .default,
                  videoBitRate: Int? = nil,
-                 videoCapturerOption: VideoCapturerDevice = .camera(settings: .default),
+                 videoCapturerDevice: VideoCapturerDevice? = nil,
                  audioCodec: AudioCodec = .default,
                  audioBitRate: Int? = nil,
                  simulcastEnabled: Bool = false,
@@ -93,7 +93,7 @@ class SoraSDKManager {
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
         configuration.videoBitRate = videoBitRate
-        configuration.videoCapturerDevice = videoCapturerOption
+        configuration.videoCapturerDevice = videoCapturerDevice ?? .camera(settings: .default)
         configuration.audioCodec = audioCodec
         configuration.audioBitRate = audioBitRate
         configuration.simulcastEnabled = simulcastEnabled
