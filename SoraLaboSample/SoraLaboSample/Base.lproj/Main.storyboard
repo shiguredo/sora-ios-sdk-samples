@@ -93,7 +93,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="配信設定" footerTitle="" id="fXu-bU-AWH">
+                            <tableViewSection headerTitle="配信設定" footerTitle="ロールを sendrecv にすると、強制的にマルチストリームが有効になります。" id="fXu-bU-AWH">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KG5-jM-cSB">
                                         <rect key="frame" x="0.0" y="231" width="375" height="44"/>
@@ -208,7 +208,7 @@
                             <tableViewSection headerTitle="映像" footerTitle="" id="9vd-10-yNj">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="NVT-af-Sne">
-                                        <rect key="frame" x="0.0" y="474.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="498.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NVT-af-Sne" id="qqm-Kr-G6p">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -241,7 +241,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RcT-3h-s52">
-                                        <rect key="frame" x="0.0" y="518.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="542.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RcT-3h-s52" id="isF-4S-Mf5">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -278,7 +278,7 @@
                             <tableViewSection headerTitle="音声" footerTitle="" id="jBa-b2-V9i">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="fWE-b9-Tp7">
-                                        <rect key="frame" x="0.0" y="630" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="654" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fWE-b9-Tp7" id="q1a-Ti-8QO">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -311,7 +311,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RG7-VN-See">
-                                        <rect key="frame" x="0.0" y="674" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="698" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RG7-VN-See" id="cmT-4c-HBs">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -348,7 +348,7 @@
                             <tableViewSection headerTitle="カメラ" footerTitle="" id="gyQ-Or-oUb">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="fjH-Db-2FD">
-                                        <rect key="frame" x="0.0" y="785.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="809.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fjH-Db-2FD" id="Odv-qZ-BlN">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -381,7 +381,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="kcu-mz-24a">
-                                        <rect key="frame" x="0.0" y="829.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="853.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kcu-mz-24a" id="Omv-3f-GMz">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -418,7 +418,7 @@
                             <tableViewSection headerTitle="サイマルキャスト機能" footerTitle="" id="f6A-DI-E2p">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="sTa-TM-xa4">
-                                        <rect key="frame" x="0.0" y="941" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="965" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sTa-TM-xa4" id="mdc-bA-IPO">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -443,7 +443,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="6sk-ws-zMl">
-                                        <rect key="frame" x="0.0" y="985" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1009" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6sk-ws-zMl" id="vzh-kT-c5t">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -477,10 +477,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="スポットライト機能" footerTitle="" id="AdU-rK-0cg">
+                            <tableViewSection headerTitle="スポットライト機能" footerTitle="スポットライト機能を有効にすると、サイマルキャスト機能も有効になります。" id="AdU-rK-0cg">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="dTD-T8-g9S">
-                                        <rect key="frame" x="0.0" y="1096.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1120.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dTD-T8-g9S" id="kpM-RB-1pa">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -505,7 +505,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="mvo-1W-LiA">
-                                        <rect key="frame" x="0.0" y="1140.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1164.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mvo-1W-LiA" id="cX9-Hq-iR7">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
