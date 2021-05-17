@@ -89,7 +89,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="映像の種類" footerTitle="配信開始時の映像の種類を選択します。" id="PNL-Rl-ZYX">
+                            <tableViewSection headerTitle="映像の種類" footerTitle="接続開始時に受信する映像の種類を選択します。" id="PNL-Rl-ZYX">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Q4z-FJ-AI5">
                                         <rect key="frame" x="0.0" y="261" width="375" height="44"/>
