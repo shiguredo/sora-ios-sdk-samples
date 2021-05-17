@@ -3,6 +3,7 @@
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -170,7 +171,45 @@
                     <view key="view" contentMode="scaleToFill" id="cV4-uL-vzX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hTd-Gg-9fp" userLabel="rid">
+                                <rect key="frame" x="0.0" y="619" width="375" height="48"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ItH-2O-BZL">
+                                        <rect key="frame" x="8" y="8.5" width="359" height="32"/>
+                                        <segments>
+                                            <segment title="r0"/>
+                                            <segment title="r1"/>
+                                            <segment title="r2"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="onChangeRid:" destination="iOn-KG-Rc0" eventType="valueChanged" id="E9J-FD-N82"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="ItH-2O-BZL" firstAttribute="leading" secondItem="hTd-Gg-9fp" secondAttribute="leading" constant="8" id="AtI-L7-qJL"/>
+                                    <constraint firstAttribute="height" constant="48" id="BTH-bx-G6E"/>
+                                    <constraint firstItem="ItH-2O-BZL" firstAttribute="centerY" secondItem="hTd-Gg-9fp" secondAttribute="centerY" id="OSO-sd-RBi"/>
+                                    <constraint firstItem="ItH-2O-BZL" firstAttribute="centerX" secondItem="hTd-Gg-9fp" secondAttribute="centerX" id="Upl-zp-Qzw"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nuo-VV-0s9" userLabel="VideoViewList">
+                                <rect key="frame" x="0.0" y="44" width="375" height="575"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="hTd-Gg-9fp" firstAttribute="top" secondItem="Nuo-VV-0s9" secondAttribute="bottom" id="BhI-Gs-Unq"/>
+                            <constraint firstItem="hTd-Gg-9fp" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leading" id="FlE-b3-2P5"/>
+                            <constraint firstAttribute="trailing" secondItem="Nuo-VV-0s9" secondAttribute="trailing" id="O4C-ho-Blt"/>
+                            <constraint firstItem="Nuo-VV-0s9" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leading" id="Row-Xb-jzc"/>
+                            <constraint firstItem="Nuo-VV-0s9" firstAttribute="top" secondItem="9pm-c6-E2k" secondAttribute="bottom" id="SJw-zR-LeM"/>
+                            <constraint firstItem="Ygh-iV-c9J" firstAttribute="top" secondItem="hTd-Gg-9fp" secondAttribute="bottom" id="gXi-df-4HA"/>
+                            <constraint firstAttribute="trailing" secondItem="hTd-Gg-9fp" secondAttribute="trailing" id="sKf-9b-LE8"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="チャット中: channel_id" id="WKj-Mi-l5M">
                         <barButtonItem key="leftBarButtonItem" systemItem="stop" id="vg8-NP-zds">
@@ -185,18 +224,23 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="simulcastRidSegmentedControl" destination="ItH-2O-BZL" id="VUN-de-3eW"/>
+                        <outlet property="videoViewsView" destination="Nuo-VV-0s9" id="wkm-Af-1nX"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QNt-Sn-t3p" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="L83-jf-Dqb" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2001" y="166"/>
+            <point key="canvasLocation" x="2000.8" y="165.06746626686657"/>
         </scene>
     </scenes>
     <resources>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

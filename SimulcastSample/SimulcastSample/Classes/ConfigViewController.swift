@@ -86,6 +86,23 @@ class ConfigViewController: UITableViewController {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Connect" {
+            if let destination = segue.destination as? VideoChatRoomViewController {
+                switch simulcastRidSegmentedControl.selectedSegmentIndex {
+                case 1:
+                    destination.simulcastRidConfiguration = .r0
+                case 2:
+                    destination.simulcastRidConfiguration = .r1
+                case 3:
+                    destination.simulcastRidConfiguration = .r2
+                default:
+                    destination.simulcastRidConfiguration = nil
+                }
+            }
+        }
+    }
+    
     /**
      配信画面からのUnwind Segueの着地地点として定義してあります。
      詳細はMain.storyboardの設定をご確認ください。

@@ -6,11 +6,29 @@ import Sora
  */
 class VideoChatRoomViewController: UIViewController {
     
+    @IBOutlet weak var videoViewsView: UIView!
+    @IBOutlet weak var simulcastRidSegmentedControl: UISegmentedControl!
+
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
     private var downstreamVideoViews: [VideoView] = []
     
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
+    
+    var simulcastRidConfiguration: SimulcastRid?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        switch simulcastRidConfiguration {
+        case .r1:
+            simulcastRidSegmentedControl.selectedSegmentIndex = 1
+        case .r2:
+            simulcastRidSegmentedControl.selectedSegmentIndex = 2
+        default:
+            simulcastRidSegmentedControl.selectedSegmentIndex = 0
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -138,7 +156,7 @@ class VideoChatRoomViewController: UIViewController {
                                      y: size.height - floatingSize.height - 20.0,
                                      width: floatingSize.width,
                                      height: floatingSize.height)
-            view.bringSubviewToFront(videoView)
+            videoViewsView.bringSubviewToFront(videoView)
         }
     }
     
@@ -171,7 +189,7 @@ extension VideoChatRoomViewController {
             for _ in downstreams[downstreamVideoViews.count ..< downstreams.count] {
                 let videoView = VideoView()
                 videoView.contentMode = .scaleAspectFill
-                view.addSubview(videoView)
+                videoViewsView.addSubview(videoView)
                 downstreamVideoViews.append(videoView)
             }
         } else if downstreamVideoViews.count > downstreams.count {
@@ -195,13 +213,13 @@ extension VideoChatRoomViewController {
             videoView.contentMode = .scaleAspectFill
             videoView.layer.borderColor = UIColor.white.cgColor
             videoView.layer.borderWidth = 1.0
-            view.addSubview(videoView)
+            videoViewsView.addSubview(videoView)
             upstreamVideoView = videoView
         }
         upstream?.videoRenderer = upstreamVideoView
         
         // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
-        self.layoutVideoViews(for: self.view.bounds.size)
+        self.layoutVideoViews(for: self.videoViewsView.bounds.size)
     }
     
     /**
@@ -243,6 +261,43 @@ extension VideoChatRoomViewController {
      */
     @IBAction func onExitButton(_ sender: UIBarButtonItem) {
         handleDisconnect()
+    }
+    
+    @IBAction func onChangeRid(_ sender: Any) {
+        let rid: SimulcastRid
+        switch simulcastRidSegmentedControl.selectedSegmentIndex {
+        case 0:
+            rid = .r0
+        case 1:
+            rid = .r1
+        case 2:
+            rid = .r2
+        default:
+            fatalError()
+        }
+        
+        SoraSDKManager.shared.postRequestRid(rid) { response, error in
+            var reason: String?
+            if let error = error {
+                reason = error.localizedDescription
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return
+            }
+            if httpResponse.statusCode != 200 {
+                reason = "ステータスコード \(httpResponse.statusCode)"
+            }
+            
+            if let reason = reason {
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(title: "Rid の変更に失敗しました",
+                                                            message: reason,
+                                                            preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
 }
