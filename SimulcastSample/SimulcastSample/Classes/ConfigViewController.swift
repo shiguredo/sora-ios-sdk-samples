@@ -15,6 +15,12 @@ class ConfigViewController: UITableViewController {
     /// 配信開始時のサイマルキャスト rid を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var simulcastRidSegmentedControl: UISegmentedControl!
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        channelIdTextField.text = "sora"
+    }
+    
     /**
      行がタップされたときの処理を記述します。
      */
