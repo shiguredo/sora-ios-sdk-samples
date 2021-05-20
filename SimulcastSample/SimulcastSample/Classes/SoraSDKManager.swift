@@ -19,8 +19,6 @@ class SoraSDKManager {
      お手元のSoraの接続先を指定してください。
      */
     private static let targetURL: URL = URL(string: "wss://sora.example.com/signaling")!
-    
-    private static let targetAPIURL: URL = URL(string: "http://sora.example.com:3000")!
 
     /**
      現在接続中のSora SDKのMediaChannelです。
@@ -90,46 +88,6 @@ class SoraSDKManager {
         }
         mediaChannel.disconnect(error: nil)
         currentMediaChannel = nil
-    }
-    
-    func postRequestRid(_ rid: SimulcastRid, completionHandler: @escaping  (URLResponse?, Error?) -> Void) {
-        guard let mediaChannel = currentMediaChannel else {
-            return
-        }
-        guard let connectionId = mediaChannel.connectionId else {
-            return
-        }
-        
-        var request = URLRequest(url: SoraSDKManager.targetAPIURL)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Sora_20201005.RequestRtpStream", forHTTPHeaderField: "x-sora-target")
-        
-        let ridValue: String
-        switch rid {
-        case .r0:
-            ridValue = "r0"
-        case .r1:
-            ridValue = "r1"
-        case .r2:
-            ridValue = "r2"
-        }
-        
-        do {
-            let json: [String: Any] = ["channel_id": mediaChannel.configuration.channelId,
-                        "recv_connection_id": connectionId,
-                        "rid": ridValue]
-            let body = try JSONSerialization.data(withJSONObject: json, options: [])
-            request.httpBody = body
-            NSLog("\(#function): request body: \(body)")
-
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                completionHandler(response, error)
-            }
-            task.resume()
-        } catch let error {
-            NSLog("\(#function):  JSON serialization error: \(error)")
-        }
     }
     
 }
