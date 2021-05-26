@@ -176,6 +176,7 @@ extension VideoChatRoomViewController {
             // 今回は枠に合わせてアスペクト比を保ったまま領域全体を埋めたいので、.scaleAspectFillを指定しています。
             for _ in downstreams[downstreamVideoViews.count ..< downstreams.count] {
                 let videoView = VideoView()
+                videoView.debugMode = true
                 videoView.contentMode = .scaleAspectFill
                 videoViewsView.addSubview(videoView)
                 downstreamVideoViews.append(videoView)
@@ -198,6 +199,7 @@ extension VideoChatRoomViewController {
         // 今回は枠に合わせてアスペクト比を保ったまま領域全体を埋めたいので、.scaleAspectFillを指定しています。
         if upstreamVideoView == nil {
             let videoView = VideoView(frame: .zero)
+            videoView.debugMode = true
             videoView.contentMode = .scaleAspectFill
             videoView.layer.borderColor = UIColor.white.cgColor
             videoView.layer.borderWidth = 1.0
