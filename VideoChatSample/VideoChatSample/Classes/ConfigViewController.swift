@@ -48,7 +48,10 @@ class ConfigViewController: UITableViewController {
         
         var spotlight: Configuration.Spotlight
         if spotlightSwitch.isOn {
-            spotlight = spotlightLegacySwitch.isOn ? .legacy : .enabled
+            if spotlightLegacySwitch.isOn {
+                Sora.useSpotlightLegacy()
+            }
+            spotlight = .enabled
         } else {
             spotlight = .disabled
         }
