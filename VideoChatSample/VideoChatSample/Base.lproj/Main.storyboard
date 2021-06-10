@@ -92,7 +92,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="スポットライト設定" footerTitle="スポットライトの設定を選択します。ビデオコーデックは VP8 または H.264 のみ有効です。" id="9vd-10-yNj">
+                            <tableViewSection headerTitle="スポットライト設定" footerTitle="スポットライトレガシーの設定を選択します。ビデオコーデックは VP8 または H.264 のみ有効です。" id="9vd-10-yNj">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="XSC-pL-hI1">
                                         <rect key="frame" x="0.0" y="261" width="375" height="44"/>
