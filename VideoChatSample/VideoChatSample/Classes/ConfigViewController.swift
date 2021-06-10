@@ -11,9 +11,11 @@ class ConfigViewController: UITableViewController {
     
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
-    
+
+    /// スポットライトレガシー機能を指定するためのスイッチです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var spotlightLegacySwitch: UISwitch!
-    
+
+    /// スポットライトレガシー機能有効時のアクティブ配信数を指定するためのコントロールです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
     /**
@@ -47,6 +49,8 @@ class ConfigViewController: UITableViewController {
         let spotlight: Configuration.Spotlight
         if spotlightLegacySwitch.isOn {
             spotlight = .enabled
+
+            // スポットライトレガシー機能を有効にします。
             Sora.useSpotlightLegacy()
         } else {
             spotlight = .disabled
