@@ -72,7 +72,14 @@ class ConfigViewController: UITableViewController {
         case 4: spotlightUnfocusRid = .r2
         default: fatalError()
         }
-        
+
+        let spotlightNumber: Int?
+        if spotlightNumberSegmentedControl.selectedSegmentIndex == 0 {
+            spotlightNumber = nil
+        } else {
+            spotlightNumber = spotlightNumberSegmentedControl.selectedSegmentIndex
+        }
+
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
@@ -80,7 +87,8 @@ class ConfigViewController: UITableViewController {
             channelId: channelId,
             videoCodec: videoCodec,
             spotlightFocusRid: spotlightFocusRid,
-            spotlightUnfocusRid: spotlightUnfocusRid
+            spotlightUnfocusRid: spotlightUnfocusRid,
+            spotlightNumber: spotlightNumber
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
