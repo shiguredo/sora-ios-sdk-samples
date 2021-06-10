@@ -48,7 +48,7 @@ class SoraSDKManager {
                  videoCodec: VideoCodec = .default,
                  videoCapturerOption: VideoCapturerDevice = .camera(settings: .default),
                  spotlight: Configuration.Spotlight = .disabled,
-                 activeSpeakerLimit: Int? = nil,
+                 spotlightNumber: Int? = nil,
                  completionHandler: ((Error?) -> Void)?) {
         
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -66,7 +66,7 @@ class SoraSDKManager {
         configuration.videoCodec = videoCodec
         configuration.videoCapturerDevice = videoCapturerOption
         configuration.spotlightEnabled = spotlight
-        configuration.spotlightNumber = activeSpeakerLimit
+        configuration.spotlightNumber = spotlightNumber
         
         // Soraに接続を試みます。
         let _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in

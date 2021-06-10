@@ -14,7 +14,7 @@ class ConfigViewController: UITableViewController {
     
     @IBOutlet var spotlightLegacySwitch: UISwitch!
     
-    @IBOutlet var activeSpeakerLimitSegmentedControl: UISegmentedControl!
+    @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
     /**
      行がタップされたときの処理を記述します。
@@ -52,7 +52,7 @@ class ConfigViewController: UITableViewController {
             spotlight = .disabled
         }
         
-        let activeSpeakerLimit: Int = activeSpeakerLimitSegmentedControl.selectedSegmentIndex + 1
+        let spotlightNumber: Int = spotlightNumberSegmentedControl.selectedSegmentIndex + 1
         
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
@@ -63,7 +63,7 @@ class ConfigViewController: UITableViewController {
             multistreamEnabled: true,
             videoCodec: videoCodec,
             spotlight: spotlight,
-            activeSpeakerLimit: activeSpeakerLimit
+            spotlightNumber: spotlightNumber
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。

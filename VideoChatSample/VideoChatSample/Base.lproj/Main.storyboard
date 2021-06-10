@@ -186,9 +186,9 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
                     <connections>
-                        <outlet property="activeSpeakerLimitSegmentedControl" destination="Caw-IX-pf0" id="2kq-oZ-8OL"/>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="spotlightLegacySwitch" destination="ppP-bz-VWD" id="5Th-xY-5AA"/>
+                        <outlet property="spotlightNumberSegmentedControl" destination="Caw-IX-pf0" id="2kq-oZ-8OL"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
