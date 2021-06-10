@@ -12,8 +12,6 @@ class ConfigViewController: UITableViewController {
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
     
-    @IBOutlet var spotlightSwitch: UISwitch!
-    
     @IBOutlet var spotlightLegacySwitch: UISwitch!
     
     @IBOutlet var activeSpeakerLimitSegmentedControl: UISegmentedControl!
@@ -46,9 +44,10 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
         
-        var spotlight: Configuration.Spotlight
-        if spotlightSwitch.isOn {
-            spotlight = spotlightLegacySwitch.isOn ? .legacy : .enabled
+        let spotlight: Configuration.Spotlight
+        if spotlightLegacySwitch.isOn {
+            spotlight = .enabled
+            Sora.useSpotlightLegacy()
         } else {
             spotlight = .disabled
         }
