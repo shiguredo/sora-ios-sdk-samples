@@ -11,12 +11,12 @@ class ConfigViewController: UITableViewController {
     
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
-    
-    @IBOutlet var spotlightSwitch: UISwitch!
-    
+
+    /// スポットライトレガシー機能を指定するためのスイッチです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var spotlightLegacySwitch: UISwitch!
-    
-    @IBOutlet var activeSpeakerLimitSegmentedControl: UISegmentedControl!
+
+    /// スポットライトレガシー機能有効時のアクティブ配信数を指定するためのコントロールです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
     /**
      行がタップされたときの処理を記述します。
@@ -46,14 +46,17 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
         
-        var spotlight: Configuration.Spotlight
-        if spotlightSwitch.isOn {
-            spotlight = spotlightLegacySwitch.isOn ? .legacy : .enabled
+        let spotlight: Configuration.Spotlight
+        if spotlightLegacySwitch.isOn {
+            spotlight = .enabled
+
+            // スポットライトレガシー機能を有効にします。
+            Sora.useSpotlightLegacy()
         } else {
             spotlight = .disabled
         }
         
-        let activeSpeakerLimit: Int = activeSpeakerLimitSegmentedControl.selectedSegmentIndex + 1
+        let spotlightNumber: Int = spotlightNumberSegmentedControl.selectedSegmentIndex + 1
         
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
@@ -64,7 +67,7 @@ class ConfigViewController: UITableViewController {
             multistreamEnabled: true,
             videoCodec: videoCodec,
             spotlight: spotlight,
-            activeSpeakerLimit: activeSpeakerLimit
+            spotlightNumber: spotlightNumber
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
