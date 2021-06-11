@@ -46,6 +46,7 @@ class SoraSDKManager {
                  videoCodec: VideoCodec,
                  spotlightFocusRid: SpotlightRid,
                  spotlightUnfocusRid: SpotlightRid,
+                 spotlightNumber: Int?,
                  completionHandler: ((Error?) -> Void)?) {
         
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -62,6 +63,7 @@ class SoraSDKManager {
         configuration.videoCodec = videoCodec
         configuration.spotlightFocusRid = spotlightFocusRid
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
+        configuration.spotlightNumber = spotlightNumber
 
         // スポットライトを有効にします。
         configuration.spotlightEnabled = .enabled
