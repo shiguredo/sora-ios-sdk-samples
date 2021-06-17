@@ -22,7 +22,7 @@ Please read https://github.com/shiguredo/oss before use.
 - Xcode 11.1
 - Swift 5.1
 - Carthage 0.33.0 以降、または CocoaPods 1.6.1 以降
-- WebRTC SFU Sora 19.04.0 以降
+- WebRTC SFU Sora 2020.3 以降
 
 Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で取得できるバイナリに互換性がない可能性があります。詳しくはドキュメントを参照してください。
 
