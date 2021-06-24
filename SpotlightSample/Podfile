@@ -5,7 +5,5 @@ platform :ios, '10.0'
 
 target 'SpotlightSample' do
   use_frameworks!
-
-
-  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'feature/spotlight-focus-rid'
+  pod 'Sora', '2021.1'
 end
