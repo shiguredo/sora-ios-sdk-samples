@@ -5,21 +5,25 @@ import Sora
 /**
  実際に動画を配信する画面です。
  */
-class PublisherVideoViewController: UIViewController {
+class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var filterPickerView: UIPickerView!
     
     /// 動画に適応できるフィルタの一覧です。ユーザーが選択できるように、事前に定義してあります。
-    private static let allFilters: [String: CIFilter] = {
-        let sepiaFilter = CIFilter(name: "CISepiaTone")!
-        let motionBlurFilter = CIFilter(name: "CIMotionBlur")!
-        let colorInvertFilter = CIFilter(name: "CIColorInvert")!
-        let colorMonochromeFilter = CIFilter(name: "CIColorMonochrome")!
-        let comicFilter = CIFilter(name: "CIComicEffect")!
+    private static let allFilters: [(String, CIFilter?)] = {
+        let sepiaFilter = CIFilter(name: "CISepiaTone")
+        let motionBlurFilter = CIFilter(name: "CIMotionBlur")
+        let colorInvertFilter = CIFilter(name: "CIColorInvert")
+        let colorMonochromeFilter = CIFilter(name: "CIColorMonochrome")
+        let comicFilter = CIFilter(name: "CIComicEffect")
         return [
-            "モーションブラー": motionBlurFilter,
-            "色反転": colorInvertFilter,
-            "モノクロ": colorMonochromeFilter,
-            "セピア調": sepiaFilter,
-            "マンガ調": comicFilter
+            ("フィルタなし", nil),
+            ("モーションブラー", motionBlurFilter),
+            ("色反転", colorInvertFilter),
+            ("モノクロ", colorMonochromeFilter),
+            ("セピア調", sepiaFilter),
+            ("マンガ調", comicFilter)
         ]
     }()
     
@@ -41,6 +45,18 @@ class PublisherVideoViewController: UIViewController {
         
         // videoViewの表示設定を行います。
         videoView.contentMode = .scaleAspectFill
+        
+        // iPad の場合はフィルタ選択の UI を変更します。
+        // UIAlertController の動作が不安定なためです。
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad:
+            navigationItem.rightBarButtonItems?.remove(editButton)
+            filterPickerView.delegate = self
+            filterPickerView.dataSource = self
+        default:
+            filterPickerView.isHidden = true
+            filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,27 +100,38 @@ class PublisherVideoViewController: UIViewController {
         // captureSessionをセットアップしたのち、映像キャプチャを開始します。
         // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
         // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
+        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+        /*
         captureSessionQueue.async { [weak self] in
             if let finished = self?.configurationFinished, !finished {
                 self?.configureCaptureSession()
             }
             self?.captureSession.startRunning()
         }
+        */
+        if !configurationFinished {
+            configureCaptureSession()
+        }
+        captureSession.startRunning()
         
         // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = videoView
+        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // captureSessionを停止します。
+        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+        /*
         captureSessionQueue.async { [weak self] in
             self?.captureSession.stopRunning()
         }
-        
+         */
+        captureSession.stopRunning()
+
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
-        SoraSDKManager.shared.currentMediaChannel?.mainStream?.videoRenderer = nil
+        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -122,18 +149,30 @@ class PublisherVideoViewController: UIViewController {
         switch captureDevicePosition {
         case .front:
             captureDevicePosition = .back
+            // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+            /*
             captureSessionQueue.async { [weak self] in
                 self?.captureSession.stopRunning()
                 self?.configureCaptureSession()
                 self?.captureSession.startRunning()
             }
+             */
+            captureSession.stopRunning()
+            configureCaptureSession()
+            captureSession.startRunning()
         case .back:
             captureDevicePosition = .front
+        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+            /*
             captureSessionQueue.async { [weak self] in
                 self?.captureSession.stopRunning()
                 self?.configureCaptureSession()
                 self?.captureSession.startRunning()
             }
+             */
+            captureSession.stopRunning()
+            configureCaptureSession()
+            captureSession.startRunning()
         default:
             break
         }
@@ -145,12 +184,10 @@ class PublisherVideoViewController: UIViewController {
      */
     @IBAction func onFilterButton(_ sender: UIBarButtonItem) {
         let alertController = UIAlertController(title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
-        for (name, filter) in PublisherVideoViewController.allFilters.sorted(by: { $0.0 < $1.0 }) {
+        for (name, filter) in PublisherVideoViewController.allFilters {
             let action = UIAlertAction(title: name, style: .default) { [weak self] _ in self?.currentFilter = filter }
             alertController.addAction(action)
         }
-        let noFilterAction = UIAlertAction(title: "フィルタなし", style: .destructive) { [weak self] _ in self?.currentFilter = nil }
-        alertController.addAction(noFilterAction)
         present(alertController, animated: true, completion: nil)
     }
     
@@ -218,9 +255,7 @@ class PublisherVideoViewController: UIViewController {
         }
         
         // captureSessionのセットアップが完了したので、最後にこのカメラキャプチャが出力する動画の向きを設定します。
-        DispatchQueue.main.async { [weak self] in
-            self?.updateVideoOrientationUsingStatusBarOrientation()
-        }
+        self.updateVideoOrientationUsingStatusBarOrientation()
         
     }
     
@@ -231,11 +266,13 @@ class PublisherVideoViewController: UIViewController {
      そこで本サンプルでは最初の1回目の補正にのみ使用しています。
      */
     private func updateVideoOrientationUsingStatusBarOrientation() {
-        let statusBarOrientation = UIApplication.shared.statusBarOrientation
-        let videoOrientation = AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
-        for output in captureSession.outputs {
-            if let connection = output.connection(with: .video) {
-                connection.videoOrientation = videoOrientation
+        DispatchQueue.main.async {
+            let statusBarOrientation = UIApplication.shared.statusBarOrientation
+            let videoOrientation = AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
+            for output in self.captureSession.outputs {
+                if let connection = output.connection(with: .video) {
+                    connection.videoOrientation = videoOrientation
+                }
             }
         }
     }
@@ -261,6 +298,27 @@ class PublisherVideoViewController: UIViewController {
         }
     }
     
+    // MARK: UIPickerView
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView,
+                    titleForRow row: Int,
+                    forComponent component: Int) -> String? {
+        PublisherVideoViewController.allFilters[row].0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView,
+                    numberOfRowsInComponent component: Int) -> Int {
+        PublisherVideoViewController.allFilters.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        currentFilter = PublisherVideoViewController.allFilters[row].1
+    }
+    
 }
 
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
@@ -277,7 +335,7 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
      */
     func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-            let mediaStream = mediaChannel.mainStream else {
+            let mediaStream = mediaChannel.senderStream else {
                 return
         }
         if let filter = currentFilter {

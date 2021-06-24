@@ -8,11 +8,16 @@ class ConfigViewController: UITableViewController {
     
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
+    
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
-    /// スナップショット機能の有効無効設定のスイッチです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var snapshotSwitch: UISwitch!
-    
+
+    /// スポットライトレガシー機能を指定するためのスイッチです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var spotlightLegacySwitch: UISwitch!
+
+    /// スポットライトレガシー機能有効時のアクティブ配信数を指定するためのコントロールです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
+
     /**
      行がタップされたときの処理を記述します。
      */
@@ -22,7 +27,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 2, indexPath.row == 0 else {
+        guard indexPath.section == 3, indexPath.row == 0 else {
             return
         }
         
@@ -41,14 +46,28 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
         
+        let spotlight: Configuration.Spotlight
+        if spotlightLegacySwitch.isOn {
+            spotlight = .enabled
+
+            // スポットライトレガシー機能を有効にします。
+            Sora.useSpotlightLegacy()
+        } else {
+            spotlight = .disabled
+        }
+        
+        let spotlightNumber: Int = spotlightNumberSegmentedControl.selectedSegmentIndex + 1
+        
         // 入力された設定を元にSoraへ接続を行います。
-        // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、role引数には .group を指定しています。
-        // これにより、内部的にSora Multistream接続オプションが有効になり、複数人で同意に配信する事が可能になります。
-        // また、role引数に .group を指定してMultistream接続オプションを有効にすると、スナップショット機能を使用することはできなくなります。
+        // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
+        // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
             channelId: channelId,
-            role: .group,
-            videoCodec: videoCodec
+            role: .sendrecv,
+            multistreamEnabled: true,
+            videoCodec: videoCodec,
+            spotlight: spotlight,
+            spotlightNumber: spotlightNumber
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。

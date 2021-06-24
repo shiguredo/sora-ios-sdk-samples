@@ -31,6 +31,9 @@ class SoraSDKManager {
      シングルトンにしたいので、イニシャライザはprivateにしてあります。
      */
     private init() {
+        // SDK のログを表示します。
+        // 送受信されるシグナリングの内容や接続エラーを確認できます。
+        Logger.shared.level = .debug
     }
     
     /**
@@ -41,9 +44,11 @@ class SoraSDKManager {
      */
     func connect(channelId: String,
                  role: Role,
-                 snapshotEnabled: Bool = false,
+                 multistreamEnabled: Bool,
                  videoCodec: VideoCodec = .default,
                  videoCapturerOption: VideoCapturerDevice = .camera(settings: .default),
+                 spotlight: Configuration.Spotlight = .disabled,
+                 spotlightNumber: Int? = nil,
                  completionHandler: ((Error?) -> Void)?) {
         
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -54,20 +59,17 @@ class SoraSDKManager {
         // Configurationを生成して、接続設定を行います。
         // 必須となる設定はurl, channelId, roleのみです。
         // その他の設定にはデフォルト値が指定されていますが、ここで必要に応じて自由に調整することが可能です。
-        var configuration = Configuration(url: SoraSDKManager.targetURL, channelId: channelId, role: role)
+        var configuration = Configuration(url: SoraSDKManager.targetURL, channelId: channelId, role: role,
+                                          multistreamEnabled: multistreamEnabled)
         
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
         configuration.videoCapturerDevice = videoCapturerOption
-        
-        // 注意点として、スナップショット機能 (configuration.snapshotEnabled) を使う場合には、以下の２点の設定が必要です。
-        // - Video配信を有効にし、コーデックをVP8に指定する
-        // - Audio配信を有効にする
-        // ただし何もしなければSDK側でこれらのデフォルト設定を満たすようにしてくれるため、ここでは何もしていません。
-        configuration.snapshotEnabled = snapshotEnabled
+        configuration.spotlightEnabled = spotlight
+        configuration.spotlightNumber = spotlightNumber
         
         // Soraに接続を試みます。
-        Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
+        let _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
             // 接続に成功した場合は、mediaChannelに値が返され、errorがnilになります。
             // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
             self?.currentMediaChannel = mediaChannel

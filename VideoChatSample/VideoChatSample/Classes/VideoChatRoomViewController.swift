@@ -27,13 +27,13 @@ class VideoChatRoomViewController: UIViewController {
         // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.peerChannel.handlers.onAddStreamHandler = { [weak self] _ in
+            mediaChannel.peerChannel.handlers.onAddStream = { [weak self] _ in
                 NSLog("mediaChannel.peerChannel.handlers.onAddStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
             }
-            mediaChannel.peerChannel.handlers.onRemoveStreamHandler = { [weak self] _ in
+            mediaChannel.peerChannel.handlers.onRemoveStream = { [weak self] _ in
                 NSLog("mediaChannel.peerChannel.handlers.onRemoveStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
@@ -50,8 +50,8 @@ class VideoChatRoomViewController: UIViewController {
         
         // viewDidAppearで設定したコールバックを、対になるここで削除します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.peerChannel.handlers.onAddStreamHandler = nil
-            mediaChannel.peerChannel.handlers.onRemoveStreamHandler = nil
+            mediaChannel.peerChannel.handlers.onAddStream = nil
+            mediaChannel.peerChannel.handlers.onRemoveStream = nil
         }
     }
     
@@ -138,7 +138,7 @@ class VideoChatRoomViewController: UIViewController {
                                      y: size.height - floatingSize.height - 20.0,
                                      width: floatingSize.width,
                                      height: floatingSize.height)
-            view.bringSubview(toFront: videoView)
+            view.bringSubviewToFront(videoView)
         }
     }
     
@@ -154,18 +154,15 @@ extension VideoChatRoomViewController {
     private func handleUpdateStreams() {
         
         // まずはmediaPublisherのmediaStreamを取得します。
-        guard let mediaStreams = SoraSDKManager.shared.currentMediaChannel?.streams else {
+        guard (SoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
             return
         }
         
-        // mediaPublisherのmediaStreamの0番目は、常に自分自身の配信になります。
-        // それを利用して、mediaStreamを自分自身と、それ以外のユーザーのリストに分けます。
-        guard let upstream = mediaStreams.first else {
-            return
-        }
-        // dropFirst()はArraySliceを返す関係上、このあとのロジックの都合が悪いので、Arrayに変換しています。
-        let downstreams = Array(mediaStreams.dropFirst())
-        
+        // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
+        // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
+        let upstream = SoraSDKManager.shared.currentMediaChannel?.senderStream
+        let downstreams = SoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+
         // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
         if downstreamVideoViews.count < downstreams.count {
             // 用意されているVideoViewの数が足りないので、新たに追加します。
@@ -201,7 +198,7 @@ extension VideoChatRoomViewController {
             view.addSubview(videoView)
             upstreamVideoView = videoView
         }
-        upstream.videoRenderer = upstreamVideoView
+        upstream?.videoRenderer = upstreamVideoView
         
         // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
         self.layoutVideoViews(for: self.view.bounds.size)
@@ -231,10 +228,10 @@ extension VideoChatRoomViewController {
      */
     @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
         // フロントカメラ・バックカメラを入れ替える処理を行います。
-        guard let mainStream = SoraSDKManager.shared.currentMediaChannel?.mainStream else {
+        guard let senderStream = SoraSDKManager.shared.currentMediaChannel?.senderStream else {
             return
         }
-        guard let cameraVideoCapturer = mainStream.videoCapturer as? CameraVideoCapturer else {
+        guard let cameraVideoCapturer = senderStream.videoCapturer as? CameraVideoCapturer else {
             return
         }
         cameraVideoCapturer.flip()

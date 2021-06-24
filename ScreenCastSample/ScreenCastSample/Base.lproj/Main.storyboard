@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1ll-sw-UrR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1ll-sw-UrR">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -120,10 +119,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="配信設定" id="ocv-Ju-I1p">
-                                <string key="footerTitle">スナップショット機能を有効にすると、視聴者は動画の代わりにコマ送りの静止画を表示することができるようになります。これによってモバイル回線などの低速な通信環境でも快適に視聴を行うことができ、電池を節約することがてきます。
-
-配信者側がスナップショット機能を有効にしていても、実際にそれを利用するかどうかは視聴者側の設定次第になります。</string>
+                            <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデックを選択します。" id="ocv-Ju-I1p">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Wzi-jE-Ww3">
                                         <rect key="frame" x="0.0" y="163" width="375" height="44"/>
@@ -149,38 +145,12 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Ypp-kd-5Xn">
-                                        <rect key="frame" x="0.0" y="207" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ypp-kd-5Xn" id="GQJ-Io-kPY">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スナップショット機能" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6K4-yT-2rk">
-                                                    <rect key="frame" x="20" y="12" width="278" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Cnl-Xj-pCO">
-                                                    <rect key="frame" x="306" y="6" width="51" height="31"/>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="6K4-yT-2rk" firstAttribute="centerY" secondItem="GQJ-Io-kPY" secondAttribute="centerY" id="4uO-yk-dab"/>
-                                                <constraint firstItem="Cnl-Xj-pCO" firstAttribute="leading" secondItem="6K4-yT-2rk" secondAttribute="trailing" constant="8" id="5Ok-y1-TDl"/>
-                                                <constraint firstAttribute="trailing" secondItem="Cnl-Xj-pCO" secondAttribute="trailing" constant="20" id="TZr-pb-NlA"/>
-                                                <constraint firstItem="Cnl-Xj-pCO" firstAttribute="centerY" secondItem="GQJ-Io-kPY" secondAttribute="centerY" id="pBH-2P-R7k"/>
-                                                <constraint firstItem="6K4-yT-2rk" firstAttribute="leading" secondItem="GQJ-Io-kPY" secondAttribute="leading" constant="20" id="rqB-fn-NSg"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="0K7-Gv-Cld">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RWd-Sd-Ae5">
-                                        <rect key="frame" x="0.0" y="427" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="255" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RWd-Sd-Ae5" id="7mB-C2-N5q">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -217,7 +187,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="channelIdTextField" destination="vqy-RN-mcL" id="MND-pd-Jbn"/>
-                        <outlet property="snapshotSwitch" destination="Cnl-Xj-pCO" id="vJB-GB-rjN"/>
                         <outlet property="videoCodecSegmentedControl" destination="LWj-Kb-ulw" id="fKI-gG-gFn"/>
                         <segue destination="Op7-0k-iAq" kind="unwind" identifier="Connect" unwindAction="onUnwindByConnect:" id="N2j-vy-zcw"/>
                     </connections>

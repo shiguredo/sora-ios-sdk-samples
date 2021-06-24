@@ -1,0 +1,9 @@
+source 'https://github.com/shiguredo/sora-ios-sdk-specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '10.0'
+
+target 'SimulcastSample' do
+  use_frameworks!
+  pod 'Sora', '2021.1'
+end

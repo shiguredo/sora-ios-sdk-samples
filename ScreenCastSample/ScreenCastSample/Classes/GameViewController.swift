@@ -141,10 +141,10 @@ class GameViewController: UIViewController {
                 return
             }
             guard let currentMediaChannel = SoraSDKManager.shared.currentMediaChannel,
-                let mainStream = currentMediaChannel.mainStream else {
+                let senderStream = currentMediaChannel.senderStream else {
                     return
             }
-            mainStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+            senderStream.send(videoFrame: VideoFrame(from: sampleBuffer))
         }, completionHandler: { [weak self] error in
             if let error = error {
                 // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。

@@ -15,10 +15,6 @@
 		C57842AE1F41A18B001AF8AB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */; };
 		C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */; };
 		C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842B11F41A374001AF8AB /* SoraSDKManager.swift */; };
-		C57842B91F41A3F4001AF8AB /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57842B81F41A3F3001AF8AB /* WebRTC.framework */; };
-		C57842BB1F41A400001AF8AB /* SocketRocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57842BA1F41A400001AF8AB /* SocketRocket.framework */; };
-		C57842BF1F41A40B001AF8AB /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57842BE1F41A40B001AF8AB /* SDWebImage.framework */; };
-		C57842C11F41A415001AF8AB /* Sora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57842C01F41A415001AF8AB /* Sora.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,10 +28,6 @@
 		C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
 		C57842B11F41A374001AF8AB /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
-		C57842B81F41A3F3001AF8AB /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
-		C57842BA1F41A400001AF8AB /* SocketRocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketRocket.framework; path = Carthage/Build/iOS/SocketRocket.framework; sourceTree = "<group>"; };
-		C57842BE1F41A40B001AF8AB /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
-		C57842C01F41A415001AF8AB /* Sora.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sora.framework; path = Carthage/Build/iOS/Sora.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,10 +35,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C57842B91F41A3F4001AF8AB /* WebRTC.framework in Frameworks */,
-				C57842BB1F41A400001AF8AB /* SocketRocket.framework in Frameworks */,
-				C57842BF1F41A40B001AF8AB /* SDWebImage.framework in Frameworks */,
-				C57842C11F41A415001AF8AB /* Sora.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,7 +46,6 @@
 			children = (
 				0E55EF101F2FAC7300B5EFA8 /* VideoChatSample */,
 				0E55EF0F1F2FAC7300B5EFA8 /* Products */,
-				C57842B71F41A3F3001AF8AB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,17 +81,6 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		C57842B71F41A3F3001AF8AB /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C57842C01F41A415001AF8AB /* Sora.framework */,
-				C57842BE1F41A40B001AF8AB /* SDWebImage.framework */,
-				C57842BA1F41A400001AF8AB /* SocketRocket.framework */,
-				C57842B81F41A3F3001AF8AB /* WebRTC.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,7 +91,6 @@
 				0E55EF0A1F2FAC7300B5EFA8 /* Sources */,
 				0E55EF0B1F2FAC7300B5EFA8 /* Frameworks */,
 				0E55EF0C1F2FAC7300B5EFA8 /* Resources */,
-				C57842C21F41A452001AF8AB /* [Carthage] Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -133,11 +108,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = shiguredo;
 				TargetAttributes = {
 					0E55EF0D1F2FAC7300B5EFA8 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = DQ232CBKHS;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -148,6 +124,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -174,31 +151,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		C57842C21F41A452001AF8AB /* [Carthage] Copy Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/WebRTC.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SocketRocket.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SDWebImage.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Sora.framework",
-			);
-			name = "[Carthage] Copy Frameworks";
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WebRTC.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SocketRocket.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SDWebImage.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sora.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0E55EF0A1F2FAC7300B5EFA8 /* Sources */ = {
@@ -248,6 +200,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -255,6 +208,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -287,6 +241,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -305,6 +260,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -312,6 +268,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -336,6 +293,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -345,7 +303,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DQ232CBKHS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -354,7 +312,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.VideoChatSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -362,7 +320,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DQ232CBKHS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -371,7 +329,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.VideoChatSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
