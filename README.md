@@ -14,15 +14,15 @@ Please read https://github.com/shiguredo/oss before use.
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2020.4](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2020.4) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2021.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2021.1) を使用しています。
 
 - iOS 10.0 以降
 - アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
-- macOS 10.15 以降
-- Xcode 11.1
-- Swift 5.1
-- Carthage 0.33.0 以降、または CocoaPods 1.6.1 以降
-- WebRTC SFU Sora 2020.3 以降
+- macOS 11.3 以降
+- Xcode 12.5
+- Swift 5.4
+- CocoaPods 1.10.1 以降
+- WebRTC SFU Sora 2021.1 以降
 
 Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で取得できるバイナリに互換性がない可能性があります。詳しくはドキュメントを参照してください。
 
@@ -52,13 +52,25 @@ Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で�
 
 このサンプルでは、クライアントアプリの画面を動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
+### SimulcastSample (サイマルキャスト)
+
+[SimulcastSample (サイマルキャスト)](/SimulcastSample)
+
+このサンプルでは、Sora のサイマルキャスト機能を利用するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+
+### SpotlightSample (スポットライト)
+
+[SpotlightSample (スポットライト)](/SpotlightSample)
+
+このサンプルでは、Sora のスポットライト機能をを利用したアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+
 ## ライセンス
 
 Apache License 2.0
 
 ```
 Copyright 2017-2018, Masashi Ono (akisute)
-Copyright 2017-2020, Shiguredo Inc.
+Copyright 2017-2021, Shiguredo Inc.
 
 
 Licensed under the Apache License, Version 2.0 (the "License");
