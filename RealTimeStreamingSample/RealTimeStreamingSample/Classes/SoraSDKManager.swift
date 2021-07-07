@@ -42,7 +42,6 @@ class SoraSDKManager {
     func connect(channelId: String,
                  role: Role,
                  videoCodec: VideoCodec = .default,
-                 videoCapturerOption: VideoCapturerDevice = .camera(settings: .default),
                  completionHandler: ((Error?) -> Void)?) {
         
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -57,7 +56,6 @@ class SoraSDKManager {
         
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
-        configuration.videoCapturerDevice = videoCapturerOption
         
         // Soraに接続を試みます。
         let _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in

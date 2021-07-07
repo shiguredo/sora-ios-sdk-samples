@@ -47,8 +47,7 @@ class PublisherConfigViewController: UITableViewController {
             channelId: channelId,
             role: .sendonly,
             multistreamEnabled: false,
-            videoCodec: videoCodec,
-            videoCapturerOption: .custom
+            videoCodec: videoCodec
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。

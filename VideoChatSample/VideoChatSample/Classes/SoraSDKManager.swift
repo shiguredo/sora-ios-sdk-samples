@@ -46,7 +46,6 @@ class SoraSDKManager {
                  role: Role,
                  multistreamEnabled: Bool,
                  videoCodec: VideoCodec = .default,
-                 videoCapturerOption: VideoCapturerDevice = .camera(settings: .default),
                  spotlight: Configuration.Spotlight = .disabled,
                  spotlightNumber: Int? = nil,
                  completionHandler: ((Error?) -> Void)?) {
@@ -64,7 +63,6 @@ class SoraSDKManager {
         
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
-        configuration.videoCapturerDevice = videoCapturerOption
         configuration.spotlightEnabled = spotlight
         configuration.spotlightNumber = spotlightNumber
         
