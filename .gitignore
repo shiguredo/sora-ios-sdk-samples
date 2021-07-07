@@ -68,3 +68,5 @@ playground.xcworkspace
 
 fastlane/report.xml
 fastlane/screenshots
+
+**.xcworkspace
