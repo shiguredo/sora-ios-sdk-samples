@@ -15,7 +15,6 @@
 		91E3D010265B92F0003E19EC /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D00D265B92F0003E19EC /* ConfigViewController.swift */; };
 		91E3D011265B92F0003E19EC /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D00E265B92F0003E19EC /* SoraSDKManager.swift */; };
 		91E3D012265B92F0003E19EC /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D00F265B92F0003E19EC /* VideoChatRoomViewController.swift */; };
-		ABF2D923D03F9E2AC11BA13A /* Pods_SpotlightSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC07D8D265F7F495F32DD6E1 /* Pods_SpotlightSample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +38,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABF2D923D03F9E2AC11BA13A /* Pods_SpotlightSample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
