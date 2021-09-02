@@ -31,8 +31,6 @@
 		91E3D00D265B92F0003E19EC /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		91E3D00E265B92F0003E19EC /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
 		91E3D00F265B92F0003E19EC /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
-		961F4DEEA8B6380D8EB1A38B /* Pods-SpotlightSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotlightSample.debug.xcconfig"; path = "Target Support Files/Pods-SpotlightSample/Pods-SpotlightSample.debug.xcconfig"; sourceTree = "<group>"; };
-		B8D1A066E51056554383EEF2 /* Pods-SpotlightSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotlightSample.release.xcconfig"; path = "Target Support Files/Pods-SpotlightSample/Pods-SpotlightSample.release.xcconfig"; sourceTree = "<group>"; };
 		FC07D8D265F7F495F32DD6E1 /* Pods_SpotlightSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotlightSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -48,21 +46,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1B58C613DB61978E298D0C53 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				961F4DEEA8B6380D8EB1A38B /* Pods-SpotlightSample.debug.xcconfig */,
-				B8D1A066E51056554383EEF2 /* Pods-SpotlightSample.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		911C1BCF2653AA3E007B1B59 = {
 			isa = PBXGroup;
 			children = (
 				911C1BDA2653AA3E007B1B59 /* SpotlightSample */,
 				911C1BD92653AA3E007B1B59 /* Products */,
-				1B58C613DB61978E298D0C53 /* Pods */,
 				FB33F0434DB83BCABD08DB38 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -327,7 +315,6 @@
 		};
 		911C1BED2653AA3F007B1B59 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 961F4DEEA8B6380D8EB1A38B /* Pods-SpotlightSample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -347,7 +334,6 @@
 		};
 		911C1BEE2653AA3F007B1B59 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8D1A066E51056554383EEF2 /* Pods-SpotlightSample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
