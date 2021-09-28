@@ -9,7 +9,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var filterPickerView: UIPickerView!
-    
+
+    @IBOutlet weak var filterPickerViewHeightArchorPad: NSLayoutConstraint!
     /// 動画に適応できるフィルタの一覧です。ユーザーが選択できるように、事前に定義してあります。
     private static let allFilters: [(String, CIFilter?)] = {
         let sepiaFilter = CIFilter(name: "CISepiaTone")
@@ -55,6 +56,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             filterPickerView.dataSource = self
         default:
             filterPickerView.isHidden = true
+            filterPickerViewHeightArchorPad.isActive = false
             filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
     }
