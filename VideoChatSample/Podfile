@@ -5,5 +5,5 @@ platform :ios, '12.1'
 
 target 'VideoChatSample' do
   use_frameworks!
-  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk', :branch => 'develop'
+  pod 'Sora', '2021.2.1'
 end
