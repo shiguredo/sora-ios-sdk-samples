@@ -1,9 +1,9 @@
 source 'https://github.com/shiguredo/sora-ios-sdk-specs.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '10.0'
+platform :ios, '12.1'
 
 target 'SpotlightSample' do
   use_frameworks!
-  pod 'Sora', '2021.1'
+  pod 'Sora', '2021.2.1'
 end

@@ -14,9 +14,9 @@ Please read https://github.com/shiguredo/oss before use.
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2021.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2021.1) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2021.2.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2021.2.1) を使用しています。
 
-- iOS 10.0 以降
+- iOS 12.1 以降
 - アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
 - macOS 11.3 以降
 - Xcode 12.5
@@ -24,7 +24,7 @@ Please read https://github.com/shiguredo/oss before use.
 - CocoaPods 1.10.1 以降
 - WebRTC SFU Sora 2021.1 以降
 
-Xcode と Swift のバージョンによっては、 Carthage と CocoaPods で取得できるバイナリに互換性がない可能性があります。詳しくはドキュメントを参照してください。
+Xcode と Swift のバージョンによっては、 CocoaPods で取得できるバイナリに互換性がない可能性があります。
 
 ## サンプルの紹介
 
