@@ -46,6 +46,8 @@ class SoraSDKManager {
                  role: Role,
                  multistreamEnabled: Bool,
                  videoCodec: VideoCodec = .default,
+                 dataChannelSignaling: Bool? = nil,
+                 ignoreDisconnectWebSocket: Bool? = nil,
                  spotlight: Configuration.Spotlight = .disabled,
                  spotlightNumber: Int? = nil,
                  completionHandler: ((Error?) -> Void)?) {
@@ -63,6 +65,8 @@ class SoraSDKManager {
         
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
+        configuration.dataChannelSignaling = dataChannelSignaling
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
         configuration.spotlightEnabled = spotlight
         configuration.spotlightNumber = spotlightNumber
         

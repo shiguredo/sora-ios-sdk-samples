@@ -12,6 +12,12 @@ class ConfigViewController: UITableViewController {
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
+    /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
+    
+    /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
+    
     /// スポットライトレガシー機能を指定するためのスイッチです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var spotlightLegacySwitch: UISwitch!
 
@@ -37,7 +43,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 3, indexPath.row == 0 else {
+        guard indexPath.section == 4, indexPath.row == 0 else {
             return
         }
         
@@ -53,6 +59,22 @@ class ConfigViewController: UITableViewController {
         case 1: videoCodec = .vp9
         case 2: videoCodec = .vp8
         case 3: videoCodec = .h264
+        default: fatalError()
+        }
+        
+        let dataChannelSignaling: Bool?
+        switch dataChannelSignalingSegmentedControl.selectedSegmentIndex{
+        case 0: dataChannelSignaling = nil
+        case 1: dataChannelSignaling = false
+        case 2: dataChannelSignaling = true
+        default: fatalError()
+        }
+
+        let ignoreDisconnectWebSocket: Bool?
+        switch ignoreDisconnectWebSocketSegmentedControl.selectedSegmentIndex{
+        case 0: ignoreDisconnectWebSocket = nil
+        case 1: ignoreDisconnectWebSocket = false
+        case 2: ignoreDisconnectWebSocket = true
         default: fatalError()
         }
         
@@ -76,6 +98,8 @@ class ConfigViewController: UITableViewController {
             role: .sendrecv,
             multistreamEnabled: true,
             videoCodec: videoCodec,
+            dataChannelSignaling: dataChannelSignaling,
+            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket,
             spotlight: spotlight,
             spotlightNumber: spotlightNumber
         ) { [weak self] error in
