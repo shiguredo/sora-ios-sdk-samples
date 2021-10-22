@@ -19,6 +19,16 @@ class ConfigViewController: UITableViewController {
     @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
     /**
+     画面起動時の処理を記述します。
+     */
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        channelIdTextField.text = "sora"
+
+    }
+
+    /**
      行がタップされたときの処理を記述します。
      */
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
