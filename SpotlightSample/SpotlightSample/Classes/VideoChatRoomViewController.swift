@@ -33,14 +33,14 @@ class VideoChatRoomViewController: UIViewController {
         // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.peerChannel.handlers.onAddStream = { [weak self] _ in
-                NSLog("mediaChannel.peerChannel.handlers.onAddStream")
+            mediaChannel.handlers.onAddStream = { [weak self] _ in
+                NSLog("mediaChannel.handlers.onAddStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
             }
-            mediaChannel.peerChannel.handlers.onRemoveStream = { [weak self] _ in
-                NSLog("mediaChannel.peerChannel.handlers.onRemoveStream")
+            mediaChannel.handlers.onRemoveStream = { [weak self] _ in
+                NSLog("mediaChannel.handlers.onRemoveStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
@@ -56,8 +56,8 @@ class VideoChatRoomViewController: UIViewController {
         
         // viewDidAppearで設定したコールバックを、対になるここで削除します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.peerChannel.handlers.onAddStream = nil
-            mediaChannel.peerChannel.handlers.onRemoveStream = nil
+            mediaChannel.handlers.onAddStream = nil
+            mediaChannel.handlers.onRemoveStream = nil
         }
     }
     
