@@ -47,6 +47,8 @@ class SoraSDKManager {
                  spotlightFocusRid: SpotlightRid,
                  spotlightUnfocusRid: SpotlightRid,
                  spotlightNumber: Int?,
+                 dataChannelSignaling: Bool? = nil,
+                 ignoreDisconnectWebSocket: Bool? = nil,
                  completionHandler: ((Error?) -> Void)?) {
         
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -64,6 +66,8 @@ class SoraSDKManager {
         configuration.spotlightFocusRid = spotlightFocusRid
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
         configuration.spotlightNumber = spotlightNumber
+        configuration.dataChannelSignaling = dataChannelSignaling
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
         // スポットライトを有効にします。
         configuration.spotlightEnabled = .enabled
