@@ -45,6 +45,8 @@ class SoraSDKManager {
     func connect(channelId: String,
                  videoCodec: VideoCodec,
                  simulcastRid: SimulcastRid?,
+                 dataChannelSignaling: Bool? = nil,
+                 ignoreDisconnectWebSocket: Bool? = nil,
                  completionHandler: ((Error?) -> Void)?) {
         
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -60,6 +62,8 @@ class SoraSDKManager {
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
         configuration.simulcastRid = simulcastRid
+        configuration.dataChannelSignaling = dataChannelSignaling
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
         // サイマルキャストを有効にします。
         configuration.simulcastEnabled = true
