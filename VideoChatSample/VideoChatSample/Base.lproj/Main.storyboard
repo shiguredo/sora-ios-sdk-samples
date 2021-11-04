@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -92,10 +92,84 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="データチャンネルシグナリング設定" id="dEy-Xn-hbH">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="pss-Dg-3Qx">
+                                        <rect key="frame" x="0.0" y="253.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pss-Dg-3Qx" id="SG3-bc-GMK">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データチャンネル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngB-LY-InH">
+                                                    <rect key="frame" x="16" y="0.0" width="139" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="kFV-xq-JYi"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0J6-my-JRG" userLabel="Data Channel Signaling Segmented Control">
+                                                    <rect key="frame" x="183" y="6.5" width="176" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="0J6-my-JRG" secondAttribute="trailing" id="ANW-4b-e3F"/>
+                                                <constraint firstItem="ngB-LY-InH" firstAttribute="leading" secondItem="SG3-bc-GMK" secondAttribute="leadingMargin" id="CMt-Qi-QW2"/>
+                                                <constraint firstItem="0J6-my-JRG" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ngB-LY-InH" secondAttribute="trailing" id="HgM-DT-20J"/>
+                                                <constraint firstItem="0J6-my-JRG" firstAttribute="centerY" secondItem="SG3-bc-GMK" secondAttribute="centerY" id="LGJ-U3-Ngh"/>
+                                                <constraint firstItem="ngB-LY-InH" firstAttribute="top" secondItem="SG3-bc-GMK" secondAttribute="top" id="ZXf-4W-aAb"/>
+                                                <constraint firstItem="ngB-LY-InH" firstAttribute="centerY" secondItem="SG3-bc-GMK" secondAttribute="centerY" id="fM5-X2-1Fe"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Azl-WD-kPA">
+                                        <rect key="frame" x="0.0" y="297.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Azl-WD-kPA" id="r0R-1J-fmS">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WS 切断を無視" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="234-Pi-C4P">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="zwb-b5-E9q"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="tOw-iP-1q2" userLabel="Ignore Disconnect WebSocket Segmented Control">
+                                                    <rect key="frame" x="183" y="6.5" width="176" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="tOw-iP-1q2" secondAttribute="trailing" id="6qT-2y-Icj"/>
+                                                <constraint firstItem="234-Pi-C4P" firstAttribute="centerY" secondItem="r0R-1J-fmS" secondAttribute="centerY" id="OhZ-NK-Ze5"/>
+                                                <constraint firstItem="tOw-iP-1q2" firstAttribute="centerY" secondItem="r0R-1J-fmS" secondAttribute="centerY" id="P0E-FH-8i1"/>
+                                                <constraint firstItem="tOw-iP-1q2" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="234-Pi-C4P" secondAttribute="trailing" id="d7c-8L-EYe"/>
+                                                <constraint firstItem="234-Pi-C4P" firstAttribute="top" secondItem="r0R-1J-fmS" secondAttribute="top" id="hCh-2Y-6t2"/>
+                                                <constraint firstItem="234-Pi-C4P" firstAttribute="leading" secondItem="r0R-1J-fmS" secondAttribute="leadingMargin" id="hYO-d0-gCY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection headerTitle="スポットライトレガシー設定" footerTitle="スポットライトレガシーの設定を選択します。ビデオコーデックは VP8 または H.264 のみ有効です。" id="9vd-10-yNj">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="XSC-pL-hI1">
-                                        <rect key="frame" x="0.0" y="261" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="399" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XSC-pL-hI1" id="v4h-Af-Wxb">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -121,7 +195,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="q8d-Ms-ucJ">
-                                        <rect key="frame" x="0.0" y="305" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="443" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="q8d-Ms-ucJ" id="TpD-aM-WKr">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -157,7 +231,7 @@
                             <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="407.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="545.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -187,6 +261,8 @@
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
+                        <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
+                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
                         <outlet property="spotlightLegacySwitch" destination="ppP-bz-VWD" id="5Th-xY-5AA"/>
                         <outlet property="spotlightNumberSegmentedControl" destination="Caw-IX-pf0" id="2kq-oZ-8OL"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
@@ -195,7 +271,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-Vr-gaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1017" y="166"/>
+            <point key="canvasLocation" x="1016.8" y="165.06746626686657"/>
         </scene>
         <!--チャット中: channel_id-->
         <scene sceneID="hlW-Xb-Uw7">

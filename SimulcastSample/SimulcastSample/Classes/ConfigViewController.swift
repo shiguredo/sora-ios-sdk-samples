@@ -21,6 +21,12 @@ class ConfigViewController: UITableViewController {
         channelIdTextField.text = "sora"
     }
     
+    /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
+    /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+
+    @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
+    
     /**
      行がタップされたときの処理を記述します。
      */
@@ -30,7 +36,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 3, indexPath.row == 0 else {
+        guard indexPath.section == 4, indexPath.row == 0 else {
             return
         }
         
@@ -56,13 +62,31 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
         
+        let dataChannelSignaling: Bool?
+        switch dataChannelSignalingSegmentedControl.selectedSegmentIndex{
+        case 0: dataChannelSignaling = nil
+        case 1: dataChannelSignaling = false
+        case 2: dataChannelSignaling = true
+        default: fatalError()
+        }
+        
+        let ignoreDisconnectWebSocket: Bool?
+        switch ignoreDisconnectWebSocketSegmentedControl.selectedSegmentIndex{
+        case 0: ignoreDisconnectWebSocket = nil
+        case 1: ignoreDisconnectWebSocket = false
+        case 2: ignoreDisconnectWebSocket = true
+        default: fatalError()
+        }
+        
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
             channelId: channelId,
             videoCodec: videoCodec,
-            simulcastRid: simulcastRid
+            simulcastRid: simulcastRid,
+            dataChannelSignaling: dataChannelSignaling,
+            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
