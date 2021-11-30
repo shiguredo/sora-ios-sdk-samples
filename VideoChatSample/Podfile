@@ -6,4 +6,7 @@ platform :ios, '12.1'
 target 'VideoChatSample' do
   use_frameworks!
   pod 'Sora', '2021.3.0'
+
+  pod 'SwiftLint'
+  pod 'SwiftFormat/CLI'
 end
