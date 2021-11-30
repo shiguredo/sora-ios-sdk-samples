@@ -1,5 +1,5 @@
 source 'https://github.com/shiguredo/sora-ios-sdk-specs.git'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 
 platform :ios, '12.1'
 
