@@ -1,8 +1,8 @@
-name: Build ScreenCastSample
+name: Build SimulcastSample
 
 defaults:
   run:
-    working-directory: ./ScreenCastSample
+    working-directory: ./SimulcastSample
 
 on:
   push:
@@ -19,8 +19,8 @@ jobs:
     env:
       XCODE: /Applications/Xcode_12.4.app
       XCODE_SDK: iphoneos14.4
-      WORKSPACE: ScreenCastSample
-      SCHEME: ScreenCastSample
+      WORKSPACE: SimulcastSample
+      SCHEME: SimulcastSample
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode Version
