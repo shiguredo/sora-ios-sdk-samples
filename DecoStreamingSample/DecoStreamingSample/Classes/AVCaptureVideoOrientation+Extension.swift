@@ -1,11 +1,10 @@
-import UIKit
 import AVFoundation
+import UIKit
 
 /**
  サンプルアプリ内で使うための、便利なExtensionを定義します。
  */
 extension AVCaptureVideoOrientation {
-    
     /**
      UIDeviceOrientationを元にAVCaptureVideoOrientationを返します。
      */
@@ -18,7 +17,7 @@ extension AVCaptureVideoOrientation {
         default: return nil
         }
     }
-    
+
     /**
      UIInterfaceOrientationを元にAVCaptureVideoOrientationを返します。
      */
@@ -31,5 +30,4 @@ extension AVCaptureVideoOrientation {
         default: return nil
         }
     }
-    
 }
