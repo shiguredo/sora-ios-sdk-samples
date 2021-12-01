@@ -1,8 +1,8 @@
-name: Build RealTimeScreamingSample
+name: Build RealTimeStreamingSample
 
 defaults:
   run:
-    working-directory: ./RealTimeScreamingSample
+    working-directory: ./RealTimeStreamingSample
 
 on:
   push:
@@ -19,8 +19,8 @@ jobs:
     env:
       XCODE: /Applications/Xcode_12.4.app
       XCODE_SDK: iphoneos14.4
-      WORKSPACE: RealTimeScreamingSample
-      SCHEME: RealTimeScreamingSample
+      WORKSPACE: RealTimeStreamingSample
+      SCHEME: RealTimeStreamingSample
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode Version
