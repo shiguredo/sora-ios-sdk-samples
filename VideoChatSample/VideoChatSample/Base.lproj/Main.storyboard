@@ -166,72 +166,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="スポットライトレガシー設定" footerTitle="スポットライトレガシーの設定を選択します。ビデオコーデックは VP8 または H.264 のみ有効です。" id="9vd-10-yNj">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="XSC-pL-hI1">
-                                        <rect key="frame" x="0.0" y="399" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XSC-pL-hI1" id="v4h-Af-Wxb">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スポットライトレガシー" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Q2-eS-0Qg">
-                                                    <rect key="frame" x="16" y="11" width="191" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ppP-bz-VWD">
-                                                    <rect key="frame" x="310" y="6.5" width="51" height="31"/>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="3Q2-eS-0Qg" firstAttribute="leading" secondItem="v4h-Af-Wxb" secondAttribute="leadingMargin" id="A5P-Cx-npK"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="ppP-bz-VWD" secondAttribute="trailing" id="fnf-el-xp7"/>
-                                                <constraint firstItem="3Q2-eS-0Qg" firstAttribute="centerY" secondItem="v4h-Af-Wxb" secondAttribute="centerY" id="h1W-nF-ab0"/>
-                                                <constraint firstItem="3Q2-eS-0Qg" firstAttribute="top" secondItem="v4h-Af-Wxb" secondAttribute="topMargin" id="tJp-j1-DIe"/>
-                                                <constraint firstItem="ppP-bz-VWD" firstAttribute="centerY" secondItem="v4h-Af-Wxb" secondAttribute="centerY" id="uYZ-Ld-AN0"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="q8d-Ms-ucJ">
-                                        <rect key="frame" x="0.0" y="443" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="q8d-Ms-ucJ" id="TpD-aM-WKr">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="アクティブ配信数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8UQ-go-pk9">
-                                                    <rect key="frame" x="16" y="11" width="139" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="Caw-IX-pf0">
-                                                    <rect key="frame" x="206" y="6" width="153" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <segments>
-                                                        <segment title="1"/>
-                                                        <segment title="2"/>
-                                                        <segment title="3"/>
-                                                        <segment title="4"/>
-                                                        <segment title="5"/>
-                                                    </segments>
-                                                </segmentedControl>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="8UQ-go-pk9" firstAttribute="centerY" secondItem="TpD-aM-WKr" secondAttribute="centerY" id="8mb-S5-Ira"/>
-                                                <constraint firstItem="8UQ-go-pk9" firstAttribute="leading" secondItem="TpD-aM-WKr" secondAttribute="leadingMargin" id="Crx-he-QmJ"/>
-                                                <constraint firstItem="8UQ-go-pk9" firstAttribute="top" secondItem="TpD-aM-WKr" secondAttribute="topMargin" id="Qgr-ue-Gjv"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="545.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="377.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -263,8 +201,6 @@
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
                         <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
-                        <outlet property="spotlightLegacySwitch" destination="ppP-bz-VWD" id="5Th-xY-5AA"/>
-                        <outlet property="spotlightNumberSegmentedControl" destination="Caw-IX-pf0" id="2kq-oZ-8OL"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
