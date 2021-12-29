@@ -1,5 +1,3 @@
 import UIKit
 
-class MainMenuViewController: UIViewController {
-    
-}
+class MainMenuViewController: UIViewController {}

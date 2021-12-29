@@ -1,9 +1,12 @@
 source 'https://github.com/shiguredo/sora-ios-sdk-specs.git'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 
 platform :ios, '12.1'
 
 target 'ScreenCastSample' do
   use_frameworks!
   pod 'Sora', '2021.3.0'
+
+  pod 'SwiftLint'
+  pod 'SwiftFormat/CLI'
 end
