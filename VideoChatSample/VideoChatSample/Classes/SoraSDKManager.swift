@@ -49,8 +49,7 @@ class SoraSDKManager {
                  ignoreDisconnectWebSocket: Bool? = nil,
                  spotlight: Configuration.Spotlight = .disabled,
                  spotlightNumber: Int? = nil,
-                 completionHandler: ((Error?) -> Void)?)
-    {
+                 completionHandler: ((Error?) -> Void)?) {
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
         guard currentMediaChannel == nil else {
             return

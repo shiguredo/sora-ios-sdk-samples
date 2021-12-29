@@ -40,7 +40,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 4, indexPath.row == 0 else {
+        guard indexPath.section == 3, indexPath.row == 0 else {
             return
         }
 
@@ -96,9 +96,7 @@ class ConfigViewController: UITableViewController {
             multistreamEnabled: true,
             videoCodec: videoCodec,
             dataChannelSignaling: dataChannelSignaling,
-            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket,
-            spotlight: spotlight,
-            spotlightNumber: spotlightNumber
+            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
         ) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
