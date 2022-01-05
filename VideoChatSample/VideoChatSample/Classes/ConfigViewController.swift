@@ -17,12 +17,6 @@ class ConfigViewController: UITableViewController {
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
-    /// スポットライトレガシー機能を指定するためのスイッチです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var spotlightLegacySwitch: UISwitch!
-
-    /// スポットライトレガシー機能有効時のアクティブ配信数を指定するためのコントロールです。 Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
-
     /**
      画面起動時の処理を記述します。
      */
@@ -74,18 +68,6 @@ class ConfigViewController: UITableViewController {
         case 2: ignoreDisconnectWebSocket = true
         default: fatalError()
         }
-
-        let spotlight: Configuration.Spotlight
-        if spotlightLegacySwitch.isOn {
-            spotlight = .enabled
-
-            // スポットライトレガシー機能を有効にします。
-            Sora.useSpotlightLegacy()
-        } else {
-            spotlight = .disabled
-        }
-
-        let spotlightNumber: Int = spotlightNumberSegmentedControl.selectedSegmentIndex + 1
 
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、

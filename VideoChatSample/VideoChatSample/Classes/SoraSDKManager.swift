@@ -47,8 +47,6 @@ class SoraSDKManager {
                  videoCodec: VideoCodec = .default,
                  dataChannelSignaling: Bool? = nil,
                  ignoreDisconnectWebSocket: Bool? = nil,
-                 spotlight: Configuration.Spotlight = .disabled,
-                 spotlightNumber: Int? = nil,
                  completionHandler: ((Error?) -> Void)?) {
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
         guard currentMediaChannel == nil else {
@@ -65,8 +63,6 @@ class SoraSDKManager {
         configuration.videoCodec = videoCodec
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
-        configuration.spotlightEnabled = spotlight
-        configuration.spotlightNumber = spotlightNumber
 
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
