@@ -23,7 +23,7 @@
             </objects>
             <point key="canvasLocation" x="-4" y="166"/>
         </scene>
-        <!--ビデオチャットに参加-->
+        <!--サイマルキャスト-->
         <scene sceneID="dP0-qG-ZjG">
             <objects>
                 <tableViewController id="XQ9-0y-Y6c" customClass="ConfigViewController" customModule="SimulcastSample" customModuleProvider="target" sceneMemberID="viewController">
@@ -222,7 +222,7 @@
                             <outlet property="delegate" destination="XQ9-0y-Y6c" id="45w-CT-sgg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
+                    <navigationItem key="navigationItem" title="サイマルキャスト" id="n9f-bV-9X1"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
