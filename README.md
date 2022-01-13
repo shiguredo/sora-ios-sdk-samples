@@ -16,7 +16,7 @@ Please read https://github.com/shiguredo/oss before use.
 
 このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2021.2.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2021.2.1) を使用しています。
 
-- iOS 12.1 以降
+- iOS 13.0 以降
 - アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
 - macOS 12.0 以降
 - Xcode 13.1
