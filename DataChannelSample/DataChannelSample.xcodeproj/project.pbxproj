@@ -13,10 +13,6 @@
 		91C851D6279FD1CB002C4B55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91C851D4279FD1CB002C4B55 /* Main.storyboard */; };
 		91C851D8279FD1CB002C4B55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91C851D7279FD1CB002C4B55 /* Assets.xcassets */; };
 		91C851DB279FD1CB002C4B55 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91C851D9279FD1CB002C4B55 /* LaunchScreen.storyboard */; };
-		91C851E7279FE229002C4B55 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851E4279FE229002C4B55 /* ConfigViewController.swift */; };
-		91C851E8279FE229002C4B55 /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851E5279FE229002C4B55 /* VideoChatRoomViewController.swift */; };
-		91C851E9279FE229002C4B55 /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851E6279FE229002C4B55 /* SoraSDKManager.swift */; };
-		91C851EB279FE282002C4B55 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851EA279FE282002C4B55 /* Environment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,10 +24,6 @@
 		91C851D7279FD1CB002C4B55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91C851DA279FD1CB002C4B55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91C851DC279FD1CB002C4B55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91C851E4279FE229002C4B55 /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
-		91C851E5279FE229002C4B55 /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
-		91C851E6279FE229002C4B55 /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
-		91C851EA279FE282002C4B55 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,10 +64,6 @@
 		91C851CD279FD1CB002C4B55 /* DataChannelSample */ = {
 			isa = PBXGroup;
 			children = (
-				91C851E4279FE229002C4B55 /* ConfigViewController.swift */,
-				91C851E6279FE229002C4B55 /* SoraSDKManager.swift */,
-				91C851E5279FE229002C4B55 /* VideoChatRoomViewController.swift */,
-				91C851EA279FE282002C4B55 /* Environment.swift */,
 				91C851CE279FD1CB002C4B55 /* AppDelegate.swift */,
 				91C851D0279FD1CB002C4B55 /* SceneDelegate.swift */,
 				91C851D2279FD1CB002C4B55 /* ViewController.swift */,
@@ -201,10 +189,6 @@
 			files = (
 				91C851D3279FD1CB002C4B55 /* ViewController.swift in Sources */,
 				91C851CF279FD1CB002C4B55 /* AppDelegate.swift in Sources */,
-				91C851E8279FE229002C4B55 /* VideoChatRoomViewController.swift in Sources */,
-				91C851EB279FE282002C4B55 /* Environment.swift in Sources */,
-				91C851E9279FE229002C4B55 /* SoraSDKManager.swift in Sources */,
-				91C851E7279FE229002C4B55 /* ConfigViewController.swift in Sources */,
 				91C851D1279FD1CB002C4B55 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,7 +266,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -337,7 +321,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
