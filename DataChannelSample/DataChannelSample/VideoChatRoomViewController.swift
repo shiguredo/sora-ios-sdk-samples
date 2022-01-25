@@ -1,36 +1,15 @@
 import Sora
 import UIKit
 
-// ラベル、時刻、バイナリの内容、文字列化
-
-class ChatMessage {
-    var label: String
-    var date: Date
-    var data: Data
-
-    init(label: String, data: Data) {
-        self.label = label
-        date = Date()
-        self.data = data
-    }
-}
-
 /**
  ビデオチャットを行う画面です。
  */
 class VideoChatRoomViewController: UIViewController {
-    @IBOutlet weak var memberListView: UIView!
-    @IBOutlet weak var labelPopUpButton: UIButton!
-    @IBOutlet weak var chatMessageToSendTextField: UITextField!
-    @IBOutlet weak var historyTableView: UITableView!
-
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
     private var downstreamVideoViews: [VideoView] = []
 
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
-
-    var history: [ChatMessage] = []
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -158,16 +137,9 @@ class VideoChatRoomViewController: UIViewController {
                                      y: size.height - floatingSize.height - 20.0,
                                      width: floatingSize.width,
                                      height: floatingSize.height)
-            memberListView.bringSubviewToFront(videoView)
+            view.bringSubviewToFront(videoView)
         }
     }
-
-    @IBAction func clearHistory(_ sender: Any?) {
-        history = []
-    }
-
-    // TODO:
-    @IBAction func sendMessage(_ sender: Any?) {}
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -195,7 +167,7 @@ extension VideoChatRoomViewController {
             for _ in downstreams[downstreamVideoViews.count ..< downstreams.count] {
                 let videoView = VideoView()
                 videoView.contentMode = .scaleAspectFill
-                memberListView.addSubview(videoView)
+                view.addSubview(videoView)
                 downstreamVideoViews.append(videoView)
             }
         } else if downstreamVideoViews.count > downstreams.count {
@@ -219,13 +191,13 @@ extension VideoChatRoomViewController {
             videoView.contentMode = .scaleAspectFill
             videoView.layer.borderColor = UIColor.white.cgColor
             videoView.layer.borderWidth = 1.0
-            memberListView.addSubview(videoView)
+            view.addSubview(videoView)
             upstreamVideoView = videoView
         }
         upstream?.videoRenderer = upstreamVideoView
 
         // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
-        layoutVideoViews(for: memberListView.bounds.size)
+        layoutVideoViews(for: view.bounds.size)
     }
 
     /**
