@@ -13,6 +13,12 @@
 		91C851D6279FD1CB002C4B55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91C851D4279FD1CB002C4B55 /* Main.storyboard */; };
 		91C851D8279FD1CB002C4B55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91C851D7279FD1CB002C4B55 /* Assets.xcassets */; };
 		91C851DB279FD1CB002C4B55 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91C851D9279FD1CB002C4B55 /* LaunchScreen.storyboard */; };
+		91C851E7279FE229002C4B55 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851E4279FE229002C4B55 /* ConfigViewController.swift */; };
+		91C851E8279FE229002C4B55 /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851E5279FE229002C4B55 /* VideoChatRoomViewController.swift */; };
+		91C851E9279FE229002C4B55 /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851E6279FE229002C4B55 /* SoraSDKManager.swift */; };
+		91C851EB279FE282002C4B55 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851EA279FE282002C4B55 /* Environment.swift */; };
+		91C851EF279FE527002C4B55 /* MemberVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C851EE279FE527002C4B55 /* MemberVideoView.swift */; };
+		91C851F1279FE591002C4B55 /* MemberVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91C851F0279FE591002C4B55 /* MemberVideoView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +30,12 @@
 		91C851D7279FD1CB002C4B55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91C851DA279FD1CB002C4B55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91C851DC279FD1CB002C4B55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91C851E4279FE229002C4B55 /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		91C851E5279FE229002C4B55 /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
+		91C851E6279FE229002C4B55 /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
+		91C851EA279FE282002C4B55 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		91C851EE279FE527002C4B55 /* MemberVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberVideoView.swift; sourceTree = "<group>"; };
+		91C851F0279FE591002C4B55 /* MemberVideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemberVideoView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +76,9 @@
 		91C851CD279FD1CB002C4B55 /* DataChannelSample */ = {
 			isa = PBXGroup;
 			children = (
+				91C851E4279FE229002C4B55 /* ConfigViewController.swift */,
+				91C851E6279FE229002C4B55 /* SoraSDKManager.swift */,
+				91C851E5279FE229002C4B55 /* VideoChatRoomViewController.swift */,
 				91C851EA279FE282002C4B55 /* Environment.swift */,
 				91C851CE279FD1CB002C4B55 /* AppDelegate.swift */,
 				91C851D0279FD1CB002C4B55 /* SceneDelegate.swift */,
@@ -72,6 +87,8 @@
 				91C851D7279FD1CB002C4B55 /* Assets.xcassets */,
 				91C851D9279FD1CB002C4B55 /* LaunchScreen.storyboard */,
 				91C851DC279FD1CB002C4B55 /* Info.plist */,
+				91C851EE279FE527002C4B55 /* MemberVideoView.swift */,
+				91C851F0279FE591002C4B55 /* MemberVideoView.xib */,
 			);
 			path = DataChannelSample;
 			sourceTree = "<group>";
@@ -138,6 +155,7 @@
 			files = (
 				91C851DB279FD1CB002C4B55 /* LaunchScreen.storyboard in Resources */,
 				91C851D8279FD1CB002C4B55 /* Assets.xcassets in Resources */,
+				91C851F1279FE591002C4B55 /* MemberVideoView.xib in Resources */,
 				91C851D6279FD1CB002C4B55 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -190,7 +208,11 @@
 			files = (
 				91C851D3279FD1CB002C4B55 /* ViewController.swift in Sources */,
 				91C851CF279FD1CB002C4B55 /* AppDelegate.swift in Sources */,
+				91C851EF279FE527002C4B55 /* MemberVideoView.swift in Sources */,
+				91C851E8279FE229002C4B55 /* VideoChatRoomViewController.swift in Sources */,
 				91C851EB279FE282002C4B55 /* Environment.swift in Sources */,
+				91C851E9279FE229002C4B55 /* SoraSDKManager.swift in Sources */,
+				91C851E7279FE229002C4B55 /* ConfigViewController.swift in Sources */,
 				91C851D1279FD1CB002C4B55 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
