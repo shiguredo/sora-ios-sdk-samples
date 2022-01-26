@@ -8,14 +8,33 @@ class ConfigViewController: UITableViewController {
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
 
+    @IBOutlet var roleSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var videoEnabledSwitch: UISwitch!
+
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
-    /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
+    @IBOutlet var audioEnabledSwitch: UISwitch!
+
+    @IBOutlet var simulcastEnabledSwitch: UISwitch!
+
+    @IBOutlet var simulcastRidSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var spotlightEnabledSwitch: UISwitch!
+
+    @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var spotlightFocusRidSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var spotlightUnfocusRidSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var dataChannelLabelTextField: UITextField!
+
+    @IBOutlet var dataChannelDirectionSegmentedControl: UISegmentedControl!
 
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
+    @IBOutlet var ignoreDisconnectWebSocketSwitch: UISwitch!
 
     /**
      画面起動時の処理を記述します。
@@ -34,13 +53,25 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 3, indexPath.row == 0 else {
+        guard indexPath.section == 5, indexPath.row == 0 else {
             return
         }
 
         // チャンネルIDが入力されていない限り無視します。
         guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
             return
+        }
+
+        guard let dataChannelLabel = dataChannelLabelTextField.text, !channelId.isEmpty else {
+            return
+        }
+
+        let role: Role
+        switch roleSegmentedControl.selectedSegmentIndex {
+        case 0: role = .sendonly
+        case 1: role = .recvonly
+        case 2: role = .sendrecv
+        default: fatalError()
         }
 
         // ユーザーが選択した設定をUIコントロールから取得します。
@@ -53,33 +84,52 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        let dataChannelSignaling: Bool?
-        switch dataChannelSignalingSegmentedControl.selectedSegmentIndex {
-        case 0: dataChannelSignaling = nil
-        case 1: dataChannelSignaling = false
-        case 2: dataChannelSignaling = true
+        let simulcastRid: SimulcastRid?
+        switch simulcastRidSegmentedControl.selectedSegmentIndex {
+        case 0: simulcastRid = nil
+        case 1: simulcastRid = .r0
+        case 2: simulcastRid = .r1
+        case 3: simulcastRid = .r2
         default: fatalError()
         }
 
-        let ignoreDisconnectWebSocket: Bool?
-        switch ignoreDisconnectWebSocketSegmentedControl.selectedSegmentIndex {
-        case 0: ignoreDisconnectWebSocket = nil
-        case 1: ignoreDisconnectWebSocket = false
-        case 2: ignoreDisconnectWebSocket = true
+        let spotlightNumber = spotlightNumberSegmentedControl.selectedSegmentIndex
+
+        let spotlightFocusRid: SpotlightRid
+        switch spotlightFocusRidSegmentedControl.selectedSegmentIndex {
+        case 0: spotlightFocusRid = .unspecified
+        case 1: spotlightFocusRid = .none
+        case 2: spotlightFocusRid = .r0
+        case 3: spotlightFocusRid = .r1
+        case 4: spotlightFocusRid = .r2
+        default: fatalError()
+        }
+
+        let spotlightUnfocusRid: SpotlightRid
+        switch spotlightUnfocusRidSegmentedControl.selectedSegmentIndex {
+        case 0: spotlightUnfocusRid = .unspecified
+        case 1: spotlightUnfocusRid = .none
+        case 2: spotlightUnfocusRid = .r0
+        case 3: spotlightUnfocusRid = .r1
+        case 4: spotlightUnfocusRid = .r2
         default: fatalError()
         }
 
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
-        SoraSDKManager.shared.connect(
-            channelId: channelId,
-            role: .sendrecv,
-            multistreamEnabled: true,
-            videoCodec: videoCodec,
-            dataChannelSignaling: dataChannelSignaling,
-            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
-        ) { [weak self] error in
+        var configuration = Configuration(url: Environment.targetURL, channelId: channelId, role: role, multistreamEnabled: true)
+        configuration.videoEnabled = videoEnabledSwitch.isOn
+        configuration.videoCodec = videoCodec
+        configuration.audioEnabled = audioEnabledSwitch.isOn
+        configuration.simulcastEnabled = simulcastEnabledSwitch.isOn
+        configuration.simulcastRid = simulcastRid
+        configuration.spotlightEnabled = spotlightEnabledSwitch.isOn ? .enabled : .disabled
+        configuration.spotlightNumber = spotlightNumber
+        configuration.spotlightFocusRid = spotlightFocusRid
+        configuration.spotlightUnfocusRid = spotlightUnfocusRid
+
+        SoraSDKManager.shared.connect(with: configuration) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
