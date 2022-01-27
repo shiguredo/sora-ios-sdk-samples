@@ -165,4 +165,14 @@ class ConfigViewController: UITableViewController {
     @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
         // 前の画面から戻ってきても、特に処理は何も行いません。
     }
+
+    @IBAction func onTapTableView(_ sender: UITapGestureRecognizer) {
+        channelIdTextField.endEditing(true)
+        dataChannelLabelTextField.endEditing(true)
+    }
+
+    @IBAction func onTextFieldDidEnd(_ sender: Any?) {
+        channelIdTextField.endEditing(true)
+        dataChannelLabelTextField.endEditing(true)
+    }
 }
