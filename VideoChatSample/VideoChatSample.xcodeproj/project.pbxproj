@@ -12,6 +12,7 @@
 		0E55EF171F2FAC7300B5EFA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF151F2FAC7300B5EFA8 /* Main.storyboard */; };
 		0E55EF191F2FAC7300B5EFA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */; };
 		0E55EF1C1F2FAC7300B5EFA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF1A1F2FAC7300B5EFA8 /* LaunchScreen.storyboard */; };
+		35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9D27A389AE000B0ED7 /* Environment.swift */; };
 		C57842AE1F41A18B001AF8AB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */; };
 		C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */; };
 		C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842B11F41A374001AF8AB /* SoraSDKManager.swift */; };
@@ -25,6 +26,7 @@
 		0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0E55EF1B1F2FAC7300B5EFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0E55EF1D1F2FAC7300B5EFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		35DC8E9D27A389AE000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
 		C57842B11F41A374001AF8AB /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			children = (
 				C57842AC1F41A134001AF8AB /* Classes */,
 				0E55EF111F2FAC7300B5EFA8 /* AppDelegate.swift */,
+				35DC8E9D27A389AE000B0ED7 /* Environment.swift */,
 				0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */,
 				0E55EF1A1F2FAC7300B5EFA8 /* LaunchScreen.storyboard */,
 				0E55EF151F2FAC7300B5EFA8 /* Main.storyboard */,
@@ -202,6 +205,7 @@
 				C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */,
 				C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */,
 				0E55EF121F2FAC7300B5EFA8 /* AppDelegate.swift in Sources */,
+				35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,7 @@ class ConfigViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        channelIdTextField.text = "sora"
+        channelIdTextField.text = Environment.channelId
     }
 
     /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
