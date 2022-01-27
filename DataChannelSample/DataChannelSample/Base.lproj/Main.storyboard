@@ -566,7 +566,7 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-Vr-gaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="MTM-ep-7dm">
+                <tapGestureRecognizer cancelsTouchesInView="NO" id="MTM-ep-7dm">
                     <connections>
                         <action selector="onTapTableView:" destination="XQ9-0y-Y6c" id="pGC-p2-ukP"/>
                     </connections>
