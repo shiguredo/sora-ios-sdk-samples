@@ -45,6 +45,9 @@
                                                     <rect key="frame" x="118" y="11" width="290" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="onTextFieldDidEnd:" destination="XQ9-0y-Y6c" eventType="editingDidEndOnExit" id="tnh-hb-6tZ"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VUT-cm-blp">
                                                     <rect key="frame" x="20" y="11.666666666666664" width="86" height="21"/>
@@ -431,6 +434,9 @@
                                                     <rect key="frame" x="182" y="12.333333333333334" width="226" height="19.666666666666664"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="onTextFieldDidEnd:" destination="XQ9-0y-Y6c" eventType="editingDidEndOnExit" id="HfC-bK-d6Q"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -537,6 +543,7 @@
                         <connections>
                             <outlet property="dataSource" destination="XQ9-0y-Y6c" id="ZUi-Be-c06"/>
                             <outlet property="delegate" destination="XQ9-0y-Y6c" id="45w-CT-sgg"/>
+                            <outletCollection property="gestureRecognizers" destination="MTM-ep-7dm" appends="YES" id="YOP-rh-t3T"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
@@ -559,6 +566,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-Vr-gaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="MTM-ep-7dm">
+                    <connections>
+                        <action selector="onTapTableView:" destination="XQ9-0y-Y6c" id="pGC-p2-ukP"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1016.3551401869158" y="164.57883369330455"/>
         </scene>
