@@ -15,15 +15,19 @@
 
 ## ビルド方法
 
-このサンプルアプリは CocoaPods によって外部フレームワークの管理を行っているため、
-まず最初に以下のように `pod install` を実行する必要があります。
+1. CocoaPods でライブラリを取得します。
 
-```
-$ pod install
-```
+   ```
+   $ pod install
+   ```
 
-これにより、適切に外部フレームワークがセットアップされます。
-本サンプルアプリは、これだけで Xcode 上でビルドが可能な状態になります。
+2. (develop ブランチの場合) ``ScreenCastSample/Environment.example.swift`` のファイル名を ``ScreenCastSample/Environment.swift`` に変更し、接続情報を設定します。
+
+   ```
+   $ cp ScreenCastSample/Environment.example.swift ScreenCastSample/Environment.swift
+   ```
+
+３. ``ScreenCastSample.xcworkspace`` を Xcode で開いてビルドします。
 
 ## サンプルアプリの使い方
 
