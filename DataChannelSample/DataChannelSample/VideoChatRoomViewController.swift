@@ -1,15 +1,36 @@
 import Sora
 import UIKit
 
+// ラベル、時刻、バイナリの内容、文字列化
+
+class ChatMessage {
+    var label: String
+    var date: Date
+    var data: Data
+
+    init(label: String, data: Data) {
+        self.label = label
+        date = Date()
+        self.data = data
+    }
+}
+
 /**
  ビデオチャットを行う画面です。
  */
 class VideoChatRoomViewController: UIViewController {
+
+    @IBOutlet weak var labelPopUpButton: UIButton!
+    @IBOutlet weak var chatMessageToSendTextField: UITextField!
+    @IBOutlet weak var historyTableView: UITableView!
+
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
     private var downstreamVideoViews: [VideoView] = []
 
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
+
+    var history: [ChatMessage] = []
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -139,6 +160,14 @@ class VideoChatRoomViewController: UIViewController {
                                      height: floatingSize.height)
             view.bringSubviewToFront(videoView)
         }
+    }
+
+    @IBAction func clearHistory(_ sender: Any?) {
+        history = []
+    }
+
+    // TODO
+    @IBAction func sendMessage(_ sender: Any?) {
     }
 }
 
