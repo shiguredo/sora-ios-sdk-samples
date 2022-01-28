@@ -16,15 +16,19 @@ Sora iOS SDK を用いて実装する方法を説明しています。
 
 ## ビルド方法
 
-このサンプルアプリは CocoaPods によって外部フレームワークの管理を行っているため、
-まず最初に以下のように `pod install` を実行する必要があります。
+1. CocoaPods でライブラリを取得します。
 
-```
-$ pod install
-```
+   ```
+   $ pod install
+   ```
 
-これにより、適切に外部フレームワークがセットアップされます。
-本サンプルアプリは、これだけで Xcode 上でビルドが可能な状態になります。
+2. (develop ブランチの場合) ``DecoStreamingSample/Environment.example.swift`` のファイル名を ``DecoStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
+
+   ```
+   $ cp DecoStreamingSample/Environment.example.swift DecoStreamingSample/Environment.swift
+   ```
+
+３. ``DecoStreamingSample.xcworkspace`` を Xcode で開いてビルドします。
 
 ## サンプルアプリの使い方
 

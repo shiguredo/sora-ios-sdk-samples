@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35DC8E9827A386BD000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9727A386BD000B0ED7 /* Environment.swift */; };
 		91D7575F23B487A3007BFB81 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D7575E23B487A3007BFB81 /* AppDelegate.swift */; };
 		91D7576623B487A3007BFB81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D7576423B487A3007BFB81 /* Main.storyboard */; };
 		91D7576823B487A5007BFB81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91D7576723B487A5007BFB81 /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		35DC8E9727A386BD000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		91D7575B23B487A3007BFB81 /* RealTimeStreamingSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeStreamingSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D7575E23B487A3007BFB81 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91D7576523B487A3007BFB81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				91D7576C23B487A5007BFB81 /* Info.plist */,
 				91D7577E23B487E7007BFB81 /* InfoPlist.strings */,
 				91D7575E23B487A3007BFB81 /* AppDelegate.swift */,
+				35DC8E9727A386BD000B0ED7 /* Environment.swift */,
 				91D7577F23B487E7007BFB81 /* Assets.xcassets */,
 				91D7577923B487E7007BFB81 /* Base.lproj */,
 				91D7577223B487E7007BFB81 /* Classes */,
@@ -224,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91D7578423B487E7007BFB81 /* SubscriberConfigViewController.swift in Sources */,
+				35DC8E9827A386BD000B0ED7 /* Environment.swift in Sources */,
 				91D7578023B487E7007BFB81 /* MainMenuViewController.swift in Sources */,
 				91D7578323B487E7007BFB81 /* SoraSDKManager.swift in Sources */,
 				91D7575F23B487A3007BFB81 /* AppDelegate.swift in Sources */,

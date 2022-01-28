@@ -40,6 +40,9 @@ jobs:
       run: |
         pod repo update
         pod install
+    - name: Create Environment.swift
+      run: |
+        cp RealTimeStreamingSample/Environment.example.swift RealTimeStreamingSample/Environment.swift
     - name: Build Xcode Project
       run: |
         set -o pipefail && \

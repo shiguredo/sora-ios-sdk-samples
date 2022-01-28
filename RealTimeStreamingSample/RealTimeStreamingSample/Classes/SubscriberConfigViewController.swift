@@ -16,7 +16,7 @@ class SubscriberConfigViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        channelIdTextField.text = "sora"
+        channelIdTextField.text = Environment.channelId
     }
 
     /**

@@ -13,13 +13,6 @@ class SoraSDKManager {
     static let shared = SoraSDKManager()
 
     /**
-     Sora SDKの接続先URLです。
-
-     お手元のSoraの接続先を指定してください。
-     */
-    private static let targetURL = URL(string: "wss://sora.example.com/signaling")!
-
-    /**
      現在接続中のSora SDKのMediaChannelです。
 
      殆どの場合、アプリケーション全体で一つだけ同時にMediaChannelに接続することになるので、シングルトンとして用意すると便利に使えます。
@@ -55,7 +48,7 @@ class SoraSDKManager {
         // Configurationを生成して、接続設定を行います。
         // 必須となる設定は URL、チャネル ID、ロール、マルチストリームの可否です。
         // その他の設定にはデフォルト値が指定されていますが、ここで必要に応じて自由に調整することが可能です。
-        var configuration = Configuration(url: SoraSDKManager.targetURL,
+        var configuration = Configuration(url: Environment.url,
                                           channelId: channelId,
                                           role: role,
                                           multistreamEnabled: multistreamEnabled)

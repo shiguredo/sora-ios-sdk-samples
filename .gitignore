@@ -17,6 +17,7 @@ DerivedData
 !default.perspectivev3
 xcuserdata
 project.xcworkspace
+Environment.swift
 
 ## Other
 .DS_Store
