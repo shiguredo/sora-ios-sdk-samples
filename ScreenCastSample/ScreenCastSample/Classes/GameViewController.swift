@@ -149,7 +149,7 @@ class GameViewController: UIViewController {
             if let error = error {
                 // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
                 // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
-                NSLog("Error while RPScreenRecorder.shared().startCapture: \(error)")
+                NSLog("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
                 SoraSDKManager.shared.disconnect()
                 DispatchQueue.main.async {
                     self?.updateBarButtonItems()

@@ -3,7 +3,8 @@ import Foundation
 enum Environment {
 
     // 接続するサーバーのシグナリング URL
-    static let url = URL(string: "wss://sora.example.com/signaling")!
+    // 配列で複数の URL を指定することが可能です
+    static let urls = [URL(string: "wss://sora.example.com/signaling")!]
 
     // チャネル ID
     static let channelId = "sora"

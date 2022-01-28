@@ -27,13 +27,13 @@ class VideoChatRoomViewController: UIViewController {
         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
             mediaChannel.handlers.onAddStream = { [weak self] _ in
-                NSLog("mediaChannel.handlers.onAddStream")
+                NSLog("[sample] mediaChannel.handlers.onAddStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
             }
             mediaChannel.handlers.onRemoveStream = { [weak self] _ in
-                NSLog("mediaChannel.handlers.onRemoveStream")
+                NSLog("[sample] mediaChannel.handlers.onRemoveStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
@@ -231,7 +231,7 @@ extension VideoChatRoomViewController {
 
         CameraVideoCapturer.flip(current) { error in
             if let error = error {
-                NSLog(error.localizedDescription)
+                NSLog("[sample] " + error.localizedDescription)
             }
         }
     }

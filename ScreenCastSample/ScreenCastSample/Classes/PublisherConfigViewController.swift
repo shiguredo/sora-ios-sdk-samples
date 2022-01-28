@@ -61,7 +61,7 @@ class PublisherConfigViewController: UITableViewController {
                 // この場合は、エラー表示をユーザーに返すのが親切です。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-                NSLog("SoraSDKManager connection error: \(error)")
+                NSLog("[sample] SoraSDKManager connection error: \(error)")
                 DispatchQueue.main.async {
                     let alertController = UIAlertController(title: "接続に失敗しました",
                                                             message: error.localizedDescription,
@@ -71,7 +71,7 @@ class PublisherConfigViewController: UITableViewController {
                 }
             } else {
                 // errorがnilの場合は、接続に成功しています。
-                NSLog("SoraSDKManager connected.")
+                NSLog("[sample] SoraSDKManager connected.")
 
                 // 接続が完了したので、ゲーム画面に戻ります。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
