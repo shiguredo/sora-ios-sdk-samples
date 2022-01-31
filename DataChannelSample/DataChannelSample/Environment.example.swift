@@ -10,5 +10,8 @@ enum Environment {
 
      お手元のSoraの接続先を指定してください。
      */
-    private static let targetURL = URL(string: "wss://sora.example.com/signaling")!
+    static let urlCandidates: [URL] = [URL(string: "wss://sora.example.com/signaling")!]
+
+    static let signalingConnectMetadata: Encodable?
+    
 }
