@@ -19,7 +19,7 @@ class ChatMessage {
  ビデオチャットを行う画面です。
  */
 class VideoChatRoomViewController: UIViewController {
-
+    @IBOutlet weak var memberListView: UIView!
     @IBOutlet weak var labelPopUpButton: UIButton!
     @IBOutlet weak var chatMessageToSendTextField: UITextField!
     @IBOutlet weak var historyTableView: UITableView!
@@ -158,7 +158,7 @@ class VideoChatRoomViewController: UIViewController {
                                      y: size.height - floatingSize.height - 20.0,
                                      width: floatingSize.width,
                                      height: floatingSize.height)
-            view.bringSubviewToFront(videoView)
+            memberListView.bringSubviewToFront(videoView)
         }
     }
 
@@ -166,9 +166,8 @@ class VideoChatRoomViewController: UIViewController {
         history = []
     }
 
-    // TODO
-    @IBAction func sendMessage(_ sender: Any?) {
-    }
+    // TODO:
+    @IBAction func sendMessage(_ sender: Any?) {}
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -196,7 +195,7 @@ extension VideoChatRoomViewController {
             for _ in downstreams[downstreamVideoViews.count ..< downstreams.count] {
                 let videoView = VideoView()
                 videoView.contentMode = .scaleAspectFill
-                view.addSubview(videoView)
+                memberListView.addSubview(videoView)
                 downstreamVideoViews.append(videoView)
             }
         } else if downstreamVideoViews.count > downstreams.count {
@@ -220,13 +219,13 @@ extension VideoChatRoomViewController {
             videoView.contentMode = .scaleAspectFill
             videoView.layer.borderColor = UIColor.white.cgColor
             videoView.layer.borderWidth = 1.0
-            view.addSubview(videoView)
+            memberListView.addSubview(videoView)
             upstreamVideoView = videoView
         }
         upstream?.videoRenderer = upstreamVideoView
 
         // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
-        layoutVideoViews(for: view.bounds.size)
+        layoutVideoViews(for: memberListView.bounds.size)
     }
 
     /**
