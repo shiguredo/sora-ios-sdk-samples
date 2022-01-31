@@ -29,9 +29,13 @@ class ConfigViewController: UITableViewController {
 
     @IBOutlet var spotlightUnfocusRidSegmentedControl: UISegmentedControl!
 
-    @IBOutlet var dataChannelLabelTextField: UITextField!
+    @IBOutlet var dataChannelProtocolTextField: UITextField!
 
     @IBOutlet var dataChannelDirectionSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var dataChannelCompressSwitch: UISwitch!
+
+    @IBOutlet var dataChannelOrderedSwitch: UISwitch!
 
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var ignoreDisconnectWebSocketSwitch: UISwitch!
@@ -62,7 +66,7 @@ class ConfigViewController: UITableViewController {
             return
         }
 
-        guard let dataChannelLabel = dataChannelLabelTextField.text, !channelId.isEmpty else {
+        guard let dataChannelProtocol = dataChannelProtocolTextField.text, !channelId.isEmpty else {
             return
         }
 
@@ -168,11 +172,11 @@ class ConfigViewController: UITableViewController {
 
     @IBAction func onTapTableView(_ sender: UITapGestureRecognizer) {
         channelIdTextField.endEditing(true)
-        dataChannelLabelTextField.endEditing(true)
+        dataChannelProtocolTextField.endEditing(true)
     }
 
     @IBAction func onTextFieldDidEnd(_ sender: Any?) {
         channelIdTextField.endEditing(true)
-        dataChannelLabelTextField.endEditing(true)
+        dataChannelProtocolTextField.endEditing(true)
     }
 }
