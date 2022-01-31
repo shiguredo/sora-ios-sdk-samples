@@ -17,8 +17,8 @@ jobs:
   build:
     runs-on: macOS-latest
     env:
-      XCODE: /Applications/Xcode_12.4.app
-      XCODE_SDK: iphoneos14.4
+      XCODE: /Applications/Xcode_13.2.1.app
+      XCODE_SDK: iphoneos15.2
       WORKSPACE: SpotlightSample
       SCHEME: SpotlightSample
     steps:
