@@ -122,7 +122,7 @@ class ConfigViewController: UITableViewController {
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
-        var configuration = Configuration(url: Environment.targetURL, channelId: channelId, role: role, multistreamEnabled: true)
+        var configuration = Configuration(urlCandidates: Environment.urlCandidates, channelId: channelId, role: role, multistreamEnabled: true)
         configuration.videoEnabled = videoEnabledSwitch.isOn
         configuration.videoCodec = videoCodec
         configuration.audioEnabled = audioEnabledSwitch.isOn
@@ -132,6 +132,7 @@ class ConfigViewController: UITableViewController {
         configuration.spotlightNumber = spotlightNumber
         configuration.spotlightFocusRid = spotlightFocusRid
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
+        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         SoraSDKManager.shared.connect(with: configuration) { [weak self] error in
             if let error = error {
