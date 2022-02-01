@@ -49,7 +49,7 @@ class SoraSDKManager {
         // Configurationを生成して、接続設定を行います。
         // 必須となる設定はurl, channelId, roleのみです。
         // その他の設定にはデフォルト値が指定されていますが、ここで必要に応じて自由に調整することが可能です。
-        var configuration = Configuration(url: Environment.url, channelId: channelId, role: .sendrecv,
+        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv,
                                           multistreamEnabled: true)
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
@@ -69,6 +69,8 @@ class SoraSDKManager {
             // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
             self?.currentMediaChannel = mediaChannel
             completionHandler?(error)
+            NSLog("[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))")
+
         }
     }
 

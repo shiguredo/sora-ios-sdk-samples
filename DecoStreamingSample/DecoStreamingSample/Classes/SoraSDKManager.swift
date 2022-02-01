@@ -48,7 +48,7 @@ class SoraSDKManager {
         // Configurationを生成して、接続設定を行います。
         // 必須となる設定は URL、チャネル ID、ロール、マルチストリームの可否です。
         // その他の設定にはデフォルト値が指定されていますが、ここで必要に応じて自由に調整することが可能です。
-        var configuration = Configuration(url: Environment.url,
+        var configuration = Configuration(urlCandidates: Environment.urls,
                                           channelId: channelId,
                                           role: role,
                                           multistreamEnabled: multistreamEnabled)
@@ -63,6 +63,7 @@ class SoraSDKManager {
             // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
             self?.currentMediaChannel = mediaChannel
             completionHandler?(error)
+            NSLog("[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))")
         }
     }
 

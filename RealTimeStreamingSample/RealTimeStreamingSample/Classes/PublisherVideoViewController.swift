@@ -55,7 +55,7 @@ class PublisherVideoViewController: UIViewController {
 
         CameraVideoCapturer.flip(current) { error in
             if let error = error {
-                NSLog(error.localizedDescription)
+                NSLog("[sample] " + error.localizedDescription)
             }
         }
     }
