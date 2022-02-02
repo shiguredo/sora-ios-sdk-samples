@@ -21,5 +21,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>WebRTC</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>WebRTC</string>
 </dict>
 </plist>
