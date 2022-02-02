@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
@@ -128,6 +127,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="LuO-Hu-gTs" firstAttribute="centerY" secondItem="Hw3-2Z-tea" secondAttribute="centerY" id="4LS-0g-WOR"/>
+                                                <constraint firstItem="LuO-Hu-gTs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JV7-BO-Ujh" secondAttribute="trailing" constant="8" symbolic="YES" id="CkP-H6-WZo"/>
                                                 <constraint firstItem="JV7-BO-Ujh" firstAttribute="centerY" secondItem="Hw3-2Z-tea" secondAttribute="centerY" id="Gb5-8S-d6P"/>
                                                 <constraint firstAttribute="trailing" secondItem="LuO-Hu-gTs" secondAttribute="trailing" constant="20" id="PRX-Kq-9u8"/>
                                                 <constraint firstItem="JV7-BO-Ujh" firstAttribute="leading" secondItem="Hw3-2Z-tea" secondAttribute="leadingMargin" id="UxG-pu-Igc"/>
@@ -230,6 +230,7 @@
                                                 <constraint firstItem="BzW-YE-nky" firstAttribute="top" secondItem="JQ8-WG-gyN" secondAttribute="top" id="I7q-xe-RDB"/>
                                                 <constraint firstAttribute="trailing" secondItem="DKX-xc-mvX" secondAttribute="trailing" constant="20" id="OBW-md-bbC"/>
                                                 <constraint firstItem="BzW-YE-nky" firstAttribute="leading" secondItem="JQ8-WG-gyN" secondAttribute="leadingMargin" id="W2B-QX-3LG"/>
+                                                <constraint firstItem="DKX-xc-mvX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="BzW-YE-nky" secondAttribute="trailing" constant="8" symbolic="YES" id="m1t-X9-HNd"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -299,6 +300,7 @@
                                                 <constraint firstItem="sXn-oG-EpI" firstAttribute="centerY" secondItem="AjG-aI-mrj" secondAttribute="centerY" id="U3L-Nd-4rH"/>
                                                 <constraint firstItem="a4q-dm-2Ve" firstAttribute="leading" secondItem="AjG-aI-mrj" secondAttribute="leadingMargin" id="c0y-eV-WBY"/>
                                                 <constraint firstItem="a4q-dm-2Ve" firstAttribute="top" secondItem="AjG-aI-mrj" secondAttribute="top" id="i7J-nH-sgA"/>
+                                                <constraint firstItem="sXn-oG-EpI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="a4q-dm-2Ve" secondAttribute="trailing" constant="8" symbolic="YES" id="kIW-Ka-FBI"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -319,7 +321,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="Mh3-3t-THe">
-                                                    <rect key="frame" x="269" y="6.6666666666666679" width="139" height="32"/>
+                                                    <rect key="frame" x="228" y="6.6666666666666679" width="180" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="5qg-JW-wfp"/>
+                                                    </constraints>
                                                     <segments>
                                                         <segment title="0"/>
                                                         <segment title="1"/>
@@ -334,6 +339,7 @@
                                                 <constraint firstItem="vmt-ps-fdS" firstAttribute="top" secondItem="Oct-fA-6Rd" secondAttribute="top" id="JwN-gb-LPd"/>
                                                 <constraint firstItem="Mh3-3t-THe" firstAttribute="centerY" secondItem="Oct-fA-6Rd" secondAttribute="centerY" id="etE-sM-dS8"/>
                                                 <constraint firstItem="vmt-ps-fdS" firstAttribute="centerY" secondItem="Oct-fA-6Rd" secondAttribute="centerY" id="g2H-qx-oC8"/>
+                                                <constraint firstItem="Mh3-3t-THe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vmt-ps-fdS" secondAttribute="trailing" constant="20" id="nDs-bJ-Q3E"/>
                                                 <constraint firstItem="vmt-ps-fdS" firstAttribute="leading" secondItem="Oct-fA-6Rd" secondAttribute="leadingMargin" id="nKo-OQ-OcJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -356,6 +362,9 @@
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="H08-ru-SMr">
                                                     <rect key="frame" x="207" y="6.6666666666666679" width="201" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="0xe-GZ-8Se"/>
+                                                    </constraints>
                                                     <segments>
                                                         <segment title="未指定"/>
                                                         <segment title="なし"/>
@@ -393,6 +402,9 @@
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="DQ7-RG-kj2">
                                                     <rect key="frame" x="207" y="6.6666666666666679" width="201" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="FjT-h7-697"/>
+                                                    </constraints>
                                                     <segments>
                                                         <segment title="未指定"/>
                                                         <segment title="なし"/>
@@ -439,6 +451,7 @@
                                             <constraints>
                                                 <constraint firstItem="Guj-ry-NPU" firstAttribute="top" secondItem="GUk-lJ-51U" secondAttribute="top" id="0aT-6D-eM7"/>
                                                 <constraint firstItem="gqh-eW-GU8" firstAttribute="centerY" secondItem="GUk-lJ-51U" secondAttribute="centerY" id="52h-eZ-gFM"/>
+                                                <constraint firstItem="gqh-eW-GU8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Guj-ry-NPU" secondAttribute="trailing" constant="8" symbolic="YES" id="klC-4h-jCE"/>
                                                 <constraint firstAttribute="trailing" secondItem="gqh-eW-GU8" secondAttribute="trailing" constant="20" id="t6T-i3-1m3"/>
                                                 <constraint firstItem="Guj-ry-NPU" firstAttribute="centerY" secondItem="GUk-lJ-51U" secondAttribute="centerY" id="tz4-La-1Od"/>
                                                 <constraint firstItem="Guj-ry-NPU" firstAttribute="leading" secondItem="GUk-lJ-51U" secondAttribute="leadingMargin" id="wkw-uY-brn"/>
@@ -467,6 +480,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="Lsz-gg-GBm" secondAttribute="trailing" constant="20" id="1Ry-bm-oTa"/>
+                                                <constraint firstItem="Lsz-gg-GBm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="C7Z-NO-q8g" secondAttribute="trailing" constant="8" symbolic="YES" id="D5r-Z8-Hzp"/>
                                                 <constraint firstItem="Lsz-gg-GBm" firstAttribute="centerY" secondItem="Cbo-7U-ghH" secondAttribute="centerY" id="Sol-SZ-yt7"/>
                                                 <constraint firstItem="C7Z-NO-q8g" firstAttribute="centerY" secondItem="Cbo-7U-ghH" secondAttribute="centerY" id="mis-jU-fPv"/>
                                                 <constraint firstItem="C7Z-NO-q8g" firstAttribute="leading" secondItem="Cbo-7U-ghH" secondAttribute="leadingMargin" id="qCA-hl-yd1"/>
@@ -532,6 +546,7 @@
                                             <constraints>
                                                 <constraint firstItem="IxX-jD-zZs" firstAttribute="leading" secondItem="EpY-On-I0F" secondAttribute="leadingMargin" id="0t3-em-ARm"/>
                                                 <constraint firstItem="IxX-jD-zZs" firstAttribute="top" secondItem="EpY-On-I0F" secondAttribute="top" id="AVF-s5-brD"/>
+                                                <constraint firstItem="YuL-XC-yOM" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="IxX-jD-zZs" secondAttribute="trailing" constant="8" symbolic="YES" id="Klq-Jj-a7x"/>
                                                 <constraint firstItem="YuL-XC-yOM" firstAttribute="centerY" secondItem="EpY-On-I0F" secondAttribute="centerY" id="csn-MD-EGK"/>
                                                 <constraint firstItem="IxX-jD-zZs" firstAttribute="centerY" secondItem="EpY-On-I0F" secondAttribute="centerY" id="djt-uT-ZKP"/>
                                                 <constraint firstAttribute="trailing" secondItem="YuL-XC-yOM" secondAttribute="trailing" constant="20" id="jJ4-so-DAE"/>
@@ -546,16 +561,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="プロトコル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3IB-bR-KOQ">
-                                                    <rect key="frame" x="20" y="0.0" width="122" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="Fpy-0i-yMC"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="20" y="0.0" width="86.666666666666671" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="プロトコル名" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VgN-c4-85a">
-                                                    <rect key="frame" x="182" y="12" width="226" height="20"/>
+                                                    <rect key="frame" x="126.66666666666666" y="12" width="281.33333333333337" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="aCv-IF-L3W"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -564,7 +579,7 @@
                                                 </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="VgN-c4-85a" firstAttribute="leading" secondItem="3IB-bR-KOQ" secondAttribute="trailing" constant="40" id="Eel-Wc-o79"/>
+                                                <constraint firstItem="VgN-c4-85a" firstAttribute="leading" relation="lessThanOrEqual" secondItem="3IB-bR-KOQ" secondAttribute="trailing" constant="20" id="Eel-Wc-o79"/>
                                                 <constraint firstItem="3IB-bR-KOQ" firstAttribute="centerY" secondItem="1zg-H6-38e" secondAttribute="centerY" id="HOI-sH-IS5"/>
                                                 <constraint firstItem="3IB-bR-KOQ" firstAttribute="top" secondItem="1zg-H6-38e" secondAttribute="top" id="MQP-UP-EnI"/>
                                                 <constraint firstAttribute="trailing" secondItem="VgN-c4-85a" secondAttribute="trailing" constant="20" id="aan-xo-7fz"/>
