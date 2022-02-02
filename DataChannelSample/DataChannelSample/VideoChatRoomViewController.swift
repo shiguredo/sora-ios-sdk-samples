@@ -271,4 +271,12 @@ extension VideoChatRoomViewController {
     @IBAction func onExitButton(_ sender: UIBarButtonItem) {
         handleDisconnect()
     }
+
+    @IBAction func onTapView(_ sender: UITapGestureRecognizer) {
+        chatMessageToSendTextField.endEditing(true)
+    }
+
+    @IBAction func onTextFieldDidEnd(_ sender: Any?) {
+        chatMessageToSendTextField.endEditing(true)
+    }
 }
