@@ -12,6 +12,9 @@ enum Environment {
      */
     static let urlCandidates: [URL] = [URL(string: "wss://sora.example.com/signaling")!]
 
+    // チャネル ID
+    static let channelId = "sora"
+    
     static let signalingConnectMetadata: Encodable?
     
 }
