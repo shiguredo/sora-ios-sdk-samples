@@ -1,20 +1,6 @@
 import Sora
 import UIKit
 
-// ラベル、時刻、バイナリの内容、文字列化
-
-class ChatMessage {
-    var label: String
-    var date: Date
-    var data: Data
-
-    init(label: String, data: Data) {
-        self.label = label
-        date = Date()
-        self.data = data
-    }
-}
-
 /**
  ビデオチャットを行う画面です。
  */
@@ -31,6 +17,23 @@ class VideoChatRoomViewController: UIViewController {
     private var upstreamVideoView: VideoView?
 
     var history: [ChatMessage] = []
+
+    override func viewDidLoad() {
+        history = [
+            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
+        ]
+
+        historyTableView.delegate = self
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -63,6 +66,8 @@ class VideoChatRoomViewController: UIViewController {
 
         // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
         handleUpdateStreams()
+
+        historyTableView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -161,7 +166,6 @@ class VideoChatRoomViewController: UIViewController {
             memberListView.bringSubviewToFront(videoView)
         }
     }
-
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -279,5 +283,44 @@ extension VideoChatRoomViewController {
 
     @IBAction func onTextFieldDidEnd(_ sender: Any?) {
         chatMessageToSendTextField.endEditing(true)
+    }
+}
+
+extension VideoChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = historyTableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell") as! ChatMessageHistoryTableViewCell
+        let message = history[indexPath.row]
+        cell.timestampLabel.text = message.date.description
+        cell.labelLabel.text = message.label
+        cell.messageLabel.text = message.message
+        return cell
+    }
+}
+
+class ChatMessageHistoryTableViewCell: UITableViewCell {
+    @IBOutlet weak var timestampLabel: UILabel!
+    @IBOutlet weak var labelLabel: UILabel!
+    @IBOutlet weak var messageLabel: UILabel!
+}
+
+// ラベル、時刻、バイナリの内容、文字列化
+
+class ChatMessage {
+    var label: String
+    var date: Date
+    var data: Data
+
+    var message: String? {
+        String(data: data, encoding: .utf8)
+    }
+
+    init(label: String, data: Data) {
+        self.label = label
+        date = Date()
+        self.data = data
     }
 }
