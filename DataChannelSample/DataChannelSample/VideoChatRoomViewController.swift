@@ -10,6 +10,8 @@ class VideoChatRoomViewController: UIViewController {
     @IBOutlet weak var chatMessageToSendTextField: UITextField!
     @IBOutlet weak var historyTableView: UITableView!
 
+    @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
+
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
     private var downstreamVideoViews: [VideoView] = []
 
@@ -20,19 +22,22 @@ class VideoChatRoomViewController: UIViewController {
 
     override func viewDidLoad() {
         history = [
-            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam 1".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg 2".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam 3".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg 4".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam 5".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg 6".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam 7".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg 8".data(using: .utf8)!),
+            .init(label: "#spam", data: "spam spam spam 9".data(using: .utf8)!),
+            .init(label: "#egg", data: "egg egg egg 10".data(using: .utf8)!),
         ]
 
         historyTableView.delegate = self
+        historyTableView.dataSource = self
+
+        view.addGestureRecognizer(tapGestureRecognizer)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -166,6 +171,15 @@ class VideoChatRoomViewController: UIViewController {
             memberListView.bringSubviewToFront(videoView)
         }
     }
+
+    func updateHistoryTableView() {
+        historyTableView.reloadData()
+
+        DispatchQueue.main.async {
+            let offset = CGPoint(x: 0, y: self.historyTableView.contentSize.height - self.historyTableView.frame.size.height)
+            self.historyTableView.setContentOffset(offset, animated: true)
+        }
+    }
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -272,10 +286,17 @@ extension VideoChatRoomViewController {
 
     @IBAction func onClearButton(_ sender: Any?) {
         history = []
+        updateHistoryTableView()
     }
 
     // TODO:
-    @IBAction func onSendButton(_ sender: Any?) {}
+    @IBAction func onSendButton(_ sender: Any?) {
+        guard let text = chatMessageToSendTextField.text else {
+            return
+        }
+        // TODO: text を送信する
+        updateHistoryTableView()
+    }
 
     @IBAction func onTapView(_ sender: UITapGestureRecognizer) {
         chatMessageToSendTextField.endEditing(true)
@@ -288,15 +309,18 @@ extension VideoChatRoomViewController {
 
 extension VideoChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        history.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = historyTableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell") as! ChatMessageHistoryTableViewCell
         let message = history[indexPath.row]
-        cell.timestampLabel.text = message.date.description
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        cell.timestampLabel.text = formatter.string(from: message.timestamp)
         cell.labelLabel.text = message.label
         cell.messageLabel.text = message.message
+        print("#cell = \(cell)")
         return cell
     }
 }
@@ -311,7 +335,7 @@ class ChatMessageHistoryTableViewCell: UITableViewCell {
 
 class ChatMessage {
     var label: String
-    var date: Date
+    var timestamp: Date
     var data: Data
 
     var message: String? {
@@ -320,7 +344,7 @@ class ChatMessage {
 
     init(label: String, data: Data) {
         self.label = label
-        date = Date()
+        timestamp = Date()
         self.data = data
     }
 }
