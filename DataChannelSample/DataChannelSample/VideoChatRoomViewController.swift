@@ -162,12 +162,6 @@ class VideoChatRoomViewController: UIViewController {
         }
     }
 
-    @IBAction func clearHistory(_ sender: Any?) {
-        history = []
-    }
-
-    // TODO:
-    @IBAction func sendMessage(_ sender: Any?) {}
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -271,6 +265,13 @@ extension VideoChatRoomViewController {
     @IBAction func onExitButton(_ sender: UIBarButtonItem) {
         handleDisconnect()
     }
+
+    @IBAction func onClearButton(_ sender: Any?) {
+        history = []
+    }
+
+    // TODO:
+    @IBAction func onSendButton(_ sender: Any?) {}
 
     @IBAction func onTapView(_ sender: UITapGestureRecognizer) {
         chatMessageToSendTextField.endEditing(true)
