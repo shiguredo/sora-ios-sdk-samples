@@ -1,5 +1,5 @@
-import UIKit
 import AVFoundation
+import UIKit
 
 /**
  AVFoundationの機能を用いて、カメラがキャプチャしている現在の映像をそのままプレビューとして表示するためのビューです。
@@ -7,31 +7,30 @@ import AVFoundation
  現在Sora SDKによって配信されている映像をそのまま表示したい場合には、Sora.VideoViewを使用してください。
  */
 class AVCaptureVideoPreviewView: UIView {
-    
     override class var layerClass: AnyClass {
-        return AVCaptureVideoPreviewLayer.self
+        AVCaptureVideoPreviewLayer.self
     }
-    
+
     var previewLayer: AVCaptureVideoPreviewLayer {
-        return self.layer as! AVCaptureVideoPreviewLayer
+        self.layer as! AVCaptureVideoPreviewLayer
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
     }
-    
+
     func updateVideoOrientationUsingStatusBarOrientation() {
         let statusBarOrientation = UIApplication.shared.statusBarOrientation
         let videoOrientation = AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
         previewLayer.connection?.videoOrientation = videoOrientation
     }
-    
+
     func updateVideoOrientationUsingDeviceOrientation() {
         let deviceOrientation = UIDevice.current.orientation
         guard deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
@@ -42,5 +41,4 @@ class AVCaptureVideoPreviewView: UIView {
         }
         previewLayer.connection?.videoOrientation = videoOrientation
     }
-    
 }

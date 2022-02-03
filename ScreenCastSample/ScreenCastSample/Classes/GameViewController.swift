@@ -1,15 +1,15 @@
-import UIKit
 import ReplayKit
 import Sora
+import UIKit
 
 /// 0.0~1.0の間の乱数を生成する関数です。
 private func randomFloat() -> Float {
-    return Float(arc4random()) / Float(UInt32.max)
+    Float(arc4random()) / Float(UInt32.max)
 }
 
 /// 0.0~1.0の間の乱数を生成する関数です。
 private func randomCGFloat() -> CGFloat {
-    return CGFloat(randomFloat())
+    CGFloat(randomFloat())
 }
 
 // MARK: -
@@ -18,12 +18,11 @@ private func randomCGFloat() -> CGFloat {
  配信されるゲーム画面です。
  */
 class GameViewController: UIViewController {
-    
     /// 配信開始ボタンです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet private var cameraButton: UIBarButtonItem!
     /// 配信停止ボタンです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet private var pauseButton: UIBarButtonItem!
-    
+
     /// サンプルゲーム自体の実装のために使用します。UI Dynamicsという仕組みを使用しています。
     private var animator: UIDynamicAnimator!
     /// サンプルゲーム自体の実装のために使用します。UI Dynamicsという仕組みを使用しています。
@@ -32,15 +31,15 @@ class GameViewController: UIViewController {
     private var collision: UICollisionBehavior!
     /// サンプルゲーム自体の実装のために使用します。UI Dynamicsという仕組みを使用しています。
     private var dynamicProperties: UIDynamicItemBehavior!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // UI Dynamicsのための設定を行います。
         animator = UIDynamicAnimator(referenceView: view)
-        
+
         gravity = UIGravityBehavior(items: [])
-        
+
         collision = UICollisionBehavior(items: [])
         collision.addBoundary(withIdentifier: "Floor" as NSString,
                               from: CGPoint(x: 0, y: view.bounds.height),
@@ -49,26 +48,26 @@ class GameViewController: UIViewController {
                               from: CGPoint(x: -9999, y: view.bounds.height + 10),
                               to: CGPoint(x: 9999, y: view.bounds.height + 10))
         collision.collisionDelegate = self
-        
+
         dynamicProperties = UIDynamicItemBehavior(items: [])
         dynamicProperties.density = 1.0
         dynamicProperties.elasticity = 0.5
         dynamicProperties.friction = 0.1
-        
+
         animator.addBehavior(gravity)
         animator.addBehavior(collision)
         animator.addBehavior(dynamicProperties)
-        
+
         // 画面タッチ時のアクションを定義します。
         let tapGR = UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:)))
         view.addGestureRecognizer(tapGR)
-        
+
         // ナビゲーションバーのボタンの状態を更新します。
         updateBarButtonItems()
     }
-    
+
     // MARK: - Action
-    
+
     /**
      画面タッチ時のアクションを定義します。
      */
@@ -78,7 +77,7 @@ class GameViewController: UIViewController {
         let location = gestureRecognizer.location(in: view)
         addBox(at: location)
     }
-    
+
     /**
      配信開始ボタンが押されたときの挙動を定義します。
      */
@@ -94,7 +93,7 @@ class GameViewController: UIViewController {
             updateBarButtonItems()
         }
     }
-    
+
     /**
      配信停止ボタンが押されたときの挙動を定義します。
      */
@@ -103,7 +102,7 @@ class GameViewController: UIViewController {
         let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
         if isConnected {
             // 画面録画を停止して、配信を切断し、ボタンの状態を更新します。
-            RPScreenRecorder.shared().stopCapture { error in
+            RPScreenRecorder.shared().stopCapture { _ in
                 // エラー時処理を行う必要が無いので、無視します。
             }
             SoraSDKManager.shared.disconnect()
@@ -113,7 +112,7 @@ class GameViewController: UIViewController {
             updateBarButtonItems()
         }
     }
-    
+
     /**
      配信設定画面からのUnwind Segueの着地地点として定義してあります。
      詳細はMain.storyboardの設定をご確認ください。
@@ -141,15 +140,16 @@ class GameViewController: UIViewController {
                 return
             }
             guard let currentMediaChannel = SoraSDKManager.shared.currentMediaChannel,
-                let senderStream = currentMediaChannel.senderStream else {
-                    return
+                  let senderStream = currentMediaChannel.senderStream
+            else {
+                return
             }
             senderStream.send(videoFrame: VideoFrame(from: sampleBuffer))
         }, completionHandler: { [weak self] error in
             if let error = error {
                 // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
                 // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
-                NSLog("Error while RPScreenRecorder.shared().startCapture: \(error)")
+                NSLog("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
                 SoraSDKManager.shared.disconnect()
                 DispatchQueue.main.async {
                     self?.updateBarButtonItems()
@@ -158,7 +158,7 @@ class GameViewController: UIViewController {
         })
         updateBarButtonItems()
     }
-    
+
     /**
      配信設定画面からのUnwind Segueの着地地点として定義してあります。
      詳細はMain.storyboardの設定をご確認ください。
@@ -167,9 +167,9 @@ class GameViewController: UIViewController {
     func onUnwindByExit(_ segue: UIStoryboardSegue) {
         // 単純に閉じるボタンで配信設定画面を閉じただけなので、特に処理は何も行いません。
     }
-    
+
     // MARK: - Private
-    
+
     /**
      ゲーム用の実装です。指定された地点に箱を追加します。
      */
@@ -181,7 +181,7 @@ class GameViewController: UIViewController {
         collision.addItem(box)
         dynamicProperties.addItem(box)
     }
-    
+
     /**
      ゲーム用の実装です。箱を削除します。
      */
@@ -191,7 +191,7 @@ class GameViewController: UIViewController {
         collision.removeItem(box)
         dynamicProperties.removeItem(box)
     }
-    
+
     /**
      現在の配信状態に応じてナビゲーションバーのボタンの状態を更新します。
      */
@@ -203,13 +203,11 @@ class GameViewController: UIViewController {
             navigationItem.rightBarButtonItems = [cameraButton]
         }
     }
-    
 }
 
 // MARK: - UICollisionBehaviorDelegate
 
 extension GameViewController: UICollisionBehaviorDelegate {
-    
     /**
      ゲーム用の実装です。箱がバウンダリに接触したときの挙動を定義します。
      ここでは画面外バウンダリに箱が接触したときに箱を削除しています。
@@ -227,5 +225,4 @@ extension GameViewController: UICollisionBehaviorDelegate {
             break
         }
     }
-    
 }

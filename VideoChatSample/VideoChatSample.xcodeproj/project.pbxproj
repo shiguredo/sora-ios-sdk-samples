@@ -12,6 +12,7 @@
 		0E55EF171F2FAC7300B5EFA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF151F2FAC7300B5EFA8 /* Main.storyboard */; };
 		0E55EF191F2FAC7300B5EFA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */; };
 		0E55EF1C1F2FAC7300B5EFA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF1A1F2FAC7300B5EFA8 /* LaunchScreen.storyboard */; };
+		35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9D27A389AE000B0ED7 /* Environment.swift */; };
 		C57842AE1F41A18B001AF8AB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */; };
 		C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */; };
 		C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842B11F41A374001AF8AB /* SoraSDKManager.swift */; };
@@ -25,6 +26,7 @@
 		0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0E55EF1B1F2FAC7300B5EFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0E55EF1D1F2FAC7300B5EFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		35DC8E9D27A389AE000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
 		C57842B11F41A374001AF8AB /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			children = (
 				C57842AC1F41A134001AF8AB /* Classes */,
 				0E55EF111F2FAC7300B5EFA8 /* AppDelegate.swift */,
+				35DC8E9D27A389AE000B0ED7 /* Environment.swift */,
 				0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */,
 				0E55EF1A1F2FAC7300B5EFA8 /* LaunchScreen.storyboard */,
 				0E55EF151F2FAC7300B5EFA8 /* Main.storyboard */,
@@ -88,6 +91,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0E55EF201F2FAC7300B5EFA8 /* Build configuration list for PBXNativeTarget "VideoChatSample" */;
 			buildPhases = (
+				9112F15227560FCD00C75FE2 /* Run SwiftFormat */,
+				9112F15327560FFC00C75FE2 /* Run SwiftLint */,
 				0E55EF0A1F2FAC7300B5EFA8 /* Sources */,
 				0E55EF0B1F2FAC7300B5EFA8 /* Frameworks */,
 				0E55EF0C1F2FAC7300B5EFA8 /* Resources */,
@@ -152,6 +157,45 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9112F15227560FCD00C75FE2 /* Run SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftFormat";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which \"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" >/dev/null; then\n  \"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\"  \"$SRCROOT\"\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
+		9112F15327560FFC00C75FE2 /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/swiftlint --fix\n    ${PODS_ROOT}/SwiftLint/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0E55EF0A1F2FAC7300B5EFA8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -161,6 +205,7 @@
 				C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */,
 				C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */,
 				0E55EF121F2FAC7300B5EFA8 /* AppDelegate.swift in Sources */,
+				35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,7 +280,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -289,7 +334,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

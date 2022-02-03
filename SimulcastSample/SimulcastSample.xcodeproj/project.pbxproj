@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35DC8E9027A384BE000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E8F27A384BE000B0ED7 /* Environment.swift */; };
 		91483A3E264E5304009CA66E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91483A3D264E5304009CA66E /* AppDelegate.swift */; };
 		91483A40264E5304009CA66E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91483A3F264E5304009CA66E /* SceneDelegate.swift */; };
 		91483A45264E5304009CA66E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91483A43264E5304009CA66E /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		35DC8E8F27A384BE000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		91483A3A264E5304009CA66E /* SimulcastSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimulcastSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91483A3D264E5304009CA66E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91483A3F264E5304009CA66E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				91483A58264E5799009CA66E /* InfoPlist.strings */,
 				91483A3D264E5304009CA66E /* AppDelegate.swift */,
 				91483A3F264E5304009CA66E /* SceneDelegate.swift */,
+				35DC8E8F27A384BE000B0ED7 /* Environment.swift */,
 				91483A46264E5305009CA66E /* Assets.xcassets */,
 				91483A59264E5799009CA66E /* Classes */,
 				91483A48264E5305009CA66E /* LaunchScreen.storyboard */,
@@ -96,6 +99,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91483A4E264E5305009CA66E /* Build configuration list for PBXNativeTarget "SimulcastSample" */;
 			buildPhases = (
+				91951421275759BE0042A440 /* Run SwiftFormat */,
+				91951422275759CA0042A440 /* Run SwiftLint */,
 				91483A36264E5304009CA66E /* Sources */,
 				91483A37264E5304009CA66E /* Frameworks */,
 				91483A38264E5304009CA66E /* Resources */,
@@ -156,12 +161,52 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		91951421275759BE0042A440 /* Run SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftFormat";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which \"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" >/dev/null; then\n  \"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\"  \"$SRCROOT\"\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
+		91951422275759CA0042A440 /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/swiftlint --fix\n    ${PODS_ROOT}/SwiftLint/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		91483A36264E5304009CA66E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				91483A3E264E5304009CA66E /* AppDelegate.swift in Sources */,
+				35DC8E9027A384BE000B0ED7 /* Environment.swift in Sources */,
 				91483A5F264E5799009CA66E /* SoraSDKManager.swift in Sources */,
 				91483A60264E5799009CA66E /* VideoChatRoomViewController.swift in Sources */,
 				91483A40264E5304009CA66E /* SceneDelegate.swift in Sources */,

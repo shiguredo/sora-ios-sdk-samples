@@ -14,15 +14,15 @@ Please read https://github.com/shiguredo/oss before use.
 
 ## システム条件
 
-このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2021.2.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2021.2.1) を使用しています。
+このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2021.3.1](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2022.1.0) を使用しています。
 
-- iOS 12.1 以降
+- iOS 13.0 以降
 - アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
 - macOS 12.0 以降
-- Xcode 13.1
-- Swift 5.5
+- Xcode 13.2
+- Swift 5.5.2
 - CocoaPods 1.11.2 以降
-- WebRTC SFU Sora 2021.1 以降
+- WebRTC SFU Sora 2021.2 以降
 
 Xcode と Swift のバージョンによっては、 CocoaPods で取得できるバイナリに互換性がない可能性があります。
 
@@ -70,7 +70,7 @@ Apache License 2.0
 
 ```
 Copyright 2017-2018, Masashi Ono (akisute)
-Copyright 2017-2021, Shiguredo Inc.
+Copyright 2017-2022, Shiguredo Inc.
 
 
 Licensed under the Apache License, Version 2.0 (the "License");

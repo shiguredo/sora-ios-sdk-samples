@@ -1,0 +1,66 @@
+name: Build DecoStreamingSample
+
+defaults:
+  run:
+    working-directory: ./DecoStreamingSample
+
+on:
+  push:
+    paths-ignore:
+    - 'README.md'
+    - 'CHANGES.md'
+    - 'LICENSE'
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    env:
+      XCODE: /Applications/Xcode_13.2.1.app
+      XCODE_SDK: iphoneos15.2
+      WORKSPACE: DecoStreamingSample
+      SCHEME: DecoStreamingSample
+    steps:
+    - uses: actions/checkout@v2
+    - name: Select Xcode Version
+      run: sudo xcode-select -s '${{ env.XCODE }}/Contents/Developer'
+    - name: Show Xcode Version
+      run: xcodebuild -version
+    - name: Show CocoaPods Version
+      run: pod --version
+    - name: Restore Pods
+      uses: actions/cache@v2
+      with:
+        path: Pods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+    - name: use Podfile.dev on develop
+      if: github.ref != 'refs/heads/master'
+      run: rm Podfile && mv Podfile.dev Podfile           
+    - name: Install Dependences
+      run: |
+        pod repo update
+        pod install
+    - name: Create Environment.swift
+      run: |
+        cp DecoStreamingSample/Environment.example.swift DecoStreamingSample/Environment.swift
+    - name: Build Xcode Project
+      run: |
+        set -o pipefail && \
+          xcodebuild \
+            -workspace '${{ env.WORKSPACE }}.xcworkspace' \
+            -scheme '${{ env.SCHEME }}' \
+            -sdk ${{ env.XCODE_SDK }} \
+            -arch arm64 \
+            -configuration Release \
+            -derivedDataPath build \
+            clean build \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY= \
+            PROVISIONING_PROFILE=
+    - name: Check uncommitted unformatted code
+      run: |
+        ../lint-format.sh

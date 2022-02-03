@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35DC8E9A27A386DB000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9927A386DB000B0ED7 /* Environment.swift */; };
 		9120C46123B342960026176E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120C46023B342960026176E /* AppDelegate.swift */; };
 		9120C46823B342960026176E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9120C46623B342960026176E /* Main.storyboard */; };
 		9120C46A23B342970026176E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9120C46923B342970026176E /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		35DC8E9927A386DB000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		9120C45D23B342960026176E /* ScreenCastSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenCastSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9120C46023B342960026176E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9120C46723B342960026176E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				9120C48123B343B60026176E /* Classes */,
 				9120C47723B343A40026176E /* InfoPlist.strings */,
 				9120C46023B342960026176E /* AppDelegate.swift */,
+				35DC8E9927A386DB000B0ED7 /* Environment.swift */,
 				9120C46623B342960026176E /* Main.storyboard */,
 				9120C46923B342970026176E /* Assets.xcassets */,
 				9120C46B23B342970026176E /* LaunchScreen.storyboard */,
@@ -120,6 +123,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9120C47123B342970026176E /* Build configuration list for PBXNativeTarget "ScreenCastSample" */;
 			buildPhases = (
+				9195141D2757575C0042A440 /* Run SwiftFormat */,
+				9195141E275757660042A440 /* Run SwiftLint */,
 				9120C45923B342960026176E /* Sources */,
 				9120C45A23B342960026176E /* Frameworks */,
 				9120C45B23B342960026176E /* Resources */,
@@ -183,12 +188,52 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9195141D2757575C0042A440 /* Run SwiftFormat */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftFormat";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which \"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" >/dev/null; then\n  \"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\"  \"$SRCROOT\"\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+		};
+		9195141E275757660042A440 /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/swiftlint --fix\n    ${PODS_ROOT}/SwiftLint/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		9120C45923B342960026176E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				9120C48923B343B60026176E /* GameViewController.swift in Sources */,
+				35DC8E9A27A386DB000B0ED7 /* Environment.swift in Sources */,
 				9120C48C23B343B60026176E /* SoraSDKManager.swift in Sources */,
 				9120C46123B342960026176E /* AppDelegate.swift in Sources */,
 				9120C48A23B343B60026176E /* PublisherConfigViewController.swift in Sources */,

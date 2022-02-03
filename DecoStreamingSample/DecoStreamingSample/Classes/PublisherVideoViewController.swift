@@ -1,12 +1,11 @@
-import UIKit
 import AVFoundation
 import Sora
+import UIKit
 
 /**
  実際に動画を配信する画面です。
  */
 class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-    
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var filterPickerView: UIPickerView!
 
@@ -24,29 +23,29 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             ("色反転", colorInvertFilter),
             ("モノクロ", colorMonochromeFilter),
             ("セピア調", sepiaFilter),
-            ("マンガ調", comicFilter)
+            ("マンガ調", comicFilter),
         ]
     }()
-    
+
     /// 配信者側の動画を画面に表示するためのビューです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet private var videoView: VideoView!
-    
-    private let captureSessionQueue: DispatchQueue = DispatchQueue(label: "captureSessionQueue", qos: .userInitiated, attributes: DispatchQueue.Attributes())
-    private let captureSession: AVCaptureSession = AVCaptureSession()
+
+    private let captureSessionQueue = DispatchQueue(label: "captureSessionQueue", qos: .userInitiated, attributes: DispatchQueue.Attributes())
+    private let captureSession = AVCaptureSession()
     private var authorizationStatus: AVAuthorizationStatus?
     private var configurationFinished: Bool = false
     private var captureDevicePosition: AVCaptureDevice.Position = .front
-    
+
     private var currentFilter: CIFilter?
-    
+
     // MARK: UIViewController
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // videoViewの表示設定を行います。
         videoView.contentMode = .scaleAspectFill
-        
+
         // iPad の場合はフィルタ選択の UI を変更します。
         // UIAlertController の動作が不安定なためです。
         switch UIDevice.current.userInterfaceIdiom {
@@ -60,19 +59,19 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         // 配信画面に遷移する直前に、配信画面のタイトルを現在のチャンネルIDを使用して書き換えています。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
             navigationItem.title = "配信中: \(mediaChannel.configuration.channelId)"
         }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         if authorizationStatus == nil {
             // 映像キャプチャデバイス（要するにカメラ）を使用するには、最初にユーザーからの明示的な許可を得る必要があります。
             // ここでは許可状況を確認し、それに応じて処理を分岐しています。
@@ -98,51 +97,51 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
                 authorizationStatus = .denied
             }
         }
-        
+
         // captureSessionをセットアップしたのち、映像キャプチャを開始します。
         // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
         // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
         // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
         /*
-        captureSessionQueue.async { [weak self] in
-            if let finished = self?.configurationFinished, !finished {
-                self?.configureCaptureSession()
-            }
-            self?.captureSession.startRunning()
-        }
-        */
+         captureSessionQueue.async { [weak self] in
+             if let finished = self?.configurationFinished, !finished {
+                 self?.configureCaptureSession()
+             }
+             self?.captureSession.startRunning()
+         }
+         */
         if !configurationFinished {
             configureCaptureSession()
         }
         captureSession.startRunning()
-        
+
         // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+
         // captureSessionを停止します。
         // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
         /*
-        captureSessionQueue.async { [weak self] in
-            self?.captureSession.stopRunning()
-        }
-         */
+         captureSessionQueue.async { [weak self] in
+             self?.captureSession.stopRunning()
+         }
+          */
         captureSession.stopRunning()
 
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // 画面が回転するときに、カメラキャプチャが出力する動画の向きを都度設定します。
         updateVideoOrientationUsingDeviceOrientation()
     }
-    
+
     // MARK: Actions
-    
+
     /**
      カメラボタンを押したときの挙動を定義します。
      詳しくはMain.storyboard内の定義をご覧ください。
@@ -153,25 +152,25 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             captureDevicePosition = .back
             // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
             /*
-            captureSessionQueue.async { [weak self] in
-                self?.captureSession.stopRunning()
-                self?.configureCaptureSession()
-                self?.captureSession.startRunning()
-            }
-             */
+             captureSessionQueue.async { [weak self] in
+                 self?.captureSession.stopRunning()
+                 self?.configureCaptureSession()
+                 self?.captureSession.startRunning()
+             }
+              */
             captureSession.stopRunning()
             configureCaptureSession()
             captureSession.startRunning()
         case .back:
             captureDevicePosition = .front
-        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+            // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
             /*
-            captureSessionQueue.async { [weak self] in
-                self?.captureSession.stopRunning()
-                self?.configureCaptureSession()
-                self?.captureSession.startRunning()
-            }
-             */
+             captureSessionQueue.async { [weak self] in
+                 self?.captureSession.stopRunning()
+                 self?.configureCaptureSession()
+                 self?.captureSession.startRunning()
+             }
+              */
             captureSession.stopRunning()
             configureCaptureSession()
             captureSession.startRunning()
@@ -179,7 +178,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             break
         }
     }
-    
+
     /**
      フィルタ選択ボタンを押したときの挙動を定義します。
      詳しくはMain.storyboard内の定義をご覧ください。
@@ -192,7 +191,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         }
         present(alertController, animated: true, completion: nil)
     }
-    
+
     /**
      閉じるボタンを押したときの挙動を定義します。
      詳しくはMain.storyboard内の定義をご覧ください。
@@ -202,9 +201,9 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         SoraSDKManager.shared.disconnect()
         performSegue(withIdentifier: "Exit", sender: self)
     }
-    
+
     // MARK: Private Methods
-    
+
     private func configureCaptureSession() {
         // 映像キャプチャデバイスの仕様が許可されている場合のみ続行します。
         // 拒否されている場合は映像キャプチャデバイスを使用できないため、ここで終了します。
@@ -212,14 +211,14 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             configurationFinished = false
             return
         }
-        
+
         // ここからデバイスのセットアップを行います。
         // 全て終わったら自動的にコミットされます。
         captureSession.beginConfiguration()
         defer {
             captureSession.commitConfiguration()
         }
-        
+
         // 入力デバイスのセットアップを行い、captureSessionに設定します。
         guard let captureDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: captureDevicePosition) else {
             configurationFinished = false
@@ -235,7 +234,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         if captureSession.canAddInput(captureDeviceInput) {
             captureSession.addInput(captureDeviceInput)
         }
-        
+
         // 出力側のセットアップを行い、captureSessionに設定します。
         let videoDataOutput = AVCaptureVideoDataOutput()
         videoDataOutput.setSampleBufferDelegate(self, queue: captureSessionQueue)
@@ -245,7 +244,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         if captureSession.canAddOutput(videoDataOutput) {
             captureSession.addOutput(videoDataOutput)
         }
-        
+
         // captureSession経由で、カメラの出力プリセットの設定を行います。
         // デフォルトではカメラの出力できる最も美しい画質で動画を出力するのですが、
         // あまりにも高画質になるとフィルタをかける際に処理コストが高くなりすぎたりするため、
@@ -255,12 +254,11 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         } else {
             captureSession.sessionPreset = .medium
         }
-        
+
         // captureSessionのセットアップが完了したので、最後にこのカメラキャプチャが出力する動画の向きを設定します。
-        self.updateVideoOrientationUsingStatusBarOrientation()
-        
+        updateVideoOrientationUsingStatusBarOrientation()
     }
-    
+
     /**
      現在のUI上のステータスバーの向きを元に、映像の回転方向を補正します。
      こちらのメソッドはデバイスの画面が天頂向き・地面向きの状態であったとしても、ステータスバーの向きを基準に映像を回転させることができますが、
@@ -278,7 +276,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             }
         }
     }
-    
+
     /**
      現在のデバイス自体の向きを元に、映像の回転方向を補正します。
      こちらのメソッドはデバイスの向きを元に補正するため、デバイス画面が天頂向き・地面向きの状態で使用すると映像を回転させないで終了するようになっています。
@@ -299,37 +297,37 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             }
         }
     }
-    
+
     // MARK: UIPickerView
-    
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
-    
+
     func pickerView(_ pickerView: UIPickerView,
                     titleForRow row: Int,
-                    forComponent component: Int) -> String? {
+                    forComponent component: Int) -> String?
+    {
         PublisherVideoViewController.allFilters[row].0
     }
-    
+
     func pickerView(_ pickerView: UIPickerView,
-                    numberOfRowsInComponent component: Int) -> Int {
+                    numberOfRowsInComponent component: Int) -> Int
+    {
         PublisherVideoViewController.allFilters.count
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         currentFilter = PublisherVideoViewController.allFilters[row].1
     }
-    
 }
 
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
 extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    
     /**
      ビデオキャプチャが、新しいフレームをキャプチャしたときに呼び出されます。
-     
+
      このサンプルアプリでは、キャプチャされたフレームを適切に変換してSora SDKのmediaStreamに流すことで、配信を行っています。
      注意点として、このdelegate methodはパフォーマンス維持のため、
      メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
@@ -337,8 +335,9 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
      */
     func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-            let mediaStream = mediaChannel.senderStream else {
-                return
+              let mediaStream = mediaChannel.senderStream
+        else {
+            return
         }
         if let filter = currentFilter {
             // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
@@ -366,7 +365,7 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
             mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
         }
     }
-    
+
     /**
      ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
      */

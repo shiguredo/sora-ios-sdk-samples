@@ -7,23 +7,27 @@
 
 サンプルアプリをビルドするには以下の環境が必要です。
 
-- iOS 12.1 以降がインストールされたデバイス (iPhone / iPad どちらにも対応しています)
+- iOS 13.0 以降がインストールされたデバイス (iPhone / iPad どちらにも対応しています)
   - このサンプルアプリはシミュレータでは動作が保証されません。
-- Xcode 13.1 以降
-  - 本サンプルアプリでは Swift 5.5 を使用しています。
+- Xcode 13.2 以降
+  - 本サンプルアプリでは Swift 5.5.2 を使用しています。
 - CocoaPods 1.11.2 以降
 
 ## ビルド方法
 
-このサンプルアプリは CocoaPods によって外部フレームワークの管理を行っているため、
-まず最初に以下のように `pod install` を実行する必要があります。
+1. CocoaPods でライブラリを取得します。
 
-```
-$ pod install
-```
+   ```
+   $ pod install
+   ```
 
-これにより、適切に外部フレームワークがセットアップされます。
-本サンプルアプリは、これだけで Xcode 上でビルドが可能な状態になります。
+2. (develop ブランチの場合) ``RealTimeStreamingSample/Environment.example.swift`` のファイル名を ``RealTimeStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
+
+   ```
+   $ cp RealTimeStreamingSample/Environment.example.swift RealTimeStreamingSample/Environment.swift
+   ```
+
+３. ``RealTimeStreamingSample.xcworkspace`` を Xcode で開いてビルドします。
 
 ## サンプルアプリの使い方
 
