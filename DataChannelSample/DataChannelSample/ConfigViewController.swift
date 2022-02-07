@@ -119,6 +119,14 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
+        let messagingDirection: MessagingDirection
+        switch dataChannelDirectionSegmentedControl.selectedSegmentIndex {
+        case 0: messagingDirection = .sendonly
+        case 1: messagingDirection = .recvonly
+        case 2: messagingDirection = .sendrecv
+        default: fatalError()
+        }
+
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
@@ -133,6 +141,21 @@ class ConfigViewController: UITableViewController {
         configuration.spotlightFocusRid = spotlightFocusRid
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
+
+        configuration.dataChannelSignaling = true
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocketSwitch.isOn
+
+        var spam = SignalingConnectDataChannel(label: "#spam", direction: messagingDirection)
+        spam.compress = dataChannelCompressSwitch.isOn
+        spam.ordered = dataChannelOrderedSwitch.isOn
+        spam.protocol = dataChannelProtocolTextField.text
+        var egg = spam
+        egg.label = "#egg"
+        configuration.dataChannels = [spam, egg]
+
+        configuration.mediaChannelHandlers.onDataChannelMessage = { _, label, data in
+            print("# receive data channel message => \(label), \(data)")
+        }
 
         SoraSDKManager.shared.connect(with: configuration) { [weak self] error in
             if let error = error {
