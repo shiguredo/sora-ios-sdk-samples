@@ -155,10 +155,6 @@ class ConfigViewController: UITableViewController {
         }
         configuration.dataChannels = dataChannels
 
-        configuration.mediaChannelHandlers.onDataChannelMessage = { _, label, data in
-            print("# receive data channel message => \(label), \(data)")
-        }
-
         SoraSDKManager.shared.connect(with: configuration) { [weak self] error in
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。

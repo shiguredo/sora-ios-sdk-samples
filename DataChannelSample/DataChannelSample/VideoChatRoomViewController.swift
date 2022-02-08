@@ -21,23 +21,11 @@ class VideoChatRoomViewController: UIViewController {
     var history: [ChatMessage] = []
 
     override func viewDidLoad() {
-        history = [
-            .init(label: "#spam", data: "spam spam spam 1".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg 2".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam 3".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg 4".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam 5".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg 6".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam 7".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg 8".data(using: .utf8)!),
-            .init(label: "#spam", data: "spam spam spam 9".data(using: .utf8)!),
-            .init(label: "#egg", data: "egg egg egg 10".data(using: .utf8)!),
-        ]
-
         historyTableView.delegate = self
         historyTableView.dataSource = self
-
         view.addGestureRecognizer(tapGestureRecognizer)
+
+        history = []
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +34,21 @@ class VideoChatRoomViewController: UIViewController {
         // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
             navigationItem.title = "チャット中: \(mediaChannel.configuration.channelId)"
+            mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
+                guard let weakSelf = self else {
+                    return
+                }
+
+                // "#" で始まるラベル以外は無視します
+                guard label.starts(with: "#") else {
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    weakSelf.history.append(ChatMessage(label: label, data: data))
+                    weakSelf.updateHistoryTableView()
+                }
+            }
         }
     }
 
