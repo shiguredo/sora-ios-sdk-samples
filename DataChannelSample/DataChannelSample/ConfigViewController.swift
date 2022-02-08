@@ -145,13 +145,15 @@ class ConfigViewController: UITableViewController {
         configuration.dataChannelSignaling = true
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocketSwitch.isOn
 
-        var spam = SignalingConnectDataChannel(label: "#spam", direction: messagingDirection)
-        spam.compress = dataChannelCompressSwitch.isOn
-        spam.ordered = dataChannelOrderedSwitch.isOn
-        spam.protocol = dataChannelProtocolTextField.text
-        var egg = spam
-        egg.label = "#egg"
-        configuration.dataChannels = [spam, egg]
+        var dataChannels: [SignalingConnectDataChannel] = []
+        for label in Environment.dataChannelLabels {
+            var dataChannel = SignalingConnectDataChannel(label: label, direction: messagingDirection)
+            dataChannel.compress = dataChannelCompressSwitch.isOn
+            dataChannel.ordered = dataChannelOrderedSwitch.isOn
+            dataChannel.protocol = dataChannelProtocolTextField.text
+            dataChannels.append(dataChannel)
+        }
+        configuration.dataChannels = dataChannels
 
         configuration.mediaChannelHandlers.onDataChannelMessage = { _, label, data in
             print("# receive data channel message => \(label), \(data)")
