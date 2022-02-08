@@ -775,6 +775,15 @@
                                 <state key="normal" title="ラベル"/>
                                 <buttonConfiguration key="configuration" style="gray" title="ラベル"/>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connected URL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v8z-cH-FLv">
+                                <rect key="frame" x="20" y="88" width="374" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="XCK-t4-NAS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -816,7 +825,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="chatMessageToSendTextField" destination="Veg-bZ-Lpb" id="h4k-qp-xAj"/>
+                        <outlet property="connectedUrlLabel" destination="v8z-cH-FLv" id="NYb-mb-txT"/>
                         <outlet property="historyTableView" destination="kU8-9t-saE" id="Thh-c8-g1D"/>
+                        <outlet property="labelPopUpButton" destination="3rf-LJ-Yfg" id="aUv-9K-uGY"/>
                         <outlet property="memberListView" destination="yae-cW-sBy" id="Ghk-FM-gJW"/>
                         <outlet property="tapGestureRecognizer" destination="Ad3-oS-nEC" id="QWd-qa-9Ju"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>

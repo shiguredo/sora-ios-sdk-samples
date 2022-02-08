@@ -5,6 +5,7 @@ import UIKit
  ビデオチャットを行う画面です。
  */
 class VideoChatRoomViewController: UIViewController {
+    @IBOutlet weak var connectedUrlLabel: UILabel!
     @IBOutlet weak var memberListView: UIView!
     @IBOutlet weak var labelPopUpButton: UIButton!
     @IBOutlet weak var chatMessageToSendTextField: UITextField!
