@@ -336,6 +336,7 @@ extension VideoChatRoomViewController {
             NSLog("cannot send message: \(error)")
             return
         }
+        chatMessageToSendTextField.text = nil
 
         // 履歴を更新する
         history.append(.init(label: label, data: data))
