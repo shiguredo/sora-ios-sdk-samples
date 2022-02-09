@@ -28,6 +28,13 @@ class VideoChatRoomViewController: UIViewController {
         historyTableView.dataSource = self
         view.addGestureRecognizer(tapGestureRecognizer)
 
+        let textFieldToolBar = UIToolbar()
+        textFieldToolBar.sizeToFit()
+        let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onTextFieldDidEnd(_:)))
+        textFieldToolBar.items = [spaceItem, doneItem]
+        chatMessageToSendTextField.inputAccessoryView = textFieldToolBar
+
         history = []
     }
 
