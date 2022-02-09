@@ -200,11 +200,13 @@ class VideoChatRoomViewController: UIViewController {
     func updateHistoryTableView() {
         historyTableView.reloadData()
 
-        // スクロール
-        // reloadData() の直後だと描画が完了していないため、一瞬処理を遅らせる
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let offset = CGPoint(x: 0, y: self.historyTableView.contentSize.height - self.historyTableView.frame.size.height)
-            self.historyTableView.setContentOffset(offset, animated: true)
+        // 履歴が画面に収まらなくなったらスクロール
+        if historyTableView.contentSize.height > historyTableView.frame.size.height {
+            // reloadData() の直後だと描画が完了していないため、一瞬処理を遅らせる
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let offset = CGPoint(x: 0, y: self.historyTableView.contentSize.height - self.historyTableView.frame.size.height)
+                self.historyTableView.setContentOffset(offset, animated: true)
+            }
         }
     }
 }
