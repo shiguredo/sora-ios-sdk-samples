@@ -47,7 +47,6 @@ class VideoChatRoomViewController: UIViewController {
                 }
                 menuElements.append(command)
             }
-            print("# menu elements = \(menuElements)")
             labelPopUpButton.menu = UIMenu(title: "ラベル",
                                            image: nil,
                                            identifier: nil,
