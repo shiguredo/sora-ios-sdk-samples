@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -763,15 +762,8 @@
                                     <action selector="onClearButton:" destination="iOn-KG-Rc0" eventType="touchUpInside" id="4H9-8k-IlA"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUg-Ke-hc9">
+                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uUg-Ke-hc9">
                                 <rect key="frame" x="20" y="820" width="67" height="31"/>
-                                <menu key="menu" id="3rf-LJ-Yfg">
-                                    <menuOptions key="menuOptions" displayInline="YES" singleSelection="YES"/>
-                                    <children>
-                                        <command title="#spam" id="4x9-Bo-GL6"/>
-                                        <command title="#egg" id="Inw-j0-BbX"/>
-                                    </children>
-                                </menu>
                                 <state key="normal" title="ラベル"/>
                                 <buttonConfiguration key="configuration" style="gray" title="ラベル"/>
                             </button>
@@ -830,7 +822,7 @@
                         <outlet property="chatMessageToSendTextField" destination="Veg-bZ-Lpb" id="h4k-qp-xAj"/>
                         <outlet property="connectedUrlLabel" destination="v8z-cH-FLv" id="NYb-mb-txT"/>
                         <outlet property="historyTableView" destination="kU8-9t-saE" id="Thh-c8-g1D"/>
-                        <outlet property="labelPopUpButton" destination="3rf-LJ-Yfg" id="aUv-9K-uGY"/>
+                        <outlet property="labelPopUpButton" destination="uUg-Ke-hc9" id="4xY-cd-Lhn"/>
                         <outlet property="memberListView" destination="yae-cW-sBy" id="Ghk-FM-gJW"/>
                         <outlet property="tapGestureRecognizer" destination="Ad3-oS-nEC" id="QWd-qa-9Ju"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>

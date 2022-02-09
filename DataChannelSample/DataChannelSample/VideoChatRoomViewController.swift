@@ -21,6 +21,8 @@ class VideoChatRoomViewController: UIViewController {
 
     var history: [ChatMessage] = []
 
+    var selectedLabel: String?
+
     override func viewDidLoad() {
         historyTableView.delegate = self
         historyTableView.dataSource = self
@@ -34,7 +36,26 @@ class VideoChatRoomViewController: UIViewController {
 
         // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            navigationItem.title = "チャット中: \(mediaChannel.configuration.channelId)"
+            navigationItem.title = mediaChannel.configuration.channelId
+            connectedUrlLabel.text = mediaChannel.connectedUrl?.absoluteString
+
+            // ラベルのリスト
+            var menuElements: [UIMenuElement] = []
+            for label in Environment.dataChannelLabels {
+                let command = UIAction(title: label) { [weak self] _ in
+                    self?.selectedLabel = label
+                }
+                menuElements.append(command)
+            }
+            print("# menu elements = \(menuElements)")
+            labelPopUpButton.menu = UIMenu(title: "ラベル",
+                                           image: nil,
+                                           identifier: nil,
+                                           options: .displayInline,
+                                           children: menuElements)
+            labelPopUpButton.showsMenuAsPrimaryAction = true
+            selectedLabel = menuElements[0].title
+
             mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
                 guard let weakSelf = self else {
                     return
@@ -179,7 +200,9 @@ class VideoChatRoomViewController: UIViewController {
     func updateHistoryTableView() {
         historyTableView.reloadData()
 
-        DispatchQueue.main.async {
+        // スクロール
+        // reloadData() の直後だと描画が完了していないため、一瞬処理を遅らせる
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             let offset = CGPoint(x: 0, y: self.historyTableView.contentSize.height - self.historyTableView.frame.size.height)
             self.historyTableView.setContentOffset(offset, animated: true)
         }
@@ -298,7 +321,22 @@ extension VideoChatRoomViewController {
         guard let text = chatMessageToSendTextField.text else {
             return
         }
-        // TODO: text を送信する
+        guard let label = selectedLabel else {
+            return
+        }
+        guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
+            return
+        }
+
+        // メッセージを送信する
+        let data = text.data(using: .utf8)!
+        if let error = mediaChannel.sendMessage(label: label, data: data) {
+            NSLog("cannot send message: \(error)")
+            return
+        }
+
+        // 履歴を更新する
+        history.append(.init(label: label, data: data))
         updateHistoryTableView()
     }
 
@@ -324,7 +362,6 @@ extension VideoChatRoomViewController: UITableViewDelegate, UITableViewDataSourc
         cell.timestampLabel.text = formatter.string(from: message.timestamp)
         cell.labelLabel.text = message.label
         cell.messageLabel.text = message.message
-        print("#cell = \(cell)")
         return cell
     }
 }
