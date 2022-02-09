@@ -663,12 +663,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yae-cW-sBy">
-                                <rect key="frame" x="0.0" y="88" width="414" height="359.5"/>
+                                <rect key="frame" x="0.0" y="113" width="414" height="464"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="32" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kU8-9t-saE">
-                                <rect key="frame" x="0.0" y="487.5" width="414" height="328.5"/>
+                                <rect key="frame" x="0.0" y="616" width="414" height="200"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="OwJ-fd-se0"/>
+                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HistoryTableViewCell" id="3SA-US-a7B" customClass="ChatMessageHistoryTableViewCell" customModule="DataChannelSample" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="32"/>
@@ -744,15 +747,8 @@
                                     <action selector="onSendButton:" destination="iOn-KG-Rc0" eventType="touchUpInside" id="BsP-SX-Jvo"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hty-YB-Gbu" userLabel="中心線">
-                                <rect key="frame" x="0.0" y="447.5" width="414" height="1"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="hK7-y9-obk"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LsE-oq-zDP">
-                                <rect key="frame" x="336" y="452.5" width="58" height="31"/>
+                                <rect key="frame" x="336" y="581" width="58" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="58" id="bJ6-Kb-GZm"/>
                                 </constraints>
@@ -782,7 +778,7 @@
                             <constraint firstItem="WBm-CA-gYi" firstAttribute="top" secondItem="kU8-9t-saE" secondAttribute="bottom" constant="4" id="4QC-zT-AVO"/>
                             <constraint firstItem="yae-cW-sBy" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leading" id="B8a-i7-edE"/>
                             <constraint firstItem="Veg-bZ-Lpb" firstAttribute="leading" secondItem="uUg-Ke-hc9" secondAttribute="trailing" constant="8" id="CFv-hJ-rKp"/>
-                            <constraint firstItem="Hty-YB-Gbu" firstAttribute="top" secondItem="yae-cW-sBy" secondAttribute="bottom" id="I6G-gD-5Fx"/>
+                            <constraint firstItem="LsE-oq-zDP" firstAttribute="top" secondItem="yae-cW-sBy" secondAttribute="bottom" constant="4" id="HNT-F1-rEl"/>
                             <constraint firstItem="kU8-9t-saE" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leading" id="IKb-Y7-qGu"/>
                             <constraint firstAttribute="trailing" secondItem="kU8-9t-saE" secondAttribute="trailing" id="JBf-dY-NpD"/>
                             <constraint firstItem="uUg-Ke-hc9" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leadingMargin" id="Lqs-d0-Gzk"/>
@@ -790,17 +786,13 @@
                             <constraint firstItem="yae-cW-sBy" firstAttribute="top" secondItem="v8z-cH-FLv" secondAttribute="bottom" constant="4" id="Ohl-zz-VSN"/>
                             <constraint firstItem="v8z-cH-FLv" firstAttribute="top" secondItem="9pm-c6-E2k" secondAttribute="bottom" id="P3F-ac-ljV"/>
                             <constraint firstItem="v8z-cH-FLv" firstAttribute="trailing" secondItem="cV4-uL-vzX" secondAttribute="trailingMargin" id="WvO-Xl-VtI"/>
-                            <constraint firstItem="Hty-YB-Gbu" firstAttribute="centerY" secondItem="cV4-uL-vzX" secondAttribute="centerY" id="YJc-cI-cE2"/>
                             <constraint firstAttribute="trailing" secondItem="yae-cW-sBy" secondAttribute="trailing" id="YYF-dY-VqM"/>
                             <constraint firstItem="LsE-oq-zDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cV4-uL-vzX" secondAttribute="leading" constant="20" symbolic="YES" id="ZPx-oX-z93"/>
                             <constraint firstItem="WBm-CA-gYi" firstAttribute="leading" secondItem="Veg-bZ-Lpb" secondAttribute="trailing" constant="4" id="ZYt-VF-Fvp"/>
                             <constraint firstItem="WBm-CA-gYi" firstAttribute="trailing" secondItem="cV4-uL-vzX" secondAttribute="trailingMargin" id="eXz-eH-VTt"/>
-                            <constraint firstItem="Hty-YB-Gbu" firstAttribute="centerX" secondItem="cV4-uL-vzX" secondAttribute="centerX" id="fU7-Vr-YrD"/>
                             <constraint firstItem="Ygh-iV-c9J" firstAttribute="top" secondItem="WBm-CA-gYi" secondAttribute="bottom" constant="8" symbolic="YES" id="goD-aM-4Ee"/>
                             <constraint firstItem="kU8-9t-saE" firstAttribute="top" secondItem="LsE-oq-zDP" secondAttribute="bottom" constant="4" id="h8U-cS-LP8"/>
                             <constraint firstItem="uUg-Ke-hc9" firstAttribute="top" secondItem="kU8-9t-saE" secondAttribute="bottom" constant="4" id="mkQ-wH-hxa"/>
-                            <constraint firstItem="Hty-YB-Gbu" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leading" id="tKc-nT-o40"/>
-                            <constraint firstItem="LsE-oq-zDP" firstAttribute="top" secondItem="Hty-YB-Gbu" secondAttribute="bottom" constant="4" id="uqd-Lo-42w"/>
                             <constraint firstItem="v8z-cH-FLv" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leadingMargin" id="yeU-Lr-lQP"/>
                             <constraint firstItem="Veg-bZ-Lpb" firstAttribute="top" secondItem="kU8-9t-saE" secondAttribute="bottom" constant="4" id="zp1-Pb-66k"/>
                         </constraints>
