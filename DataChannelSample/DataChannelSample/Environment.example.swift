@@ -14,7 +14,7 @@ enum Environment {
 
     // チャネル ID
     static let channelId = "sora"
-    
+
     static let signalingConnectMetadata: Encodable?
 
     static let dataChannelLabels = ["#spam", "#egg"]
