@@ -11,6 +11,9 @@ class VideoChatRoomViewController: UIViewController {
     @IBOutlet weak var chatMessageToSendTextField: UITextField!
     @IBOutlet weak var historyTableView: UITableView!
 
+    /**
+    タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
+     */
     @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
 
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
@@ -19,8 +22,14 @@ class VideoChatRoomViewController: UIViewController {
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
 
+    /**
+        チャットメッセージの履歴です。
+     */
     var history: [ChatMessage] = []
 
+    /**
+     配信画面で選択されたラベルです。このラベルでメッセージを送信すます。
+     */
     var selectedLabel: String?
 
     override func viewDidLoad() {
@@ -28,6 +37,7 @@ class VideoChatRoomViewController: UIViewController {
         historyTableView.dataSource = self
         view.addGestureRecognizer(tapGestureRecognizer)
 
+        // メッセージ入力キーボードの上部に Done ボタンを追加します。
         let textFieldToolBar = UIToolbar()
         textFieldToolBar.sizeToFit()
         let spaceItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -35,6 +45,7 @@ class VideoChatRoomViewController: UIViewController {
         textFieldToolBar.items = [spaceItem, doneItem]
         chatMessageToSendTextField.inputAccessoryView = textFieldToolBar
 
+        // メッセージの履歴を初期化します。
         history = []
     }
 
@@ -46,7 +57,7 @@ class VideoChatRoomViewController: UIViewController {
             navigationItem.title = mediaChannel.configuration.channelId
             connectedUrlLabel.text = mediaChannel.connectedUrl?.absoluteString
 
-            // ラベルのリスト
+            // 送信可能なラベルのリストを表示します。
             var menuElements: [UIMenuElement] = []
             for label in Environment.dataChannelLabels {
                 let command = UIAction(title: label) { [weak self] _ in
@@ -62,6 +73,7 @@ class VideoChatRoomViewController: UIViewController {
             labelPopUpButton.showsMenuAsPrimaryAction = true
             selectedLabel = menuElements[0].title
 
+            // メッセージ受信時の挙動を定義します。
             mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
                 guard let weakSelf = self else {
                     return
@@ -72,6 +84,7 @@ class VideoChatRoomViewController: UIViewController {
                     return
                 }
 
+                // 受信したメッセージを履歴に追加して画面を更新します。
                 DispatchQueue.main.async {
                     weakSelf.history.append(ChatMessage(label: label, data: data))
                     weakSelf.updateHistoryTableView()
@@ -103,6 +116,7 @@ class VideoChatRoomViewController: UIViewController {
         // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
         handleUpdateStreams()
 
+        // メッセージ履歴を更新します。
         historyTableView.reloadData()
     }
 
@@ -203,12 +217,14 @@ class VideoChatRoomViewController: UIViewController {
         }
     }
 
+    // メッセージ履歴の表示を更新します。
     func updateHistoryTableView() {
+        // メッセージ履歴の表示を更新します。
         historyTableView.reloadData()
 
-        // 履歴が画面に収まらなくなったらスクロール
+        // 履歴の量が画面に収まらなければ、最下部 (最新) のメッセージにスクロールします。
         if historyTableView.contentSize.height > historyTableView.frame.size.height {
-            // reloadData() の直後だと描画が完了していないため、一瞬処理を遅らせる
+            // historyTableView.reloadData() の直後は再描画が完了していない可能性があるので、一瞬待ってからスクロールを行います。
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 let offset = CGPoint(x: 0, y: self.historyTableView.contentSize.height - self.historyTableView.frame.size.height)
                 self.historyTableView.setContentOffset(offset, animated: true)
@@ -319,12 +335,18 @@ extension VideoChatRoomViewController {
         handleDisconnect()
     }
 
+    /**
+     Clear ボタンを押したときの挙動を定義します。
+     すべてのメッセージ履歴を削除します。
+     */
     @IBAction func onClearButton(_ sender: Any?) {
         history = []
         updateHistoryTableView()
     }
 
-    // TODO:
+    /**
+     メッセージ送信ボタンが押されたときの挙動を定義します。
+     */
     @IBAction func onSendButton(_ sender: Any?) {
         guard let text = chatMessageToSendTextField.text else {
             return
@@ -336,7 +358,7 @@ extension VideoChatRoomViewController {
             return
         }
 
-        // メッセージを送信する
+        // メッセージを送信します。
         let data = text.data(using: .utf8)!
         if let error = mediaChannel.sendMessage(label: label, data: data) {
             NSLog("cannot send message: \(error)")
@@ -344,26 +366,39 @@ extension VideoChatRoomViewController {
         }
         chatMessageToSendTextField.text = nil
 
-        // 履歴を更新する
+        // メッセージ履歴を更新します。
         history.append(.init(label: label, data: data))
         updateHistoryTableView()
     }
 
+    /**
+     画面のタップ時の挙動を定義します。
+     */
     @IBAction func onTapView(_ sender: UITapGestureRecognizer) {
+        // キーボードが開いていれば閉じます。
         chatMessageToSendTextField.endEditing(true)
     }
 
+    /**
+     メッセージ入力キーボードのテキスト入力終了時の挙動を定義します。
+     */
     @IBAction func onTextFieldDidEnd(_ sender: Any?) {
+        // キーボードを閉じます。
         chatMessageToSendTextField.endEditing(true)
     }
 }
 
+/**
+ メッセージ履歴を表示するテーブルのデリゲートです。
+ */
 extension VideoChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // メッセージ履歴の数だけテーブルの列を表示します。
         history.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // メッセージの詳細を表示するセルを用意します。
         let cell = historyTableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell") as! ChatMessageHistoryTableViewCell
         let message = history[indexPath.row]
         let formatter = DateFormatter()
@@ -375,19 +410,25 @@ extension VideoChatRoomViewController: UITableViewDelegate, UITableViewDataSourc
     }
 }
 
+/**
+ 個々のメッセージの内容を表示するセルです。
+ 詳細は Main.storyboard を参照してください。
+ */
 class ChatMessageHistoryTableViewCell: UITableViewCell {
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var labelLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
 }
 
-// ラベル、時刻、バイナリの内容、文字列化
-
+/**
+ 送受信するメッセージを表します。
+ */
 class ChatMessage {
     var label: String
     var timestamp: Date
     var data: Data
 
+    // データを文字列に変換します。
     var message: String? {
         String(data: data, encoding: .utf8)
     }
