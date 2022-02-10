@@ -27,13 +27,13 @@ class VideoChatRoomViewController: UIViewController {
         // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.peerChannel.handlers.onAddStream = { [weak self] _ in
+            mediaChannel.handlers.onAddStream = { [weak self] _ in
                 NSLog("mediaChannel.peerChannel.handlers.onAddStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
             }
-            mediaChannel.peerChannel.handlers.onRemoveStream = { [weak self] _ in
+            mediaChannel.handlers.onRemoveStream = { [weak self] _ in
                 NSLog("mediaChannel.peerChannel.handlers.onRemoveStream")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
@@ -50,8 +50,8 @@ class VideoChatRoomViewController: UIViewController {
         
         // viewDidAppearで設定したコールバックを、対になるここで削除します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.peerChannel.handlers.onAddStream = nil
-            mediaChannel.peerChannel.handlers.onRemoveStream = nil
+            mediaChannel.handlers.onAddStream = nil
+            mediaChannel.handlers.onRemoveStream = nil
         }
     }
     
@@ -227,14 +227,19 @@ extension VideoChatRoomViewController {
      詳しくはMain.storyboard内の定義をご覧ください。
      */
     @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
-        // フロントカメラ・バックカメラを入れ替える処理を行います。
-        guard let senderStream = SoraSDKManager.shared.currentMediaChannel?.senderStream else {
+        guard let current = CameraVideoCapturer.current else {
             return
         }
-        guard let cameraVideoCapturer = senderStream.videoCapturer as? CameraVideoCapturer else {
+
+        guard current.isRunning else {
             return
         }
-        cameraVideoCapturer.flip()
+
+        CameraVideoCapturer.flip(current) { error in
+            if let error = error {
+                NSLog("[sample] " + error.localizedDescription)
+            }
+        }
     }
     
     /**

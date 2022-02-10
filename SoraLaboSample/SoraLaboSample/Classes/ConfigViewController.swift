@@ -105,7 +105,7 @@ class ConfigViewController: UITableViewController {
             videoBitRate = nil
         }
         
-        let cameraResolution: CameraVideoCapturer.Settings.Resolution
+        let cameraResolution: CameraSettings.Resolution
         switch cameraResolutionButton.currentTitle {
         case "FHD":
             cameraResolution = .hd1080p
@@ -120,8 +120,8 @@ class ConfigViewController: UITableViewController {
         }
         
         let cameraFrameRate = Int(cameraFrameRateButton.currentTitle!)!
-        let cameraSettings = CameraVideoCapturer.Settings(resolution: cameraResolution, frameRate: cameraFrameRate, canStop: true)
-        let videoCapturerDevice = VideoCapturerDevice.camera(settings: cameraSettings)
+        let cameraSettings = CameraSettings(resolution: cameraResolution, frameRate: cameraFrameRate, isEnabled: true)
+        //let videoCapturerDevice = VideoCapturerDevice.camera(settings: cameraSettings)
         
         let audioCodec: AudioCodec
         switch audioCodecButton.currentTitle {
@@ -162,7 +162,7 @@ class ConfigViewController: UITableViewController {
             audioEnabled: audioEnabledSwitch.isOn,
             videoCodec: videoCodec,
             videoBitRate: videoBitRate,
-            videoCapturerDevice: videoCapturerDevice,
+            cameraSettings: cameraSettings,
             audioCodec: audioCodec,
             audioBitRate: audioBitRate,
             simulcastEnabled: simulcastEnabledSwitch.isOn,
