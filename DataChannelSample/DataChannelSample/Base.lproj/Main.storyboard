@@ -65,12 +65,40 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="oUu-FX-a1n">
+                                        <rect key="frame" x="0.0" y="93.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oUu-FX-a1n" id="SRQ-Ld-a1X">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="マルチストリーム" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Mz-Dz-bzP">
+                                                    <rect key="frame" x="20" y="11.5" width="139" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="139" id="w01-Y8-bwT"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6zX-aO-gfn">
+                                                    <rect key="frame" x="345" y="6.5" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="0Mz-Dz-bzP" firstAttribute="centerY" secondItem="SRQ-Ld-a1X" secondAttribute="centerY" id="By4-bu-icj"/>
+                                                <constraint firstItem="0Mz-Dz-bzP" firstAttribute="leading" secondItem="SRQ-Ld-a1X" secondAttribute="leading" constant="20" id="LIK-wu-N75"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="6zX-aO-gfn" secondAttribute="trailing" id="gYK-jW-dvv"/>
+                                                <constraint firstItem="6zX-aO-gfn" firstAttribute="centerY" secondItem="SRQ-Ld-a1X" secondAttribute="centerY" id="l33-l9-Oow"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="配信設定" id="gIG-V2-749">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="b6r-KP-Uhe">
-                                        <rect key="frame" x="0.0" y="143.5" width="414" height="44"/>
+                                        <rect key="frame" x="0.0" y="187.5" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b6r-KP-Uhe" id="iFV-Eh-3Uh">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -629,6 +657,7 @@
                         <outlet property="dataChannelOrderedSwitch" destination="YuL-XC-yOM" id="9kL-o0-A5u"/>
                         <outlet property="dataChannelProtocolTextField" destination="VgN-c4-85a" id="YDv-26-a2l"/>
                         <outlet property="ignoreDisconnectWebSocketSwitch" destination="gqh-eW-GU8" id="MkW-mH-Ad2"/>
+                        <outlet property="multistreamEnabledSwitch" destination="6zX-aO-gfn" id="q8D-c0-qEt"/>
                         <outlet property="roleSegmentedControl" destination="tai-WJ-qKO" id="aNB-q3-yAm"/>
                         <outlet property="simulcastEnabledSwitch" destination="DKX-xc-mvX" id="PiL-Kq-yVI"/>
                         <outlet property="simulcastRidSegmentedControl" destination="GeQ-5J-0ko" id="Ar7-su-qHV"/>

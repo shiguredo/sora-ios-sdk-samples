@@ -10,6 +10,8 @@ class ConfigViewController: UITableViewController {
 
     @IBOutlet var roleSegmentedControl: UISegmentedControl!
 
+    @IBOutlet var multistreamEnabledSwitch: UISwitch!
+
     @IBOutlet var videoEnabledSwitch: UISwitch!
 
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
@@ -130,7 +132,7 @@ class ConfigViewController: UITableViewController {
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
-        var configuration = Configuration(urlCandidates: Environment.urlCandidates, channelId: channelId, role: role, multistreamEnabled: true)
+        var configuration = Configuration(urlCandidates: Environment.urlCandidates, channelId: channelId, role: role, multistreamEnabled: multistreamEnabledSwitch.isOn)
         configuration.videoEnabled = videoEnabledSwitch.isOn
         configuration.videoCodec = videoCodec
         configuration.audioEnabled = audioEnabledSwitch.isOn
