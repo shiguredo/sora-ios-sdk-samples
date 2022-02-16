@@ -33,14 +33,16 @@ class ConfigViewController: UITableViewController {
 
     @IBOutlet var dataChannelProtocolTextField: UITextField!
 
+    @IBOutlet var dataChannelProtocolNoSendSwitch: UISwitch!
+
     @IBOutlet var dataChannelDirectionSegmentedControl: UISegmentedControl!
 
-    @IBOutlet var dataChannelCompressSwitch: UISwitch!
+    @IBOutlet var dataChannelCompressSegmentedControl: UISegmentedControl!
 
-    @IBOutlet var dataChannelOrderedSwitch: UISwitch!
+    @IBOutlet var dataChannelOrderedSegmentedControl: UISegmentedControl!
 
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-    @IBOutlet var ignoreDisconnectWebSocketSwitch: UISwitch!
+    @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
     /**
      画面起動時の処理を記述します。
@@ -65,10 +67,6 @@ class ConfigViewController: UITableViewController {
 
         // チャンネルIDが入力されていない限り無視します。
         guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
-            return
-        }
-
-        guard let dataChannelProtocol = dataChannelProtocolTextField.text, !channelId.isEmpty else {
             return
         }
 
@@ -121,11 +119,35 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
+        let ignoreDisconnectWebSocket: Bool?
+        switch ignoreDisconnectWebSocketSegmentedControl.selectedSegmentIndex {
+        case 0: ignoreDisconnectWebSocket = nil
+        case 1: ignoreDisconnectWebSocket = true
+        case 2: ignoreDisconnectWebSocket = false
+        default: fatalError()
+        }
+
         let messagingDirection: MessagingDirection
         switch dataChannelDirectionSegmentedControl.selectedSegmentIndex {
         case 0: messagingDirection = .sendonly
         case 1: messagingDirection = .recvonly
         case 2: messagingDirection = .sendrecv
+        default: fatalError()
+        }
+
+        let dataChannelCompress: Bool?
+        switch dataChannelCompressSegmentedControl.selectedSegmentIndex {
+        case 0: dataChannelCompress = nil
+        case 1: dataChannelCompress = true
+        case 2: dataChannelCompress = false
+        default: fatalError()
+        }
+
+        let dataChannelOrdered: Bool?
+        switch dataChannelOrderedSegmentedControl.selectedSegmentIndex {
+        case 0: dataChannelOrdered = nil
+        case 1: dataChannelOrdered = true
+        case 2: dataChannelOrdered = false
         default: fatalError()
         }
 
@@ -145,14 +167,16 @@ class ConfigViewController: UITableViewController {
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         configuration.dataChannelSignaling = true
-        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocketSwitch.isOn
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
         var dataChannels: [SignalingConnectDataChannel] = []
         for label in Environment.dataChannelLabels {
             var dataChannel = SignalingConnectDataChannel(label: label, direction: messagingDirection)
-            dataChannel.compress = dataChannelCompressSwitch.isOn
-            dataChannel.ordered = dataChannelOrderedSwitch.isOn
-            dataChannel.protocol = dataChannelProtocolTextField.text
+            dataChannel.compress = dataChannelCompress
+            dataChannel.ordered = dataChannelOrdered
+            if !dataChannelProtocolNoSendSwitch.isOn {
+                dataChannel.protocol = dataChannelProtocolTextField.text
+            }
             dataChannels.append(dataChannel)
         }
         configuration.dataChannels = dataChannels

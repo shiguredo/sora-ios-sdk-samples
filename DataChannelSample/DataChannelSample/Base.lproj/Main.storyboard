@@ -462,8 +462,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WebSocket の切断を無視" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Guj-ry-NPU">
-                                                    <rect key="frame" x="20" y="0.0" width="163" height="54"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WSの切断を無視" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Guj-ry-NPU">
+                                                    <rect key="frame" x="20" y="0.0" width="122" height="54"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="Lgz-YG-Qwg"/>
                                                     </constraints>
@@ -471,15 +471,19 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gqh-eW-GU8">
-                                                    <rect key="frame" x="345" y="11.5" width="51" height="31"/>
-                                                </switch>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFq-V8-NRu">
+                                                    <rect key="frame" x="218" y="11.5" width="176" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Guj-ry-NPU" firstAttribute="top" secondItem="GUk-lJ-51U" secondAttribute="top" id="0aT-6D-eM7"/>
-                                                <constraint firstItem="gqh-eW-GU8" firstAttribute="centerY" secondItem="GUk-lJ-51U" secondAttribute="centerY" id="52h-eZ-gFM"/>
-                                                <constraint firstItem="gqh-eW-GU8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Guj-ry-NPU" secondAttribute="trailing" constant="8" symbolic="YES" id="klC-4h-jCE"/>
-                                                <constraint firstAttribute="trailing" secondItem="gqh-eW-GU8" secondAttribute="trailing" constant="20" id="t6T-i3-1m3"/>
+                                                <constraint firstItem="YFq-V8-NRu" firstAttribute="centerY" secondItem="GUk-lJ-51U" secondAttribute="centerY" id="Gcs-AZ-Bi2"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="YFq-V8-NRu" secondAttribute="trailing" id="tdA-gz-d9a"/>
                                                 <constraint firstItem="Guj-ry-NPU" firstAttribute="centerY" secondItem="GUk-lJ-51U" secondAttribute="centerY" id="tz4-La-1Od"/>
                                                 <constraint firstItem="Guj-ry-NPU" firstAttribute="leading" secondItem="GUk-lJ-51U" secondAttribute="leadingMargin" id="wkw-uY-brn"/>
                                             </constraints>
@@ -501,14 +505,18 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lsz-gg-GBm">
-                                                    <rect key="frame" x="345" y="11.5" width="51" height="31"/>
-                                                </switch>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3mf-dj-4aG">
+                                                    <rect key="frame" x="218" y="11.5" width="176" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="Lsz-gg-GBm" secondAttribute="trailing" constant="20" id="1Ry-bm-oTa"/>
-                                                <constraint firstItem="Lsz-gg-GBm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="C7Z-NO-q8g" secondAttribute="trailing" constant="8" symbolic="YES" id="D5r-Z8-Hzp"/>
-                                                <constraint firstItem="Lsz-gg-GBm" firstAttribute="centerY" secondItem="Cbo-7U-ghH" secondAttribute="centerY" id="Sol-SZ-yt7"/>
+                                                <constraint firstItem="3mf-dj-4aG" firstAttribute="centerY" secondItem="Cbo-7U-ghH" secondAttribute="centerY" id="N6J-df-N3W"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="3mf-dj-4aG" secondAttribute="trailing" id="R6B-tM-Ad2"/>
                                                 <constraint firstItem="C7Z-NO-q8g" firstAttribute="centerY" secondItem="Cbo-7U-ghH" secondAttribute="centerY" id="mis-jU-fPv"/>
                                                 <constraint firstItem="C7Z-NO-q8g" firstAttribute="leading" secondItem="Cbo-7U-ghH" secondAttribute="leadingMargin" id="qCA-hl-yd1"/>
                                                 <constraint firstItem="C7Z-NO-q8g" firstAttribute="top" secondItem="Cbo-7U-ghH" secondAttribute="top" id="qqU-0x-tk6"/>
@@ -566,17 +574,21 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YuL-XC-yOM">
-                                                    <rect key="frame" x="345" y="11.5" width="51" height="31"/>
-                                                </switch>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wcP-eK-CYc">
+                                                    <rect key="frame" x="218" y="11.5" width="176" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="IxX-jD-zZs" firstAttribute="leading" secondItem="EpY-On-I0F" secondAttribute="leadingMargin" id="0t3-em-ARm"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="wcP-eK-CYc" secondAttribute="trailing" id="13B-Mz-BhB"/>
                                                 <constraint firstItem="IxX-jD-zZs" firstAttribute="top" secondItem="EpY-On-I0F" secondAttribute="top" id="AVF-s5-brD"/>
-                                                <constraint firstItem="YuL-XC-yOM" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="IxX-jD-zZs" secondAttribute="trailing" constant="8" symbolic="YES" id="Klq-Jj-a7x"/>
-                                                <constraint firstItem="YuL-XC-yOM" firstAttribute="centerY" secondItem="EpY-On-I0F" secondAttribute="centerY" id="csn-MD-EGK"/>
+                                                <constraint firstItem="wcP-eK-CYc" firstAttribute="centerY" secondItem="EpY-On-I0F" secondAttribute="centerY" id="FDJ-ib-f35"/>
                                                 <constraint firstItem="IxX-jD-zZs" firstAttribute="centerY" secondItem="EpY-On-I0F" secondAttribute="centerY" id="djt-uT-ZKP"/>
-                                                <constraint firstAttribute="trailing" secondItem="YuL-XC-yOM" secondAttribute="trailing" constant="20" id="jJ4-so-DAE"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -588,17 +600,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="プロトコル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3IB-bR-KOQ">
-                                                    <rect key="frame" x="20" y="0.0" width="71.5" height="54"/>
+                                                    <rect key="frame" x="20" y="18.5" width="71.5" height="17"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="プロトコル名" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VgN-c4-85a">
-                                                    <rect key="frame" x="111.5" y="17" width="282.5" height="20"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="プロトコル" textAlignment="right" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VgN-c4-85a">
+                                                    <rect key="frame" x="111.5" y="18" width="282.5" height="18.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="aCv-IF-L3W"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
                                                         <action selector="onTextFieldDidEnd:" destination="XQ9-0y-Y6c" eventType="editingDidEndOnExit" id="AoF-9b-v9U"/>
@@ -608,10 +620,39 @@
                                             <constraints>
                                                 <constraint firstItem="VgN-c4-85a" firstAttribute="leading" relation="lessThanOrEqual" secondItem="3IB-bR-KOQ" secondAttribute="trailing" constant="20" id="Eel-Wc-o79"/>
                                                 <constraint firstItem="3IB-bR-KOQ" firstAttribute="centerY" secondItem="1zg-H6-38e" secondAttribute="centerY" id="HOI-sH-IS5"/>
-                                                <constraint firstItem="3IB-bR-KOQ" firstAttribute="top" secondItem="1zg-H6-38e" secondAttribute="top" id="MQP-UP-EnI"/>
                                                 <constraint firstAttribute="trailing" secondItem="VgN-c4-85a" secondAttribute="trailing" constant="20" id="aan-xo-7fz"/>
                                                 <constraint firstItem="3IB-bR-KOQ" firstAttribute="leading" secondItem="1zg-H6-38e" secondAttribute="leadingMargin" id="ecx-nP-Sok"/>
                                                 <constraint firstItem="VgN-c4-85a" firstAttribute="centerY" secondItem="1zg-H6-38e" secondAttribute="centerY" id="ksz-ws-MLC"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="TYQ-bK-Og7">
+                                        <rect key="frame" x="0.0" y="1167.5" width="414" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TYQ-bK-Og7" id="cNc-WO-KJM">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="プロトコルを送信しない" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RP6-Uk-8HX">
+                                                    <rect key="frame" x="20" y="0.0" width="157.5" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="8sk-jm-TRe"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="K0W-oK-H8t">
+                                                    <rect key="frame" x="345" y="11.5" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="K0W-oK-H8t" firstAttribute="centerY" secondItem="cNc-WO-KJM" secondAttribute="centerY" id="2oM-rB-k5g"/>
+                                                <constraint firstItem="RP6-Uk-8HX" firstAttribute="leading" secondItem="cNc-WO-KJM" secondAttribute="leadingMargin" id="Sqs-7j-K1O"/>
+                                                <constraint firstItem="RP6-Uk-8HX" firstAttribute="centerY" secondItem="cNc-WO-KJM" secondAttribute="centerY" id="brX-uU-fh0"/>
+                                                <constraint firstItem="K0W-oK-H8t" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RP6-Uk-8HX" secondAttribute="trailing" constant="8" symbolic="YES" id="fZi-BD-djP"/>
+                                                <constraint firstAttribute="trailing" secondItem="K0W-oK-H8t" secondAttribute="trailing" constant="20" id="fo9-06-9qe"/>
+                                                <constraint firstItem="RP6-Uk-8HX" firstAttribute="top" secondItem="cNc-WO-KJM" secondAttribute="top" id="xho-v7-VQ0"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -620,14 +661,14 @@
                             <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="1203.5" width="414" height="49"/>
+                                        <rect key="frame" x="0.0" y="1257.5" width="414" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="チャットに入室する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQp-k7-8lk">
-                                                    <rect key="frame" x="142.5" y="16" width="129" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャットに入室する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQp-k7-8lk">
+                                                    <rect key="frame" x="142.5" y="18.5" width="129" height="17"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -650,13 +691,14 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
                     <connections>
-                        <outlet property="audioEnabledSwitch" destination="evs-2P-3Kj" id="1wV-94-0eo"/>
+                        <outlet property="audioEnabledSwitch" destination="evs-2P-3Kj" id="nWP-cH-BYB"/>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
-                        <outlet property="dataChannelCompressSwitch" destination="Lsz-gg-GBm" id="FKg-x9-zHA"/>
+                        <outlet property="dataChannelCompressSegmentedControl" destination="3mf-dj-4aG" id="2Cx-32-FSg"/>
                         <outlet property="dataChannelDirectionSegmentedControl" destination="bEO-iq-gX8" id="LWg-2U-LiJ"/>
-                        <outlet property="dataChannelOrderedSwitch" destination="YuL-XC-yOM" id="9kL-o0-A5u"/>
+                        <outlet property="dataChannelOrderedSegmentedControl" destination="wcP-eK-CYc" id="PER-pb-jc5"/>
+                        <outlet property="dataChannelProtocolNoSendSwitch" destination="K0W-oK-H8t" id="tr9-1m-VG8"/>
                         <outlet property="dataChannelProtocolTextField" destination="VgN-c4-85a" id="YDv-26-a2l"/>
-                        <outlet property="ignoreDisconnectWebSocketSwitch" destination="gqh-eW-GU8" id="MkW-mH-Ad2"/>
+                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="YFq-V8-NRu" id="99N-sx-jIw"/>
                         <outlet property="multistreamEnabledSwitch" destination="6zX-aO-gfn" id="q8D-c0-qEt"/>
                         <outlet property="roleSegmentedControl" destination="tai-WJ-qKO" id="aNB-q3-yAm"/>
                         <outlet property="simulcastEnabledSwitch" destination="DKX-xc-mvX" id="PiL-Kq-yVI"/>
@@ -666,7 +708,7 @@
                         <outlet property="spotlightNumberSegmentedControl" destination="Mh3-3t-THe" id="Qfe-hb-dgk"/>
                         <outlet property="spotlightUnfocusRidSegmentedControl" destination="DQ7-RG-kj2" id="52w-LG-AYj"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
-                        <outlet property="videoEnabledSwitch" destination="LuO-Hu-gTs" id="MKO-LC-H9S"/>
+                        <outlet property="videoEnabledSwitch" destination="LuO-Hu-gTs" id="X0K-jc-dRu"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
                 </tableViewController>
