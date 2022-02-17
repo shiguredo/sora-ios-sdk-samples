@@ -28,7 +28,7 @@ class VideoChatRoomViewController: UIViewController {
     var history: [ChatMessage] = []
 
     /**
-     配信画面で選択されたラベルです。このラベルでメッセージを送信すます。
+     配信画面で選択されたラベルです。このラベルでメッセージを送信します。
      */
     var selectedLabel: String?
 
