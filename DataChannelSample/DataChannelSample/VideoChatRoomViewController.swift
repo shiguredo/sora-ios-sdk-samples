@@ -12,8 +12,8 @@ class VideoChatRoomViewController: UIViewController {
     @IBOutlet weak var historyTableView: UITableView!
 
     /**
-    タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
-     */
+     タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
+      */
     @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
 
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
