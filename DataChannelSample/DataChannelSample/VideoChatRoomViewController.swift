@@ -32,6 +32,11 @@ class VideoChatRoomViewController: UIViewController {
      */
     var selectedLabel: String?
 
+    /**
+     送信するバイナリメッセージです。ランダムなバイナリを送信するように指定した場合に使います。
+     */
+    var binaryToSend: Data?
+
     override func viewDidLoad() {
         historyTableView.delegate = self
         historyTableView.dataSource = self
@@ -90,7 +95,28 @@ class VideoChatRoomViewController: UIViewController {
                     weakSelf.updateHistoryTableView()
                 }
             }
+
+            // ランダムなバイナリを送信するように指定されていたら
+            // テキストフィールドを入力不可にし、バイナリを生成します。
+            if SoraSDKManager.shared.dataChannelRandomBinary {
+                chatMessageToSendTextField.isEnabled = false
+                generateRandomBinary()
+            } else {
+                chatMessageToSendTextField.isEnabled = true
+                chatMessageToSendTextField.text = nil
+            }
         }
+    }
+
+    func generateRandomBinary() {
+        var binary: [UInt8] = []
+        for _ in 0 ..< 8 {
+            binary.append(UInt8.random(in: 0 ..< UInt8.max))
+        }
+        binaryToSend = Data(binary)
+
+        let s = binary.map(\.description).joined(separator: ", ")
+        chatMessageToSendTextField.text = s
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -348,9 +374,6 @@ extension VideoChatRoomViewController {
      メッセージ送信ボタンが押されたときの挙動を定義します。
      */
     @IBAction func onSendButton(_ sender: Any?) {
-        guard let text = chatMessageToSendTextField.text else {
-            return
-        }
         guard let label = selectedLabel else {
             return
         }
@@ -359,12 +382,29 @@ extension VideoChatRoomViewController {
         }
 
         // メッセージを送信します。
-        let data = text.data(using: .utf8)!
+        let data: Data
+        if SoraSDKManager.shared.dataChannelRandomBinary {
+            guard let binary = binaryToSend else {
+                return
+            }
+            data = binary
+        } else {
+            guard let text = chatMessageToSendTextField.text else {
+                return
+            }
+            data = text.data(using: .utf8)!
+        }
+
         if let error = mediaChannel.sendMessage(label: label, data: data) {
             NSLog("cannot send message: \(error)")
             return
         }
-        chatMessageToSendTextField.text = nil
+
+        if SoraSDKManager.shared.dataChannelRandomBinary {
+            generateRandomBinary()
+        } else {
+            chatMessageToSendTextField.text = nil
+        }
 
         // メッセージ履歴を更新します。
         history.append(.init(label: label, data: data))
@@ -430,7 +470,7 @@ class ChatMessage {
 
     // データを文字列に変換します。
     var message: String? {
-        String(data: data, encoding: .utf8)
+        String(data: data, encoding: .utf8) ?? data.map(\.description).joined(separator: ", ")
     }
 
     init(label: String, data: Data) {

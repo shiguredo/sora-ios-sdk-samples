@@ -20,6 +20,12 @@ class SoraSDKManager {
     private(set) var currentMediaChannel: MediaChannel?
 
     /**
+     DataChannel メッセージでランダムなバイナリを送信するかどうかを指定します。
+     VideoChatViewController から参照されます。
+     */
+    var dataChannelRandomBinary: Bool = false
+
+    /**
      シングルトンにしたいので、イニシャライザはprivateにしてあります。
      */
     private init() {

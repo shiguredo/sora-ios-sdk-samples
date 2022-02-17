@@ -5,44 +5,67 @@ import UIKit
  チャット接続設定画面です。
  */
 class ConfigViewController: UITableViewController {
-    /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    // 以下のプロパティは UI コンポーネントを保持します。
+    // Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+
+    /// チャンネルIDを入力するコントロールです。
     @IBOutlet var channelIdTextField: UITextField!
 
+    /// ロールを選択するコントロールです。
     @IBOutlet var roleSegmentedControl: UISegmentedControl!
 
+    /// マルチストリームを指定するコントロールです。
     @IBOutlet var multistreamEnabledSwitch: UISwitch!
 
+    /// 映像の配信を指定するコントロールです。
     @IBOutlet var videoEnabledSwitch: UISwitch!
 
-    /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+    /// 動画のコーデックを指定するためのコントロールです。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
+    /// 音声の配信を指定するコントロールです。
     @IBOutlet var audioEnabledSwitch: UISwitch!
 
+    /// サイマルキャストの配信を指定するコントロールです。
     @IBOutlet var simulcastEnabledSwitch: UISwitch!
 
+    /// サイマルキャスト rid を指定するコントロールです。
     @IBOutlet var simulcastRidSegmentedControl: UISegmentedControl!
 
+    /// スポットライトの配信を指定するコントロールです。
     @IBOutlet var spotlightEnabledSwitch: UISwitch!
 
+    /// スポットライト数を指定するコントロールです。
     @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
+    /// スポットライトでフォーカスされた映像の rid を指定するコントロールです。
     @IBOutlet var spotlightFocusRidSegmentedControl: UISegmentedControl!
 
+    /// スポットライトでフォーカスされていない映像の rid を指定するコントロールです。
     @IBOutlet var spotlightUnfocusRidSegmentedControl: UISegmentedControl!
 
+    /// DataChannel メッセージのプロトコルを入力するコントロールです。
+    /// プロトコルが空でも送信します。
     @IBOutlet var dataChannelProtocolTextField: UITextField!
 
+    /// DataChannel メッセージのプロトコルの送信を指定するコントロールです。
+    /// このスイッチがオンの場合、プロトコルが入力されていても送信しません。
     @IBOutlet var dataChannelProtocolNoSendSwitch: UISwitch!
 
+    /// DataChannel メッセージの方向を指定するコントロールです。
     @IBOutlet var dataChannelDirectionSegmentedControl: UISegmentedControl!
 
+    /// DataChannel メッセージの圧縮を指定するコントロールです。
     @IBOutlet var dataChannelCompressSegmentedControl: UISegmentedControl!
 
+    /// DataChannel メッセージの順序保証を指定するコントロールです。
     @IBOutlet var dataChannelOrderedSegmentedControl: UISegmentedControl!
 
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
+
+    /// DataChannel メッセージでランダムなバイナリを送信するかどうかを指定するコントロールです。
+    @IBOutlet var dataChannelRandomBinarySwitch: UISwitch!
 
     /**
      画面起動時の処理を記述します。
@@ -97,7 +120,11 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        let spotlightNumber = spotlightNumberSegmentedControl.selectedSegmentIndex
+        let spotlightNumber: Int?
+        switch spotlightNumberSegmentedControl.selectedSegmentIndex {
+        case 0: spotlightNumber = nil
+        default: spotlightNumber = spotlightNumberSegmentedControl.selectedSegmentIndex
+        }
 
         let spotlightFocusRid: SpotlightRid
         switch spotlightFocusRidSegmentedControl.selectedSegmentIndex {
@@ -150,6 +177,8 @@ class ConfigViewController: UITableViewController {
         case 2: dataChannelOrdered = false
         default: fatalError()
         }
+
+        SoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
 
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、

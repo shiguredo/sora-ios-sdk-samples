@@ -348,16 +348,15 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="Mh3-3t-THe">
-                                                    <rect key="frame" x="214" y="11.5" width="180" height="32"/>
+                                                    <rect key="frame" x="159" y="11.5" width="235" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="5qg-JW-wfp"/>
                                                     </constraints>
                                                     <segments>
-                                                        <segment title="0"/>
+                                                        <segment title="未指定"/>
                                                         <segment title="1"/>
                                                         <segment title="2"/>
                                                         <segment title="3"/>
-                                                        <segment title="4"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
@@ -656,12 +655,42 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="03e-EX-uLi">
+                                        <rect key="frame" x="0.0" y="1221.5" width="414" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="03e-EX-uLi" id="Ll7-1Y-ATH">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ランダムなバイナリを送信" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4v-Xl-qhU">
+                                                    <rect key="frame" x="20" y="0.0" width="172" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="f1j-tP-0dS"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3d2-1s-4Jy">
+                                                    <rect key="frame" x="345" y="11.5" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="H4v-Xl-qhU" firstAttribute="top" secondItem="Ll7-1Y-ATH" secondAttribute="top" id="4j1-Eq-AwD"/>
+                                                <constraint firstItem="H4v-Xl-qhU" firstAttribute="leading" secondItem="Ll7-1Y-ATH" secondAttribute="leadingMargin" id="Ozf-HY-0ci"/>
+                                                <constraint firstItem="H4v-Xl-qhU" firstAttribute="centerY" secondItem="Ll7-1Y-ATH" secondAttribute="centerY" id="XUr-w8-uWp"/>
+                                                <constraint firstItem="3d2-1s-4Jy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H4v-Xl-qhU" secondAttribute="trailing" constant="8" symbolic="YES" id="gRM-hf-1FW"/>
+                                                <constraint firstAttribute="trailing" secondItem="3d2-1s-4Jy" secondAttribute="trailing" constant="20" id="lmC-o9-tvC"/>
+                                                <constraint firstItem="3d2-1s-4Jy" firstAttribute="centerY" secondItem="Ll7-1Y-ATH" secondAttribute="centerY" id="q5R-BW-i1c"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="1257.5" width="414" height="54"/>
+                                        <rect key="frame" x="0.0" y="1311.5" width="414" height="54"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
@@ -698,6 +727,7 @@
                         <outlet property="dataChannelOrderedSegmentedControl" destination="wcP-eK-CYc" id="PER-pb-jc5"/>
                         <outlet property="dataChannelProtocolNoSendSwitch" destination="K0W-oK-H8t" id="tr9-1m-VG8"/>
                         <outlet property="dataChannelProtocolTextField" destination="VgN-c4-85a" id="YDv-26-a2l"/>
+                        <outlet property="dataChannelRandomBinarySwitch" destination="3d2-1s-4Jy" id="93I-Hr-uUL"/>
                         <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="YFq-V8-NRu" id="99N-sx-jIw"/>
                         <outlet property="multistreamEnabledSwitch" destination="6zX-aO-gfn" id="q8D-c0-qEt"/>
                         <outlet property="roleSegmentedControl" destination="tai-WJ-qKO" id="aNB-q3-yAm"/>
@@ -799,9 +829,6 @@
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Veg-bZ-Lpb">
                                 <rect key="frame" x="95" y="820" width="248" height="34"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="5AS-5e-7ph"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
