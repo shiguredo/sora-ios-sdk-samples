@@ -5,10 +5,22 @@ import UIKit
  ビデオチャットを行う画面です。
  */
 class VideoChatRoomViewController: UIViewController {
+    // 以下のプロパティは UI コンポーネントを保持します。
+    // Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+
+    /// 接続中の URL を表示するコントロールです。
     @IBOutlet weak var connectedUrlLabel: UILabel!
+
+    /// チャットに参加中の映像を表示するコントロールです。
     @IBOutlet weak var memberListView: UIView!
+
+    /// DataChannel ラベルのリストを選択するためのコントロールです。
     @IBOutlet weak var labelPopUpButton: UIButton!
+
+    /// 送信するチャットメッセージを入力するコントロールです。
     @IBOutlet weak var chatMessageToSendTextField: UITextField!
+
+    /// 送受信したチャットメッセージの履歴を表示するコントロールです。
     @IBOutlet weak var historyTableView: UITableView!
 
     /**
@@ -469,6 +481,7 @@ class ChatMessage {
     var data: Data
 
     // データを文字列に変換します。
+    // UTF-8 文字列に変換できない場合はバイナリの内容を数値で表します。
     var message: String? {
         String(data: data, encoding: .utf8) ?? data.map(\.description).joined(separator: ", ")
     }

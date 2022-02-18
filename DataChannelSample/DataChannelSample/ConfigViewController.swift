@@ -93,6 +93,7 @@ class ConfigViewController: UITableViewController {
             return
         }
 
+        // 以下、ユーザーが選択した設定をUIコントロールから取得します。
         let role: Role
         switch roleSegmentedControl.selectedSegmentIndex {
         case 0: role = .sendonly
@@ -101,7 +102,6 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        // ユーザーが選択した設定をUIコントロールから取得します。
         let videoCodec: VideoCodec
         switch videoCodecSegmentedControl.selectedSegmentIndex {
         case 0: videoCodec = .default
@@ -198,6 +198,7 @@ class ConfigViewController: UITableViewController {
         configuration.dataChannelSignaling = true
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
+        // DataChannel ラベルの設定を行います。
         var dataChannels: [SignalingConnectDataChannel] = []
         for label in Environment.dataChannelLabels {
             var dataChannel = SignalingConnectDataChannel(label: label, direction: messagingDirection)
@@ -247,12 +248,22 @@ class ConfigViewController: UITableViewController {
         // 前の画面から戻ってきても、特に処理は何も行いません。
     }
 
+    /**
+     テーブルビューのタップ時に呼ばれます。
+     詳細はMain.storyboardの設定をご確認ください。
+     */
     @IBAction func onTapTableView(_ sender: UITapGestureRecognizer) {
+        // テキストフィールドの入力中であれば、表示されているキーボードを閉じます。
         channelIdTextField.endEditing(true)
         dataChannelProtocolTextField.endEditing(true)
     }
 
+    /**
+     テキストフィールドの入力終了時に呼ばれます。
+     詳細はMain.storyboardの設定をご確認ください。
+     */
     @IBAction func onTextFieldDidEnd(_ sender: Any?) {
+        // 表示されているキーボードを閉じます。
         channelIdTextField.endEditing(true)
         dataChannelProtocolTextField.endEditing(true)
     }
