@@ -154,11 +154,11 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        let messagingDirection: MessagingDirection
+        let messagingDirection: String
         switch dataChannelDirectionSegmentedControl.selectedSegmentIndex {
-        case 0: messagingDirection = .sendonly
-        case 1: messagingDirection = .recvonly
-        case 2: messagingDirection = .sendrecv
+        case 0: messagingDirection = "sendonly"
+        case 1: messagingDirection = "recvonly"
+        case 2: messagingDirection = "sendrecv"
         default: fatalError()
         }
 
@@ -199,13 +199,13 @@ class ConfigViewController: UITableViewController {
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
         // DataChannel ラベルの設定を行います。
-        var dataChannels: [SignalingConnectDataChannel] = []
+        var dataChannels: [[String: Any]] = []
         for label in Environment.dataChannelLabels {
-            var dataChannel = SignalingConnectDataChannel(label: label, direction: messagingDirection)
-            dataChannel.compress = dataChannelCompress
-            dataChannel.ordered = dataChannelOrdered
+            var dataChannel: [String: Any] = ["label": label, "direction": messagingDirection]
+            dataChannel["compress"] = dataChannelCompress
+            dataChannel["ordered"] = dataChannelOrdered
             if !dataChannelProtocolNoSendSwitch.isOn {
-                dataChannel.protocol = dataChannelProtocolTextField.text
+                dataChannel["protocol"] = dataChannelProtocolTextField.text
             }
             dataChannels.append(dataChannel)
         }
