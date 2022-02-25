@@ -10,6 +10,9 @@ class PublisherConfigViewController: UITableViewController {
     /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
+    /// 接続試行中かどうかを表します。
+    var isConnecting = false
+
     /**
      画面起動時の処理を記述します。
      */
@@ -17,6 +20,7 @@ class PublisherConfigViewController: UITableViewController {
         super.viewDidLoad()
 
         channelIdTextField.text = Environment.channelId
+        isConnecting = false
     }
 
     /**
@@ -35,6 +39,12 @@ class PublisherConfigViewController: UITableViewController {
         guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
             return
         }
+
+        // 接続試行中であれば、二重の接続を防ぐために無視します。
+        guard isConnecting == false else {
+            return
+        }
+        isConnecting = true
 
         // ユーザーが選択した設定をUIコントロールから取得します。
         let videoCodec: VideoCodec
@@ -56,6 +66,8 @@ class PublisherConfigViewController: UITableViewController {
             multistreamEnabled: false,
             videoCodec: videoCodec
         ) { [weak self] error in
+            self?.isConnecting = false
+
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
