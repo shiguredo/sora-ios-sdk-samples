@@ -470,7 +470,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFq-V8-NRu">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="YFq-V8-NRu">
                                                     <rect key="frame" x="218" y="11.5" width="176" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
@@ -504,7 +504,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3mf-dj-4aG">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="3mf-dj-4aG">
                                                     <rect key="frame" x="218" y="11.5" width="176" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
@@ -573,7 +573,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wcP-eK-CYc">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="wcP-eK-CYc">
                                                     <rect key="frame" x="218" y="11.5" width="176" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
