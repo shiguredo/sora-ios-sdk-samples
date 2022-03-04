@@ -40,7 +40,8 @@ class SoraSDKManager {
                  videoCodec: VideoCodec = .default,
                  dataChannelSignaling: Bool? = nil,
                  ignoreDisconnectWebSocket: Bool? = nil,
-                 completionHandler: ((Error?) -> Void)?) {
+                 completionHandler: ((Error?) -> Void)?)
+    {
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
         guard currentMediaChannel == nil else {
             return
