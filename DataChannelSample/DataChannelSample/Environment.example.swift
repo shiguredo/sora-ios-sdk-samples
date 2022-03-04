@@ -12,7 +12,7 @@ enum Environment {
     static let channelId = "sora"
 
     // type: connect に含めるメタデータ
-    static let signalingConnectMetadata: Encodable?
+    static let signalingConnectMetadata: Encodable? = nil
 
     // DataChannel メッセージングに使うラベル
     static let dataChannelLabels = ["#spam", "#egg"]
