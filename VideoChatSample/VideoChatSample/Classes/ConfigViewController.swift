@@ -17,6 +17,9 @@ class ConfigViewController: UITableViewController {
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
+    /// 接続試行中かどうかを表します。
+    var isConnecting = false
+
     /**
      画面起動時の処理を記述します。
      */
@@ -42,6 +45,12 @@ class ConfigViewController: UITableViewController {
         guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
             return
         }
+
+        // 接続試行中なら無視します。
+        if isConnecting {
+            return
+        }
+        isConnecting = true
 
         // ユーザーが選択した設定をUIコントロールから取得します。
         let videoCodec: VideoCodec
@@ -80,6 +89,9 @@ class ConfigViewController: UITableViewController {
             dataChannelSignaling: dataChannelSignaling,
             ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
         ) { [weak self] error in
+            // 接続処理が終了したので false にします。
+            self?.isConnecting = false
+
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
