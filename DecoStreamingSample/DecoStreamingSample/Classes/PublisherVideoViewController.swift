@@ -58,6 +58,14 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             filterPickerViewHeightArchorPad.isActive = false
             filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
+
+        let graphManager = VideoGraphManager.shared
+        let graph = graphManager.graph
+        graphManager.videoViewOutputNode = VideoViewOutputNode(videoView)
+        graph.attach(graph.cameraInputNode)
+        graph.attach(graphManager.videoViewOutputNode!)
+        graph.connect(graph.cameraInputNode, to: graphManager.decoNode, format: nil)
+        graph.connect(graphManager.decoNode, to: graphManager.videoViewOutputNode!, format: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -72,51 +80,55 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if authorizationStatus == nil {
-            // 映像キャプチャデバイス（要するにカメラ）を使用するには、最初にユーザーからの明示的な許可を得る必要があります。
-            // ここでは許可状況を確認し、それに応じて処理を分岐しています。
-            switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
-            case .authorized:
-                // 既に許可が得られているので、そのまま続行します。
-                authorizationStatus = .authorized
-            case .notDetermined:
-                // まだ一度もユーザーに対して許可を得るダイアログを表示していないため、ここで許可を得るためのダイアログを表示します。
-                // ユーザーがダイアログに対して返事を返すまでの間、captureSessionQueueを停止させ、処理をサスペンドしています。
-                // ユーザーがダイアログに対して処理を返してきたら、そのステータスに応じて処理を続行するため、captureSessionQueueを再開させます。
-                captureSessionQueue.suspend()
-                AVCaptureDevice.requestAccess(for: AVMediaType.video) { [weak self] granted in
-                    if !granted {
-                        self?.authorizationStatus = .denied
-                    } else {
-                        self?.authorizationStatus = .authorized
-                    }
-                    self?.captureSessionQueue.resume()
-                }
-            default:
-                // 既に明示的に拒否されているため、そのまま続行します。
-                authorizationStatus = .denied
-            }
-        }
-
-        // captureSessionをセットアップしたのち、映像キャプチャを開始します。
-        // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
-        // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
-        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
         /*
-         captureSessionQueue.async { [weak self] in
-             if let finished = self?.configurationFinished, !finished {
-                 self?.configureCaptureSession()
+         if authorizationStatus == nil {
+             // 映像キャプチャデバイス（要するにカメラ）を使用するには、最初にユーザーからの明示的な許可を得る必要があります。
+             // ここでは許可状況を確認し、それに応じて処理を分岐しています。
+             switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
+             case .authorized:
+                 // 既に許可が得られているので、そのまま続行します。
+                 authorizationStatus = .authorized
+             case .notDetermined:
+                 // まだ一度もユーザーに対して許可を得るダイアログを表示していないため、ここで許可を得るためのダイアログを表示します。
+                 // ユーザーがダイアログに対して返事を返すまでの間、captureSessionQueueを停止させ、処理をサスペンドしています。
+                 // ユーザーがダイアログに対して処理を返してきたら、そのステータスに応じて処理を続行するため、captureSessionQueueを再開させます。
+                 captureSessionQueue.suspend()
+                 AVCaptureDevice.requestAccess(for: AVMediaType.video) { [weak self] granted in
+                     if !granted {
+                         self?.authorizationStatus = .denied
+                     } else {
+                         self?.authorizationStatus = .authorized
+                     }
+                     self?.captureSessionQueue.resume()
+                 }
+             default:
+                 // 既に明示的に拒否されているため、そのまま続行します。
+                 authorizationStatus = .denied
              }
-             self?.captureSession.startRunning()
          }
-         */
-        if !configurationFinished {
-            configureCaptureSession()
-        }
-        captureSession.startRunning()
 
-        // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
-        SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
+         // captureSessionをセットアップしたのち、映像キャプチャを開始します。
+         // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
+         // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
+         // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+         /*
+          captureSessionQueue.async { [weak self] in
+              if let finished = self?.configurationFinished, !finished {
+                  self?.configureCaptureSession()
+              }
+              self?.captureSession.startRunning()
+          }
+          */
+         if !configurationFinished {
+             configureCaptureSession()
+         }
+         captureSession.startRunning()
+
+         // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
+         // SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
+          */
+
+        VideoGraphManager.shared.setUp()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -129,7 +141,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
              self?.captureSession.stopRunning()
          }
           */
-        captureSession.stopRunning()
+        // captureSession.stopRunning()
 
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
@@ -147,36 +159,38 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
      詳しくはMain.storyboard内の定義をご覧ください。
      */
     @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
-        switch captureDevicePosition {
-        case .front:
-            captureDevicePosition = .back
-            // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
-            /*
-             captureSessionQueue.async { [weak self] in
-                 self?.captureSession.stopRunning()
-                 self?.configureCaptureSession()
-                 self?.captureSession.startRunning()
-             }
-              */
-            captureSession.stopRunning()
-            configureCaptureSession()
-            captureSession.startRunning()
-        case .back:
-            captureDevicePosition = .front
-            // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
-            /*
-             captureSessionQueue.async { [weak self] in
-                 self?.captureSession.stopRunning()
-                 self?.configureCaptureSession()
-                 self?.captureSession.startRunning()
-             }
-              */
-            captureSession.stopRunning()
-            configureCaptureSession()
-            captureSession.startRunning()
-        default:
-            break
-        }
+        /*
+         switch captureDevicePosition {
+         case .front:
+             captureDevicePosition = .back
+             // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+             /*
+              captureSessionQueue.async { [weak self] in
+                  self?.captureSession.stopRunning()
+                  self?.configureCaptureSession()
+                  self?.captureSession.startRunning()
+              }
+               */
+             captureSession.stopRunning()
+             configureCaptureSession()
+             captureSession.startRunning()
+         case .back:
+             captureDevicePosition = .front
+             // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
+             /*
+              captureSessionQueue.async { [weak self] in
+                  self?.captureSession.stopRunning()
+                  self?.configureCaptureSession()
+                  self?.captureSession.startRunning()
+              }
+               */
+             captureSession.stopRunning()
+             configureCaptureSession()
+             captureSession.startRunning()
+         default:
+             break
+         }
+          */
     }
 
     /**
@@ -186,7 +200,10 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     @IBAction func onFilterButton(_ sender: UIBarButtonItem) {
         let alertController = UIAlertController(title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
         for (name, filter) in PublisherVideoViewController.allFilters {
-            let action = UIAlertAction(title: name, style: .default) { [weak self] _ in self?.currentFilter = filter }
+            let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
+                // self?.currentFilter = filter
+                VideoGraphManager.shared.decoNode.currentFilter = filter
+            }
             alertController.addAction(action)
         }
         present(alertController, animated: true, completion: nil)
@@ -205,58 +222,60 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     // MARK: Private Methods
 
     private func configureCaptureSession() {
-        // 映像キャプチャデバイスの仕様が許可されている場合のみ続行します。
-        // 拒否されている場合は映像キャプチャデバイスを使用できないため、ここで終了します。
-        guard authorizationStatus == .authorized else {
-            configurationFinished = false
-            return
-        }
+        /*
+         // 映像キャプチャデバイスの仕様が許可されている場合のみ続行します。
+         // 拒否されている場合は映像キャプチャデバイスを使用できないため、ここで終了します。
+         guard authorizationStatus == .authorized else {
+             configurationFinished = false
+             return
+         }
 
-        // ここからデバイスのセットアップを行います。
-        // 全て終わったら自動的にコミットされます。
-        captureSession.beginConfiguration()
-        defer {
-            captureSession.commitConfiguration()
-        }
+         // ここからデバイスのセットアップを行います。
+         // 全て終わったら自動的にコミットされます。
+         captureSession.beginConfiguration()
+         defer {
+             captureSession.commitConfiguration()
+         }
 
-        // 入力デバイスのセットアップを行い、captureSessionに設定します。
-        guard let captureDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: captureDevicePosition) else {
-            configurationFinished = false
-            return
-        }
-        guard let captureDeviceInput = try? AVCaptureDeviceInput(device: captureDevice) else {
-            configurationFinished = false
-            return
-        }
-        for input in captureSession.inputs {
-            captureSession.removeInput(input)
-        }
-        if captureSession.canAddInput(captureDeviceInput) {
-            captureSession.addInput(captureDeviceInput)
-        }
+         // 入力デバイスのセットアップを行い、captureSessionに設定します。
+         guard let captureDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: captureDevicePosition) else {
+             configurationFinished = false
+             return
+         }
+         guard let captureDeviceInput = try? AVCaptureDeviceInput(device: captureDevice) else {
+             configurationFinished = false
+             return
+         }
+         for input in captureSession.inputs {
+             captureSession.removeInput(input)
+         }
+         if captureSession.canAddInput(captureDeviceInput) {
+             captureSession.addInput(captureDeviceInput)
+         }
 
-        // 出力側のセットアップを行い、captureSessionに設定します。
-        let videoDataOutput = AVCaptureVideoDataOutput()
-        videoDataOutput.setSampleBufferDelegate(self, queue: captureSessionQueue)
-        for output in captureSession.outputs {
-            captureSession.removeOutput(output)
-        }
-        if captureSession.canAddOutput(videoDataOutput) {
-            captureSession.addOutput(videoDataOutput)
-        }
+         // 出力側のセットアップを行い、captureSessionに設定します。
+         let videoDataOutput = AVCaptureVideoDataOutput()
+         videoDataOutput.setSampleBufferDelegate(self, queue: captureSessionQueue)
+         for output in captureSession.outputs {
+             captureSession.removeOutput(output)
+         }
+         if captureSession.canAddOutput(videoDataOutput) {
+             captureSession.addOutput(videoDataOutput)
+         }
 
-        // captureSession経由で、カメラの出力プリセットの設定を行います。
-        // デフォルトではカメラの出力できる最も美しい画質で動画を出力するのですが、
-        // あまりにも高画質になるとフィルタをかける際に処理コストが高くなりすぎたりするため、
-        // ここでは適切な画質に設定しています。
-        if captureSession.canSetSessionPreset(.hd1280x720) {
-            captureSession.sessionPreset = .hd1280x720
-        } else {
-            captureSession.sessionPreset = .medium
-        }
+         // captureSession経由で、カメラの出力プリセットの設定を行います。
+         // デフォルトではカメラの出力できる最も美しい画質で動画を出力するのですが、
+         // あまりにも高画質になるとフィルタをかける際に処理コストが高くなりすぎたりするため、
+         // ここでは適切な画質に設定しています。
+         if captureSession.canSetSessionPreset(.hd1280x720) {
+             captureSession.sessionPreset = .hd1280x720
+         } else {
+             captureSession.sessionPreset = .medium
+         }
 
-        // captureSessionのセットアップが完了したので、最後にこのカメラキャプチャが出力する動画の向きを設定します。
-        updateVideoOrientationUsingStatusBarOrientation()
+         // captureSessionのセットアップが完了したので、最後にこのカメラキャプチャが出力する動画の向きを設定します。
+         updateVideoOrientationUsingStatusBarOrientation()
+          */
     }
 
     /**
@@ -334,36 +353,38 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
      したがってメインスレッド上で直接操作する必要があるコードを呼び出す場合は注意が必要です。
      */
     func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-              let mediaStream = mediaChannel.senderStream
-        else {
-            return
-        }
-        if let filter = currentFilter {
-            // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
-            //
-            // フィルタの実装方法について:
-            // ここでは一番簡単なCore Imageを使ったフィルタリングを実装しています。
-            // 大本のビデオフレームバッファ (CMSampleBuffer) から画像フレームバッファ (CVPixelBuffer) を取りだし、
-            // Core ImageのCIImageに変換して、フィルタをかけます。
-            // 最後にフィルタリングされたCIImageをCIContext経由で元々の画像フレームバッファ領域に上書きレンダリングしています。
-            // 元々の画像フレームバッファ領域に直接上書きしているので、大本のビデオフレームバッファをそのまま引き続き使用することができ、
-            // 最終的にはこのビデオフレームバッファをSora SDKの提供するVideoFrameに変換して配信することができます。
-            guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-                return
-            }
-            let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
-            filter.setValue(cameraImage, forKey: kCIInputImageKey)
-            guard let filteredImage = filter.outputImage else {
-                return
-            }
-            let context = CIContext(options: nil)
-            context.render(filteredImage, to: pixelBuffer)
-            mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
-        } else {
-            // フィルタが選択されていないので、キャプチャした動画をそのまま配信させます。
-            mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
-        }
+        /*
+         guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+               let mediaStream = mediaChannel.senderStream
+         else {
+             return
+         }
+         if let filter = currentFilter {
+             // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
+             //
+             // フィルタの実装方法について:
+             // ここでは一番簡単なCore Imageを使ったフィルタリングを実装しています。
+             // 大本のビデオフレームバッファ (CMSampleBuffer) から画像フレームバッファ (CVPixelBuffer) を取りだし、
+             // Core ImageのCIImageに変換して、フィルタをかけます。
+             // 最後にフィルタリングされたCIImageをCIContext経由で元々の画像フレームバッファ領域に上書きレンダリングしています。
+             // 元々の画像フレームバッファ領域に直接上書きしているので、大本のビデオフレームバッファをそのまま引き続き使用することができ、
+             // 最終的にはこのビデオフレームバッファをSora SDKの提供するVideoFrameに変換して配信することができます。
+             guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+                 return
+             }
+             let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
+             filter.setValue(cameraImage, forKey: kCIInputImageKey)
+             guard let filteredImage = filter.outputImage else {
+                 return
+             }
+             let context = CIContext(options: nil)
+             context.render(filteredImage, to: pixelBuffer)
+             mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+         } else {
+             // フィルタが選択されていないので、キャプチャした動画をそのまま配信させます。
+             mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+         }
+          */
     }
 
     /**

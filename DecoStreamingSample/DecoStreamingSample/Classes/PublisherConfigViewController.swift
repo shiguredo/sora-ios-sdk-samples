@@ -53,7 +53,7 @@ class PublisherConfigViewController: UITableViewController {
         SoraSDKManager.shared.connect(
             channelId: channelId,
             role: .sendonly,
-            multistreamEnabled: false,
+            multistreamEnabled: true,
             videoCodec: videoCodec
         ) { [weak self] error in
             if let error = error {
