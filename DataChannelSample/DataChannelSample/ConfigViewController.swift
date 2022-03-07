@@ -67,6 +67,9 @@ class ConfigViewController: UITableViewController {
     /// DataChannel メッセージでランダムなバイナリを送信するかどうかを指定するコントロールです。
     @IBOutlet var dataChannelRandomBinarySwitch: UISwitch!
 
+    /// 接続試行中かどうかを表します。
+    var isConnecting = false
+
     /**
      画面起動時の処理を記述します。
      */
@@ -92,6 +95,12 @@ class ConfigViewController: UITableViewController {
         guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
             return
         }
+
+        // 接続試行中なら無視します。
+        if isConnecting {
+            return
+        }
+        isConnecting = true
 
         // 以下、ユーザーが選択した設定をUIコントロールから取得します。
         let role: Role
@@ -212,6 +221,9 @@ class ConfigViewController: UITableViewController {
         configuration.dataChannels = dataChannels
 
         SoraSDKManager.shared.connect(with: configuration) { [weak self] error in
+            // 接続処理が終了したので false にします。
+            self?.isConnecting = false
+
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
