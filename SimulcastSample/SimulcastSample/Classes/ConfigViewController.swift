@@ -14,6 +14,9 @@ class ConfigViewController: UITableViewController {
     /// 配信開始時のサイマルキャスト rid を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var simulcastRidSegmentedControl: UISegmentedControl!
 
+    /// 接続試行中かどうかを表します。
+    var isConnecting = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,6 +45,12 @@ class ConfigViewController: UITableViewController {
         guard let channelId = channelIdTextField.text, !channelId.isEmpty else {
             return
         }
+
+        // 接続試行中なら無視します。
+        if isConnecting {
+            return
+        }
+        isConnecting = true
 
         // ユーザーが選択した設定をUIコントロールから取得します。
         let videoCodec: VideoCodec
@@ -86,6 +95,9 @@ class ConfigViewController: UITableViewController {
             dataChannelSignaling: dataChannelSignaling,
             ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
         ) { [weak self] error in
+            // 接続処理が終了したので false にします。
+            self?.isConnecting = false
+
             if let error = error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
