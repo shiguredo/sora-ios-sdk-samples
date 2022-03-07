@@ -63,7 +63,6 @@ class SoraSDKManager {
             self?.currentMediaChannel = mediaChannel
             completionHandler?(error)
             NSLog("[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))")
-
         }
     }
 
