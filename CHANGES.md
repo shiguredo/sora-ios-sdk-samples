@@ -11,3 +11,9 @@
 
 ## develop
 
+- [UPDATE] Github Actions でのビルド処理で利用する Podfile を Podfile.dev からPodfile に変更する 
+    - @miosakuma
+- [ADD] DataChannelSample の追加する
+    - @szktty
+- [FIX] 接続ボタンを連打された際に複数の接続が作成される不具合を修正する
+    - @szktty, @miosakuma
