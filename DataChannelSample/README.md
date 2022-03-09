@@ -22,7 +22,7 @@
    $ pod install
    ```
 
-2. (develop ブランチの場合) ``DataChannelSample/Environment.example.swift`` のファイル名を ``DataChannelSample/Environment.swift`` に変更し、接続情報を設定します。
+2. ``DataChannelSample/Environment.example.swift`` のファイル名を ``DataChannelSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp DataChannelSample/Environment.example.swift DataChannelSample/Environment.swift

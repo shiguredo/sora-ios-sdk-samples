@@ -64,6 +64,12 @@ Xcode と Swift のバージョンによっては、 CocoaPods で取得でき�
 
 このサンプルでは、Sora のスポットライト機能をを利用したアプリを Sora iOS SDK を用いて実装する方法を説明しています。
 
+### DataChannelSample (メッセージング)
+
+[DataChannelSample (メッセージング)](/DataChannelSample)
+
+このサンプルでは、Sora のメッセージング機能をを利用したアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+
 ## ライセンス
 
 Apache License 2.0
