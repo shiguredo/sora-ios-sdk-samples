@@ -29,7 +29,9 @@ class VideoGraphManager {
                 NSLog("error = \(error)")
                 return
             }
-            self.graph.start()
+            Task {
+                await self.graph.start()
+            }
         }
     }
 }

@@ -9,12 +9,12 @@ class VideoDecoNode: VideoNode {
         super.init()
     }
 
-    override func renderFrame(_ frame: VideoFrameBuffer?) -> VideoFrameBuffer? {
-        guard let frame = frame else {
+    override func processFrameBuffer(_ buffer: VideoFrameBuffer?) async -> VideoFrameBuffer? {
+        guard let buffer = buffer else {
             return nil
         }
         guard let filter = currentFilter else {
-            return frame
+            return buffer
         }
 
         // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
@@ -27,18 +27,17 @@ class VideoDecoNode: VideoNode {
         // 元々の画像フレームバッファ領域に直接上書きしているので、大本のビデオフレームバッファをそのまま引き続き使用することができ、
         // 最終的にはこのビデオフレームバッファをSora SDKの提供するVideoFrameに変換して配信することができます。
 
-        guard let nativePixelBuffer = frame.nativeFrame?.buffer as? RTCCVPixelBuffer else {
-            return frame
+        guard let pixelBuffer = buffer.pixelBuffer else {
+            return buffer
         }
-        let pixelBuffer = nativePixelBuffer.pixelBuffer
         let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
         filter.setValue(cameraImage, forKey: kCIInputImageKey)
         guard let filteredImage = filter.outputImage else {
-            return frame
+            return buffer
         }
         let context = CIContext(options: nil)
         context.render(filteredImage, to: pixelBuffer)
         print("# VideoDecoNode filtered")
-        return frame
+        return buffer
     }
 }
