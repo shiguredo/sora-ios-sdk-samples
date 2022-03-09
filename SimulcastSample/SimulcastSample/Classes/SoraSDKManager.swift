@@ -56,6 +56,7 @@ class SoraSDKManager {
         configuration.simulcastRid = simulcastRid
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         // サイマルキャストを有効にします。
         configuration.simulcastEnabled = true

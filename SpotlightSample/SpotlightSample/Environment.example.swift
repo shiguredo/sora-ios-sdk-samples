@@ -7,4 +7,7 @@ enum Environment {
 
     // チャネル ID
     static let channelId = "sora"
+
+    // type: connect に含めるメタデータ
+    static let signalingConnectMetadata: Encodable? = nil
 }
