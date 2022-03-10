@@ -57,6 +57,7 @@ class SoraSDKManager {
         configuration.videoCodec = videoCodec
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in

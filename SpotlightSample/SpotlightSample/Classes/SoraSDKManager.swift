@@ -60,6 +60,7 @@ class SoraSDKManager {
         configuration.spotlightNumber = spotlightNumber
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         // スポットライトを有効にします。
         configuration.spotlightEnabled = .enabled
