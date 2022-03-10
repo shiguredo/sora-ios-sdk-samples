@@ -38,6 +38,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
 
     private var currentFilter: CIFilter?
 
+    private var streamOutputNode: VideoStreamOutputNode?
+
     // MARK: UIViewController
 
     override func viewDidLoad() {
@@ -128,7 +130,13 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
          // SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
           */
 
-        VideoGraphManager.shared.setUp()
+        let manager = VideoGraphManager.shared
+        manager.setUp()
+        if let stream = SoraSDKManager.shared.currentMediaChannel?.mainStream {
+            streamOutputNode = VideoStreamOutputNode(stream)
+            manager.graph.attach(streamOutputNode!)
+            manager.graph.connect(manager.decoNode, to: streamOutputNode!, format: nil)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -145,6 +153,10 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
 
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
+
+        if let outputNode = streamOutputNode {
+            VideoGraphManager.shared.graph.detach(outputNode)
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
