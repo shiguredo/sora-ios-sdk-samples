@@ -11,6 +11,8 @@
 
 ## develop
 
+## sora-ios-sdk-2022.2.0
+
 - [UPDATE] Github Actions でのビルド処理で利用する Podfile を Podfile.dev からPodfile に変更する 
     - @miosakuma
 - [UPDATE] Environment.example.swift に signalingConnectMetadata を追加する 
