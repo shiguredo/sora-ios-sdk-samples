@@ -71,3 +71,4 @@ fastlane/report.xml
 fastlane/screenshots
 
 **.xcworkspace
+DataChannelSample/DataChannelSample/Environment.swift

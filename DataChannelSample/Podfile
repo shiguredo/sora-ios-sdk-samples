@@ -3,10 +3,9 @@ source 'https://cdn.cocoapods.org/'
 
 platform :ios, '13.0'
 
-target 'RealTimeStreamingSample' do
+target 'DataChannelSample' do
   use_frameworks!
-  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'develop'
-
+  pod 'Sora', '2022.2.0'
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
 end

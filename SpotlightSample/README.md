@@ -20,7 +20,7 @@
    $ pod install
    ```
 
-2. (develop ブランチの場合) ``SpotlightSample/Environment.example.swift`` のファイル名を ``SpotlightSample/Environment.swift`` に変更し、接続情報を設定します。
+2. ``SpotlightSample/Environment.example.swift`` のファイル名を ``SpotlightSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp SpotlightSample/Environment.example.swift SpotlightSample/Environment.swift

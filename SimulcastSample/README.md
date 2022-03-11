@@ -20,7 +20,7 @@
    $ pod install
    ```
 
-2. (develop ブランチの場合) ``SimulcastSample/Environment.example.swift`` のファイル名を ``SimulcastSample/Environment.swift`` に変更し、接続情報を設定します。
+2. ``SimulcastSample/Environment.example.swift`` のファイル名を ``SimulcastSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp SimulcastSample/Environment.example.swift SimulcastSample/Environment.swift

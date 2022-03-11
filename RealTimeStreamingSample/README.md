@@ -21,7 +21,7 @@
    $ pod install
    ```
 
-2. (develop ブランチの場合) ``RealTimeStreamingSample/Environment.example.swift`` のファイル名を ``RealTimeStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
+2. ``RealTimeStreamingSample/Environment.example.swift`` のファイル名を ``RealTimeStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp RealTimeStreamingSample/Environment.example.swift RealTimeStreamingSample/Environment.swift

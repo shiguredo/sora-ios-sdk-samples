@@ -55,6 +55,7 @@ class SoraSDKManager {
 
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
+        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
@@ -63,7 +64,6 @@ class SoraSDKManager {
             self?.currentMediaChannel = mediaChannel
             completionHandler?(error)
             NSLog("[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))")
-
         }
     }
 

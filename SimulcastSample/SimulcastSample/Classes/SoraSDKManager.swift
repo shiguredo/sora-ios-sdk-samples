@@ -56,6 +56,7 @@ class SoraSDKManager {
         configuration.simulcastRid = simulcastRid
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         // サイマルキャストを有効にします。
         configuration.simulcastEnabled = true
@@ -70,7 +71,6 @@ class SoraSDKManager {
             self?.currentMediaChannel = mediaChannel
             completionHandler?(error)
             NSLog("[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))")
-
         }
     }
 

@@ -21,7 +21,7 @@
    $ pod install
    ```
 
-2. (develop ブランチの場合) ``ScreenCastSample/Environment.example.swift`` のファイル名を ``ScreenCastSample/Environment.swift`` に変更し、接続情報を設定します。
+2. ``ScreenCastSample/Environment.example.swift`` のファイル名を ``ScreenCastSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp ScreenCastSample/Environment.example.swift ScreenCastSample/Environment.swift

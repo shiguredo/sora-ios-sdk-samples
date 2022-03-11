@@ -21,7 +21,7 @@
    $ pod install
    ```
 
-2. (develop ブランチの場合) ``VideoChatSample/Environment.example.swift`` のファイル名を ``VideoChatSample/Environment.swift`` に変更し、接続情報を設定します。
+2. ``VideoChatSample/Environment.example.swift`` のファイル名を ``VideoChatSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp VideoChatSample/Environment.example.swift VideoChatSample/Environment.swift
