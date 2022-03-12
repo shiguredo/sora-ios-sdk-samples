@@ -6,11 +6,11 @@ class VideoGraphManager {
 
     var graph: VideoGraph
     var videoViewOutputNode: VideoViewOutputNode?
-    var decoNode: VideoDecoNode
+    var decoNode: VideoCIFilterNode
 
     init() {
         graph = VideoGraph()
-        decoNode = VideoDecoNode()
+        decoNode = VideoCIFilterNode()
         graph.attach(decoNode)
     }
 

@@ -214,7 +214,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         for (name, filter) in PublisherVideoViewController.allFilters {
             let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
                 // self?.currentFilter = filter
-                VideoGraphManager.shared.decoNode.currentFilter = filter
+                VideoGraphManager.shared.decoNode.filter = filter
             }
             alertController.addAction(action)
         }
