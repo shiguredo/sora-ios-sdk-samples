@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9145715D27E1185B00ABCEAB /* VideoPiPMixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9145715C27E1185B00ABCEAB /* VideoPiPMixer.swift */; };
+		915774D627E1D1060091AEF9 /* VideoColorMonochromeFadeOutNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915774D527E1D1060091AEF9 /* VideoColorMonochromeFadeOutNode.swift */; };
 		9182CDC827E077A200B47540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDC727E077A200B47540 /* AppDelegate.swift */; };
 		9182CDCA27E077A200B47540 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDC927E077A200B47540 /* SceneDelegate.swift */; };
 		9182CDCF27E077A200B47540 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9182CDCD27E077A200B47540 /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		9145715C27E1185B00ABCEAB /* VideoPiPMixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPiPMixer.swift; sourceTree = "<group>"; };
+		915774D527E1D1060091AEF9 /* VideoColorMonochromeFadeOutNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoColorMonochromeFadeOutNode.swift; sourceTree = "<group>"; };
 		9182CDC427E077A200B47540 /* VideoGraphSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoGraphSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9182CDC727E077A200B47540 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9182CDC927E077A200B47540 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				9182CDD027E077A500B47540 /* Assets.xcassets */,
 				9182CDD227E077A500B47540 /* LaunchScreen.storyboard */,
 				9182CDCD27E077A200B47540 /* Main.storyboard */,
+				915774D527E1D1060091AEF9 /* VideoColorMonochromeFadeOutNode.swift */,
 			);
 			path = VideoGraphSample;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				915774D627E1D1060091AEF9 /* VideoColorMonochromeFadeOutNode.swift in Sources */,
 				9182CDE127E07F7100B47540 /* SoraSDKManager.swift in Sources */,
 				9182CDE227E07F7100B47540 /* Environment.swift in Sources */,
 				9182CDE627E082EB00B47540 /* VideoGraphManager.swift in Sources */,

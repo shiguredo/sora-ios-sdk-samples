@@ -365,9 +365,18 @@ extension VideoChatRoomViewController {
             return
         }
 
-        CameraVideoCapturer.flip(current) { error in
-            if let error = error {
-                NSLog(error.localizedDescription)
+        // フェードアウト
+        let fadeOut = VideoGraphManager.shared.fadeOutNode
+        // 処理可能なモードに戻す
+        fadeOut.mode = .process
+        fadeOut.startFadeOut {
+            CameraVideoCapturer.flip(current) { error in
+                fadeOut.clear()
+                // 負荷を軽くするため、再び無効にする
+                fadeOut.mode = .passthrough
+                if let error = error {
+                    NSLog(error.localizedDescription)
+                }
             }
         }
     }
