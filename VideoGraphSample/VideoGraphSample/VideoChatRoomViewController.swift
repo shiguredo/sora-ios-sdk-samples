@@ -14,6 +14,8 @@ class VideoChatRoomViewController: UIViewController {
     /// チャットに参加中の映像を表示するコントロールです。
     @IBOutlet weak var memberListView: UIView!
 
+    @IBOutlet weak var mainVideoView: VideoView!
+
     /// DataChannel ラベルのリストを選択するためのコントロールです。
     @IBOutlet weak var labelPopUpButton: UIButton!
 
@@ -50,6 +52,9 @@ class VideoChatRoomViewController: UIViewController {
     var binaryToSend: Data?
 
     override func viewDidLoad() {
+        let graphManager = VideoGraphManager.shared
+        graphManager.videoViewOutputNode.videoView = mainVideoView
+
         historyTableView.delegate = self
         historyTableView.dataSource = self
         view.addGestureRecognizer(tapGestureRecognizer)
@@ -68,6 +73,8 @@ class VideoChatRoomViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        VideoGraphManager.shared.start()
 
         // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
@@ -140,19 +147,19 @@ class VideoChatRoomViewController: UIViewController {
             mediaChannel.handlers.onAddStream = { [weak self] _ in
                 NSLog("mediaChannel.handlers.onAddStream")
                 DispatchQueue.main.async {
-                    self?.handleUpdateStreams()
+                    // self?.handleUpdateStreams()
                 }
             }
             mediaChannel.handlers.onRemoveStream = { [weak self] _ in
                 NSLog("mediaChannel.handlers.onRemoveStream")
                 DispatchQueue.main.async {
-                    self?.handleUpdateStreams()
+                    // self?.handleUpdateStreams()
                 }
             }
         }
 
         // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
-        handleUpdateStreams()
+        // handleUpdateStreams()
 
         // メッセージ履歴を更新します。
         historyTableView.reloadData()

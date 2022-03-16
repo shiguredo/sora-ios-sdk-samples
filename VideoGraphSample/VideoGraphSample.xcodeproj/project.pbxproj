@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9145715D27E1185B00ABCEAB /* VideoPiPMixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9145715C27E1185B00ABCEAB /* VideoPiPMixer.swift */; };
 		9182CDC827E077A200B47540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDC727E077A200B47540 /* AppDelegate.swift */; };
 		9182CDCA27E077A200B47540 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDC927E077A200B47540 /* SceneDelegate.swift */; };
 		9182CDCF27E077A200B47540 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9182CDCD27E077A200B47540 /* Main.storyboard */; };
@@ -16,9 +17,11 @@
 		9182CDE227E07F7100B47540 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDDE27E07F7100B47540 /* Environment.swift */; };
 		9182CDE327E07F7100B47540 /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDDF27E07F7100B47540 /* VideoChatRoomViewController.swift */; };
 		9182CDE427E07F7100B47540 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDE027E07F7100B47540 /* ConfigViewController.swift */; };
+		9182CDE627E082EB00B47540 /* VideoGraphManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9182CDE527E082EB00B47540 /* VideoGraphManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9145715C27E1185B00ABCEAB /* VideoPiPMixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPiPMixer.swift; sourceTree = "<group>"; };
 		9182CDC427E077A200B47540 /* VideoGraphSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoGraphSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9182CDC727E077A200B47540 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9182CDC927E077A200B47540 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +33,7 @@
 		9182CDDE27E07F7100B47540 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		9182CDDF27E07F7100B47540 /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
 		9182CDE027E07F7100B47540 /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		9182CDE527E082EB00B47540 /* VideoGraphManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoGraphManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,16 +66,18 @@
 		9182CDC627E077A200B47540 /* VideoGraphSample */ = {
 			isa = PBXGroup;
 			children = (
+				9182CDD527E077A500B47540 /* Info.plist */,
+				9182CDC727E077A200B47540 /* AppDelegate.swift */,
 				9182CDE027E07F7100B47540 /* ConfigViewController.swift */,
 				9182CDDE27E07F7100B47540 /* Environment.swift */,
+				9182CDC927E077A200B47540 /* SceneDelegate.swift */,
 				9182CDDD27E07F7100B47540 /* SoraSDKManager.swift */,
 				9182CDDF27E07F7100B47540 /* VideoChatRoomViewController.swift */,
-				9182CDC727E077A200B47540 /* AppDelegate.swift */,
-				9182CDC927E077A200B47540 /* SceneDelegate.swift */,
-				9182CDCD27E077A200B47540 /* Main.storyboard */,
+				9182CDE527E082EB00B47540 /* VideoGraphManager.swift */,
+				9145715C27E1185B00ABCEAB /* VideoPiPMixer.swift */,
 				9182CDD027E077A500B47540 /* Assets.xcassets */,
 				9182CDD227E077A500B47540 /* LaunchScreen.storyboard */,
-				9182CDD527E077A500B47540 /* Info.plist */,
+				9182CDCD27E077A200B47540 /* Main.storyboard */,
 			);
 			path = VideoGraphSample;
 			sourceTree = "<group>";
@@ -190,6 +196,8 @@
 			files = (
 				9182CDE127E07F7100B47540 /* SoraSDKManager.swift in Sources */,
 				9182CDE227E07F7100B47540 /* Environment.swift in Sources */,
+				9182CDE627E082EB00B47540 /* VideoGraphManager.swift in Sources */,
+				9145715D27E1185B00ABCEAB /* VideoPiPMixer.swift in Sources */,
 				9182CDE427E07F7100B47540 /* ConfigViewController.swift in Sources */,
 				9182CDE327E07F7100B47540 /* VideoChatRoomViewController.swift in Sources */,
 				9182CDC827E077A200B47540 /* AppDelegate.swift in Sources */,
