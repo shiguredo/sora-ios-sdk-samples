@@ -365,11 +365,12 @@ extension VideoChatRoomViewController {
             return
         }
 
-        // フェードアウト
-        let fadeOut = VideoGraphManager.shared.fadeOutNode
-        // 処理可能なモードに戻す
-        fadeOut.mode = .process
-        fadeOut.startFadeOut {
+        Task {
+            // フェードアウト
+            let fadeOut = VideoGraphManager.shared.fadeOutNode
+            // 処理可能なモードに戻す
+            fadeOut.mode = .process
+            await fadeOut.startFadeOut()
             CameraVideoCapturer.flip(current) { error in
                 fadeOut.clear()
                 // 負荷を軽くするため、再び無効にする

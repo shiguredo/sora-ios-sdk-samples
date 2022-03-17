@@ -17,24 +17,28 @@ public class VideoColorMonochromeFadeOutNode: VideoNode {
         super.init()
     }
 
-    public func startFadeOut(completionHandler: @escaping () -> Void) {
-        inputIntensity = 0.0
-        filter.setValue(inputColor, forKey: kCIInputColorKey)
-        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { _ in
-            self.filter.setValue(self.inputIntensity, forKey: kCIInputIntensityKey)
-            self.inputIntensity += self.inputIntensityRate
-            if self.inputIntensity > self.maxInputIntensity {
-                self.finishFadeOut()
-                completionHandler()
+    private typealias FadeOutContinuation = CheckedContinuation<Void, Never>
+
+    public func startFadeOut() async {
+        await withCheckedContinuation { (continuation: FadeOutContinuation) in
+            inputIntensity = 0.0
+            filter.setValue(inputColor, forKey: kCIInputColorKey)
+            timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { _ in
+                self.filter.setValue(self.inputIntensity, forKey: kCIInputIntensityKey)
+                self.inputIntensity += self.inputIntensityRate
+                if self.inputIntensity > self.maxInputIntensity {
+                    self.finishFadeOut(continuation)
+                }
             }
+            inFadeOut = true
         }
-        inFadeOut = true
     }
 
-    private func finishFadeOut() {
+    private func finishFadeOut(_ continuation: FadeOutContinuation) {
         inFadeOut = false
         timer?.invalidate()
         timer = nil
+        continuation.resume()
     }
 
     public func clear() {
