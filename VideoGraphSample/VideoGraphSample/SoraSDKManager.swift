@@ -57,6 +57,14 @@ class SoraSDKManager {
         }
     }
 
+    func connect(with configuration: Configuration) async -> Error? {
+        await withCheckedContinuation { continuation in
+            connect(with: configuration) { error in
+                continuation.resume(returning: error)
+            }
+        }
+    }
+
     /**
      既に接続済みのmediaChannelから切断します。
 

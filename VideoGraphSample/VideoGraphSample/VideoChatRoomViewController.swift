@@ -371,14 +371,13 @@ extension VideoChatRoomViewController {
             // 処理可能なモードに戻す
             fadeOut.mode = .process
             await fadeOut.startFadeOut()
-            CameraVideoCapturer.flip(current) { error in
-                fadeOut.clear()
-                // 負荷を軽くするため、再び無効にする
-                fadeOut.mode = .passthrough
-                if let error = error {
-                    NSLog(error.localizedDescription)
-                }
+            if let error = await CameraVideoCapturer.flip(current) {
+                NSLog(error.localizedDescription)
+                return
             }
+            fadeOut.clear()
+            // 負荷を軽くするため、再び無効にする
+            fadeOut.mode = .passthrough
         }
     }
 

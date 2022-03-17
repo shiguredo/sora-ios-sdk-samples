@@ -211,31 +211,32 @@ class ConfigViewController: UITableViewController {
         }
         configuration.dataChannels = dataChannels
 
-        SoraSDKManager.shared.connect(with: configuration) { [weak self] error in
-            if let error = error {
+        let safeConfiguration = configuration
+        Task {
+            if let error = await SoraSDKManager.shared.connect(with: safeConfiguration) {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
                 NSLog("SoraSDKManager connection error: \(error)")
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     let alertController = UIAlertController(title: "接続に失敗しました",
                                                             message: error.localizedDescription,
                                                             preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self?.present(alertController, animated: true, completion: nil)
                 }
-            } else {
-                // errorがnilの場合は、接続に成功しています。
-                NSLog("SoraSDKManager connected.")
+                return
+            }
+            // errorがnilの場合は、接続に成功しています。
+            NSLog("SoraSDKManager connected.")
 
-                // 次の配信画面に遷移します。
-                // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
-                // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-                DispatchQueue.main.async {
-                    // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-                    self?.performSegue(withIdentifier: "Connect", sender: self)
-                }
+            // 次の配信画面に遷移します。
+            // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
+            // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
+            DispatchQueue.main.async { [weak self] in
+                // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+                self?.performSegue(withIdentifier: "Connect", sender: self)
             }
         }
     }
