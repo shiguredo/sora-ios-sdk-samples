@@ -39,18 +39,8 @@ class VideoGraphManager {
         }
 
         NSLog("run videograph")
-        let device = CameraVideoCapturer.device(for: .front)
-        let format = CameraVideoCapturer.format(width: 640, height: 480, for: device!)!
-        let capturer = CameraVideoCapturer(device: device!)
-        capturer.start(format: format, frameRate: 30) { error in
-            print("start capturer")
-            guard error == nil else {
-                NSLog("error = \(error)")
-                return
-            }
-            Task {
-                await self.graph.start()
-            }
+        Task {
+            await self.graph.start()
         }
     }
 }
