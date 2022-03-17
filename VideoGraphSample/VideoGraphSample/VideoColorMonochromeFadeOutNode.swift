@@ -4,7 +4,7 @@ import Sora
 public class VideoColorMonochromeFadeOutNode: VideoNode {
     public var filter: CIFilter
     public var timeInterval: TimeInterval = 0.07
-    public var inputIntensityRate: Double = 0.1
+    public var inputIntensityRate: Double = 0.3
     public var maxInputIntensity: Double = 2
     public var inputColor: CIColor = .black
 
