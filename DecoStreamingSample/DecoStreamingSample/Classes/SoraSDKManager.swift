@@ -55,7 +55,6 @@ class SoraSDKManager {
 
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
-        configuration.cameraSettings.isEnabled = false
 
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in

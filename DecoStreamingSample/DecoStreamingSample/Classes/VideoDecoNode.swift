@@ -9,7 +9,7 @@ class VideoDecoNode: VideoNode {
         super.init()
     }
 
-    override func processFrameBuffer(_ buffer: VideoFrameBuffer?) async -> VideoFrameBuffer? {
+    override func processFrameBuffer(_ buffer: VideoFrameBuffer?, in context: VideoGraph.Context) async -> VideoFrameBuffer? {
         guard let buffer = buffer else {
             return nil
         }

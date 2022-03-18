@@ -38,8 +38,6 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
 
     private var currentFilter: CIFilter?
 
-    private var streamOutputNode: VideoStreamOutputNode?
-
     // MARK: UIViewController
 
     override func viewDidLoad() {
@@ -61,13 +59,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
 
-        let graphManager = VideoGraphManager.shared
-        let graph = graphManager.graph
-        graphManager.videoViewOutputNode = VideoViewOutputNode(videoView)
-        graph.attach(graph.cameraInputNode)
-        graph.attach(graphManager.videoViewOutputNode!)
-        graph.connect(graph.cameraInputNode, to: graphManager.decoNode, format: nil)
-        graph.connect(graphManager.decoNode, to: graphManager.videoViewOutputNode!, format: nil)
+        VideoGraphManager.shared.videoViewOutputNode.videoView = videoView
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -131,11 +123,9 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
           */
 
         let manager = VideoGraphManager.shared
-        manager.setUp()
+        manager.start()
         if let stream = SoraSDKManager.shared.currentMediaChannel?.mainStream {
-            streamOutputNode = VideoStreamOutputNode(stream)
-            manager.graph.attach(streamOutputNode!)
-            manager.graph.connect(manager.decoNode, to: streamOutputNode!, format: nil)
+            manager.streamOutputNode.stream = stream
         }
     }
 
@@ -153,10 +143,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
 
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
-
-        if let outputNode = streamOutputNode {
-            VideoGraphManager.shared.graph.detach(outputNode)
-        }
+        VideoGraphManager.shared.streamOutputNode.stream = nil
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

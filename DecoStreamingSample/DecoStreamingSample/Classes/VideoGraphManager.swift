@@ -5,33 +5,31 @@ class VideoGraphManager {
     static var shared: VideoGraphManager = .init()
 
     var graph: VideoGraph
-    var videoViewOutputNode: VideoViewOutputNode?
     var decoNode: VideoCIFilterNode
+    var videoViewOutputNode: VideoViewOutputNode
+    var streamOutputNode: VideoStreamOutputNode
 
     init() {
         graph = VideoGraph()
         decoNode = VideoCIFilterNode()
+        videoViewOutputNode = VideoViewOutputNode()
+        streamOutputNode = VideoStreamOutputNode()
+        graph.attach(graph.cameraInputNode)
         graph.attach(decoNode)
+        graph.attach(videoViewOutputNode)
+        graph.attach(streamOutputNode)
+        graph.connect(graph.cameraInputNode, to: decoNode, format: nil)
+        graph.connect(decoNode, to: videoViewOutputNode, format: nil)
+        graph.connect(decoNode, to: streamOutputNode, format: nil)
     }
 
-    func setUp() {
+    func start() {
         guard !graph.isRunning else {
             return
         }
 
-        NSLog("run videograph")
-        let device = CameraVideoCapturer.device(for: .front)
-        let format = CameraVideoCapturer.format(width: 640, height: 480, for: device!)!
-        let capturer = CameraVideoCapturer(device: device!)
-        capturer.start(format: format, frameRate: 30) { error in
-            print("start capturer")
-            guard error == nil else {
-                NSLog("error = \(error)")
-                return
-            }
-            Task {
-                await self.graph.start()
-            }
+        Task {
+            await self.graph.start()
         }
     }
 }
