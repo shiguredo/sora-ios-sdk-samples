@@ -9,6 +9,7 @@ class VideoGraphManager {
     var decorationNode: VideoCIFilterNode
     var fadeOutNode: VideoColorMonochromeFadeOutNode
     var pipMixerNode: VideoPiPMixer
+    var streamInputNode: VideoStreamInputNode
     var streamOutputNode: VideoStreamOutputNode
 
     init() {
@@ -19,6 +20,7 @@ class VideoGraphManager {
         // 負荷を軽くするため、使用時以外は無効にしておく
         fadeOutNode.mode = .passthrough
         pipMixerNode = VideoPiPMixer()
+        streamInputNode = VideoStreamInputNode()
         streamOutputNode = VideoStreamOutputNode()
 
         graph.attach(graph.cameraInputNode)
@@ -26,11 +28,15 @@ class VideoGraphManager {
         graph.attach(decorationNode)
         graph.attach(fadeOutNode)
         graph.attach(pipMixerNode)
+        graph.attach(streamInputNode)
         graph.attach(streamOutputNode)
+
         graph.connect(graph.cameraInputNode, to: fadeOutNode, format: nil)
         graph.connect(fadeOutNode, to: pipMixerNode, format: nil)
         graph.connect(pipMixerNode, to: videoViewOutputNode, format: nil)
-        pipMixerNode.localNode = graph.cameraInputNode
+        graph.connect(streamInputNode, to: pipMixerNode, format: nil)
+        pipMixerNode.mainNode = streamInputNode
+        pipMixerNode.subnode = fadeOutNode
     }
 
     func start() {

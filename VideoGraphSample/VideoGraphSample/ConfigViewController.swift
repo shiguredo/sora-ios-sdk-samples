@@ -195,6 +195,13 @@ class ConfigViewController: UITableViewController {
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
+        // ノードにセット
+        configuration.mediaChannelHandlers.onAddStream = { stream in
+            Task {
+                await VideoGraphManager.shared.streamInputNode.start(stream)
+            }
+        }
+
         configuration.dataChannelSignaling = true
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
