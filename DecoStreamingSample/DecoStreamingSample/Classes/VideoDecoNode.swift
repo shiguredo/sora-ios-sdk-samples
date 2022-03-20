@@ -4,8 +4,10 @@ import WebRTC
 
 class VideoDecoNode: VideoNode {
     var currentFilter: CIFilter?
+    private var ciContext: CIContext
 
     override init() {
+        ciContext = CIContext(options: nil)
         super.init()
     }
 
@@ -35,8 +37,8 @@ class VideoDecoNode: VideoNode {
         guard let filteredImage = filter.outputImage else {
             return buffer
         }
-        let context = CIContext(options: nil)
-        context.render(filteredImage, to: pixelBuffer)
+        ciContext = CIContext(options: nil)
+        ciContext.render(filteredImage, to: pixelBuffer)
         print("# VideoDecoNode filtered")
         return buffer
     }
