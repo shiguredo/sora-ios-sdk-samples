@@ -7,10 +7,10 @@ public class VideoColorMonochromeFadeOutNode: VideoNode {
     public var inputIntensityRate: Double = 0.5
     public var maxInputIntensity: Double = 5
     public var inputColor: CIColor = .black
+    public private(set) var inFadeOut = false
 
     private var inputIntensity: Double = 0.0
     private var timer: Timer?
-    private var inFadeOut = false
 
     override public init() {
         filter = CIFilter(name: "CIColorMonochrome")!
@@ -19,7 +19,10 @@ public class VideoColorMonochromeFadeOutNode: VideoNode {
 
     private typealias FadeOutContinuation = CheckedContinuation<Void, Never>
 
-    public func startFadeOut() async {
+    public func startFadeOut() async -> Bool {
+        guard !inFadeOut else {
+            return false
+        }
         await withCheckedContinuation { (continuation: FadeOutContinuation) in
             inputIntensity = 0.0
             filter.setValue(inputColor, forKey: kCIInputColorKey)
@@ -32,6 +35,7 @@ public class VideoColorMonochromeFadeOutNode: VideoNode {
             }
             inFadeOut = true
         }
+        return true
     }
 
     private func finishFadeOut(_ continuation: FadeOutContinuation) {
