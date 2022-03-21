@@ -27,12 +27,6 @@ public class VideoPiPMixer: VideoNode {
             // TODO: 受信ストリームで pixel buffer を取得できない
             // RTCI420Buffer になってる
             print("# no pixel buffer ")
-            switch buffer {
-            case let .native(frame):
-                print("# native buffer = \(frame.buffer)")
-            default:
-                break
-            }
             return buffer
         }
 
