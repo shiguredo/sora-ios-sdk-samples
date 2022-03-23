@@ -48,8 +48,6 @@ class PublisherConfigViewController: UITableViewController {
 
         // 入力された設定を元にSoraへ接続を行います。
         // この画面からは配信側に接続を行うため、role引数には .sendonly を指定しています。
-        // また今回のサンプルアプリでは、デフォルトのカメラ映像のキャプチャではなく、加工されたカメラ映像のキャプチャを使用したいため、
-        // videoCapturerOptionをカスタムに設定しておきます。
         SoraSDKManager.shared.connect(
             channelId: channelId,
             role: .sendonly,
