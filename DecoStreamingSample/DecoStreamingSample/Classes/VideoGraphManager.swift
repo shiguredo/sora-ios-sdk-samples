@@ -61,4 +61,17 @@ class VideoGraphManager {
             await self.graph.start()
         }
     }
+
+    // 実行中のグラフを停止する
+    func stop() {
+        // 実行中でなければ何もしない
+        guard graph.isRunning else {
+            return
+        }
+
+        Task {
+            // グラフを停止する
+            await graph.stop()
+        }
+    }
 }
