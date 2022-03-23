@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		35DC8E9627A38699000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9527A38699000B0ED7 /* Environment.swift */; };
 		9117BCC227D29D91002FACAA /* VideoGraphManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9117BCC127D29D91002FACAA /* VideoGraphManager.swift */; };
-		9117BCC427D2A0F5002FACAA /* VideoDecoNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9117BCC327D2A0F5002FACAA /* VideoDecoNode.swift */; };
 		9120C49E23B3502B0026176E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120C49D23B3502B0026176E /* AppDelegate.swift */; };
 		9120C4A523B3502B0026176E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9120C4A323B3502B0026176E /* Main.storyboard */; };
 		9120C4A723B3502C0026176E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9120C4A623B3502C0026176E /* Assets.xcassets */; };
@@ -27,7 +26,6 @@
 /* Begin PBXFileReference section */
 		35DC8E9527A38699000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		9117BCC127D29D91002FACAA /* VideoGraphManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGraphManager.swift; sourceTree = "<group>"; };
-		9117BCC327D2A0F5002FACAA /* VideoDecoNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDecoNode.swift; sourceTree = "<group>"; };
 		9120C49A23B3502B0026176E /* DecoStreamingSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DecoStreamingSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9120C49D23B3502B0026176E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9120C4A423B3502B0026176E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -105,7 +103,6 @@
 				9120C4BA23B3505A0026176E /* PublisherVideoViewController.swift */,
 				9120C4BB23B3505A0026176E /* SoraSDKManager.swift */,
 				9117BCC127D29D91002FACAA /* VideoGraphManager.swift */,
-				9117BCC327D2A0F5002FACAA /* VideoDecoNode.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -228,7 +225,6 @@
 			files = (
 				9120C4C423B3505A0026176E /* SoraSDKManager.swift in Sources */,
 				9120C49E23B3502B0026176E /* AppDelegate.swift in Sources */,
-				9117BCC427D2A0F5002FACAA /* VideoDecoNode.swift in Sources */,
 				35DC8E9627A38699000B0ED7 /* Environment.swift in Sources */,
 				9120C4C323B3505A0026176E /* PublisherVideoViewController.swift in Sources */,
 				9120C4C023B3505A0026176E /* AVCaptureVideoOrientation+Extension.swift in Sources */,
