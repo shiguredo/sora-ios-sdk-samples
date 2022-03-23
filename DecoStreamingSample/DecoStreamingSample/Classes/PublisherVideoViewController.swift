@@ -59,6 +59,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
             filterPickerView.heightAnchor.constraint(equalToConstant: 0).isActive = true
         }
 
+        // VideoView 出力ノードにビューをセットする
+        // ノードに渡された映像が VideoView で描画されるようになる
         VideoGraphManager.shared.videoViewOutputNode.videoView = videoView
     }
 
@@ -122,8 +124,13 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
          // SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
           */
 
+        // グラフを開始する
+        // 開始処理は非同期で実行される
         let manager = VideoGraphManager.shared
         manager.start()
+
+        // ストリーム出力ノードに配信ストリームをセットする
+        // ノードに渡された映像が配信ストリームにより Sora に送信される
         if let stream = SoraSDKManager.shared.currentMediaChannel?.mainStream {
             manager.streamOutputNode.stream = stream
         }
@@ -201,6 +208,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         for (name, filter) in PublisherVideoViewController.allFilters {
             let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
                 // self?.currentFilter = filter
+                // 選択されたフィルターを加工ノードにセットする
                 VideoGraphManager.shared.decoNode.filter = filter
             }
             alertController.addAction(action)
