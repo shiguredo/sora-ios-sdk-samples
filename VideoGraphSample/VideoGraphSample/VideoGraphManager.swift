@@ -31,10 +31,10 @@ class VideoGraphManager {
         graph.attach(streamInputNode)
         graph.attach(streamOutputNode)
 
-        graph.connect(graph.cameraInputNode, to: fadeOutNode, format: nil)
-        graph.connect(fadeOutNode, to: pipMixerNode, format: nil)
-        graph.connect(pipMixerNode, to: videoViewOutputNode, format: nil)
-        graph.connect(streamInputNode, to: pipMixerNode, format: nil)
+        graph.connect(graph.cameraInputNode, to: fadeOutNode)
+        graph.connect(fadeOutNode, to: pipMixerNode)
+        graph.connect(pipMixerNode, to: videoViewOutputNode)
+        graph.connect(streamInputNode, to: pipMixerNode)
         pipMixerNode.mainNode = streamInputNode
         pipMixerNode.subnode = fadeOutNode
     }
