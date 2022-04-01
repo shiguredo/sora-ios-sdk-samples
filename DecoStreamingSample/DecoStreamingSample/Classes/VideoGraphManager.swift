@@ -34,13 +34,13 @@ class VideoGraphManager {
         // ノード同士を接続する
         // カメラから映像を取得するノードと映像を加工するノードを接続し、カメラの映像を加工する
         // 加工ノードが加工した映像は、加工ノードに接続したノードすべてに渡される
-        graph.connect(graph.cameraInputNode, to: decoNode, format: nil)
+        graph.connect(graph.cameraInputNode, to: decoNode)
 
         // 加工ノードと VideoView ノードを接続し、加工した映像を VideoView に渡す
-        graph.connect(decoNode, to: videoViewOutputNode, format: nil)
+        graph.connect(decoNode, to: videoViewOutputNode)
 
         // 加工ノードとストリーム出力ノードを接続し、加工した映像を配信ストリームに渡す
-        graph.connect(decoNode, to: streamOutputNode, format: nil)
+        graph.connect(decoNode, to: streamOutputNode)
     }
 
     // グラフの処理を開始する
