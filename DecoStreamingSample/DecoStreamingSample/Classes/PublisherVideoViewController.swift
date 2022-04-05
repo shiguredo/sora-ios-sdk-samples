@@ -30,7 +30,12 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     /// 配信者側の動画を画面に表示するためのビューです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet private var videoView: VideoView!
 
-    private var currentFilter: CIFilter?
+    private var currentFilter: CIFilter? {
+        didSet {
+            // フィルターを加工ノードにセットする
+            VideoGraphManager.shared.decoNode.filter = currentFilter
+        }
+    }
 
     // MARK: UIViewController
 
@@ -112,8 +117,7 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         let alertController = UIAlertController(title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
         for (name, filter) in PublisherVideoViewController.allFilters {
             let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
-                // 選択されたフィルターを加工ノードにセットする
-                VideoGraphManager.shared.decoNode.filter = filter
+                self?.currentFilter = filter
             }
             alertController.addAction(action)
         }
