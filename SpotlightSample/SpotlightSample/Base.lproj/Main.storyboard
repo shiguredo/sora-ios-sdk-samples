@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -42,7 +42,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ShA-Zi-CkT">
-                                                    <rect key="frame" x="118" y="11.5" width="237" height="21"/>
+                                                    <rect key="frame" x="118" y="11" width="237" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
@@ -77,6 +77,7 @@
                                                     <rect key="frame" x="20" y="6.5" width="335" height="32"/>
                                                     <segments>
                                                         <segment title="VP8"/>
+                                                        <segment title="VP9"/>
                                                         <segment title="H.264"/>
                                                     </segments>
                                                 </segmentedControl>
@@ -199,16 +200,16 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="データチャンネルシグナリング設定" id="6PQ-4D-44e">
+                            <tableViewSection headerTitle="サイマルキャスト" id="6PQ-4D-44e" userLabel="サイマルキャスト">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="QOr-Zy-rST">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="QOr-Zy-rST">
                                         <rect key="frame" x="0.0" y="517.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QOr-Zy-rST" id="2Np-ls-Sob">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データチャンネル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bc5-W6-GoS">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="サイマルキャスト" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bc5-W6-GoS" userLabel="サイマルキャスト">
                                                     <rect key="frame" x="16" y="0.0" width="139" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="P3X-tz-l2r"/>
@@ -217,10 +218,9 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="r8Z-CJ-cKv" userLabel="Data Channel Signaling Segmented Control">
-                                                    <rect key="frame" x="183" y="6.5" width="176" height="32"/>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="r8Z-CJ-cKv" userLabel="Simulcast Segmented Control">
+                                                    <rect key="frame" x="268" y="6.5" width="91" height="32"/>
                                                     <segments>
-                                                        <segment title="未指定"/>
                                                         <segment title="無効"/>
                                                         <segment title="有効"/>
                                                     </segments>
@@ -236,23 +236,27 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="deb-6W-Di7">
-                                        <rect key="frame" x="0.0" y="561.5" width="375" height="44"/>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="データチャンネルシグナリング設定" id="wzX-Nd-nfH">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="x2C-JV-nCg">
+                                        <rect key="frame" x="0.0" y="611.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="deb-6W-Di7" id="NV7-2h-fLj">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x2C-JV-nCg" id="SYC-jP-UQJ">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WS 切断を無視" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wyw-VD-MfH">
-                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データチャンネル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Y9-dB-VgN">
+                                                    <rect key="frame" x="16" y="0.0" width="139" height="44"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="I5w-ob-KSz"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="EFq-5n-nbF"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="R7z-Gu-4Dp" userLabel="Ignore Disconnect WebSocket Segmented Control">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2ub-UV-wPB" userLabel="Data Channel Signaling Segmented Control">
                                                     <rect key="frame" x="183" y="6.5" width="176" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
@@ -262,12 +266,47 @@
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="R7z-Gu-4Dp" firstAttribute="centerY" secondItem="NV7-2h-fLj" secondAttribute="centerY" id="2Hv-E2-yFc"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="R7z-Gu-4Dp" secondAttribute="trailing" id="BKe-Fv-u66"/>
-                                                <constraint firstItem="Wyw-VD-MfH" firstAttribute="centerY" secondItem="NV7-2h-fLj" secondAttribute="centerY" id="ObW-Zr-Pqm"/>
-                                                <constraint firstItem="Wyw-VD-MfH" firstAttribute="leading" secondItem="NV7-2h-fLj" secondAttribute="leadingMargin" id="oF9-HG-ow0"/>
-                                                <constraint firstItem="Wyw-VD-MfH" firstAttribute="top" secondItem="NV7-2h-fLj" secondAttribute="top" id="r5l-Jh-fWN"/>
-                                                <constraint firstItem="R7z-Gu-4Dp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Wyw-VD-MfH" secondAttribute="trailing" id="sBP-P8-y4v"/>
+                                                <constraint firstItem="2ub-UV-wPB" firstAttribute="centerY" secondItem="SYC-jP-UQJ" secondAttribute="centerY" id="2uj-sf-HY9"/>
+                                                <constraint firstItem="1Y9-dB-VgN" firstAttribute="leading" secondItem="SYC-jP-UQJ" secondAttribute="leadingMargin" id="SWr-Re-7Zm"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="2ub-UV-wPB" secondAttribute="trailing" id="VLf-hi-lsD"/>
+                                                <constraint firstItem="1Y9-dB-VgN" firstAttribute="top" secondItem="SYC-jP-UQJ" secondAttribute="top" id="aup-Qg-KaF"/>
+                                                <constraint firstItem="2ub-UV-wPB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1Y9-dB-VgN" secondAttribute="trailing" id="e0b-IS-Y8M"/>
+                                                <constraint firstItem="1Y9-dB-VgN" firstAttribute="centerY" secondItem="SYC-jP-UQJ" secondAttribute="centerY" id="nVS-ab-Roq"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="raM-Em-77Z">
+                                        <rect key="frame" x="0.0" y="655.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="raM-Em-77Z" id="aJm-LC-2GF">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WS 切断を無視" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uM1-Vy-o47">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="Uva-c5-IdX"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="r23-gW-KKp" userLabel="Ignore Disconnect WebSocket Segmented Control">
+                                                    <rect key="frame" x="183" y="6.5" width="176" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="r23-gW-KKp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uM1-Vy-o47" secondAttribute="trailing" id="hJJ-Hy-Hla"/>
+                                                <constraint firstItem="r23-gW-KKp" firstAttribute="centerY" secondItem="aJm-LC-2GF" secondAttribute="centerY" id="lgt-tZ-GIg"/>
+                                                <constraint firstItem="uM1-Vy-o47" firstAttribute="leading" secondItem="aJm-LC-2GF" secondAttribute="leadingMargin" id="lhQ-DB-Qql"/>
+                                                <constraint firstItem="uM1-Vy-o47" firstAttribute="top" secondItem="aJm-LC-2GF" secondAttribute="top" id="oqs-qI-h9j"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="r23-gW-KKp" secondAttribute="trailing" id="q7k-Uj-lRc"/>
+                                                <constraint firstItem="uM1-Vy-o47" firstAttribute="centerY" secondItem="aJm-LC-2GF" secondAttribute="centerY" id="r2t-d8-1QU"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -276,7 +315,7 @@
                             <tableViewSection id="6GQ-II-yrh">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="OP6-lF-bDi">
-                                        <rect key="frame" x="0.0" y="641.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="735.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OP6-lF-bDi" id="AZP-Dj-9uN">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -306,8 +345,9 @@
                     <navigationItem key="navigationItem" title="スポットライト" id="n9f-bV-9X1"/>
                     <connections>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
-                        <outlet property="dataChannelSignalingSegmentedControl" destination="r8Z-CJ-cKv" id="Jvi-2O-gb5"/>
-                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="R7z-Gu-4Dp" id="AoY-MD-GUH"/>
+                        <outlet property="dataChannelSignalingSegmentedControl" destination="2ub-UV-wPB" id="TbY-Ai-Fyl"/>
+                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="r23-gW-KKp" id="jgB-uZ-Uax"/>
+                        <outlet property="simulcastSegmentedControl" destination="r8Z-CJ-cKv" id="IBh-bv-J9G"/>
                         <outlet property="spotlightFocusRidSegmentedControl" destination="S3w-p8-QFj" id="8Kp-cT-pz2"/>
                         <outlet property="spotlightNumberSegmentedControl" destination="d7C-wH-w61" id="Be1-cJ-j36"/>
                         <outlet property="spotlightUnfocusRidSegmentedControl" destination="cWJ-SD-e0P" id="akT-r2-u51"/>

@@ -39,6 +39,7 @@ class SoraSDKManager {
                  spotlightFocusRid: SpotlightRid,
                  spotlightUnfocusRid: SpotlightRid,
                  spotlightNumber: Int?,
+                 simulcast: Bool,
                  dataChannelSignaling: Bool? = nil,
                  ignoreDisconnectWebSocket: Bool? = nil,
                  completionHandler: ((Error?) -> Void)?)
@@ -58,6 +59,7 @@ class SoraSDKManager {
         configuration.spotlightFocusRid = spotlightFocusRid
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
         configuration.spotlightNumber = spotlightNumber
+        configuration.simulcastEnabled = simulcast
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
