@@ -63,6 +63,9 @@ class SoraSDKManager {
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
+        // bundle_id を設定します。
+        configuration.bundleId = UUID().uuidString
+
         // スポットライトを有効にします。
         configuration.spotlightEnabled = .enabled
 

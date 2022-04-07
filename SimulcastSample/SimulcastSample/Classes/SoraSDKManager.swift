@@ -57,6 +57,9 @@ class SoraSDKManager {
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
+        // bundle_id を指定します。
+        configuration.bundleId = UUID().uuidString
+
         // サイマルキャストを有効にします。
         configuration.simulcastEnabled = true
 
