@@ -21,6 +21,14 @@ class SubscriberVideoViewController: UIViewController {
         // 視聴画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
             navigationItem.title = "視聴中: \(mediaChannel.configuration.channelId)"
+
+            // サーバーから切断されたときのコールバックを設定します。
+            mediaChannel.handlers.onDisconnect = { [weak self] _ in
+                NSLog("[sample] mediaChannel.handlers.onDisconnect")
+                DispatchQueue.main.async {
+                    self?.onExitButton(nil)
+                }
+            }
         }
     }
 
@@ -43,7 +51,7 @@ class SubscriberVideoViewController: UIViewController {
      閉じるボタンを押したときの挙動を定義します。
      詳しくはMain.storyboard内の定義をご覧ください。
      */
-    @IBAction func onExitButton(_ sender: UIBarButtonItem) {
+    @IBAction func onExitButton(_ sender: UIBarButtonItem?) {
         // 閉じるボタンを押してもいきなり画面を閉じるのではなく、明示的に配信をストップしてから、画面を閉じるようにしています。
         SoraSDKManager.shared.disconnect()
         // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
