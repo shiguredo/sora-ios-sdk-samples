@@ -117,6 +117,14 @@ class VideoChatRoomViewController: UIViewController {
                 chatMessageToSendTextField.isEnabled = true
                 chatMessageToSendTextField.text = nil
             }
+
+            // サーバーから切断されたときのコールバックを設定します。
+            mediaChannel.handlers.onDisconnect = { [weak self] _ in
+                NSLog("[sample] mediaChannel.handlers.onDisconnect")
+                DispatchQueue.main.async {
+                    self?.handleDisconnect()
+                }
+            }
         }
     }
 
