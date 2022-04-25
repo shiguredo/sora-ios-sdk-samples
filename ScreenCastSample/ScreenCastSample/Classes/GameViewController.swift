@@ -32,6 +32,8 @@ class GameViewController: UIViewController {
     /// サンプルゲーム自体の実装のために使用します。UI Dynamicsという仕組みを使用しています。
     private var dynamicProperties: UIDynamicItemBehavior!
 
+    private var ciContext: CIContext?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -64,6 +66,8 @@ class GameViewController: UIViewController {
 
         // ナビゲーションバーのボタンの状態を更新します。
         updateBarButtonItems()
+
+        ciContext = CIContext()
     }
 
     // MARK: - Action
@@ -144,7 +148,18 @@ class GameViewController: UIViewController {
             else {
                 return
             }
-            senderStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+
+            // H.264 の場合リサイズ
+            var bufferToSend = sampleBuffer
+            if currentMediaChannel.configuration.videoCodec == .h264 {
+                if let resizedBuffer = resizeSampleBuffer(sampleBuffer,
+                                                          scale: 0.5,
+                                                          ciContext: self.ciContext!)
+                {
+                    bufferToSend = resizedBuffer
+                }
+            }
+            senderStream.send(videoFrame: VideoFrame(from: bufferToSend))
         }, completionHandler: { [weak self] error in
             if let error = error {
                 // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
@@ -241,4 +256,91 @@ extension GameViewController: UICollisionBehaviorDelegate {
             break
         }
     }
+}
+
+// https://github.com/shiguredo/sora-ios-sdk/issues/34
+// https://fromatom.hatenablog.com/entry/2019/10/28/172628
+private func resizeSampleBuffer(_ sampleBuffer: CMSampleBuffer,
+                                scale: CGFloat,
+                                ciContext: CIContext) -> CMSampleBuffer?
+{
+    // CMSampleTimingInfo を取得する
+    // リサイズ後の CMSampleBuffer の生成に使う
+    let presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+    let duration = CMSampleBufferGetDuration(sampleBuffer)
+    let decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer)
+    var timingInfo = CMSampleTimingInfo(duration: duration,
+                                        presentationTimeStamp: presentationTimeStamp,
+                                        decodeTimeStamp: decodeTimeStamp)
+
+    // CIImage をリサイズする
+    guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+        NSLog("cannot get pixel buffer")
+        return nil
+    }
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+
+    guard let filter = CIFilter(name: "CILanczosScaleTransform") else {
+        NSLog("not found filter")
+        return nil
+    }
+    filter.setDefaults()
+    filter.setValue(ciImage, forKey: kCIInputImageKey)
+    filter.setValue(scale, forKey: kCIInputScaleKey)
+    guard let resizedCIImage = filter.outputImage else {
+        NSLog("resize CIImage failed")
+        return nil
+    }
+
+    // リサイズした CIImage を使って CVPixelBuffer を生成する
+    let attrs = [kCVPixelFormatCGImageCompatibility: kCFBooleanTrue,
+                 kCVPixelFormatCGBitmapContextCompatibility: kCFBooleanTrue] as CFDictionary
+    var newPixelBuffer: CVPixelBuffer!
+    var status = CVPixelBufferCreate(nil,
+                                     Int(resizedCIImage.extent.size.width),
+                                     Int(resizedCIImage.extent.size.height),
+                                     kCVPixelFormatType_32BGRA,
+                                     attrs,
+                                     &newPixelBuffer)
+    guard status == kCVReturnSuccess else {
+        NSLog("cannot create new pixel buffer \(status)")
+        return nil
+    }
+    ciContext.render(resizedCIImage,
+                     to: newPixelBuffer,
+                     bounds: resizedCIImage.extent,
+                     colorSpace: CGColorSpaceCreateDeviceRGB())
+    status = CVPixelBufferLockBaseAddress(newPixelBuffer, .readOnly)
+    guard status == kCVReturnSuccess else {
+        NSLog("cannot render to new pixel buffer \(status)")
+        return nil
+    }
+
+    // CVPixelBuffer から CMSampleBuffer を生成する
+    // 最初に取得しておいた CMSampleTimingInfo を使う
+    var newSampleBuffer: CMSampleBuffer!
+    var videoInfo: CMVideoFormatDescription!
+
+    status = CMVideoFormatDescriptionCreateForImageBuffer(allocator: nil,
+                                                          imageBuffer: newPixelBuffer,
+                                                          formatDescriptionOut: &videoInfo)
+    guard status == errSecSuccess else {
+        NSLog("cannot create video format description \(status)")
+        return nil
+    }
+
+    status = CMSampleBufferCreateForImageBuffer(allocator: nil,
+                                                imageBuffer: newPixelBuffer,
+                                                dataReady: true,
+                                                makeDataReadyCallback: nil,
+                                                refcon: nil,
+                                                formatDescription: videoInfo,
+                                                sampleTiming: &timingInfo,
+                                                sampleBufferOut: &newSampleBuffer)
+    guard status == errSecSuccess else {
+        NSLog("cannot create new sample buffer \(status)")
+        return nil
+    }
+
+    return newSampleBuffer
 }
