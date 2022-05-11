@@ -4,7 +4,7 @@ import SwiftUI
 struct VideoChatSampleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ConfigurationView()
         }
     }
 }

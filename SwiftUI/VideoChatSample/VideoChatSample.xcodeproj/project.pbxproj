@@ -8,17 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		91E75404282B8A76001E7AB5 /* VideoChatSampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E75403282B8A76001E7AB5 /* VideoChatSampleApp.swift */; };
-		91E75406282B8A76001E7AB5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E75405282B8A76001E7AB5 /* ContentView.swift */; };
+		91E75406282B8A76001E7AB5 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E75405282B8A76001E7AB5 /* ConfigurationView.swift */; };
 		91E75408282B8A77001E7AB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91E75407282B8A77001E7AB5 /* Assets.xcassets */; };
 		91E7540B282B8A77001E7AB5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91E7540A282B8A77001E7AB5 /* Preview Assets.xcassets */; };
+		91E75414282B8F19001E7AB5 /* VideoChatRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E75413282B8F19001E7AB5 /* VideoChatRoomView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		91E75400282B8A76001E7AB5 /* VideoChatSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoChatSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91E75403282B8A76001E7AB5 /* VideoChatSampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChatSampleApp.swift; sourceTree = "<group>"; };
-		91E75405282B8A76001E7AB5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		91E75405282B8A76001E7AB5 /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
 		91E75407282B8A77001E7AB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91E7540A282B8A77001E7AB5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		91E75413282B8F19001E7AB5 /* VideoChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChatRoomView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +53,9 @@
 		91E75402282B8A76001E7AB5 /* VideoChatSample */ = {
 			isa = PBXGroup;
 			children = (
+				91E75405282B8A76001E7AB5 /* ConfigurationView.swift */,
+				91E75413282B8F19001E7AB5 /* VideoChatRoomView.swift */,
 				91E75403282B8A76001E7AB5 /* VideoChatSampleApp.swift */,
-				91E75405282B8A76001E7AB5 /* ContentView.swift */,
 				91E75407282B8A77001E7AB5 /* Assets.xcassets */,
 				91E75409282B8A77001E7AB5 /* Preview Content */,
 			);
@@ -178,7 +181,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91E75406282B8A76001E7AB5 /* ContentView.swift in Sources */,
+				91E75414282B8F19001E7AB5 /* VideoChatRoomView.swift in Sources */,
+				91E75406282B8A76001E7AB5 /* ConfigurationView.swift in Sources */,
 				91E75404282B8A76001E7AB5 /* VideoChatSampleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,7 +240,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -290,7 +294,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
