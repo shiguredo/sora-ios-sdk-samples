@@ -36,12 +36,21 @@ enum Availability {
 }
 
 struct ConfigurationView: View {
-    @State var channelId: String = "sora"
-    @State var videoCodec: VideoCodec = .default
-    @State var dataChannel: Availability = .unspecified
-    @State var ignoreDisconnectWebSocket: Availability = .unspecified
+    @State private var channelId: String = AppEnvironment.channelId
+    @State private var videoCodec: VideoCodec = .default
+    @State private var dataChannel: Availability = .unspecified
+    @State private var ignoreDisconnectWebSocket: Availability = .unspecified
 
-    @State var connectTag: Bool?
+    // 接続時のエラーです。
+    @State private var connectionError: Error?
+
+    // アラートを表示する必要がある場合に true にします。
+    // エラーが発生したときに使います。
+    @State private var showsAlert = false
+
+    // 接続に成功したら true にします。
+    // true にすると映像画面に遷移します。
+    @State private var connectTag: Bool?
 
     var body: some View {
         NavigationView {
@@ -81,7 +90,20 @@ struct ConfigurationView: View {
                         // NavigationLink をボタンで操作します。
                         // このボタンをタップし、接続が確立できれば下記の NavigationLink が実行されます。
                         Button("チャットに入室する", action: {
-                            connectTag = true
+                            SoraSDKManager.shared.connect(channelId: channelId,
+                                                          role: .sendrecv,
+                                                          multistreamEnabled: true)
+                            { error in
+                                // エラーがあればアラートを表示します。
+                                if let error = error {
+                                    self.connectionError = error
+                                    self.showsAlert = true
+                                    return
+                                }
+
+                                // 接続が確立したら NavigationLink を操作します。
+                                connectTag = true
+                            }
                         })
                         Spacer()
                     }
@@ -93,8 +115,22 @@ struct ConfigurationView: View {
                     EmptyView()
                 }
             }
-            .navigationTitle("ビデオチャット")
         }
+        .navigationTitle("ビデオチャット")
+
+        // 何らかのエラー時にアラートを表示します。
+        .alert("エラー", isPresented: $showsAlert, actions: {
+            Button("OK") {
+                showsAlert = false
+                connectionError = nil
+            }
+        }, message: {
+            if let error = connectionError {
+                Text(error.localizedDescription)
+            } else {
+                Text("エラー内容不明")
+            }
+        })
     }
 }
 
