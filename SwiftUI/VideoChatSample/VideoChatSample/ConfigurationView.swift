@@ -41,46 +41,56 @@ struct ConfigurationView: View {
     @State var dataChannel: Availability = .unspecified
     @State var ignoreDisconnectWebSocket: Availability = .unspecified
 
+    @State var connectTag: Bool?
+
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    TextField("チャネルID", text: $channelId)
-                } header: {
-                    Text("接続設定")
-                }
-
-                Section {
-                    HStack {
-                        Text("映像コーデック")
-                        Spacer()
-                        Menu(videoCodec.name) {
-                            Button(VideoCodec.default.name) { videoCodec = .default }
-                            Button(VideoCodec.vp8.name) { videoCodec = .vp8 }
-                            Button(VideoCodec.vp9.name) { videoCodec = .vp9 }
-                            Button(VideoCodec.h264.name) { videoCodec = .h264 }
-                            Button(VideoCodec.av1.name) { videoCodec = .av1 }
-                        }
+            VStack {
+                Form {
+                    Section {
+                        TextField("チャネルID", text: $channelId)
+                    } header: {
+                        Text("接続設定")
                     }
-                } header: {
-                    Text("配信設定")
-                }
 
-                Section {
-                    AvailabilityMenu("データチャネル", value: $dataChannel)
-                    AvailabilityMenu("WS切断を無視", value: $ignoreDisconnectWebSocket)
-                } header: {
-                    Text("データチャネルシグナリング設定")
-                }
+                    Section {
+                        HStack {
+                            Text("映像コーデック")
+                            Spacer()
+                            Menu(videoCodec.name) {
+                                Button(VideoCodec.default.name) { videoCodec = .default }
+                                Button(VideoCodec.vp8.name) { videoCodec = .vp8 }
+                                Button(VideoCodec.vp9.name) { videoCodec = .vp9 }
+                                Button(VideoCodec.h264.name) { videoCodec = .h264 }
+                                Button(VideoCodec.av1.name) { videoCodec = .av1 }
+                            }
+                        }
+                    } header: {
+                        Text("配信設定")
+                    }
 
-                Section {
+                    Section {
+                        AvailabilityMenu("データチャネル", value: $dataChannel)
+                        AvailabilityMenu("WS切断を無視", value: $ignoreDisconnectWebSocket)
+                    } header: {
+                        Text("データチャネルシグナリング設定")
+                    }
+
                     HStack {
                         Spacer()
+                        // NavigationLink をボタンで操作します。
+                        // このボタンをタップし、接続が確立できれば下記の NavigationLink が実行されます。
                         Button("チャットに入室する", action: {
-                            // TODO:
+                            connectTag = true
                         })
                         Spacer()
                     }
+                }
+
+                // 上記のボタンのタップ時、接続が確立できれば画面遷移します。
+                NavigationLink(destination: VideoChatRoomView(),
+                               tag: true, selection: $connectTag) {
+                    EmptyView()
                 }
             }
             .navigationTitle("ビデオチャット")
