@@ -4,31 +4,36 @@ import SwiftUI
 struct VideoChatRoomView: View {
     @Environment(\.scenePhase) private var scenePhase
 
+    @State private var senderStream: MediaStream?
+
+    @State private var showsAlert = false
+
+    // 接続時のエラーです。
+    @State private var connectionError: Error?
+
     var mediaChannel: MediaChannel? {
         SoraSDKManager.shared.currentMediaChannel
     }
 
     var body: some View {
         NavigationView {
-            /*
-             // 受信映像の上に小さいサイズの配信映像を重ねて表示します。
-             ZStack {
-                 // Video($receiverStream)
+            // 受信映像の上に小さいサイズの配信映像を重ねて表示します。
+            ZStack {
+                // Video($receiverStream)
 
-                 VStack {
-                     // スペースを上と左にいれて右下に映像ビューを配置します。
-                     Spacer()
-                     HStack {
-                         Spacer()
-                         Video($senderStream)
-                             .frame(width: 110, height: 170)
-                             .border(Color.white, width: 2)
-                             .padding(.trailing, 20)
-                             .padding(.bottom, 20)
-                     }
-                 }
-             }
-              */
+                VStack {
+                    // スペースを上と左にいれて右下に映像ビューを配置します。
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Video($senderStream)
+                            .frame(width: 110, height: 170)
+                            .border(Color.white, width: 2)
+                            .padding(.trailing, 20)
+                            .padding(.bottom, 20)
+                    }
+                }
+            }
         }
         .navigationTitle("\(mediaChannel?.configuration.channelId ?? "")")
         .navigationBarTitleDisplayMode(.inline)
@@ -43,22 +48,49 @@ struct VideoChatRoomView: View {
             }
         }
 
+        // ビューが最初に描画されたときの処理です。
+        .onAppear {
+            onForeground()
+        }
+
+        // ビューがバックグラウンドを往復したときの処理です。
         .onChange(of: scenePhase) { phase in
             switch phase {
             case .background:
                 onBackground()
-            case .inactive:
+            case .active:
                 onForeground()
             default:
                 break
             }
         }
+
+        // 何らかのエラー時にアラートを表示します。
+        .alert("エラー", isPresented: $showsAlert, actions: {
+            Button("OK") {
+                showsAlert = false
+                connectionError = nil
+            }
+        }, message: {
+            if let error = connectionError {
+                Text(error.localizedDescription)
+            } else {
+                Text("エラー内容不明")
+            }
+        })
     }
 
+    // ビューがフォアグラウンドに遷移したときの処理です。
+    // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
+    // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
     func onForeground() {
+        guard let mediaChannel = mediaChannel else {
+            return
+        }
+
+        senderStream = mediaChannel.senderStream
+
         /*
-         // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
-         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
          if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
              mediaChannel.handlers.onAddStream = { [weak self] _ in
                  NSLog("[sample] mediaChannel.handlers.onAddStream")
@@ -87,6 +119,7 @@ struct VideoChatRoomView: View {
           */
     }
 
+    // ビューがバックグラウンドに遷移したときの処理です。
     func onBackground() {
         // バックグラウンド時にコールバックを削除します。
         if let mediaChannel = mediaChannel {
