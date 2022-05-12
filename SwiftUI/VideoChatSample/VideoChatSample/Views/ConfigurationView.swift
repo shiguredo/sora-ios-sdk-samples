@@ -115,8 +115,9 @@ struct ConfigurationView: View {
                     EmptyView()
                 }
             }
+            .navigationTitle("ビデオチャット")
         }
-        .navigationTitle("ビデオチャット")
+        .navigationViewStyle(.stack)
 
         // 何らかのエラー時にアラートを表示します。
         .alert("エラー", isPresented: $showsAlert, actions: {
