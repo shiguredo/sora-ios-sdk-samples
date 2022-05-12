@@ -72,3 +72,4 @@ fastlane/screenshots
 
 **.xcworkspace
 DataChannelSample/DataChannelSample/Environment.swift
+AppEnvironment.swift

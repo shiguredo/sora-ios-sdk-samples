@@ -50,14 +50,14 @@ class SoraSDKManager {
         // Configurationを生成して、接続設定を行います。
         // 必須となる設定はurl, channelId, roleのみです。
         // その他の設定にはデフォルト値が指定されていますが、ここで必要に応じて自由に調整することが可能です。
-        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: role,
+        var configuration = Configuration(urlCandidates: AppEnvironment.urls, channelId: channelId, role: role,
                                           multistreamEnabled: multistreamEnabled)
 
         // 引数で指定された値を設定します。
         configuration.videoCodec = videoCodec
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
-        configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
+        configuration.signalingConnectMetadata = AppEnvironment.signalingConnectMetadata
 
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in

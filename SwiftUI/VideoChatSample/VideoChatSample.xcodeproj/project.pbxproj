@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		911AF455282CE1FC001242A8 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AF454282CE1FC001242A8 /* Environment.swift */; };
+		911AF455282CE1FC001242A8 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AF454282CE1FC001242A8 /* AppEnvironment.swift */; };
 		911AF457282CE2B6001242A8 /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911AF456282CE2B6001242A8 /* SoraSDKManager.swift */; };
 		91E75404282B8A76001E7AB5 /* VideoChatSampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E75403282B8A76001E7AB5 /* VideoChatSampleApp.swift */; };
 		91E75406282B8A76001E7AB5 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E75405282B8A76001E7AB5 /* ConfigurationView.swift */; };
@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		911AF454282CE1FC001242A8 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		911AF454282CE1FC001242A8 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		911AF456282CE2B6001242A8 /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
 		91E75400282B8A76001E7AB5 /* VideoChatSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoChatSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91E75403282B8A76001E7AB5 /* VideoChatSampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoChatSampleApp.swift; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		911AF459282CE32B001242A8 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				911AF454282CE1FC001242A8 /* Environment.swift */,
+				911AF454282CE1FC001242A8 /* AppEnvironment.swift */,
 				911AF456282CE2B6001242A8 /* SoraSDKManager.swift */,
 				91E75403282B8A76001E7AB5 /* VideoChatSampleApp.swift */,
 			);
@@ -204,7 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91E75414282B8F19001E7AB5 /* VideoChatRoomView.swift in Sources */,
-				911AF455282CE1FC001242A8 /* Environment.swift in Sources */,
+				911AF455282CE1FC001242A8 /* AppEnvironment.swift in Sources */,
 				91E75406282B8A76001E7AB5 /* ConfigurationView.swift in Sources */,
 				911AF457282CE2B6001242A8 /* SoraSDKManager.swift in Sources */,
 				91E75404282B8A76001E7AB5 /* VideoChatSampleApp.swift in Sources */,
