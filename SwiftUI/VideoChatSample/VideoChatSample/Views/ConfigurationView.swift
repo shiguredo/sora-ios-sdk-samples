@@ -59,7 +59,7 @@ struct ConfigurationView: View {
                     Section {
                         TextField("チャネルID", text: $channelId)
                     } header: {
-                        Text("接続設定")
+                        Text("チャネルID")
                     }
 
                     Section {
