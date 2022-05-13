@@ -6,6 +6,11 @@ struct VideoChatRoomView: View {
 
     @State private var senderStream: MediaStream?
 
+    // 受信用のストリームです。
+    // @State を指定しているので、このプロパティに変更があると
+    // 受信者リストビューが再描画されます。
+    @State private var receiverStreams: [MediaStream] = []
+
     @State private var showsAlert = false
 
     // 接続時のエラーです。
@@ -19,14 +24,14 @@ struct VideoChatRoomView: View {
         NavigationView {
             // 受信映像の上に小さいサイズの配信映像を重ねて表示します。
             ZStack {
-                // Video($receiverStream)
+                ReceiversView(receiverStreams, columnCount: 2)
 
                 VStack {
                     // スペースを上と左にいれて右下に映像ビューを配置します。
                     Spacer()
                     HStack {
                         Spacer()
-                        Video($senderStream)
+                        Video(senderStream)
                             .frame(width: 110, height: 170)
                             .border(Color.white, width: 2)
                             .padding(.trailing, 20)
@@ -89,39 +94,34 @@ struct VideoChatRoomView: View {
         }
 
         senderStream = mediaChannel.senderStream
+        receiverStreams = mediaChannel.receiverStreams
 
-        /*
-         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-             mediaChannel.handlers.onAddStream = { [weak self] _ in
-                 NSLog("[sample] mediaChannel.handlers.onAddStream")
-                 DispatchQueue.main.async {
-                     self?.handleUpdateStreams()
-                 }
-             }
-             mediaChannel.handlers.onRemoveStream = { [weak self] _ in
-                 NSLog("[sample] mediaChannel.handlers.onRemoveStream")
-                 DispatchQueue.main.async {
-                     self?.handleUpdateStreams()
-                 }
-             }
+        // 同チャネルに接続が追加されたときのコールバックを設定します。
+        mediaChannel.handlers.onAddStream = { _ in
+            NSLog("[sample] mediaChannel.handlers.onAddStream")
+            // 受信ストリームを更新します。
+            // receiverStreams プロパティは監視対象なので、
+            // 新しいリストを代入するとビューが再描画されて受信映像リストが更新されます。
+            self.receiverStreams = mediaChannel.receiverStreams
+        }
 
-             // サーバーから切断されたときのコールバックを設定します。
-             mediaChannel.handlers.onDisconnect = { [weak self] _ in
-                 NSLog("[sample] mediaChannel.handlers.onDisconnect")
-                 DispatchQueue.main.async {
-                     self?.handleDisconnect()
-                 }
-             }
-         }
+        // 同チャネルへの接続が減ったときのコールバックを設定します。
+        mediaChannel.handlers.onRemoveStream = { _ in
+            NSLog("[sample] mediaChannel.handlers.onRemoveStream")
+            // 受信ストリームの追加時と同様に receiverStreams プロパティを更新します。
+            self.receiverStreams = mediaChannel.receiverStreams
+        }
 
-         // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
-         handleUpdateStreams()
-          */
+        // サーバーから切断されたときのコールバックを設定します。
+        mediaChannel.handlers.onDisconnect = { _ in
+            NSLog("[sample] mediaChannel.handlers.onDisconnect")
+            // 本アプリでは特に行うべき処理はありません。
+        }
     }
 
     // ビューがバックグラウンドに遷移したときの処理です。
     func onBackground() {
-        // バックグラウンド時にコールバックを削除します。
+        // コールバックを削除します。
         if let mediaChannel = mediaChannel {
             mediaChannel.handlers.onAddStream = nil
             mediaChannel.handlers.onRemoveStream = nil
@@ -129,6 +129,7 @@ struct VideoChatRoomView: View {
         }
     }
 
+    // フロントカメラとバックカメラを切り替えます。
     func flipCamera() {
         guard let current = CameraVideoCapturer.current else {
             return
@@ -143,6 +144,59 @@ struct VideoChatRoomView: View {
                 NSLog("[sample] " + error.localizedDescription)
             }
         }
+    }
+}
+
+// 受信ストリームの映像を格子状に並べるビューです。
+struct ReceiversView: View {
+    // 一つの列に並べるストリームのリストです。
+    // ForEach で使います。
+    struct Row: Identifiable {
+        var id = UUID()
+
+        var streams: [MediaStream]
+
+        init(_ streams: [MediaStream]) {
+            self.streams = streams
+        }
+    }
+
+    var rows: [Row]
+
+    init(_ streams: [MediaStream], columnCount: Int) {
+        // 表示用に配置したストリームのリストを先に用意しておきます。
+        let rowCount = (streams.count / columnCount) + (streams.count % columnCount > 0 ? 0 : 1)
+        rows = []
+        for i in 0 ..< rowCount {
+            var rowStreams: [MediaStream] = []
+            for j in 0 ..< columnCount {
+                let k = i * rowCount + j
+                NSLog("\(i), \(j), \(k)")
+                if k < streams.count {
+                    rowStreams.append(streams[k])
+                }
+            }
+            NSLog("row \(i), streams \(rowStreams.count)")
+            rows.append(Row(rowStreams))
+        }
+
+        NSLog("ReceiversView: streams \(streams.count), rows \(rowCount), columns: \(columnCount)")
+    }
+
+    var body: some View {
+        // 映像ビューを格子状に配置します。
+        VStack {
+            ForEach(rows, id: \.id) { row in
+                HStack {
+                    // ストリームのリストは streamId プロパティで識別可能です。
+                    ForEach(row.streams, id: \.streamId) { stream in
+                        Video(stream)
+                    }
+                }
+            }
+            .padding(0)
+        }
+        .listStyle(.plain)
     }
 }
 
