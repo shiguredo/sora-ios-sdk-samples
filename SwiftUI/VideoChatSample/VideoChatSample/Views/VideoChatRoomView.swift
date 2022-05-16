@@ -161,26 +161,25 @@ struct ReceiversView: View {
         }
     }
 
+    var streams: [MediaStream]
     var rows: [Row]
 
     init(_ streams: [MediaStream], columnCount: Int) {
+        self.streams = streams
+
         // 表示用に配置したストリームのリストを先に用意しておきます。
-        let rowCount = (streams.count / columnCount) + (streams.count % columnCount > 0 ? 0 : 1)
+        let rowCount = (streams.count / columnCount) + (streams.count % columnCount > 0 ? 1 : 0)
         rows = []
         for i in 0 ..< rowCount {
             var rowStreams: [MediaStream] = []
             for j in 0 ..< columnCount {
-                let k = i * rowCount + j
-                NSLog("\(i), \(j), \(k)")
+                let k = i * columnCount + j
                 if k < streams.count {
                     rowStreams.append(streams[k])
                 }
             }
-            NSLog("row \(i), streams \(rowStreams.count)")
             rows.append(Row(rowStreams))
         }
-
-        NSLog("ReceiversView: streams \(streams.count), rows \(rowCount), columns: \(columnCount)")
     }
 
     var body: some View {
@@ -194,7 +193,6 @@ struct ReceiversView: View {
                     }
                 }
             }
-            .padding(0)
         }
         .listStyle(.plain)
     }
