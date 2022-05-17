@@ -32,6 +32,8 @@ struct VideoChatRoomView: View {
                     HStack {
                         Spacer()
                         Video(senderStream)
+                            // 映像を引き伸ばしてビューを埋めます。
+                            .videoAspect(.fill)
                             .frame(width: 110, height: 170)
                             .border(Color.white, width: 2)
                             .padding(.trailing, 20)
@@ -190,6 +192,8 @@ struct ReceiversView: View {
                     // ストリームのリストは streamId プロパティで識別可能です。
                     ForEach(row.streams, id: \.streamId) { stream in
                         Video(stream)
+                            // 映像を引き伸ばしてビューを埋めます。
+                            .videoAspect(.fill)
                     }
                 }
             }
