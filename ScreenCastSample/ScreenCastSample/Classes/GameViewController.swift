@@ -163,11 +163,14 @@ class GameViewController: UIViewController {
      いずれの場合も含めます。
      */
     private func handleDisconnect() {
-        // 画面録画を停止して、配信を切断し、ボタンの状態を更新します。
-        RPScreenRecorder.shared().stopCapture { _ in
-            // エラー時処理を行う必要が無いので、無視します。
-            NSLog("[sample] stop Capture")
+        // 画面録画中であれば録画を停止して、配信を切断し、ボタンの状態を更新します。
+        if RPScreenRecorder.shared().isRecording {
+            RPScreenRecorder.shared().stopCapture { _ in
+                // エラー時処理を行う必要が無いので、無視します。
+                NSLog("[sample] stop Capture")
+            }
         }
+
         // 明示的に配信をストップしてから、画面を閉じるようにしています。
         SoraSDKManager.shared.disconnect()
         DispatchQueue.main.async { [weak self] in
