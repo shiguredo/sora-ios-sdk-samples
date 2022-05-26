@@ -28,12 +28,6 @@ Xcode と Swift のバージョンによっては、 CocoaPods で取得でき�
 
 ## サンプルの紹介
 
-### RealTimeStreamingSample (生放送配信)
-
-[RealTimeStreamingSample (生放送配信)](/RealTimeStreamingSample)
-
-このサンプルでは、動画生放送の配信・視聴を行うアプリを Sora iOS SDK を用いて実装する方法を説明しています。
-
 ### VideoChatSample (ビデオチャット)
 
 [VideoChatSample (ビデオチャット)](/VideoChatSample)
