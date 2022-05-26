@@ -167,7 +167,6 @@ class GameViewController: UIViewController {
         if RPScreenRecorder.shared().isRecording {
             RPScreenRecorder.shared().stopCapture { _ in
                 // エラー時処理を行う必要が無いので、無視します。
-                NSLog("[sample] stop Capture")
             }
         }
 
