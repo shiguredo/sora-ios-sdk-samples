@@ -57,7 +57,6 @@ class SoraSDKManager {
         configuration.videoCodec = videoCodec
         configuration.cameraSettings.isEnabled = false
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
-        configuration.audioEnabled = false
 
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
