@@ -13,8 +13,6 @@
 
 - [UPDATE] DecoStreamingSample をマルチストリームにする
     - @szktty
-- [UPDATE] RealTimeStreamingSample をマルチストリームにする
-    - @szktty
 - [UPDATE] ScreenCastSample をマルチストリームにする
     - @miosakuma
 - [ADD] サーバから切断されたとき接続前の状態に戻る
