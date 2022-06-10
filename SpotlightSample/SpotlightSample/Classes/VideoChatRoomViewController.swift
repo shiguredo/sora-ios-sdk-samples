@@ -44,6 +44,14 @@ class VideoChatRoomViewController: UIViewController {
                     self?.handleUpdateStreams()
                 }
             }
+
+            // サーバーから切断されたときのコールバックを設定します。
+            mediaChannel.handlers.onDisconnect = { [weak self] _ in
+                NSLog("[sample] mediaChannel.handlers.onDisconnect")
+                DispatchQueue.main.async {
+                    self?.handleDisconnect()
+                }
+            }
         }
 
         // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
@@ -57,6 +65,7 @@ class VideoChatRoomViewController: UIViewController {
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
             mediaChannel.handlers.onAddStream = nil
             mediaChannel.handlers.onRemoveStream = nil
+            mediaChannel.handlers.onDisconnect = nil
         }
     }
 

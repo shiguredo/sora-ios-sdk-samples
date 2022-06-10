@@ -101,12 +101,7 @@ class GameViewController: UIViewController {
     func onPauseButton(_ sender: UIBarButtonItem) {
         let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
         if isConnected {
-            // 画面録画を停止して、配信を切断し、ボタンの状態を更新します。
-            RPScreenRecorder.shared().stopCapture { _ in
-                // エラー時処理を行う必要が無いので、無視します。
-            }
-            SoraSDKManager.shared.disconnect()
-            updateBarButtonItems()
+            handleDisconnect()
         } else {
             // 配信されていないので何もしなくて良いです。ボタンの状態だけ更新します。
             updateBarButtonItems()
@@ -150,13 +145,36 @@ class GameViewController: UIViewController {
                 // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
                 // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
                 NSLog("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
-                SoraSDKManager.shared.disconnect()
-                DispatchQueue.main.async {
-                    self?.updateBarButtonItems()
+                self?.handleDisconnect()
+            } else if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+                // サーバーから切断されたときのコールバックを設定します。
+                mediaChannel.handlers.onDisconnect = { [weak self] _ in
+                    NSLog("[sample] mediaChannel.handlers.onDisconnect")
+                    self?.handleDisconnect()
                 }
             }
         })
         updateBarButtonItems()
+    }
+
+    /**
+     接続が切断されたときに呼び出されるべき処理をまとめています。
+     この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
+     いずれの場合も含めます。
+     */
+    private func handleDisconnect() {
+        // 画面録画中であれば録画を停止して、配信を切断し、ボタンの状態を更新します。
+        if RPScreenRecorder.shared().isRecording {
+            RPScreenRecorder.shared().stopCapture { _ in
+                // エラー時処理を行う必要が無いので、無視します。
+            }
+        }
+
+        // 明示的に配信をストップしてから、画面を閉じるようにしています。
+        SoraSDKManager.shared.disconnect()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateBarButtonItems()
+        }
     }
 
     /**

@@ -11,6 +11,17 @@
 
 ## develop
 
+## sora-ios-sdk-2022.3.0
+
+- [UPDATE] DecoStreamingSample をマルチストリームにする
+    - @szktty
+- [UPDATE] ScreenCastSample をマルチストリームにする
+    - @miosakuma
+- [ADD] サーバから切断されたとき接続前の状態に戻る
+    - @szktty
+- [CHANGE] RealTimeStreamingSample を廃止する
+    - @miosakuma
+
 ## sora-ios-sdk-2022.2.0
 
 - [UPDATE] Github Actions でのビルド処理で利用する Podfile を Podfile.dev からPodfile に変更する 
