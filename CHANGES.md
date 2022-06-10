@@ -11,12 +11,16 @@
 
 ## develop
 
-- [ADD] サーバから切断されたとき接続前の状態に戻る
-    - @szktty
 - [UPDATE] DecoStreamingSample をマルチストリームにする
     - @szktty
 - [UPDATE] RealTimeStreamingSample をマルチストリームにする
     - @szktty
+- [UPDATE] ScreenCastSample をマルチストリームにする
+    - @miosakuma
+- [ADD] サーバから切断されたとき接続前の状態に戻る
+    - @szktty
+- [CHANGE] RealTimeStreamingSample を廃止する
+    - @miosakuma
 
 ## sora-ios-sdk-2022.2.0
 
