@@ -59,6 +59,9 @@ class SoraSDKManager {
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
+        // bundle_id を設定します。
+        configuration.bundleId = UUID().uuidString
+
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
             // 接続に成功した場合は、mediaChannelに値が返され、errorがnilになります。

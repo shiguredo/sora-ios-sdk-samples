@@ -29,6 +29,9 @@ class ConfigViewController: UITableViewController {
         channelIdTextField.text = Environment.channelId
     }
 
+    /// サイマルキャスト
+    @IBOutlet var simulcastSegmentedControl: UISegmentedControl!
+
     /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
 
@@ -43,7 +46,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 5, indexPath.row == 0 else {
+        guard indexPath.section == 6, indexPath.row == 0 else {
             return
         }
 
@@ -62,7 +65,8 @@ class ConfigViewController: UITableViewController {
         let videoCodec: VideoCodec
         switch videoCodecSegmentedControl.selectedSegmentIndex {
         case 0: videoCodec = .vp8
-        case 1: videoCodec = .h264
+        case 1: videoCodec = .vp9
+        case 2: videoCodec = .h264
         default: fatalError()
         }
 
@@ -93,6 +97,13 @@ class ConfigViewController: UITableViewController {
             spotlightNumber = spotlightNumberSegmentedControl.selectedSegmentIndex
         }
 
+        let simulcast: Bool
+        switch simulcastSegmentedControl.selectedSegmentIndex {
+        case 0: simulcast = false
+        case 1: simulcast = true
+        default: fatalError()
+        }
+
         let dataChannelSignaling: Bool?
         switch dataChannelSignalingSegmentedControl.selectedSegmentIndex {
         case 0: dataChannelSignaling = nil
@@ -118,6 +129,7 @@ class ConfigViewController: UITableViewController {
             spotlightFocusRid: spotlightFocusRid,
             spotlightUnfocusRid: spotlightUnfocusRid,
             spotlightNumber: spotlightNumber,
+            simulcast: simulcast,
             dataChannelSignaling: dataChannelSignaling,
             ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
         ) { [weak self] error in
