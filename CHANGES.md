@@ -11,6 +11,8 @@
 
 ## develop
 
+- [UPDATE] SpotlightSample でサイマルキャストを有効にする
+    - @miosakuma
 - [ADD] VideoChatSample, SimulcastSample, SpotlightSample で bundle_id を設定する
     - @enm10k
 - [ADD] SpotlightSample の映像コーデックに VP9 を追加する

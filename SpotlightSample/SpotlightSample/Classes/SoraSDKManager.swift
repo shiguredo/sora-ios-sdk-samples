@@ -69,6 +69,7 @@ class SoraSDKManager {
 
         // スポットライトを有効にします。
         configuration.spotlightEnabled = .enabled
+        configuration.simulcastEnabled = true
 
         // スポットライト用にビットレートを高めに設定します。
         configuration.videoBitRate = 3000
