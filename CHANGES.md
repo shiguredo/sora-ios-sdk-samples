@@ -15,6 +15,8 @@
     - @enm10k
 - [ADD] SpotlightSample の映像コーデックに VP9 を追加する
     - @enm10k
+- [ADD] SpotlightSample サイマルキャストの有効・無効を切り替える設定を追加する
+    - @enm10k
 
 ## sora-ios-sdk-2022.3.0
 
