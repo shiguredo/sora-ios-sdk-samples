@@ -11,6 +11,12 @@
 
 ## develop
 
+## sora-ios-sdk-2022.4.0
+
+- [UPDATE] システム条件を変更する
+    - macOS 12.3 以降
+    - WebRTC SFU Sora 2022.1 以降
+    - @miosakuma
 - [ADD] VideoChatSample, SimulcastSample, SpotlightSample で bundle_id を設定する
     - @enm10k
 - [ADD] SpotlightSample の映像コーデックに VP9 を追加する
