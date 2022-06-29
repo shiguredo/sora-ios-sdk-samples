@@ -5,7 +5,7 @@ platform :ios, '13.0'
 
 target 'ScreenCastSample' do
   use_frameworks!
-  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'develop'
+  pod 'Sora', '2022.4.0'
 
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
