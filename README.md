@@ -22,7 +22,7 @@ Please read https://github.com/shiguredo/oss before use.
 - Xcode 13.4
 - Swift 5.6.1
 - CocoaPods 1.11.2 以降
-- WebRTC SFU Sora 2022.1 以降
+- WebRTC SFU Sora 2022.1.0 以降
 
 Xcode と Swift のバージョンによっては、 CocoaPods で取得できるバイナリに互換性がない可能性があります。
 
