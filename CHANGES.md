@@ -11,11 +11,21 @@
 
 ## develop
 
+## sora-ios-sdk-2022.5.0
+
+- [UPDATE] システム条件を変更する
+    - WebRTC SFU Sora 2022.1.1 以降
+    - Xcode 13.4.1
+    - @miosakuma
+- [FIX] DecoStreamingSample の iOS 14 初期に発生していたクラッシュ不具合の暫定処理を削除
+    - iOS 14.6 で問題が解消されていたため当初の処理に戻す
+    - @szktty
+
 ## sora-ios-sdk-2022.4.0
 
 - [UPDATE] システム条件を変更する
     - macOS 12.3 以降
-    - WebRTC SFU Sora 2022.1 以降
+    - WebRTC SFU Sora 2022.1.0 以降
     - @miosakuma
 - [ADD] VideoChatSample, SimulcastSample, SpotlightSample で bundle_id を設定する
     - @enm10k

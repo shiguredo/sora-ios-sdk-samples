@@ -109,19 +109,12 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         // captureSessionをセットアップしたのち、映像キャプチャを開始します。
         // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
         // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
-        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
-        /*
-         captureSessionQueue.async { [weak self] in
-             if let finished = self?.configurationFinished, !finished {
-                 self?.configureCaptureSession()
-             }
-             self?.captureSession.startRunning()
-         }
-         */
-        if !configurationFinished {
-            configureCaptureSession()
+        captureSessionQueue.async { [weak self] in
+            if let finished = self?.configurationFinished, !finished {
+                self?.configureCaptureSession()
+            }
+            self?.captureSession.startRunning()
         }
-        captureSession.startRunning()
 
         // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
@@ -131,13 +124,9 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         super.viewWillDisappear(animated)
 
         // captureSessionを停止します。
-        // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
-        /*
-         captureSessionQueue.async { [weak self] in
-             self?.captureSession.stopRunning()
-         }
-          */
-        captureSession.stopRunning()
+        captureSessionQueue.async { [weak self] in
+            self?.captureSession.stopRunning()
+        }
 
         // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
@@ -158,30 +147,18 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         switch captureDevicePosition {
         case .front:
             captureDevicePosition = .back
-            // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
-            /*
-             captureSessionQueue.async { [weak self] in
-                 self?.captureSession.stopRunning()
-                 self?.configureCaptureSession()
-                 self?.captureSession.startRunning()
-             }
-              */
-            captureSession.stopRunning()
-            configureCaptureSession()
-            captureSession.startRunning()
+            captureSessionQueue.async { [weak self] in
+                self?.captureSession.stopRunning()
+                self?.configureCaptureSession()
+                self?.captureSession.startRunning()
+            }
         case .back:
             captureDevicePosition = .front
-            // 注: iOS14 で以下のコードを実行するとクラッシュしてしまうため、一時的にキューの使用を止めています。
-            /*
-             captureSessionQueue.async { [weak self] in
-                 self?.captureSession.stopRunning()
-                 self?.configureCaptureSession()
-                 self?.captureSession.startRunning()
-             }
-              */
-            captureSession.stopRunning()
-            configureCaptureSession()
-            captureSession.startRunning()
+            captureSessionQueue.async { [weak self] in
+                self?.captureSession.stopRunning()
+                self?.configureCaptureSession()
+                self?.captureSession.startRunning()
+            }
         default:
             break
         }
