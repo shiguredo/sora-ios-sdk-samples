@@ -19,10 +19,10 @@ Please read https://github.com/shiguredo/oss before use.
 - iOS 13.0 以降
 - アーキテクチャ arm64, x86_64 (シミュレーターの動作は未保証)
 - macOS 12.3 以降
-- Xcode 13.4
+- Xcode 13.4.1
 - Swift 5.6.1
 - CocoaPods 1.11.2 以降
-- WebRTC SFU Sora 2022.1.0 以降
+- WebRTC SFU Sora 2022.1.1 以降
 
 Xcode と Swift のバージョンによっては、 CocoaPods で取得できるバイナリに互換性がない可能性があります。
 
