@@ -1,15 +1,18 @@
 # 変更履歴
 
+- CHANGE
+    - 下位互換のない変更
 - UPDATE
     - 下位互換がある変更
 - ADD
     - 下位互換がある追加
-- CHANGE
-    - 下位互換のない変更
 - FIX
     - バグ修正
 
 ## develop
+
+- [CHANGE] bitcode を無効にする
+    - @miosakuma
 
 ## sora-ios-sdk-2022.5.0
 
@@ -36,14 +39,14 @@
 
 ## sora-ios-sdk-2022.3.0
 
+- [CHANGE] RealTimeStreamingSample を廃止する
+    - @miosakuma
 - [UPDATE] DecoStreamingSample をマルチストリームにする
     - @szktty
 - [UPDATE] ScreenCastSample をマルチストリームにする
     - @miosakuma
 - [ADD] サーバから切断されたとき接続前の状態に戻る
     - @szktty
-- [CHANGE] RealTimeStreamingSample を廃止する
-    - @miosakuma
 
 ## sora-ios-sdk-2022.2.0
 
