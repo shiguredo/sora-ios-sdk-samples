@@ -15,10 +15,10 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: macos-12
     env:
-      XCODE: /Applications/Xcode_13.2.1.app
-      XCODE_SDK: iphoneos15.2
+      XCODE: /Applications/Xcode_13.4.1.app
+      XCODE_SDK: iphoneos15.5
       WORKSPACE: ScreenCastSample
       SCHEME: ScreenCastSample
     steps:
