@@ -5,7 +5,7 @@ platform :ios, '13.0'
 
 target 'ScreenCastSample' do
   use_frameworks!
-  pod 'Sora', '2022.5.0'
+  pod 'Sora', '2022.6.0'
 
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
