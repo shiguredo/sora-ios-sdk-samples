@@ -18,11 +18,11 @@ Please read https://github.com/shiguredo/oss before use.
 
 - iOS 13 以降
 - アーキテクチャ arm64 (シミュレーターの動作は未保証)
-- macOS 12.6 以降
-- Xcode 14.0
-- Swift 5.7
+- macOS 13.1 以降
+- Xcode 14.2
+- Swift 5.7.2
 - CocoaPods 1.11.3 以降
-- WebRTC SFU Sora 2022.1.1 以降
+- WebRTC SFU Sora 2022.2.0 以降
 
 Xcode と Swift のバージョンによっては、 CocoaPods で取得できるバイナリに互換性がない可能性があります。
 
@@ -70,7 +70,7 @@ Apache License 2.0
 
 ```
 Copyright 2017-2018, Masashi Ono (akisute)
-Copyright 2017-2022, Shiguredo Inc.
+Copyright 2017-2023, Shiguredo Inc.
 
 
 Licensed under the Apache License, Version 2.0 (the "License");
