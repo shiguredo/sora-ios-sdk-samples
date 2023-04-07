@@ -17,12 +17,12 @@ jobs:
   build:
     runs-on: macos-12
     env:
-      XCODE: /Applications/Xcode_13.4.1.app
-      XCODE_SDK: iphoneos15.5
+      XCODE: /Applications/Xcode_14.0.app
+      XCODE_SDK: iphoneos16.0
       WORKSPACE: SimulcastSample
       SCHEME: SimulcastSample
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Select Xcode Version
       run: sudo xcode-select -s '${{ env.XCODE }}/Contents/Developer'
     - name: Show Xcode Version
@@ -30,7 +30,7 @@ jobs:
     - name: Show CocoaPods Version
       run: pod --version
     - name: Restore Pods
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: Pods
         key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
