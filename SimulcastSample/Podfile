@@ -5,7 +5,7 @@ platform :ios, '13.0'
 
 target 'SimulcastSample' do
   use_frameworks!
-  pod 'Sora', '2023.1.0'
+  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'develop'
 
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
