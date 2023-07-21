@@ -47,7 +47,8 @@ class SoraSDKManager {
         guard currentMediaChannel == nil else {
             return
         }
-
+        NSLog(configuration.channelId)
+        NSLog(configuration.videoVp9Params as! String)
         // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
             // 接続に成功した場合は、mediaChannelに値が返され、errorがnilになります。

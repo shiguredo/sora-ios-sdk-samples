@@ -17,6 +17,51 @@ class ConfigViewController: UITableViewController {
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
+    @IBOutlet var vp9ProfileIdSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var av1ProfileIdSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var h264ProfileLevelIdPopup: UIButton!
+
+    enum H264ProfileLevelId: CaseIterable {
+        case id_none
+        case id_42e01f
+        case id_42e020
+        case id_42e034
+
+        var title: String {
+            switch self {
+            case .id_none:
+                return "none"
+            case .id_42e01f:
+                return "42e01f"
+            case .id_42e020:
+                return "42e020"
+            case .id_42e034:
+                return "42e034"
+            }
+        }
+    }
+
+    private var selectedMenuType = H264ProfileLevelId.id_none
+
+    private func configureH264ProfileLevelIdPopupMenu() {
+        let actions = H264ProfileLevelId.allCases
+            .compactMap { type in
+                UIAction(
+                    title: type.title,
+                    state: type == selectedMenuType ? .on : .off,
+                    handler: { _ in
+                        self.selectedMenuType = type
+                        self.configureH264ProfileLevelIdPopupMenu()
+                    }
+                )
+            }
+        h264ProfileLevelIdPopup.menu = UIMenu(title: "", options: .displayInline, children: actions)
+        h264ProfileLevelIdPopup.showsMenuAsPrimaryAction = true
+        h264ProfileLevelIdPopup.setTitle(selectedMenuType.title, for: .normal)
+    }
+
     /// 接続試行中かどうかを表します。
     var isConnecting = false
 
@@ -25,7 +70,7 @@ class ConfigViewController: UITableViewController {
      */
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        configureH264ProfileLevelIdPopupMenu()
         channelIdTextField.text = Environment.channelId
     }
 
@@ -37,7 +82,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 3, indexPath.row == 0 else {
+        guard indexPath.section == 4, indexPath.row == 0 else {
             return
         }
 
@@ -59,6 +104,7 @@ class ConfigViewController: UITableViewController {
         case 1: videoCodec = .vp9
         case 2: videoCodec = .vp8
         case 3: videoCodec = .h264
+        case 4: videoCodec = .av1
         default: fatalError()
         }
 
@@ -78,16 +124,49 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
+        let vp9ProfileId: Int?
+        switch vp9ProfileIdSegmentedControl.selectedSegmentIndex {
+        case 0: vp9ProfileId = nil
+        case 1: vp9ProfileId = 0
+        case 2: vp9ProfileId = 1
+        case 3: vp9ProfileId = 2
+        default: fatalError()
+        }
+
+        let av1ProfileId: Int?
+        switch av1ProfileIdSegmentedControl.selectedSegmentIndex {
+        case 0: av1ProfileId = nil
+        case 1: av1ProfileId = 0
+        case 2: av1ProfileId = 1
+        case 3: av1ProfileId = 2
+        default: fatalError()
+        }
+
+        let h264ProfileId = (h264ProfileLevelIdPopup.menu?.selectedElements[0].title == "none") ? nil : h264ProfileLevelIdPopup.menu?.selectedElements[0].title
+        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv, multistreamEnabled: true)
+        configuration.videoCodec = videoCodec
+        configuration.dataChannelSignaling = dataChannelSignaling
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+
+        if vp9ProfileId != nil {
+            let videoVp9Params: Encodable = ["profile_id": 1]
+            configuration.videoVp9Params = videoVp9Params
+        }
+
+        let videoVp9Params = vp9ProfileId != nil ? ["profile": vp9ProfileId!] : nil
+        configuration.videoVp9Params = videoVp9Params
+
+        let videoAv1Params = av1ProfileId != nil ? ["profile": av1ProfileId!] : nil
+        configuration.videoAv1Params = videoAv1Params
+
+        let videoH264Params = h264ProfileId != nil ? ["profile_level_id": h264ProfileId!] : nil
+        configuration.videoH264Params = videoH264Params
+
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
-            channelId: channelId,
-            role: .sendrecv,
-            multistreamEnabled: true,
-            videoCodec: videoCodec,
-            dataChannelSignaling: dataChannelSignaling,
-            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
+            with: configuration
         ) { [weak self] error in
             // 接続処理が終了したので false にします。
             self?.isConnecting = false
