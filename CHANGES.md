@@ -11,6 +11,19 @@
 
 ## develop
 
+- [ADD] DataChannelSample の映像コーデックに AV1 を追加する
+    - @miosakuma
+- [ADD] DecoStreamingSample の映像コーデックに AV1 を追加する
+    - @miosakuma
+- [ADD] ScreenCastSample の映像コーデックに AV1 を追加する
+    - @miosakuma
+- [ADD] SimulcastSample の映像コーデックに VP9 と AV1 を追加する
+    - @miosakuma
+- [ADD] VideoChatSample の映像コーデックに AV1 を追加する
+    - @miosakuma
+- [ADD] VideoChatSample に映像コーデックプロファイル設定を追加する
+    - @miosakuma
+
 ## sora-ios-sdk-2023.1.0
 
 - [CHANGE] システム条件を変更する
