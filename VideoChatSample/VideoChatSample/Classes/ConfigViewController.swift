@@ -21,46 +21,7 @@ class ConfigViewController: UITableViewController {
 
     @IBOutlet var av1ProfileIdSegmentedControl: UISegmentedControl!
 
-    @IBOutlet var h264ProfileLevelIdPopup: UIButton!
-
-    enum H264ProfileLevelId: CaseIterable {
-        case id_none
-        case id_42e01f
-        case id_42e020
-        case id_42e034
-
-        var title: String {
-            switch self {
-            case .id_none:
-                return "none"
-            case .id_42e01f:
-                return "42e01f"
-            case .id_42e020:
-                return "42e020"
-            case .id_42e034:
-                return "42e034"
-            }
-        }
-    }
-
-    private var selectedMenuType = H264ProfileLevelId.id_none
-
-    private func configureH264ProfileLevelIdPopupMenu() {
-        let actions = H264ProfileLevelId.allCases
-            .compactMap { type in
-                UIAction(
-                    title: type.title,
-                    state: type == selectedMenuType ? .on : .off,
-                    handler: { _ in
-                        self.selectedMenuType = type
-                        self.configureH264ProfileLevelIdPopupMenu()
-                    }
-                )
-            }
-        h264ProfileLevelIdPopup.menu = UIMenu(title: "", options: .displayInline, children: actions)
-        h264ProfileLevelIdPopup.showsMenuAsPrimaryAction = true
-        h264ProfileLevelIdPopup.setTitle(selectedMenuType.title, for: .normal)
-    }
+    @IBOutlet var h264ProfileLevelIdTextField: UITextField!
 
     /// 接続試行中かどうかを表します。
     var isConnecting = false
@@ -70,8 +31,8 @@ class ConfigViewController: UITableViewController {
      */
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureH264ProfileLevelIdPopupMenu()
         channelIdTextField.text = Environment.channelId
+        h264ProfileLevelIdTextField.text = ""
     }
 
     /**
@@ -142,7 +103,7 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        let h264ProfileId = (h264ProfileLevelIdPopup.menu?.selectedElements[0].title == "none") ? nil : h264ProfileLevelIdPopup.menu?.selectedElements[0].title
+        let h264ProfileLevelId = h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
         var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv, multistreamEnabled: true)
         configuration.videoCodec = videoCodec
         configuration.dataChannelSignaling = dataChannelSignaling
@@ -154,7 +115,7 @@ class ConfigViewController: UITableViewController {
         let videoAv1Params = av1ProfileId != nil ? ["profile": av1ProfileId!] : nil
         configuration.videoAv1Params = videoAv1Params
 
-        let videoH264Params = h264ProfileId != nil ? ["profile_level_id": h264ProfileId!] : nil
+        let videoH264Params = h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
         configuration.videoH264Params = videoH264Params
 
         // 入力された設定を元にSoraへ接続を行います。

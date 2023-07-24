@@ -257,16 +257,19 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ac5-Eg-E5R" userLabel="H264Profile Level Id Popup">
-                                                    <rect key="frame" x="313" y="7" width="46" height="30"/>
-                                                    <state key="normal" title="Button"/>
-                                                </button>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="42e01f" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="mw9-oG-2hI" userLabel="H.264 Profile Level ID">
+                                                    <rect key="frame" x="150" y="11" width="209" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="jm9-eS-8vq" firstAttribute="centerY" secondItem="JtU-Hu-tGF" secondAttribute="centerY" id="8pW-8Z-W7Q"/>
+                                                <constraint firstItem="mw9-oG-2hI" firstAttribute="centerY" secondItem="JtU-Hu-tGF" secondAttribute="centerY" id="Ive-PF-FNa"/>
                                                 <constraint firstItem="jm9-eS-8vq" firstAttribute="leading" secondItem="JtU-Hu-tGF" secondAttribute="leadingMargin" id="JZX-J6-EwF"/>
                                                 <constraint firstItem="jm9-eS-8vq" firstAttribute="top" secondItem="JtU-Hu-tGF" secondAttribute="top" id="Ys5-el-rgG"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Ac5-Eg-E5R" secondAttribute="trailing" id="zLC-Iy-7M4"/>
+                                                <constraint firstItem="mw9-oG-2hI" firstAttribute="leading" relation="lessThanOrEqual" secondItem="jm9-eS-8vq" secondAttribute="trailing" constant="12" id="e7O-Gm-foV"/>
+                                                <constraint firstItem="mw9-oG-2hI" firstAttribute="trailing" secondItem="JtU-Hu-tGF" secondAttribute="trailingMargin" id="gNJ-GH-w5g"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -307,7 +310,7 @@
                         <outlet property="av1ProfileIdSegmentedControl" destination="Dr3-pY-7YN" id="L8b-ua-igw"/>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
-                        <outlet property="h264ProfileLevelIdPopup" destination="Ac5-Eg-E5R" id="CQU-cl-S1B"/>
+                        <outlet property="h264ProfileLevelIdTextField" destination="mw9-oG-2hI" id="sPB-Iw-Lzn"/>
                         <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <outlet property="vp9ProfileIdSegmentedControl" destination="Z2i-ih-FxO" id="Ibx-Tx-Aah"/>
