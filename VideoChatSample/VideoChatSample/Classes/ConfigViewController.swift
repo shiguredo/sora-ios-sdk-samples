@@ -148,12 +148,7 @@ class ConfigViewController: UITableViewController {
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
-        if vp9ProfileId != nil {
-            let videoVp9Params: Encodable = ["profile_id": 1]
-            configuration.videoVp9Params = videoVp9Params
-        }
-
-        let videoVp9Params = vp9ProfileId != nil ? ["profile": vp9ProfileId!] : nil
+        let videoVp9Params = vp9ProfileId != nil ? ["profile_id": vp9ProfileId!] : nil
         configuration.videoVp9Params = videoVp9Params
 
         let videoAv1Params = av1ProfileId != nil ? ["profile": av1ProfileId!] : nil
