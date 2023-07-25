@@ -221,7 +221,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Dr3-pY-7YN" userLabel="AV1 Profile ID Segmented Control">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Dr3-pY-7YN" userLabel="AV1 Profile Segmented Control">
                                                     <rect key="frame" x="160" y="6.5" width="199" height="32"/>
                                                     <segments>
                                                         <segment title="none"/>
@@ -307,7 +307,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
                     <connections>
-                        <outlet property="av1ProfileIdSegmentedControl" destination="Dr3-pY-7YN" id="L8b-ua-igw"/>
+                        <outlet property="av1ProfileSegmentedControl" destination="Dr3-pY-7YN" id="L8b-ua-igw"/>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
                         <outlet property="h264ProfileLevelIdTextField" destination="mw9-oG-2hI" id="sPB-Iw-Lzn"/>

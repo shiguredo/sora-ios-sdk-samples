@@ -19,7 +19,7 @@ class ConfigViewController: UITableViewController {
 
     @IBOutlet var vp9ProfileIdSegmentedControl: UISegmentedControl!
 
-    @IBOutlet var av1ProfileIdSegmentedControl: UISegmentedControl!
+    @IBOutlet var av1ProfileSegmentedControl: UISegmentedControl!
 
     @IBOutlet var h264ProfileLevelIdTextField: UITextField!
 
@@ -94,12 +94,12 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        let av1ProfileId: Int?
-        switch av1ProfileIdSegmentedControl.selectedSegmentIndex {
-        case 0: av1ProfileId = nil
-        case 1: av1ProfileId = 0
-        case 2: av1ProfileId = 1
-        case 3: av1ProfileId = 2
+        let av1Profile: Int?
+        switch av1ProfileSegmentedControl.selectedSegmentIndex {
+        case 0: av1Profile = nil
+        case 1: av1Profile = 0
+        case 2: av1Profile = 1
+        case 3: av1Profile = 2
         default: fatalError()
         }
 
@@ -112,7 +112,7 @@ class ConfigViewController: UITableViewController {
         let videoVp9Params = vp9ProfileId != nil ? ["profile_id": vp9ProfileId!] : nil
         configuration.videoVp9Params = videoVp9Params
 
-        let videoAv1Params = av1ProfileId != nil ? ["profile": av1ProfileId!] : nil
+        let videoAv1Params = av1Profile != nil ? ["profile": av1Profile!] : nil
         configuration.videoAv1Params = videoAv1Params
 
         let videoH264Params = h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
