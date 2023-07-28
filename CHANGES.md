@@ -22,6 +22,12 @@
 - [ADD] VideoChatSample の映像コーデックに AV1 を追加する
     - @miosakuma
 - [ADD] VideoChatSample に映像コーデックプロファイル設定を追加する
+- [CHANGE] システム条件を変更する
+    - macOS 13.4.1 以降
+    - Xcode 14.3.1
+    - Swift 5.8.1
+    - WebRTC SFU Sora 2023.1.0 以降
+    - CocoaPods 1.12.1 以降
     - @miosakuma
 
 ## sora-ios-sdk-2023.1.0
