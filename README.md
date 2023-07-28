@@ -16,7 +16,7 @@ Please read https://github.com/shiguredo/oss before use.
 
 このリポジトリの全てのサンプルアプリは、 [Sora iOS SDK 2022.6.0](https://github.com/shiguredo/sora-ios-sdk/releases/tag/2022.6.0) を使用しています。
 
-- iOS 13 以降
+- iOS 15 以降
 - アーキテクチャ arm64 (シミュレーターの動作は未保証)
 - macOS 13.4.1 以降
 - Xcode 14.3.1
