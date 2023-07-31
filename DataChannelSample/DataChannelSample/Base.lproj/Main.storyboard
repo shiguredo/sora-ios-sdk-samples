@@ -171,12 +171,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jHA-3S-8CN">
-                                                    <rect key="frame" x="162" y="11.5" width="232" height="32"/>
+                                                    <rect key="frame" x="142" y="11.5" width="252" height="32"/>
                                                     <segments>
                                                         <segment title="none"/>
                                                         <segment title="VP9"/>
                                                         <segment title="VP8"/>
-                                                        <segment title="H.264"/>
+                                                        <segment title="H264"/>
                                                         <segment title="AV1"/>
                                                     </segments>
                                                 </segmentedControl>
@@ -194,7 +194,7 @@
                                                 <constraint firstItem="exq-v9-sOL" firstAttribute="leading" secondItem="wuW-MK-FoO" secondAttribute="leadingMargin" id="352-Cx-dhL"/>
                                                 <constraint firstItem="exq-v9-sOL" firstAttribute="centerY" secondItem="jHA-3S-8CN" secondAttribute="centerY" id="JGG-Md-dxr"/>
                                                 <constraint firstAttribute="trailing" secondItem="jHA-3S-8CN" secondAttribute="trailing" constant="20" id="RJO-3N-nuM"/>
-                                                <constraint firstItem="jHA-3S-8CN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="exq-v9-sOL" secondAttribute="trailing" constant="20" id="afJ-ke-f4T"/>
+                                                <constraint firstItem="jHA-3S-8CN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="exq-v9-sOL" secondAttribute="trailing" id="afJ-ke-f4T"/>
                                                 <constraint firstItem="jHA-3S-8CN" firstAttribute="centerY" secondItem="wuW-MK-FoO" secondAttribute="centerY" id="tGp-3e-Ezm"/>
                                             </constraints>
                                         </tableViewCellContentView>
