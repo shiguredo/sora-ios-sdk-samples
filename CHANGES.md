@@ -25,7 +25,7 @@
     - @miosakuma
 - [ADD] VideoChatSample に映像コーデックプロファイル設定を追加する
     - @miosakuma
-- [CHANGE] システム条件を変更する
+- [UPDATE] システム条件を変更する
     - macOS 13.4.1 以降
     - Xcode 14.3.1
     - Swift 5.8.1
@@ -38,7 +38,7 @@
 
 ## sora-ios-sdk-2023.1.0
 
-- [CHANGE] システム条件を変更する
+- [UPDATE] システム条件を変更する
     - macOS 13.3 以降
     - Xcode 14.3
     - Swift 5.8
