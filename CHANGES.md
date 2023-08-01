@@ -15,6 +15,8 @@
     - @miosakuma
 - [ADD] DecoStreamingSample の映像コーデックに AV1 を追加する
     - @miosakuma
+- [ADD] ScreenCastSample の映像コーデックに AV1 を追加する
+    - @miosakuma
 - [ADD] SimulcastSample の映像コーデックに VP9 と AV1 を追加する
     - @miosakuma
 - [ADD] VideoChatSample の映像コーデックに AV1 を追加する
