@@ -5,7 +5,7 @@ platform :ios, '13.0'
 
 target 'DataChannelSample' do
   use_frameworks!
-  pod 'Sora', '2023.1.0'
+  pod 'Sora', '2023.2.0'
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
 end

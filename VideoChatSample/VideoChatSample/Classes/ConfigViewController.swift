@@ -17,6 +17,12 @@ class ConfigViewController: UITableViewController {
     /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
+    @IBOutlet var vp9ProfileIdSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var av1ProfileSegmentedControl: UISegmentedControl!
+
+    @IBOutlet var h264ProfileLevelIdTextField: UITextField!
+
     /// 接続試行中かどうかを表します。
     var isConnecting = false
 
@@ -25,8 +31,8 @@ class ConfigViewController: UITableViewController {
      */
     override func viewDidLoad() {
         super.viewDidLoad()
-
         channelIdTextField.text = Environment.channelId
+        h264ProfileLevelIdTextField.text = ""
     }
 
     /**
@@ -37,7 +43,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 3, indexPath.row == 0 else {
+        guard indexPath.section == 4, indexPath.row == 0 else {
             return
         }
 
@@ -59,6 +65,7 @@ class ConfigViewController: UITableViewController {
         case 1: videoCodec = .vp9
         case 2: videoCodec = .vp8
         case 3: videoCodec = .h264
+        case 4: videoCodec = .av1
         default: fatalError()
         }
 
@@ -78,16 +85,44 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
+        let vp9ProfileId: Int?
+        switch vp9ProfileIdSegmentedControl.selectedSegmentIndex {
+        case 0: vp9ProfileId = nil
+        case 1: vp9ProfileId = 0
+        case 2: vp9ProfileId = 1
+        case 3: vp9ProfileId = 2
+        default: fatalError()
+        }
+
+        let av1Profile: Int?
+        switch av1ProfileSegmentedControl.selectedSegmentIndex {
+        case 0: av1Profile = nil
+        case 1: av1Profile = 0
+        case 2: av1Profile = 1
+        case 3: av1Profile = 2
+        default: fatalError()
+        }
+
+        let h264ProfileLevelId = h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
+        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv, multistreamEnabled: true)
+        configuration.videoCodec = videoCodec
+        configuration.dataChannelSignaling = dataChannelSignaling
+        configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+
+        let videoVp9Params = vp9ProfileId != nil ? ["profile_id": vp9ProfileId!] : nil
+        configuration.videoVp9Params = videoVp9Params
+
+        let videoAv1Params = av1Profile != nil ? ["profile": av1Profile!] : nil
+        configuration.videoAv1Params = videoAv1Params
+
+        let videoH264Params = h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
+        configuration.videoH264Params = videoH264Params
+
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
         SoraSDKManager.shared.connect(
-            channelId: channelId,
-            role: .sendrecv,
-            multistreamEnabled: true,
-            videoCodec: videoCodec,
-            dataChannelSignaling: dataChannelSignaling,
-            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
+            with: configuration
         ) { [weak self] error in
             // 接続処理が終了したので false にします。
             self?.isConnecting = false

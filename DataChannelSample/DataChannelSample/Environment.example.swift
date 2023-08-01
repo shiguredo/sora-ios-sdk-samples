@@ -6,7 +6,7 @@ import Foundation
  */
 enum Environment {
     // Sora SDKの接続先URL。複数指定可能
-    static let urlCandidates: [URL] = [URL(string: "wss://sora.example.com/signaling")!]
+    static let urls: [URL] = [URL(string: "wss://sora.example.com/signaling")!]
 
     // チャネル ID
     static let channelId = "sora"

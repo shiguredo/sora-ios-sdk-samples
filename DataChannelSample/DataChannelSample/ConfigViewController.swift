@@ -117,6 +117,7 @@ class ConfigViewController: UITableViewController {
         case 1: videoCodec = .vp9
         case 2: videoCodec = .vp8
         case 3: videoCodec = .h264
+        case 4: videoCodec = .av1
         default: fatalError()
         }
 
@@ -192,7 +193,7 @@ class ConfigViewController: UITableViewController {
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
-        var configuration = Configuration(urlCandidates: Environment.urlCandidates, channelId: channelId, role: role, multistreamEnabled: multistreamEnabledSwitch.isOn)
+        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: role, multistreamEnabled: multistreamEnabledSwitch.isOn)
         configuration.videoEnabled = videoEnabledSwitch.isOn
         configuration.videoCodec = videoCodec
         configuration.audioEnabled = audioEnabledSwitch.isOn
