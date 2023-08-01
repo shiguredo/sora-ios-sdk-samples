@@ -132,7 +132,6 @@
                                                         <segment title="VP9"/>
                                                         <segment title="VP8"/>
                                                         <segment title="H.264"/>
-                                                        <segment title="AV1"/>
                                                     </segments>
                                                 </segmentedControl>
                                             </subviews>
