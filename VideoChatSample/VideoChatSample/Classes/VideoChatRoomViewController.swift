@@ -7,6 +7,7 @@ import UIKit
 class VideoChatRoomViewController: UIViewController {
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
     private var downstreamVideoViews: [VideoView] = []
+    private var isSpeaker = false
 
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
@@ -243,6 +244,11 @@ extension VideoChatRoomViewController {
                 NSLog("[sample] " + error.localizedDescription)
             }
         }
+    }
+
+    @IBAction func onSpeakerButton(_ sender: UIBarButtonItem) {
+        isSpeaker.toggle()
+        SoraSDKManager.shared.turnSpeaker(isSpeaker)
     }
 
     /**

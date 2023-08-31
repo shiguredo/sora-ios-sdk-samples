@@ -340,11 +340,18 @@
                                 <action selector="onExitButton:" destination="iOn-KG-Rc0" id="BTN-MB-Pnp"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="2aw-lv-VLe">
-                            <connections>
-                                <action selector="onCameraButton:" destination="iOn-KG-Rc0" id="kFJ-KT-eJM"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="camera" id="2aw-lv-VLe">
+                                <connections>
+                                    <action selector="onCameraButton:" destination="iOn-KG-Rc0" id="kFJ-KT-eJM"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="🔈" id="MAk-Yr-6cO">
+                                <connections>
+                                    <action selector="onSpeakerButton:" destination="iOn-KG-Rc0" id="d8o-uT-Ci2"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>

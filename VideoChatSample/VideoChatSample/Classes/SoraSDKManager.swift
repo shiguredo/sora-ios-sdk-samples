@@ -51,6 +51,25 @@ class SoraSDKManager {
         }
     }
 
+    //
+    func turnSpeaker(_ isSpeaker: Bool) {
+        if isSpeaker {
+            switch Sora.shared.setAudioMode(.voiceChat(output: .speaker)) {
+            case .success:
+                NSLog("[sample] Suceeded to change to speaker on")
+            case let .failure(error):
+                NSLog("[sample] Failed to change to speaker on: \(error.localizedDescription)")
+            }
+        } else {
+            switch Sora.shared.setAudioMode(.voiceChat(output: .default)) {
+            case .success:
+                NSLog("[sample] Suceeded to change to speaker off")
+            case let .failure(error):
+                NSLog("[sample] Failed to change to speaker off: \(error.localizedDescription)")
+            }
+        }
+    }
+
     /**
      既に接続済みのmediaChannelから切断します。
 
