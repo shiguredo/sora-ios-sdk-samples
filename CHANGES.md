@@ -11,6 +11,10 @@
 
 ## develop
 
+- [UPDATE] SwiftLint, SwiftFormat/CLI を一時的にコメントアウトする
+    - SwiftLint, SwiftFormat/CLI が Swift Swift 5.9 に対応できていないため
+    - 対応が完了したら戻す
+    - @miosakuma
 - [FIX] VideoChatSample で signalingConnectMetadata が設定できない不具合を修正
     - @miosakuma
 
