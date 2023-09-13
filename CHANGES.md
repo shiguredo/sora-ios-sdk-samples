@@ -11,6 +11,8 @@
 
 ## develop
 
+## sora-ios-sdk-2023.3.0
+
 - [UPDATE] SwiftLint, SwiftFormat/CLI を一時的にコメントアウトする
     - SwiftLint, SwiftFormat/CLI が Swift Swift 5.9 に対応できていないため
     - 対応が完了したら戻す
