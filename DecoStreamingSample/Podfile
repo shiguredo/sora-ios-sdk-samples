@@ -5,8 +5,9 @@ platform :ios, '13.0'
 
 target 'DecoStreamingSample' do
   use_frameworks!
-  pod 'Sora', '2023.2.0'
+  pod 'Sora', '2023.3.0'
 
-  pod 'SwiftLint'
-  pod 'SwiftFormat/CLI'
+#  SwiftLint, SwiftFormat/CLI が Swift 5.8 に対応していないため一時的にコメントアウトする
+#  pod 'SwiftLint'
+#  pod 'SwiftFormat/CLI'
 end
