@@ -11,6 +11,9 @@
 
 ## develop
 
+- [FIX] VideoChatSample で signalingConnectMetadata が設定できない不具合を修正
+    - @miosakuma
+
 ## sora-ios-sdk-2023.2.0
 
 - [ADD] DataChannelSample の映像コーデックに AV1 を追加する
