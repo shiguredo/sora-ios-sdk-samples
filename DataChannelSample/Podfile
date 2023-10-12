@@ -5,7 +5,9 @@ platform :ios, '13.0'
 
 target 'DataChannelSample' do
   use_frameworks!
-  pod 'Sora', '2023.3.0'
+  # pod 'Sora', '2023.3.0'
+  # TODO: develop にマージするタイミングで修正する
+  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'feature/h265'
 #  SwiftLint, SwiftFormat/CLI が Swift 5.8 に対応していないため一時的にコメントアウトする
 #  pod 'SwiftLint'
 #  pod 'SwiftFormat/CLI'
