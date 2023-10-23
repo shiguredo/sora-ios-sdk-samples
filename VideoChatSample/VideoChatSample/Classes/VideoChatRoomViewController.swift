@@ -216,9 +216,13 @@ extension VideoChatRoomViewController {
      */
     private func handleDisconnect() {
         // 明示的に配信をストップしてから、画面を閉じるようにしています。
-        SoraSDKManager.shared.disconnect()
+        // SoraSDKManager.shared.disconnect()
         // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-        performSegue(withIdentifier: "Exit", sender: self)
+        // performSegue(withIdentifier: "Exit", sender: self)
+        
+        let audioEnabled = Sora.shared.audioEnabled
+        NSLog("audioEnabled: \(audioEnabled) -> \(!audioEnabled)")
+        Sora.shared.audioEnabled = !audioEnabled
     }
 }
 
