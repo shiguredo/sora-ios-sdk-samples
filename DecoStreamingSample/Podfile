@@ -5,7 +5,7 @@ platform :ios, '13.0'
 
 target 'DecoStreamingSample' do
   use_frameworks!
-  pod 'Sora', '2023.3.1'
+  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'develop'
 
 #  SwiftLint, SwiftFormat/CLI が Swift 5.8 に対応していないため一時的にコメントアウトする
 #  pod 'SwiftLint'
