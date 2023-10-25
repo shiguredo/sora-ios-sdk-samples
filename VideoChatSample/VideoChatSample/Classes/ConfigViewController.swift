@@ -117,7 +117,7 @@ class ConfigViewController: UITableViewController {
 
         let videoH264Params = h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
         configuration.videoH264Params = videoH264Params
-        
+
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
 
         // 入力された設定を元にSoraへ接続を行います。
