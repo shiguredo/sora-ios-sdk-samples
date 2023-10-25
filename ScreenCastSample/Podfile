@@ -7,7 +7,6 @@ target 'ScreenCastSample' do
   use_frameworks!
   pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'develop'
 
-#  SwiftLint, SwiftFormat/CLI が Swift 5.8 に対応していないため一時的にコメントアウトする
-#  pod 'SwiftLint'
-#  pod 'SwiftFormat/CLI'
+  pod 'SwiftLint'
+  pod 'SwiftFormat/CLI'
 end
