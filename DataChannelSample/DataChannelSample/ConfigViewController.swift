@@ -191,6 +191,7 @@ class ConfigViewController: UITableViewController {
 
         SoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
 
+        
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
@@ -205,7 +206,11 @@ class ConfigViewController: UITableViewController {
         configuration.spotlightFocusRid = spotlightFocusRid
         configuration.spotlightUnfocusRid = spotlightUnfocusRid
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
-
+        
+        configuration.videoBitRate = 30000
+        //configuration.cameraSettings = CameraSettings(resolution: .qvga240p, frameRate: 30, position: .back)
+        configuration.cameraSettings = CameraSettings(resolution: .uhd3024p, frameRate: 60, position: .back)
+        //configuration.cameraSettings = CameraSettings(resolution: .uhd2160p, frameRate: 10, position: .back)
         configuration.dataChannelSignaling = true
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
