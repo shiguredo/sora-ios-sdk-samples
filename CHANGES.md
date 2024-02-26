@@ -11,6 +11,16 @@
 
 ## develop
 
+## sora-ios-sdk-2024.1.0
+
+- [UPDATE] システム条件を変更する
+  - macOS 14.3.1 以降
+  - WebRTC SFU Sora 2023.2.0 以降
+  - Xcode 15.2
+  - Swift 5.9.2
+  - CocoaPods 1.15.2 以降
+  - @miosakuma
+
 ## sora-ios-sdk-2023.3.1
 
 - [UPDATE] Sora iOS SDK を 2023.3.1 にあげる

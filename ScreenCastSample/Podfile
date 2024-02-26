@@ -5,9 +5,8 @@ platform :ios, '13.0'
 
 target 'ScreenCastSample' do
   use_frameworks!
-  pod 'Sora', '2023.3.1'
+  pod 'Sora', '2024.1.0'
 
-#  SwiftLint, SwiftFormat/CLI が Swift 5.8 に対応していないため一時的にコメントアウトする
-#  pod 'SwiftLint'
-#  pod 'SwiftFormat/CLI'
+  pod 'SwiftLint'
+  pod 'SwiftFormat/CLI'
 end

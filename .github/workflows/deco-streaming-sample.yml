@@ -58,7 +58,6 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY= \
             PROVISIONING_PROFILE=
-    #  SwiftLint, SwiftFormat/CLI が Swift 5.8 に対応していないため一時的にコメントアウトする
-    #- name: Check uncommitted unformatted code
-    #  run: |
-    #    ./lint-format.sh
+    - name: Check uncommitted unformatted code
+      run: |
+        ../lint-format.sh

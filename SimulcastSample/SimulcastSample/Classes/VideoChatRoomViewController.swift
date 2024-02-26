@@ -13,10 +13,6 @@ class VideoChatRoomViewController: UIViewController {
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
