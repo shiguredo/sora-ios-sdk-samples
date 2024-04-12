@@ -11,6 +11,9 @@
 
 ## develop
 
+- [UPDATE] Github Actions の actions/cache@v4 にあげる
+  - @miosakuma
+
 ## sora-ios-sdk-2024.1.0
 
 - [UPDATE] システム条件を変更する
