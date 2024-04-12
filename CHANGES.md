@@ -15,6 +15,8 @@
   - @miosakuma
 - [UPDATE] Github Actions を macos-14  にあげる
   - @miosakuma
+- [UPDATE] Github Actions を Xcode 15.2, iphoneos17.2 にあげる
+  - @miosakuma
 
 ## sora-ios-sdk-2024.1.0
 
