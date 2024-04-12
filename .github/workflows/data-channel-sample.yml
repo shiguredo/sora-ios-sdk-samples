@@ -57,7 +57,8 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY= \
-            PROVISIONING_PROFILE=
+            PROVISIONING_PROFILE= \
+            ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS=NO
     - name: Check uncommitted unformatted code
       run: |
         ../lint-format.sh
