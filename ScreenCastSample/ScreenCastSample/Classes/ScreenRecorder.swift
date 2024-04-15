@@ -29,7 +29,7 @@ class ScreenRecorder {
     }
 
     func stopCapture() {
-        if let displayLink = displayLink {
+        if let displayLink {
             displayLink.remove(from: RunLoop.main, forMode: RunLoop.Mode.common)
         }
         displayLink = nil

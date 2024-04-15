@@ -17,6 +17,11 @@
   - @miosakuma
 - [UPDATE] Github Actions を Xcode 15.2, iphoneos17.2 にあげる
   - @miosakuma
+- [UPDATE] Github Actions のビルドオプションに `ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS=NO` を追加する
+  - Xcode 15 で Asset のシンボルである、GeneratedAssetSymbols.swift が生成されるようになったがこのファイルが SwiftFormat エラー対象となる
+  - CI では Asset のシンボル生成は不要であるため生成しないようオプション指定を行う
+  - [Xcode 15 リリースノート - Asset Catalogs](https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#Asset-Catalogs)
+  - @miosakuma
 
 ## sora-ios-sdk-2024.1.0
 

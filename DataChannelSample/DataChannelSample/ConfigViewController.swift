@@ -225,7 +225,7 @@ class ConfigViewController: UITableViewController {
             // 接続処理が終了したので false にします。
             self?.isConnecting = false
 
-            if let error = error {
+            if let error {
                 // errorがnilでないばあいは、接続に失敗しています。
                 // この場合は、エラー表示をユーザーに返すのが親切です。
                 // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
