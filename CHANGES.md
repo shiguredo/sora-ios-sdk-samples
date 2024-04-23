@@ -22,6 +22,11 @@
   - CI では Asset のシンボル生成は不要であるため生成しないようオプション指定を行う
   - [Xcode 15 リリースノート - Asset Catalogs](https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#Asset-Catalogs)
   - @miosakuma
+- [UPDATE] システム条件を変更する
+  - macOS 14.4.1 以降
+  - Xcode 15.3
+  - Swift 5.10
+  - @miosakuma
 
 ## sora-ios-sdk-2024.1.0
 
