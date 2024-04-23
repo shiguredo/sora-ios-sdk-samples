@@ -12,7 +12,7 @@ class AVCaptureVideoPreviewView: UIView {
     }
 
     var previewLayer: AVCaptureVideoPreviewLayer {
-        self.layer as! AVCaptureVideoPreviewLayer
+        layer as! AVCaptureVideoPreviewLayer
     }
 
     required init?(coder aDecoder: NSCoder) {

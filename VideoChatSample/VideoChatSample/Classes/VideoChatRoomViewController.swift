@@ -239,7 +239,7 @@ extension VideoChatRoomViewController {
         }
 
         CameraVideoCapturer.flip(current) { error in
-            if let error = error {
+            if let error {
                 NSLog("[sample] " + error.localizedDescription)
             }
         }

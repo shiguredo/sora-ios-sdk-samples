@@ -18,9 +18,9 @@ Please read https://github.com/shiguredo/oss before use.
 
 - iOS 15 以降
 - アーキテクチャ arm64 (シミュレーターの動作は未保証)
-- macOS 14.3.1 以降
-- Xcode 15.2
-- Swift 5.9.2
+- macOS 14.4.1 以降
+- Xcode 15.3
+- Swift 5.10
 - CocoaPods 1.15.2 以降
 - WebRTC SFU Sora 2023.2.0 以降
 
@@ -85,3 +85,5 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+このリポジトリに含まれるすべてのアプリアイコン画像（すべての PNG 形式ファイル）のライセンスは [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ja) です。
