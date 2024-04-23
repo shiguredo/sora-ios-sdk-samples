@@ -11,6 +11,8 @@
 
 ## develop
 
+## sora-ios-sdk-2024.2.0
+
 - [UPDATE] Github Actions を actions/cache@v4 にあげる
   - @miosakuma
 - [UPDATE] Github Actions を macos-14  にあげる
