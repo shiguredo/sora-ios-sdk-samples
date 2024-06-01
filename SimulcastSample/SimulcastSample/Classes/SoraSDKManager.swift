@@ -39,6 +39,7 @@ class SoraSDKManager {
                  simulcastRid: SimulcastRid?,
                  dataChannelSignaling: Bool? = nil,
                  ignoreDisconnectWebSocket: Bool? = nil,
+                 simulcastMulticodec: Bool? = nil,
                  completionHandler: ((Error?) -> Void)?)
     {
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -57,6 +58,7 @@ class SoraSDKManager {
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
+        configuration.simulcastMulticodecEnabled = simulcastMulticodec
 
         // bundle_id を指定します。
         configuration.bundleId = UUID().uuidString

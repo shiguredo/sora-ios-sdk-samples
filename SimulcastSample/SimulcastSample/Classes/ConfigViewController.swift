@@ -29,6 +29,9 @@ class ConfigViewController: UITableViewController {
 
     @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
+    // サイマルキャストマルチコーデックの設定のためのコントロールです。
+    @IBOutlet var simulcastMulticodecControl: UISwitch!
+
     /**
      行がタップされたときの処理を記述します。
      */
@@ -37,7 +40,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 4, indexPath.row == 0 else {
+        guard indexPath.section == 5, indexPath.row == 0 else {
             return
         }
 
@@ -87,6 +90,8 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
+        let simulcastMulticodec = simulcastMulticodecControl.isOn
+
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
@@ -95,7 +100,8 @@ class ConfigViewController: UITableViewController {
             videoCodec: videoCodec,
             simulcastRid: simulcastRid,
             dataChannelSignaling: dataChannelSignaling,
-            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket
+            ignoreDisconnectWebSocket: ignoreDisconnectWebSocket,
+            simulcastMulticodec: simulcastMulticodec
         ) { [weak self] error in
             // 接続処理が終了したので false にします。
             self?.isConnecting = false
