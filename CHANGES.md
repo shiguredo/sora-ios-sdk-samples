@@ -11,6 +11,10 @@
 
 ## develop
 
+- [UPDATE] 各サンプルの libwebrtc のログレベルを RTCLoggingSeverityNone から RTCLoggingSeverityInfo にする
+  - libwebrtc のログを INFO レベルで出力するようにする
+  - @zztkm
+
 ## sora-ios-sdk-2024.2.0
 
 - [UPDATE] Github Actions を actions/cache@v4 にあげる
