@@ -109,6 +109,14 @@ class ConfigViewController: UITableViewController {
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
 
+        // サイマルキャストの設定
+        configuration.simulcastEnabled = true
+        configuration.videoCodec = .vp9
+        configuration.videoBitRate = 15000
+
+        // 解像度、フレームレートの設定
+        configuration.cameraSettings = CameraSettings(resolution: .hd1080p, frameRate: 30)
+
         let videoVp9Params = vp9ProfileId != nil ? ["profile_id": vp9ProfileId!] : nil
         configuration.videoVp9Params = videoVp9Params
 

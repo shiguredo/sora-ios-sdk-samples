@@ -8,6 +8,12 @@ class VideoChatRoomViewController: UIViewController {
     /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
     private var downstreamVideoViews: [VideoView] = []
 
+    /**
+     音量調整の状態を保存するための変数
+     デフォルトは 0.5 で、3.0 と切り替えることで音量調整を行う
+     */
+    private var defaultVolume: Double = 0.5
+
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
 
@@ -26,8 +32,12 @@ class VideoChatRoomViewController: UIViewController {
         // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
         // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
         if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-            mediaChannel.handlers.onAddStream = { [weak self] _ in
+            mediaChannel.handlers.onAddStream = { [weak self] stream in
+                // ダウンストリーム（自分以外）の Stream が追加されたら発火するコールバック
+                // 自分より先に Channel に接続の Stream はここを通らない
                 NSLog("[sample] mediaChannel.handlers.onAddStream")
+                // steamId = Sora の connectionID
+                NSLog("[kensaku] onAddStream \(stream.streamId)")
                 DispatchQueue.main.async {
                     self?.handleUpdateStreams()
                 }
@@ -158,6 +168,7 @@ extension VideoChatRoomViewController {
      接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
      */
     private func handleUpdateStreams() {
+        NSLog("[kensaku]: handleUpdateStreams")
         // まずはmediaPublisherのmediaStreamを取得します。
         guard (SoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
             return
@@ -166,6 +177,7 @@ extension VideoChatRoomViewController {
         // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
         // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
         let upstream = SoraSDKManager.shared.currentMediaChannel?.senderStream
+        // ダウンストリーム = 自分以外のユーザーのストリーム
         let downstreams = SoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
 
         // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
@@ -173,7 +185,9 @@ extension VideoChatRoomViewController {
             // 用意されているVideoViewの数が足りないので、新たに追加します。
             // このとき、VideoView.contentModeを変化させることで、描画モードを調整することができます。
             // 今回は枠に合わせてアスペクト比を保ったまま領域全体を埋めたいので、.scaleAspectFillを指定しています。
-            for _ in downstreams[downstreamVideoViews.count ..< downstreams.count] {
+            for stream in downstreams[downstreamVideoViews.count ..< downstreams.count] {
+                // デフォルト Volume を設定する
+                stream.remoteAudioVolume = defaultVolume
                 let videoView = VideoView()
                 videoView.contentMode = .scaleAspectFill
                 view.addSubview(videoView)
@@ -220,6 +234,47 @@ extension VideoChatRoomViewController {
         // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
         performSegue(withIdentifier: "Exit", sender: self)
     }
+
+    /**
+     ボリューム変更用ボタンです。3.0 と 0.5 を切り替えます
+     ボタンのアイコンは、再生ボタンです
+     */
+    private func handleChangeVolume() {
+        NSLog("[kensaku] handleChangeVolue 実行")
+        // ダウンストリーム = 自分以外のユーザーのストリーム
+        let downstreams = SoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+        // downstreams が空の場合は何もしない
+        guard downstreams.count > 0 else {
+            NSLog("[kensaku] handleChangeVolue: downstreams is empty")
+            return
+        }
+        // 全ての steam に対して音量調整を行う
+        for stream in downstreams {
+            // streamId = Sora の connectionID
+            NSLog("[kensaku] handleChangeVolue: streamId \(stream.streamId)")
+            // 音量調整
+            if stream.remoteAudioVolume == 0.5 {
+                NSLog("[kensaku] handleChangeVolue: volume 0.5 -> 3.0")
+                stream.remoteAudioVolume = 4.0
+            } else {
+                NSLog("[kensaku] handleChangeVolue: volume 3.0 -> 0.5")
+                stream.remoteAudioVolume = 0.5
+            }
+        }
+    }
+
+    /**
+     ミュート切り替え用です
+     他にアイコンがなかったため、ミュートマークは Bookmarks です...
+     */
+    private func handleMute() {
+        let upstream = SoraSDKManager.shared.currentMediaChannel?.senderStream
+        guard let audioEnabled = upstream?.audioEnabled else {
+            return
+        }
+        NSLog("[kensaku] handleMute: audioEnabled to \(!audioEnabled)")
+        upstream?.audioEnabled = !audioEnabled
+    }
 }
 
 // MARK: - Interface Builderのための実装
@@ -251,5 +306,21 @@ extension VideoChatRoomViewController {
      */
     @IBAction func onExitButton(_ sender: UIBarButtonItem) {
         handleDisconnect()
+    }
+
+    /**
+     音量調整切り替えボタン
+     */
+    @IBAction func onConfigButton(_ sender: UIBarButtonItem) {
+        NSLog("kensaku: onConfigButton")
+        handleChangeVolume()
+    }
+
+    /**
+     セルフミュート切り替えボタン
+     */
+    @IBAction func onMuteButton(_ sender: UIBarButtonItem) {
+        NSLog("kensaku: onMuteButton")
+        handleMute()
     }
 }
