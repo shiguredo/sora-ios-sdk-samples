@@ -12,7 +12,7 @@ class VideoChatRoomViewController: UIViewController {
      音量調整の状態を保存するための変数
      デフォルトは 0.5 で、3.0 と切り替えることで音量調整を行う
      */
-    private var defaultVolume: Double = 0.5
+    private var defaultVolume: Double = 1.0
 
     /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
     private var upstreamVideoView: VideoView?
@@ -236,33 +236,8 @@ extension VideoChatRoomViewController {
     }
 
     /**
-     ボリューム変更用ボタンです。3.0 と 0.5 を切り替えます
-     ボタンのアイコンは、再生ボタンです
+     ボリューム変更処理
      */
-    private func handleChangeVolume() {
-        NSLog("[kensaku] handleChangeVolue 実行")
-        // ダウンストリーム = 自分以外のユーザーのストリーム
-        let downstreams = SoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
-        // downstreams が空の場合は何もしない
-        guard downstreams.count > 0 else {
-            NSLog("[kensaku] handleChangeVolue: downstreams is empty")
-            return
-        }
-        // 全ての steam に対して音量調整を行う
-        for stream in downstreams {
-            // streamId = Sora の connectionID
-            NSLog("[kensaku] handleChangeVolue: streamId \(stream.streamId)")
-            // 音量調整
-            if stream.remoteAudioVolume == 0.5 {
-                NSLog("[kensaku] handleChangeVolue: volume 0.5 -> 3.0")
-                stream.remoteAudioVolume = 4.0
-            } else {
-                NSLog("[kensaku] handleChangeVolue: volume 3.0 -> 0.5")
-                stream.remoteAudioVolume = 0.5
-            }
-        }
-    }
-
     private func handleChangeVolume(_ volume: Double) {
         NSLog("[kensaku] handleChangeVolue from Slider 実行")
         // ダウンストリーム = 自分以外のユーザーのストリーム
@@ -273,12 +248,11 @@ extension VideoChatRoomViewController {
             return
         }
         // 全ての steam に対して音量調整を行う
-        for stream in downstreams {
-            // streamId = Sora の connectionID
-            NSLog("[kensaku] handleChangeVolue: streamId \(stream.streamId)")
-            // 音量調整
-            stream.remoteAudioVolume = volume
-        }
+        // downstreams の要素 0 のみ音量調整を行う
+        // streamId = Sora の connectionID
+        NSLog("[kensaku] handleChangeVolue: streamId \(downstreams[0].streamId)")
+        // 音量調整
+        downstreams[0].remoteAudioVolume = volume
     }
 
     /**
@@ -327,14 +301,6 @@ extension VideoChatRoomViewController {
     }
 
     /**
-     音量調整切り替えボタン
-     */
-    @IBAction func onConfigButton(_ sender: UIBarButtonItem) {
-        NSLog("kensaku: onConfigButton")
-        handleChangeVolume()
-    }
-
-    /**
      セルフミュート切り替えボタン
      */
     @IBAction func onMuteButton(_ sender: UIBarButtonItem) {
@@ -342,6 +308,9 @@ extension VideoChatRoomViewController {
         handleMute()
     }
 
+    /**
+     スライダーで入力されたボリュームを設定する
+     */
     @IBAction func onChangeVolume(_ sender: UISlider) {
         NSLog("kensaku: onChangeVolume")
         handleChangeVolume(Double(sender.value))
