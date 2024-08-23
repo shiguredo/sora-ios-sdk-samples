@@ -263,6 +263,24 @@ extension VideoChatRoomViewController {
         }
     }
 
+    private func handleChangeVolume(_ volume: Double) {
+        NSLog("[kensaku] handleChangeVolue from Slider 実行")
+        // ダウンストリーム = 自分以外のユーザーのストリーム
+        let downstreams = SoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+        // downstreams が空の場合は何もしない
+        guard downstreams.count > 0 else {
+            NSLog("[kensaku] handleChangeVolue: downstreams is empty")
+            return
+        }
+        // 全ての steam に対して音量調整を行う
+        for stream in downstreams {
+            // streamId = Sora の connectionID
+            NSLog("[kensaku] handleChangeVolue: streamId \(stream.streamId)")
+            // 音量調整
+            stream.remoteAudioVolume = volume
+        }
+    }
+
     /**
      ミュート切り替え用です
      他にアイコンがなかったため、ミュートマークは Bookmarks です...
@@ -322,5 +340,10 @@ extension VideoChatRoomViewController {
     @IBAction func onMuteButton(_ sender: UIBarButtonItem) {
         NSLog("kensaku: onMuteButton")
         handleMute()
+    }
+
+    @IBAction func onChangeVolume(_ sender: UISlider) {
+        NSLog("kensaku: onChangeVolume")
+        handleChangeVolume(Double(sender.value))
     }
 }

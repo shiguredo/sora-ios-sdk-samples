@@ -322,7 +322,7 @@
             </objects>
             <point key="canvasLocation" x="1016.8" y="165.06746626686657"/>
         </scene>
-        <!--チャット中: channel_id-->
+        <!--Video Chat Room View Controller-->
         <scene sceneID="hlW-Xb-Uw7">
             <objects>
                 <viewController id="iOn-KG-Rc0" customClass="VideoChatRoomViewController" customModule="VideoChatSample" customModuleProvider="target" sceneMemberID="viewController">
@@ -335,12 +335,30 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="チャット中: channel_id" id="WKj-Mi-l5M">
-                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="vg8-NP-zds">
+                    <navigationItem key="navigationItem" id="WKj-Mi-l5M">
+                        <nil key="title"/>
+                        <leftBarButtonItems>
+                            <barButtonItem systemItem="stop" id="vg8-NP-zds">
+                                <connections>
+                                    <action selector="onExitButton:" destination="iOn-KG-Rc0" id="BTN-MB-Pnp"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem style="plain" id="sYz-QB-y3K">
+                                <textField key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" id="aF5-ZU-o51">
+                                    <rect key="frame" x="0.0" y="0.0" width="83" height="34"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <slider key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="10" id="rai-64-jVi">
+                            <rect key="frame" x="55" y="5" width="206" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <connections>
-                                <action selector="onExitButton:" destination="iOn-KG-Rc0" id="BTN-MB-Pnp"/>
+                                <action selector="onChangeVolume:" destination="iOn-KG-Rc0" eventType="valueChanged" id="J0i-d5-uwe"/>
                             </connections>
-                        </barButtonItem>
+                        </slider>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="camera" id="2aw-lv-VLe">
                                 <connections>
@@ -350,11 +368,6 @@
                             <barButtonItem systemItem="play" id="LD9-6g-oFS">
                                 <connections>
                                     <action selector="onConfigButton:" destination="iOn-KG-Rc0" id="8RP-Rp-Php"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem systemItem="bookmarks" id="IH2-OD-WmB">
-                                <connections>
-                                    <action selector="onMuteButton:" destination="iOn-KG-Rc0" id="pwO-lS-Ruc"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
