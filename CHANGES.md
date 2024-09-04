@@ -17,7 +17,12 @@
 - [UPDATE] GitHub Actions の Xcode のバージョンを 15.4 にあげる
   - 合わせて iOS の SDK を iphoneos17.5 にあげる
   - @miosakuma
-  
+- [UPDATE] システム条件を変更する
+  - macOS 14.6.1 以降
+  - Xcode 15.4
+  - WebRTC SFU Sora 2024.1.0 以降
+  - @miosakuma
+
 ## sora-ios-sdk-2024.2.0
 
 - [UPDATE] Github Actions を actions/cache@v4 にあげる
