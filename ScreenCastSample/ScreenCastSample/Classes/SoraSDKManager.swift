@@ -26,6 +26,7 @@ class SoraSDKManager {
         // SDK のログを表示します。
         // 送受信されるシグナリングの内容や接続エラーを確認できます。
         Logger.shared.level = .debug
+        Sora.setWebRTCLogLevel(.info)
     }
 
     /**
