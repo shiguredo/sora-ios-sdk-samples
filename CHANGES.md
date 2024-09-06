@@ -11,6 +11,10 @@
 
 ## develop
 
+## sora-ios-sdk-2024.3.0
+
+**リリース日**: 2024-09-06
+
 - [UPDATE] 各サンプルの libwebrtc のログレベルを RTCLoggingSeverityNone から RTCLoggingSeverityInfo にする
   - libwebrtc のログを INFO レベルで出力するようにする
   - @zztkm
