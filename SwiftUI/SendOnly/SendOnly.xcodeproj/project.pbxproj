@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B301E4C82CA5338900775259 /* Sora in Frameworks */ = {isa = PBXBuildFile; productRef = B301E4C72CA5338900775259 /* Sora */; };
+		B301E4CA2CA5338900775259 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = B301E4C92CA5338900775259 /* WebRTC */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		B301E4AD2CA52C3200775259 /* SendOnly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SendOnly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B301E4C82CA5338900775259 /* Sora in Frameworks */,
+				B301E4CA2CA5338900775259 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = SendOnly;
 			packageProductDependencies = (
+				B301E4C72CA5338900775259 /* Sora */,
+				B301E4C92CA5338900775259 /* WebRTC */,
 			);
 			productName = SendOnly;
 			productReference = B301E4AD2CA52C3200775259 /* SendOnly.app */;
@@ -107,6 +116,9 @@
 			);
 			mainGroup = B301E4A42CA52C3200775259;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B301E4C62CA5338900775259 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B301E4AE2CA52C3200775259 /* Products */;
 			projectDirPath = "";
@@ -265,6 +277,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SendOnly/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = WebRTC;
@@ -295,6 +308,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SendOnly/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = WebRTC;
@@ -339,6 +353,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B301E4C62CA5338900775259 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
+			requirement = {
+				branch = "feature/swiftui-view";
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B301E4C72CA5338900775259 /* Sora */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B301E4C62CA5338900775259 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = Sora;
+		};
+		B301E4C92CA5338900775259 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B301E4C62CA5338900775259 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B301E4A52CA52C3200775259 /* Project object */;
 }
