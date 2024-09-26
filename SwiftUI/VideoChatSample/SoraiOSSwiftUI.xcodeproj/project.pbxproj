@@ -34,9 +34,22 @@
 		B30ADA192CA3AAF700B34FB1 /* SoraiOSSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoraiOSSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B301E48E2CA50B0900775259 /* Exceptions for "SoraiOSSwiftUI" folder in "SoraiOSSwiftUI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AppEnvironment.example.swift,
+			);
+			target = B30AD9FE2CA3AAF600B34FB1 /* SoraiOSSwiftUI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B30ADA012CA3AAF600B34FB1 /* SoraiOSSwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B301E48E2CA50B0900775259 /* Exceptions for "SoraiOSSwiftUI" folder in "SoraiOSSwiftUI" target */,
+			);
 			path = SoraiOSSwiftUI;
 			sourceTree = "<group>";
 		};
