@@ -19,6 +19,7 @@ struct ContentView: View {
             ZStack {
                 Video(senderStream)
                     .videoAspect(.fill)
+                    .ignoresSafeArea()
                 // この中の要素は画面下に寄せる
                 VStack {
                     Spacer()
