@@ -77,18 +77,6 @@ struct ContentView: View {
             multistreamEnabled: true)
         config.signalingConnectMetadata = AppEnvironment.signalingConnectMetadata
 
-        config.mediaChannelHandlers.onConnect = { error in
-            if let error = error {
-                self.connectionError = error
-                self.showsAlert = true
-                self.connectionState = .disconnected // 接続に失敗したので、状態を切断中に更新
-                print("Error: \(error)")
-            } else {
-                self.senderStream = self.mediaChannel?.senderStream
-                self.connectionState = .connected
-            }
-        }
-
         _ = Sora.shared.connect(configuration: config) { mediaChannel, error in
             if let error = error {
                 connectionError = error
@@ -97,6 +85,8 @@ struct ContentView: View {
                 print("Error: \(error)")
             } else {
                 self.mediaChannel = mediaChannel
+                senderStream = self.mediaChannel?.senderStream
+                connectionState = .connected
             }
         }
     }
