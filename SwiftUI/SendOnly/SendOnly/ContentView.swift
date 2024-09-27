@@ -1,18 +1,23 @@
 import SwiftUI
 import Sora
 
+import SwiftUI
+import Sora
+
+// 接続状態
+enum ConnectionState {
+    case connecting // 接続試行
+    case connected // 接続
+    case disconnected //切断
+}
+
 struct ContentView: View {
     @State private var mediaChannel: MediaChannel?
 
     @State private var senderStream: MediaStream?
-    // アラートを表示するための状態管理変数
     @State private var showsAlert = false
-    // 接続時のエラー
     @State private var connectionError: Error?
-    // 接続状態
-    private var isConnected: Bool {
-        mediaChannel?.isAvailable ?? false
-    }
+    @State private var connectionState: ConnectionState = .disconnected // 接続状態を管理
 
     var body: some View {
         VStack {
@@ -20,7 +25,6 @@ struct ContentView: View {
                 Video(senderStream)
                     .videoAspect(.fill)
                     .ignoresSafeArea()
-                // この中の要素は画面下に寄せる
                 VStack {
                     Spacer()
                     HStack {
@@ -29,18 +33,20 @@ struct ContentView: View {
                         } label: {
                             Text("接続")
                                 .font(.title)
-                        }.disabled(isConnected)
+                        }
+                        .disabled(connectionState == .connecting || connectionState == .connected) // 接続試行中 or 接続中は無効化
+
+
                         Button {
                             disconnect()
                         } label: {
                             Text("切断")
                                 .font(.title)
-                        }.disabled(!isConnected)
+                        }
+                        .disabled(connectionState == .connecting || connectionState == .disconnected) // 接続試行中 or 切断中は無効化
                     }
                 }.padding()
-
             }
-            // 何らかのエラー時にアラートを表示します。
             .alert("エラー", isPresented: $showsAlert, actions: {
                 Button("OK") {
                     showsAlert = false
@@ -57,10 +63,12 @@ struct ContentView: View {
     }
 
     func connect() {
-        if isConnected {
+        if connectionState == .connected {
             print("Already connected.")
             return
         }
+
+        connectionState = .connecting // 接続処理中に設定
 
         var config = Configuration(
             urlCandidates: AppEnvironment.urls,
@@ -69,32 +77,32 @@ struct ContentView: View {
             multistreamEnabled: true)
         config.signalingConnectMetadata = AppEnvironment.signalingConnectMetadata
 
-        // mediaChannel のイベントハンドラ
         config.mediaChannelHandlers.onConnect = { error in
-            if error != nil {
+            if let error = error {
                 self.connectionError = error
                 self.showsAlert = true
-                print("Error: \(error!)")
+                self.connectionState = .disconnected // 接続に失敗したので、状態を切断中に更新
+                print("Error: \(error)")
+            } else {
+                self.senderStream = self.mediaChannel?.senderStream
+                self.connectionState = .connected
             }
-            // 接続に成功した場合、senderStream がセットされているので senderStream にセットする
-            self.senderStream = self.mediaChannel?.senderStream
         }
 
-        // Soraに接続を試みます。
         _ = Sora.shared.connect(configuration: config) { mediaChannel, error in
-            // 接続に成功した場合は、mediaChannelに値が返され、errorがnilになります。
-            // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
             if let error = error {
                 connectionError = error
                 showsAlert = true
+                connectionState = .disconnected // 接続失敗したので、状態を切断中に更新
                 print("Error: \(error)")
+            } else {
+                self.mediaChannel = mediaChannel
             }
-            self.mediaChannel = mediaChannel
         }
     }
 
     func disconnect() {
-        if isConnected == false {
+        if connectionState == .disconnected {
             print("Already disconnected.")
             return
         }
@@ -104,6 +112,7 @@ struct ContentView: View {
         mediaChannel.disconnect(error: nil)
         self.mediaChannel = nil
         self.senderStream = nil
+        self.connectionState = .disconnected
     }
 }
 
