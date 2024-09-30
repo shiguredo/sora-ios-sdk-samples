@@ -22,7 +22,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ZStack {
-                Video(senderStream)
+                SwiftUIVideoView(senderStream)
                     .videoAspect(.fill)
                     .ignoresSafeArea()
                 VStack {
