@@ -1,9 +1,6 @@
 import SwiftUI
 import Sora
 
-import SwiftUI
-import Sora
-
 // 接続状態
 enum ConnectionState {
     case connecting // 接続試行
@@ -18,7 +15,6 @@ struct ContentView: View {
     @State private var showsAlert = false
     @State private var connectionError: Error?
     @State private var connectionState: ConnectionState = .disconnected // 接続状態を管理
-
     var body: some View {
         VStack {
             ZStack {
