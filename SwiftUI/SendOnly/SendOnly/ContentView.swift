@@ -15,10 +15,13 @@ struct ContentView: View {
     @State private var showsAlert = false
     @State private var connectionError: Error?
     @State private var connectionState: ConnectionState = .disconnected // 接続状態を管理
+
+    @State private var isVideoStopped: Bool = false // Video描画の停止管理
+
     var body: some View {
         VStack {
             ZStack {
-                SwiftUIVideoView(senderStream)
+                SwiftUIVideoView(senderStream, stopVideo: $isVideoStopped)
                     .videoAspect(.fill)
                     .ignoresSafeArea()
                 VStack {
@@ -40,6 +43,13 @@ struct ContentView: View {
                                 .font(.title)
                         }
                         .disabled(connectionState == .connecting || connectionState == .disconnected) // 接続試行中 or 切断中は無効化
+
+                        Button {
+                            isVideoStopped.toggle()
+                        } label: {
+                            Text("映像表示切替")
+                                .font(.title)
+                        }
                     }
                 }.padding()
             }
