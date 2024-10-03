@@ -23,6 +23,8 @@ struct ContentView: View {
             ZStack {
                 SwiftUIVideoView(senderStream, stopVideo: $isVideoStopped)
                     .videoAspect(.fill)
+                    .videoOnRender(perform: self.videoOnRender)
+                    .connectionMode(.manual) // NOTE: mode によって、view の autoStop 時の挙動が変わる（default: .autoClear
                     .ignoresSafeArea()
                 VStack {
                     Spacer()
@@ -66,6 +68,10 @@ struct ContentView: View {
                 }
             })
         }
+    }
+
+    func videoOnRender(frame: VideoFrame?) -> Void {
+        //print("zztkm: videoOnRender")
     }
 
     func connect() {
