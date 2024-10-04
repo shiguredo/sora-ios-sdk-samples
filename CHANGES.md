@@ -11,6 +11,14 @@
 
 ## develop
 
+- [UPDATE] CocoaPods の platform の設定を 14.0 に上げる
+  - @miosakuma
+- [UPDATE] システム条件を変更する
+  - iOS 14 以降
+  - macOS 15.0 以降
+  - Xcode 16.0
+  - @miosakuma
+
 ## sora-ios-sdk-2024.3.0
 
 **リリース日**: 2024-09-06
