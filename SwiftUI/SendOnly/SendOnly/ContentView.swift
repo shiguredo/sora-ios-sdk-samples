@@ -17,11 +17,16 @@ struct ContentView: View {
     @State private var connectionState: ConnectionState = .disconnected // 接続状態を管理
 
     @State private var isVideoStopped: Bool = false // Video描画の停止管理
+    @State private var isVideoClear: Bool = false // Video描画をクリアして背景を表示させるフラグ
 
     var body: some View {
         VStack {
             ZStack {
-                SwiftUIVideoView(senderStream, stopVideo: $isVideoStopped)
+                SwiftUIVideoView(
+                    senderStream,
+                    isStop: $isVideoStopped,
+                    isClear: $isVideoClear
+                )
                     .videoAspect(.fill)
                     .videoOnRender(perform: self.videoOnRender)
                     .connectionMode(.manual) // NOTE: mode によって、view の autoStop 時の挙動が変わる（default: .autoClear
@@ -48,6 +53,7 @@ struct ContentView: View {
 
                         Button {
                             isVideoStopped.toggle()
+                            isVideoClear.toggle()
                         } label: {
                             Text("映像表示切替")
                                 .font(.title)
