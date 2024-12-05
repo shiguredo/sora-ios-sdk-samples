@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var connectionError: Error?
     @State private var connectionState: ConnectionState = .disconnected // 接続状態を管理
 
+    // connectionMode が manual のときは以下の State で映像制御を実装する必要がある
     @State private var isVideoStopped: Bool = false // Video描画の停止管理
     @State private var isVideoClear: Bool = false // Video描画をクリアして背景を表示させるフラグ
 
@@ -28,7 +29,6 @@ struct ContentView: View {
                     isClear: $isVideoClear
                 )
                     .videoAspect(.fill)
-                    .videoOnRender(perform: self.videoOnRender)
                     .connectionMode(.manual) // NOTE: mode によって、view の autoStop 時の挙動が変わる（default: .autoClear
                     .ignoresSafeArea()
                 VStack {
@@ -52,8 +52,7 @@ struct ContentView: View {
                         .disabled(connectionState == .connecting || connectionState == .disconnected) // 接続試行中 or 切断中は無効化
 
                         Button {
-                            isVideoStopped.toggle()
-                            isVideoClear.toggle()
+                            toggleVideo()
                         } label: {
                             Text("映像表示切替")
                                 .font(.title)
@@ -74,10 +73,6 @@ struct ContentView: View {
                 }
             })
         }
-    }
-
-    func videoOnRender(frame: VideoFrame?) -> Void {
-        //print("zztkm: videoOnRender")
     }
 
     func connect() {
@@ -121,6 +116,11 @@ struct ContentView: View {
         self.mediaChannel = nil
         self.senderStream = nil
         self.connectionState = .disconnected
+    }
+
+    func toggleVideo() {
+        isVideoStopped.toggle()
+        isVideoClear.toggle()
     }
 }
 
