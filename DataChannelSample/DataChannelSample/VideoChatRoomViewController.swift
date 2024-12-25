@@ -49,6 +49,9 @@ class VideoChatRoomViewController: UIViewController {
      */
     var binaryToSend: Data?
 
+    /// dataChannels の label ごとにヘッダーの長さを保持するための変数
+    var headerLengths: [String: Int] = [:]
+
     override func viewDidLoad() {
         historyTableView.delegate = self
         historyTableView.dataSource = self
@@ -90,6 +93,40 @@ class VideoChatRoomViewController: UIViewController {
             labelPopUpButton.showsMenuAsPrimaryAction = true
             selectedLabel = menuElements[0].title
 
+            // offer で入ってくる data channel header の長さを取得する
+            mediaChannel.handlers.onReceiveSignaling = { [weak self] signaling in
+                guard let self else {
+                    return
+                }
+                print("kensaku: \(signaling)")
+                switch signaling {
+                case let .offer(offer):
+                    print("kensaku: offer を処理する")
+                    guard let dataChannels = offer.dataChannels else {
+                        return
+                    }
+                    print("kensaku: dataChannels を処理する")
+                    for dataChannel in dataChannels {
+                        // ラベルが "#" で始まる場合のみ処理する
+                        let label: String = dataChannel["label"] as! String
+                        guard label.starts(with: "#") else {
+                            continue
+                        }
+
+                        print("kensaku: \(label)")
+                        let headers: [[String: Any]] = dataChannel["header"] as! [[String: Any]]
+                        for header in headers {
+                            if header["type"] as! String == "sender_connection_id" {
+                                let lenght = header["length"] as! Double
+                                headerLengths[label] = Int(lenght)
+                                print("kensaku: \(label) \(Int(lenght))")
+                            }
+                        }
+                    }
+                default:
+                    break
+                }
+            }
             // メッセージ受信時の挙動を定義します。
             mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
                 guard let weakSelf = self else {
@@ -101,9 +138,14 @@ class VideoChatRoomViewController: UIViewController {
                     return
                 }
 
+                // ヘッダーの長さを取得し、ヘッダーとメッセージを分離します
+                let headerLength = weakSelf.headerLengths[label] ?? 0
+                let header = data.prefix(headerLength)
+                let message = data.suffix(from: headerLength)
+
                 // 受信したメッセージを履歴に追加して画面を更新します。
                 DispatchQueue.main.async {
-                    weakSelf.history.append(ChatMessage(label: label, data: data))
+                    weakSelf.history.append(ChatMessage(label: label, data: message))
                     weakSelf.updateHistoryTableView()
                 }
             }

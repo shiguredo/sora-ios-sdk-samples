@@ -217,6 +217,7 @@ class ConfigViewController: UITableViewController {
             if !dataChannelProtocolNoSendSwitch.isOn {
                 dataChannel["protocol"] = dataChannelProtocolTextField.text
             }
+            dataChannel["header"] = [["type": "sender_connection_id"]]
             dataChannels.append(dataChannel)
         }
         configuration.dataChannels = dataChannels
