@@ -53,6 +53,7 @@ class PublisherConfigViewController: UITableViewController {
         case 2: videoCodec = .vp8
         case 3: videoCodec = .h264
         case 4: videoCodec = .av1
+        case 5: videoCodec = .h265
         default: fatalError()
         }
 

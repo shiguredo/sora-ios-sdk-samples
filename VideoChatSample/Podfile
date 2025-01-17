@@ -5,8 +5,7 @@ platform :ios, '14.0'
 
 target 'VideoChatSample' do
   use_frameworks!
-  # pod 'Sora', '2024.3.0'
-  pod 'Sora', :git => 'https://github.com/shiguredo/sora-ios-sdk.git', :branch => 'develop'
+  pod 'Sora', '2024.3.0'
 
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
