@@ -64,8 +64,8 @@ class ConfigViewController: UITableViewController {
         case 0: videoCodec = .default
         case 1: videoCodec = .vp9
         case 2: videoCodec = .vp8
-        case 3: videoCodec = .h264
-        case 4: videoCodec = .av1
+        case 3: videoCodec = .av1
+        case 4: videoCodec = .h264
         case 5: videoCodec = .h265
         default: fatalError()
         }

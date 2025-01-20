@@ -176,8 +176,9 @@
                                                         <segment title="none"/>
                                                         <segment title="VP9"/>
                                                         <segment title="VP8"/>
-                                                        <segment title="H264"/>
                                                         <segment title="AV1"/>
+                                                        <segment title="H264"/>
+                                                        <segment title="H265"/>
                                                     </segments>
                                                 </segmentedControl>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="映像コーデック" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="exq-v9-sOL">
