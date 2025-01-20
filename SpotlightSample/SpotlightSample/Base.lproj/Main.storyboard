@@ -76,6 +76,7 @@
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jHA-3S-8CN">
                                                     <rect key="frame" x="20" y="6.5" width="335" height="32"/>
                                                     <segments>
+                                                        <segment title="none"/>
                                                         <segment title="VP8"/>
                                                         <segment title="VP9"/>
                                                         <segment title="AV1"/>
