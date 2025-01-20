@@ -18,6 +18,11 @@
   - macOS 15.0 以降
   - Xcode 16.0
   - @miosakuma
+- [UPDATE] 映像コーデックタイプの並び順を変更する
+  - VP8 / VP9 / AV1 / H.264/ H.265 の順番になるように変更
+  - @zztkm
+- [ADD] 映像コーデックタイプに H.265 を追加する
+  - @zztkm
 
 ## sora-ios-sdk-2024.3.0
 
