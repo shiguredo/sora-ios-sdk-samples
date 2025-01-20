@@ -87,7 +87,7 @@ class ConfigViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         // 選択された行が「接続」ボタンでない限り無視します。
-        guard indexPath.section == 5, indexPath.row == 0 else {
+        guard indexPath.section == 6, indexPath.row == 0 else {
             return
         }
 
