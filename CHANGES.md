@@ -23,6 +23,9 @@
   - @zztkm
 - [ADD] 映像コーデックタイプに H.265 を追加する
   - @zztkm
+- [ADD] 映像コーデックタイプに none を追加する
+  - `SimulcastSample` と `SpotlightSample` に追加
+  - @zztkm
 
 ## sora-ios-sdk-2024.3.0
 
