@@ -11,6 +11,10 @@
 
 ## develop
 
+## sora-ios-sdk-2025.1.0
+
+**リリース日**: 2025-01-21
+
 - [UPDATE] CocoaPods の platform の設定を 14.0 に上げる
   - @miosakuma
 - [UPDATE] システム条件を変更する
