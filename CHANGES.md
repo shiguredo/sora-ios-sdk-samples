@@ -11,6 +11,25 @@
 
 ## develop
 
+## sora-ios-sdk-2025.1.0
+
+**リリース日**: 2025-01-21
+
+- [UPDATE] CocoaPods の platform の設定を 14.0 に上げる
+  - @miosakuma
+- [UPDATE] システム条件を変更する
+  - iOS 14 以降
+  - macOS 15.0 以降
+  - Xcode 16.0
+  - @miosakuma
+- [UPDATE] 映像コーデックタイプの並び順を変更する
+  - VP8 / VP9 / AV1 / H.264/ H.265 の順番になるように変更
+  - @zztkm
+- [ADD] 映像コーデックタイプに H.265 を追加する
+  - @zztkm
+- [ADD] none 項目がなかった `SimulcastSample` と `SpotlightSample` に none を追加
+  - @zztkm
+
 ## sora-ios-sdk-2024.3.0
 
 **リリース日**: 2024-09-06
