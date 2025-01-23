@@ -11,6 +11,13 @@
 
 ## develop
 
+## sora-ios-sdk-2025.1.1
+
+**リリース日**: 2025-01-23
+
+- [UPDATE] Sora iOS SDK を 2025.1.1 にあげる
+  - @miosakuma
+
 ## sora-ios-sdk-2025.1.0
 
 **リリース日**: 2025-01-21
