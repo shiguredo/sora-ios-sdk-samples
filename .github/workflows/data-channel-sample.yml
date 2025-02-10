@@ -13,10 +13,10 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
     env:
-      XCODE: /Applications/Xcode_15.4.app
-      XCODE_SDK: iphoneos17.5
+      XCODE: /Applications/Xcode_16.2.app
+      XCODE_SDK: iphoneos18.2
       WORKSPACE: DataChannelSample
       SCHEME: DataChannelSample
     steps:

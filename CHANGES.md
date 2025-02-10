@@ -13,6 +13,11 @@
 
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
+- [UPDATE] GitHub Actions のビルド環境を更新する
+  - runner を macos-15 に変更
+  - Xcode の version を 16.2 に変更
+  - SDK を iOS 18.2 に変更
+  - @zztkm
 
 ## sora-ios-sdk-2025.1.1
 
