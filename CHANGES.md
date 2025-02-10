@@ -11,6 +11,8 @@
 
 ## develop
 
+### misc
+
 - [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
   - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
   - swift-format 用設定ファイル `.swift-format` を追加
