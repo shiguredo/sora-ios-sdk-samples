@@ -11,6 +11,9 @@
 
 ## develop
 
+- [UPDATE] GitHub Actions の定期実行をやめる
+  - @zztkm
+
 ## sora-ios-sdk-2025.1.1
 
 **リリース日**: 2025-01-23

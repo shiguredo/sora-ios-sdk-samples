@@ -10,8 +10,6 @@ on:
     - 'README.md'
     - 'CHANGES.md'
     - 'LICENSE'
-  schedule:
-  - cron: "0 0 * * *"
 
 jobs:
   build:
