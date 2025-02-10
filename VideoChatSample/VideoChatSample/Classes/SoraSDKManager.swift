@@ -1,11 +1,9 @@
 import Foundation
 import Sora
 
-/**
- Sora SDK関連の、アプリケーション全体で共通して行いたい処理を行うシングルトン・マネージャ・クラスです。
-
- このようなクラスを用意しておくと、Sora SDKのConnectionをアプリケーション全体で一つだけ確実に管理する事が可能になるため、おすすめです。
- */
+/// Sora SDK関連の、アプリケーション全体で共通して行いたい処理を行うシングルトン・マネージャ・クラスです。
+///
+/// このようなクラスを用意しておくと、Sora SDKのConnectionをアプリケーション全体で一つだけ確実に管理する事が可能になるため、おすすめです。
 class SoraSDKManager {
     /**
      SoraSDKManagerのシングルトンインスタンスです。
@@ -35,9 +33,10 @@ class SoraSDKManager {
      既に接続されており、currentMediaChannelが設定されている場合は新たに接続ができないようにしてあります。
      その場合は、一旦先に `disconnect()` を呼び出して、現在の接続を終了してください。
      */
-    func connect(with configuration: Configuration,
-                 completionHandler: ((Error?) -> Void)?)
-    {
+    func connect(
+        with configuration: Configuration,
+        completionHandler: ((Error?) -> Void)?
+    ) {
         // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
         guard currentMediaChannel == nil else {
             return
@@ -48,7 +47,9 @@ class SoraSDKManager {
             // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
             self?.currentMediaChannel = mediaChannel
             completionHandler?(error)
-            NSLog("[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))")
+            NSLog(
+                "[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))"
+            )
         }
     }
 

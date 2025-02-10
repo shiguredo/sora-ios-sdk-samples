@@ -1,9 +1,7 @@
 import Sora
 import UIKit
 
-/**
- ビデオチャットを行う画面です。
- */
+/// ビデオチャットを行う画面です。
 class VideoChatRoomViewController: UIViewController {
     @IBOutlet weak var videoViewsView: UIView!
 
@@ -65,7 +63,9 @@ class VideoChatRoomViewController: UIViewController {
         }
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(
+        to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator
+    ) {
         // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
         // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
         coordinator.animate(alongsideTransition: { [weak self] _ in
@@ -92,47 +92,54 @@ class VideoChatRoomViewController: UIViewController {
             let videoView1 = videoViews[1]
             if isPortrait {
                 videoView0.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height / 2)
-                videoView1.frame = CGRect(x: 0, y: size.height / 2, width: size.width, height: size.height / 2)
+                videoView1.frame = CGRect(
+                    x: 0, y: size.height / 2, width: size.width, height: size.height / 2)
             } else {
                 videoView0.frame = CGRect(x: 0, y: 0, width: size.width / 2, height: size.height)
-                videoView1.frame = CGRect(x: size.width / 2, y: 0, width: size.width / 2, height: size.height)
+                videoView1.frame = CGRect(
+                    x: size.width / 2, y: 0, width: size.width / 2, height: size.height)
             }
-        case 3 ... 4:
+        case 3...4:
             // 3~4ユーザーの場合は四等分します。
             let videoView0 = videoViews[0]
             let videoView1 = videoViews[1]
             let videoView2 = videoViews[2]
             videoView0.frame = CGRect(x: 0, y: 0, width: size.width / 2, height: size.height / 2)
-            videoView1.frame = CGRect(x: size.width / 2, y: 0, width: size.width / 2, height: size.height / 2)
-            videoView2.frame = CGRect(x: 0, y: size.height / 2, width: size.width / 2, height: size.height / 2)
+            videoView1.frame = CGRect(
+                x: size.width / 2, y: 0, width: size.width / 2, height: size.height / 2)
+            videoView2.frame = CGRect(
+                x: 0, y: size.height / 2, width: size.width / 2, height: size.height / 2)
             if videoViews.count == 4 {
                 let videoView3 = videoViews[3]
-                videoView3.frame = CGRect(x: size.width / 2, y: size.height / 2, width: size.width / 2, height: size.height / 2)
+                videoView3.frame = CGRect(
+                    x: size.width / 2, y: size.height / 2, width: size.width / 2,
+                    height: size.height / 2)
             }
-        case 5 ... 12:
+        case 5...12:
             // それ以上の場合には、長辺を４等分、短辺を２〜３等分して、左上から順番に、最大８〜１２個を並べるようにします。
             // 最初にX方向の分割数mxとY方向の分割数myを計算します。
             // 条件として、(縦向きか否か && videoViewの枚数は８枚以下かそれ以上か)によって分岐させます。
             let mx: Int
             let my: Int
             switch (isPortrait, videoViews.count > 8) {
-            case (true, true): (mx, my) = (3, 4) // 縦向き、最大１２枚
-            case (true, false): (mx, my) = (2, 4) // 縦向き、８枚まで
-            case (false, true): (mx, my) = (4, 3) // 横向き、最大１２枚
-            case (false, false): (mx, my) = (4, 2) // 横向き、８枚まで
+            case (true, true): (mx, my) = (3, 4)  // 縦向き、最大１２枚
+            case (true, false): (mx, my) = (2, 4)  // 縦向き、８枚まで
+            case (false, true): (mx, my) = (4, 3)  // 横向き、最大１２枚
+            case (false, false): (mx, my) = (4, 2)  // 横向き、８枚まで
             }
             // あとはループを回して１枚ずつ左上から右下方向にvideoViewsをタイル状に並べていくだけです。
             // このときタイル(x, y)は、videoViews[y * my + x]番目に相当します。
             // そこで(y * my + x)がvideoViewsの実際の枚数を超えない間だけループを回すようにしています。
-            for y in 0 ..< my {
-                for x in 0 ..< mx where (y * my + x) < videoViews.count {
+            for y in 0..<my {
+                for x in 0..<mx where (y * my + x) < videoViews.count {
                     let videoView = videoViews[y * my + x]
                     let width = size.width / CGFloat(mx)
                     let height = size.height / CGFloat(my)
-                    videoView.frame = CGRect(x: CGFloat(x) * width,
-                                             y: CGFloat(y) * height,
-                                             width: width,
-                                             height: height)
+                    videoView.frame = CGRect(
+                        x: CGFloat(x) * width,
+                        y: CGFloat(y) * height,
+                        width: width,
+                        height: height)
                 }
             }
         default:
@@ -144,10 +151,11 @@ class VideoChatRoomViewController: UIViewController {
         // このVideoViewは最前面にフロートして表示されるようになります。
         if let videoView = upstreamVideoView {
             let floatingSize = CGSize(width: 100, height: 150)
-            videoView.frame = CGRect(x: size.width - floatingSize.width - 20.0,
-                                     y: size.height - floatingSize.height - 20.0,
-                                     width: floatingSize.width,
-                                     height: floatingSize.height)
+            videoView.frame = CGRect(
+                x: size.width - floatingSize.width - 20.0,
+                y: size.height - floatingSize.height - 20.0,
+                width: floatingSize.width,
+                height: floatingSize.height)
             videoViewsView.bringSubviewToFront(videoView)
         }
     }
@@ -175,7 +183,7 @@ extension VideoChatRoomViewController {
             // 用意されているVideoViewの数が足りないので、新たに追加します。
             // このとき、VideoView.contentModeを変化させることで、描画モードを調整することができます。
             // 今回は枠に合わせてアスペクト比を保ったまま領域全体を埋めたいので、.scaleAspectFillを指定しています。
-            for _ in downstreams[downstreamVideoViews.count ..< downstreams.count] {
+            for _ in downstreams[downstreamVideoViews.count..<downstreams.count] {
                 let videoView = VideoView()
                 videoView.debugMode = true
                 videoView.contentMode = .scaleAspectFill
@@ -184,10 +192,10 @@ extension VideoChatRoomViewController {
             }
         } else if downstreamVideoViews.count > downstreams.count {
             // 人が抜けたためにVideoViewが余っているので、削除します。
-            for videoView in downstreamVideoViews[downstreams.count ..< downstreamVideoViews.count] {
+            for videoView in downstreamVideoViews[downstreams.count..<downstreamVideoViews.count] {
                 videoView.removeFromSuperview()
             }
-            downstreamVideoViews.removeSubrange(downstreams.count ..< downstreamVideoViews.count)
+            downstreamVideoViews.removeSubrange(downstreams.count..<downstreamVideoViews.count)
         } else {
             // 既に全員分のVideoViewの準備が出来ているので、VideoViewの追加削除は必要ありません。
         }

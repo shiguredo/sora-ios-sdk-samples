@@ -1,9 +1,7 @@
 import Foundation
 
-/**
-    環境設定を記述します。
-    このファイルをコピーして、ファイル名を Environment.swift に変更してください。
- */
+/// 環境設定を記述します。
+/// このファイルをコピーして、ファイル名を Environment.swift に変更してください。
 enum Environment {
     // Sora SDKの接続先URL。複数指定可能
     static let urls: [URL] = [URL(string: "wss://sora.example.com/signaling")!]

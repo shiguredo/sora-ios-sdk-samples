@@ -1,9 +1,7 @@
 import Sora
 import UIKit
 
-/**
- チャット接続設定画面です。
- */
+/// チャット接続設定画面です。
 class ConfigViewController: UITableViewController {
     // 以下のプロパティは UI コンポーネントを保持します。
     // Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
@@ -194,7 +192,9 @@ class ConfigViewController: UITableViewController {
         // 入力された設定を元にSoraへ接続を行います。
         // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
         // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
-        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: role, multistreamEnabled: multistreamEnabledSwitch.isOn)
+        var configuration = Configuration(
+            urlCandidates: Environment.urls, channelId: channelId, role: role,
+            multistreamEnabled: multistreamEnabledSwitch.isOn)
         configuration.videoEnabled = videoEnabledSwitch.isOn
         configuration.videoCodec = videoCodec
         configuration.audioEnabled = audioEnabledSwitch.isOn
@@ -233,10 +233,12 @@ class ConfigViewController: UITableViewController {
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
                 NSLog("SoraSDKManager connection error: \(error)")
                 DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "接続に失敗しました",
-                                                            message: error.localizedDescription,
-                                                            preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    let alertController = UIAlertController(
+                        title: "接続に失敗しました",
+                        message: error.localizedDescription,
+                        preferredStyle: .alert)
+                    alertController.addAction(
+                        UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self?.present(alertController, animated: true, completion: nil)
                 }
             } else {

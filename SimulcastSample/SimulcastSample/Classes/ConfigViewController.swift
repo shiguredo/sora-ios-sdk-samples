@@ -1,9 +1,7 @@
 import Sora
 import UIKit
 
-/**
- チャット接続設定画面です。
- */
+/// チャット接続設定画面です。
 class ConfigViewController: UITableViewController {
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
@@ -109,10 +107,12 @@ class ConfigViewController: UITableViewController {
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
                 NSLog("[sample] SoraSDKManager connection error: \(error)")
                 DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "接続に失敗しました",
-                                                            message: error.localizedDescription,
-                                                            preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    let alertController = UIAlertController(
+                        title: "接続に失敗しました",
+                        message: error.localizedDescription,
+                        preferredStyle: .alert)
+                    alertController.addAction(
+                        UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self?.present(alertController, animated: true, completion: nil)
                 }
             } else {

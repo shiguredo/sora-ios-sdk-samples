@@ -1,9 +1,7 @@
 import Sora
 import UIKit
 
-/**
- チャット接続設定画面です。
- */
+/// チャット接続設定画面です。
 class ConfigViewController: UITableViewController {
     /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet var channelIdTextField: UITextField!
@@ -104,8 +102,12 @@ class ConfigViewController: UITableViewController {
         default: fatalError()
         }
 
-        let h264ProfileLevelId = h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
-        var configuration = Configuration(urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv, multistreamEnabled: true)
+        let h264ProfileLevelId =
+            h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty
+            ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
+        var configuration = Configuration(
+            urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv,
+            multistreamEnabled: true)
         configuration.videoCodec = videoCodec
         configuration.dataChannelSignaling = dataChannelSignaling
         configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
@@ -116,7 +118,8 @@ class ConfigViewController: UITableViewController {
         let videoAv1Params = av1Profile != nil ? ["profile": av1Profile!] : nil
         configuration.videoAv1Params = videoAv1Params
 
-        let videoH264Params = h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
+        let videoH264Params =
+            h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
         configuration.videoH264Params = videoH264Params
 
         configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
@@ -137,10 +140,12 @@ class ConfigViewController: UITableViewController {
                 // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
                 NSLog("[sample] SoraSDKManager connection error: \(error)")
                 DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "接続に失敗しました",
-                                                            message: error.localizedDescription,
-                                                            preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    let alertController = UIAlertController(
+                        title: "接続に失敗しました",
+                        message: error.localizedDescription,
+                        preferredStyle: .alert)
+                    alertController.addAction(
+                        UIAlertAction(title: "OK", style: .cancel, handler: nil))
                     self?.present(alertController, animated: true, completion: nil)
                 }
             } else {

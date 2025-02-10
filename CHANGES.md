@@ -11,6 +11,8 @@
 
 ## develop
 
+- [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
+  - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
 - [UPDATE] GitHub Actions のビルド環境を更新する

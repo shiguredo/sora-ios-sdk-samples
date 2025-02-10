@@ -2,9 +2,7 @@ import AVFoundation
 import Sora
 import UIKit
 
-/**
- 実際に動画を配信する画面です。
- */
+/// 実際に動画を配信する画面です。
 class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var filterPickerView: UIPickerView!
@@ -30,7 +28,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     /// 配信者側の動画を画面に表示するためのビューです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet private var videoView: VideoView!
 
-    private let captureSessionQueue = DispatchQueue(label: "captureSessionQueue", qos: .userInitiated, attributes: DispatchQueue.Attributes())
+    private let captureSessionQueue = DispatchQueue(
+        label: "captureSessionQueue", qos: .userInitiated, attributes: DispatchQueue.Attributes())
     private let captureSession = AVCaptureSession()
     private var authorizationStatus: AVAuthorizationStatus?
     private var configurationFinished: Bool = false
@@ -132,7 +131,9 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(
+        to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator
+    ) {
         // 画面が回転するときに、カメラキャプチャが出力する動画の向きを都度設定します。
         updateVideoOrientationUsingDeviceOrientation()
     }
@@ -169,9 +170,12 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
      詳しくはMain.storyboard内の定義をご覧ください。
      */
     @IBAction func onFilterButton(_ sender: UIBarButtonItem) {
-        let alertController = UIAlertController(title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(
+            title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
         for (name, filter) in PublisherVideoViewController.allFilters {
-            let action = UIAlertAction(title: name, style: .default) { [weak self] _ in self?.currentFilter = filter }
+            let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
+                self?.currentFilter = filter
+            }
             alertController.addAction(action)
         }
         present(alertController, animated: true, completion: nil)
@@ -205,7 +209,11 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         }
 
         // 入力デバイスのセットアップを行い、captureSessionに設定します。
-        guard let captureDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: captureDevicePosition) else {
+        guard
+            let captureDevice = AVCaptureDevice.default(
+                AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video,
+                position: captureDevicePosition)
+        else {
             configurationFinished = false
             return
         }
@@ -253,7 +261,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     private func updateVideoOrientationUsingStatusBarOrientation() {
         DispatchQueue.main.async {
             let statusBarOrientation = UIApplication.shared.statusBarOrientation
-            let videoOrientation = AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
+            let videoOrientation =
+                AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
             for output in self.captureSession.outputs {
                 if let connection = output.connection(with: .video) {
                     connection.videoOrientation = videoOrientation
@@ -273,7 +282,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         guard deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
             return
         }
-        guard let videoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation) else {
+        guard let videoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
+        else {
             return
         }
         for output in captureSession.outputs {
@@ -289,16 +299,18 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
         1
     }
 
-    func pickerView(_ pickerView: UIPickerView,
-                    titleForRow row: Int,
-                    forComponent component: Int) -> String?
-    {
+    func pickerView(
+        _ pickerView: UIPickerView,
+        titleForRow row: Int,
+        forComponent component: Int
+    ) -> String? {
         PublisherVideoViewController.allFilters[row].0
     }
 
-    func pickerView(_ pickerView: UIPickerView,
-                    numberOfRowsInComponent component: Int) -> Int
-    {
+    func pickerView(
+        _ pickerView: UIPickerView,
+        numberOfRowsInComponent component: Int
+    ) -> Int {
         PublisherVideoViewController.allFilters.count
     }
 
@@ -318,9 +330,12 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
      メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
      したがってメインスレッド上で直接操作する必要があるコードを呼び出す場合は注意が必要です。
      */
-    func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    func captureOutput(
+        _ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer,
+        from connection: AVCaptureConnection
+    ) {
         guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-              let mediaStream = mediaChannel.senderStream
+            let mediaStream = mediaChannel.senderStream
         else {
             return
         }
@@ -354,7 +369,10 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
     /**
      ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
      */
-    func captureOutput(_ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    func captureOutput(
+        _ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer,
+        from connection: AVCaptureConnection
+    ) {
         // このサンプルアプリでは何もしません。
     }
 }

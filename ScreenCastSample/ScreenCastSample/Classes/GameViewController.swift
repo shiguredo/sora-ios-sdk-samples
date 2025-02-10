@@ -14,9 +14,7 @@ private func randomCGFloat() -> CGFloat {
 
 // MARK: -
 
-/**
- 配信されるゲーム画面です。
- */
+/// 配信されるゲーム画面です。
 class GameViewController: UIViewController {
     /// 配信開始ボタンです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
     @IBOutlet private var cameraButton: UIBarButtonItem!
@@ -43,12 +41,14 @@ class GameViewController: UIViewController {
         gravity = UIGravityBehavior(items: [])
 
         collision = UICollisionBehavior(items: [])
-        collision.addBoundary(withIdentifier: "Floor" as NSString,
-                              from: CGPoint(x: 0, y: view.bounds.height),
-                              to: CGPoint(x: view.bounds.width, y: view.bounds.height))
-        collision.addBoundary(withIdentifier: "Void" as NSString,
-                              from: CGPoint(x: -9999, y: view.bounds.height + 10),
-                              to: CGPoint(x: 9999, y: view.bounds.height + 10))
+        collision.addBoundary(
+            withIdentifier: "Floor" as NSString,
+            from: CGPoint(x: 0, y: view.bounds.height),
+            to: CGPoint(x: view.bounds.width, y: view.bounds.height))
+        collision.addBoundary(
+            withIdentifier: "Void" as NSString,
+            from: CGPoint(x: -9999, y: view.bounds.height + 10),
+            to: CGPoint(x: 9999, y: view.bounds.height + 10))
         collision.collisionDelegate = self
 
         dynamicProperties = UIDynamicItemBehavior(items: [])
@@ -131,44 +131,47 @@ class GameViewController: UIViewController {
         // 現在のところはVP9など他のエンコード形式を使用することで回避してください。
         RPScreenRecorder.shared().isCameraEnabled = false
         RPScreenRecorder.shared().isMicrophoneEnabled = false
-        RPScreenRecorder.shared().startCapture(handler: { sampleBuffer, sampleBufferType, error in
-            guard sampleBufferType == .video else {
-                return
-            }
-            guard error == nil else {
-                return
-            }
-            guard let currentMediaChannel = SoraSDKManager.shared.currentMediaChannel,
-                  let senderStream = currentMediaChannel.senderStream
-            else {
-                return
-            }
+        RPScreenRecorder.shared().startCapture(
+            handler: { sampleBuffer, sampleBufferType, error in
+                guard sampleBufferType == .video else {
+                    return
+                }
+                guard error == nil else {
+                    return
+                }
+                guard let currentMediaChannel = SoraSDKManager.shared.currentMediaChannel,
+                    let senderStream = currentMediaChannel.senderStream
+                else {
+                    return
+                }
 
-            // H.264 の場合リサイズ
-            var bufferToSend = sampleBuffer
-            if currentMediaChannel.configuration.videoCodec == .h264 {
-                if let resizedBuffer = resizeSampleBuffer(sampleBuffer,
-                                                          scale: 0.5,
-                                                          ciContext: self.ciContext!)
-                {
-                    bufferToSend = resizedBuffer
+                // H.264 の場合リサイズ
+                var bufferToSend = sampleBuffer
+                if currentMediaChannel.configuration.videoCodec == .h264 {
+                    if let resizedBuffer = resizeSampleBuffer(
+                        sampleBuffer,
+                        scale: 0.5,
+                        ciContext: self.ciContext!)
+                    {
+                        bufferToSend = resizedBuffer
+                    }
                 }
-            }
-            senderStream.send(videoFrame: VideoFrame(from: bufferToSend))
-        }, completionHandler: { [weak self] error in
-            if let error {
-                // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
-                // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
-                NSLog("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
-                self?.handleDisconnect()
-            } else if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-                // サーバーから切断されたときのコールバックを設定します。
-                mediaChannel.handlers.onDisconnect = { [weak self] _ in
-                    NSLog("[sample] mediaChannel.handlers.onDisconnect")
+                senderStream.send(videoFrame: VideoFrame(from: bufferToSend))
+            },
+            completionHandler: { [weak self] error in
+                if let error {
+                    // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
+                    // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
+                    NSLog("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
                     self?.handleDisconnect()
+                } else if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+                    // サーバーから切断されたときのコールバックを設定します。
+                    mediaChannel.handlers.onDisconnect = { [weak self] _ in
+                        NSLog("[sample] mediaChannel.handlers.onDisconnect")
+                        self?.handleDisconnect()
+                    }
                 }
-            }
-        })
+            })
         updateBarButtonItems()
     }
 
@@ -208,7 +211,9 @@ class GameViewController: UIViewController {
      */
     private func addBox(at point: CGPoint) {
         let box = UIView(frame: CGRect(x: point.x, y: point.y, width: 64, height: 64))
-        box.backgroundColor = UIColor(hue: randomCGFloat(), saturation: randomCGFloat(), brightness: randomCGFloat(), alpha: 1.0)
+        box.backgroundColor = UIColor(
+            hue: randomCGFloat(), saturation: randomCGFloat(), brightness: randomCGFloat(),
+            alpha: 1.0)
         view.addSubview(box)
         gravity.addItem(box)
         collision.addItem(box)
@@ -245,7 +250,10 @@ extension GameViewController: UICollisionBehaviorDelegate {
      ゲーム用の実装です。箱がバウンダリに接触したときの挙動を定義します。
      ここでは画面外バウンダリに箱が接触したときに箱を削除しています。
      */
-    func collisionBehavior(_ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint) {
+    func collisionBehavior(
+        _ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem,
+        withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint
+    ) {
         guard let boundaryName = identifier as? String else {
             fatalError()
         }
@@ -262,18 +270,20 @@ extension GameViewController: UICollisionBehaviorDelegate {
 
 // https://github.com/shiguredo/sora-ios-sdk/issues/34
 // https://fromatom.hatenablog.com/entry/2019/10/28/172628
-private func resizeSampleBuffer(_ sampleBuffer: CMSampleBuffer,
-                                scale: CGFloat,
-                                ciContext: CIContext) -> CMSampleBuffer?
-{
+private func resizeSampleBuffer(
+    _ sampleBuffer: CMSampleBuffer,
+    scale: CGFloat,
+    ciContext: CIContext
+) -> CMSampleBuffer? {
     // CMSampleTimingInfo を取得する
     // リサイズ後の CMSampleBuffer の生成に使う
     let presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
     let duration = CMSampleBufferGetDuration(sampleBuffer)
     let decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer)
-    var timingInfo = CMSampleTimingInfo(duration: duration,
-                                        presentationTimeStamp: presentationTimeStamp,
-                                        decodeTimeStamp: decodeTimeStamp)
+    var timingInfo = CMSampleTimingInfo(
+        duration: duration,
+        presentationTimeStamp: presentationTimeStamp,
+        decodeTimeStamp: decodeTimeStamp)
 
     // CIImage をリサイズする
     guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
@@ -295,23 +305,28 @@ private func resizeSampleBuffer(_ sampleBuffer: CMSampleBuffer,
     }
 
     // リサイズした CIImage を使って CVPixelBuffer を生成する
-    let attrs = [kCVPixelFormatCGImageCompatibility: kCFBooleanTrue,
-                 kCVPixelFormatCGBitmapContextCompatibility: kCFBooleanTrue] as CFDictionary
+    let attrs =
+        [
+            kCVPixelFormatCGImageCompatibility: kCFBooleanTrue,
+            kCVPixelFormatCGBitmapContextCompatibility: kCFBooleanTrue,
+        ] as CFDictionary
     var newPixelBuffer: CVPixelBuffer!
-    var status = CVPixelBufferCreate(nil,
-                                     Int(resizedCIImage.extent.size.width),
-                                     Int(resizedCIImage.extent.size.height),
-                                     kCVPixelFormatType_32BGRA,
-                                     attrs,
-                                     &newPixelBuffer)
+    var status = CVPixelBufferCreate(
+        nil,
+        Int(resizedCIImage.extent.size.width),
+        Int(resizedCIImage.extent.size.height),
+        kCVPixelFormatType_32BGRA,
+        attrs,
+        &newPixelBuffer)
     guard status == kCVReturnSuccess else {
         NSLog("cannot create new pixel buffer \(status)")
         return nil
     }
-    ciContext.render(resizedCIImage,
-                     to: newPixelBuffer,
-                     bounds: resizedCIImage.extent,
-                     colorSpace: CGColorSpaceCreateDeviceRGB())
+    ciContext.render(
+        resizedCIImage,
+        to: newPixelBuffer,
+        bounds: resizedCIImage.extent,
+        colorSpace: CGColorSpaceCreateDeviceRGB())
     status = CVPixelBufferLockBaseAddress(newPixelBuffer, .readOnly)
     guard status == kCVReturnSuccess else {
         NSLog("cannot render to new pixel buffer \(status)")
@@ -323,22 +338,24 @@ private func resizeSampleBuffer(_ sampleBuffer: CMSampleBuffer,
     var newSampleBuffer: CMSampleBuffer!
     var videoInfo: CMVideoFormatDescription!
 
-    status = CMVideoFormatDescriptionCreateForImageBuffer(allocator: nil,
-                                                          imageBuffer: newPixelBuffer,
-                                                          formatDescriptionOut: &videoInfo)
+    status = CMVideoFormatDescriptionCreateForImageBuffer(
+        allocator: nil,
+        imageBuffer: newPixelBuffer,
+        formatDescriptionOut: &videoInfo)
     guard status == errSecSuccess else {
         NSLog("cannot create video format description \(status)")
         return nil
     }
 
-    status = CMSampleBufferCreateForImageBuffer(allocator: nil,
-                                                imageBuffer: newPixelBuffer,
-                                                dataReady: true,
-                                                makeDataReadyCallback: nil,
-                                                refcon: nil,
-                                                formatDescription: videoInfo,
-                                                sampleTiming: &timingInfo,
-                                                sampleBufferOut: &newSampleBuffer)
+    status = CMSampleBufferCreateForImageBuffer(
+        allocator: nil,
+        imageBuffer: newPixelBuffer,
+        dataReady: true,
+        makeDataReadyCallback: nil,
+        refcon: nil,
+        formatDescription: videoInfo,
+        sampleTiming: &timingInfo,
+        sampleBufferOut: &newSampleBuffer)
     guard status == errSecSuccess else {
         NSLog("cannot create new sample buffer \(status)")
         return nil

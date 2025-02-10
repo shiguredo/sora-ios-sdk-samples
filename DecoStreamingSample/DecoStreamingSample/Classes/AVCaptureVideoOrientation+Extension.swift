@@ -1,9 +1,7 @@
 import AVFoundation
 import UIKit
 
-/**
- サンプルアプリ内で使うための、便利なExtensionを定義します。
- */
+/// サンプルアプリ内で使うための、便利なExtensionを定義します。
 extension AVCaptureVideoOrientation {
     /**
      UIDeviceOrientationを元にAVCaptureVideoOrientationを返します。
