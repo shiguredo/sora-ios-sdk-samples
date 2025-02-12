@@ -8,11 +8,6 @@ PODS_ROOT=Pods
 SRCROOT=.
 LINT=${PODS_ROOT}/SwiftLint/swiftlint
 
-# フォーマットリントは未フォーマットでもステータスコード 0 を返すので
-# ステータスコードチェックを行わない
-swift format lint --parallel -r .
-swift format --parallel -i -r .
-
 $LINT --fix $SRCROOT
 $LINT $SRCROOT
 lint=$?
