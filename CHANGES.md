@@ -15,7 +15,8 @@
 
 - [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
   - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
-  - swift-format の設定ファイルを用意せず、デフォルトを採用
+  - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない
+  - https://github.com/swiftlang/swift-format
   - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
