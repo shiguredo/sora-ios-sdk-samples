@@ -1,16 +1,23 @@
 # 変更履歴
 
+- CHANGE
+  - 下位互換のない変更
 - UPDATE
   - 下位互換がある変更
 - ADD
   - 下位互換がある追加
-- CHANGE
-  - 下位互換のない変更
 - FIX
   - バグ修正
 
 ## develop
 
+### misc
+
+- [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
+  - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
+  - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない
+  - https://github.com/swiftlang/swift-format
+  - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
 - [UPDATE] GitHub Actions のビルド環境を更新する

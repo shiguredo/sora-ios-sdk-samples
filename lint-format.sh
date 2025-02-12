@@ -6,17 +6,11 @@
 
 PODS_ROOT=Pods
 SRCROOT=.
-FORMAT=${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat
 LINT=${PODS_ROOT}/SwiftLint/swiftlint
 
-# フォーマットの必要性を確認する
-$FORMAT --lint $SRCROOT
-format=$?
-
-$FORMAT $SRCROOT
 $LINT --fix $SRCROOT
 $LINT $SRCROOT
 lint=$?
 
-test $format -eq 0 -a $lint -eq 0
+test $lint -eq 0
 exit $?
