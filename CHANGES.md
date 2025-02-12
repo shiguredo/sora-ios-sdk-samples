@@ -15,10 +15,7 @@
 
 - [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
   - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
-  - swift-format 用設定ファイル `.swift-format` を追加
-    - SwiftFormat 用設定ファイルは各サンプルアプリのディレクトリに設定ファイルをおいていたが、
-    - swift-format は設定ファイルが実行ディレクトリにない場合に親ディレクトリを参照するため、root ディレクトリに設定ファイルをおくだけで良い
-      - 参考: <https://github.com/swiftlang/swift-format?tab=readme-ov-file#configuring-the-command-line-tool>
+  - swift-format の設定ファイルを用意せず、デフォルトを採用
   - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
