@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,8 @@
 		9120C4C423B3505A0026176E /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120C4BB23B3505A0026176E /* SoraSDKManager.swift */; };
 		9120C4C523B3505A0026176E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9120C4BC23B3505A0026176E /* Assets.xcassets */; };
 		9120C4C623B3505A0026176E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9120C4BD23B3505A0026176E /* InfoPlist.strings */; };
+		B3CDDD4F2D5DF8AA002E4981 /* Sora in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD4E2D5DF8AA002E4981 /* Sora */; };
+		B3CDDD512D5DF8AA002E4981 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD502D5DF8AA002E4981 /* WebRTC */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3CDDD4F2D5DF8AA002E4981 /* Sora in Frameworks */,
+				B3CDDD512D5DF8AA002E4981 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +157,9 @@
 				Base,
 			);
 			mainGroup = 9120C49123B3502B0026176E;
+			packageReferences = (
+				B3CDDD4D2D5DF8AA002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */,
+			);
 			productRefGroup = 9120C49B23B3502B0026176E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -443,6 +450,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B3CDDD4D2D5DF8AA002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2025.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B3CDDD4E2D5DF8AA002E4981 /* Sora */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3CDDD4D2D5DF8AA002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = Sora;
+		};
+		B3CDDD502D5DF8AA002E4981 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3CDDD4D2D5DF8AA002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9120C49223B3502B0026176E /* Project object */;
 }
