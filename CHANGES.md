@@ -18,6 +18,9 @@
   - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない
   - https://github.com/swiftlang/swift-format
   - @zztkm
+- [UPDATE] 依存管理を CocoaPods から Xcode の Swift Package Manager に移行する
+  - Sora を Swift Package Manager 管理に移行する
+  - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
 - [UPDATE] GitHub Actions のビルド環境を更新する

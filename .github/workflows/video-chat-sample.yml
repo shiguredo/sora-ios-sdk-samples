@@ -17,7 +17,7 @@ jobs:
     env:
       XCODE: /Applications/Xcode_16.2.app
       XCODE_SDK: iphoneos18.2
-      WORKSPACE: VideoChatSample
+      PROJECT: VideoChatSample
       SCHEME: VideoChatSample
     steps:
     - uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
       run: |
         set -o pipefail && \
           xcodebuild \
-            -workspace '${{ env.WORKSPACE }}.xcworkspace' \
+            -project '${{ env.PROJECT }}.xcodeproj' \
             -scheme '${{ env.SCHEME }}' \
             -sdk ${{ env.XCODE_SDK }} \
             -arch arm64 \
