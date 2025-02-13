@@ -25,6 +25,9 @@
   - Xcode の version を 16.2 に変更
   - SDK を iOS 18.2 に変更
   - @zztkm
+- [ADD] swift-format 実行用の Makefile を追加する
+  - lint-format.sh で一括実行していたコマンドを個別に実行できるようにした
+  - @zztkm
 
 ## sora-ios-sdk-2025.1.1
 
