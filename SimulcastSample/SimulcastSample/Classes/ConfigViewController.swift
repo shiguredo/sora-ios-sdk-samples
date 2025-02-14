@@ -24,12 +24,9 @@ class ConfigViewController: UITableViewController {
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
   /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-
   @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
-  /**
-     行がタップされたときの処理を記述します。
-     */
+  /// 行がタップされたときの処理を記述します。
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // まず最初にタップされた行の選択状態を解除します。
     tableView.deselectRow(at: indexPath, animated: true)
@@ -130,10 +127,8 @@ class ConfigViewController: UITableViewController {
     }
   }
 
-  /**
-     配信画面からのUnwind Segueの着地地点として定義してあります。
-     詳細はMain.storyboardの設定をご確認ください。
-     */
+  /// 配信画面からのUnwind Segueの着地地点として定義してあります。
+  /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
   }

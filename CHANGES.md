@@ -31,6 +31,8 @@
   - @zztkm
 - [UPDATE] フォーマッターとリンターの実行を Makefile と Xcode に分割したため、不要になった lint-format.sh を削除
   - @zztkm
+- [UPDATE] swift-format lint で出力される警告を修正
+  - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
 - [UPDATE] GitHub Actions のビルド環境を更新する
@@ -40,6 +42,7 @@
   - @zztkm
 - [ADD] swift-format 実行用の Makefile を追加する
   - lint-format.sh で一括実行していたコマンドを個別に実行できるようにした
+  - デフォルトでは make コマンドを実行したディレクトリから再帰的に .swift ファイルを探すが、`TARGET_PATH` 変数を与えることで特定のディレクトリ以下の .swift ファイルを対象にすることも可能
   - @zztkm
 
 ## sora-ios-sdk-2025.1.1

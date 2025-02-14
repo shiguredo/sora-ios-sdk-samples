@@ -68,18 +68,14 @@ class ConfigViewController: UITableViewController {
   /// 接続試行中かどうかを表します。
   var isConnecting = false
 
-  /**
-     画面起動時の処理を記述します。
-     */
+  /// 画面起動時の処理を記述します。
   override func viewDidLoad() {
     super.viewDidLoad()
 
     channelIdTextField.text = Environment.channelId
   }
 
-  /**
-     行がタップされたときの処理を記述します。
-     */
+  /// 行がタップされたときの処理を記述します。
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // まず最初にタップされた行の選択状態を解除します。
     tableView.deselectRow(at: indexPath, animated: true)
@@ -256,28 +252,22 @@ class ConfigViewController: UITableViewController {
     }
   }
 
-  /**
-     配信画面からのUnwind Segueの着地地点として定義してあります。
-     詳細はMain.storyboardの設定をご確認ください。
-     */
+  /// 配信画面からのUnwind Segueの着地地点として定義してあります。
+  /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
   }
 
-  /**
-     テーブルビューのタップ時に呼ばれます。
-     詳細はMain.storyboardの設定をご確認ください。
-     */
+  /// テーブルビューのタップ時に呼ばれます。
+  /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onTapTableView(_ sender: UITapGestureRecognizer) {
     // テキストフィールドの入力中であれば、表示されているキーボードを閉じます。
     channelIdTextField.endEditing(true)
     dataChannelProtocolTextField.endEditing(true)
   }
 
-  /**
-     テキストフィールドの入力終了時に呼ばれます。
-     詳細はMain.storyboardの設定をご確認ください。
-     */
+  /// テキストフィールドの入力終了時に呼ばれます。
+  /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onTextFieldDidEnd(_ sender: Any?) {
     // 表示されているキーボードを閉じます。
     channelIdTextField.endEditing(true)

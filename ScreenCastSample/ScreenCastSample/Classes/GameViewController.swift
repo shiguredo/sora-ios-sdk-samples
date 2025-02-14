@@ -72,9 +72,7 @@ class GameViewController: UIViewController {
 
   // MARK: - Action
 
-  /**
-     画面タッチ時のアクションを定義します。
-     */
+  /// 画面タッチ時のアクションを定義します。
   @objc
   func onViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
     // タッチした場所に新しい箱を発生させます。
@@ -82,9 +80,7 @@ class GameViewController: UIViewController {
     addBox(at: location)
   }
 
-  /**
-     配信開始ボタンが押されたときの挙動を定義します。
-     */
+  /// 配信開始ボタンが押されたときの挙動を定義します。
   @IBAction
   func onCameraButton(_ sender: UIBarButtonItem) {
     let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
@@ -98,9 +94,7 @@ class GameViewController: UIViewController {
     }
   }
 
-  /**
-     配信停止ボタンが押されたときの挙動を定義します。
-     */
+  /// 配信停止ボタンが押されたときの挙動を定義します。
   @IBAction
   func onPauseButton(_ sender: UIBarButtonItem) {
     let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
@@ -112,10 +106,8 @@ class GameViewController: UIViewController {
     }
   }
 
-  /**
-     配信設定画面からのUnwind Segueの着地地点として定義してあります。
-     詳細はMain.storyboardの設定をご確認ください。
-     */
+  /// 配信設定画面からのUnwind Segueの着地地点として定義してあります。
+  /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction
   func onUnwindByConnect(_ segue: UIStoryboardSegue) {
     // 接続が完了して配信設定画面から戻ってきたので、画面録画を開始して配信をスタートします。
@@ -175,11 +167,9 @@ class GameViewController: UIViewController {
     updateBarButtonItems()
   }
 
-  /**
-     接続が切断されたときに呼び出されるべき処理をまとめています。
-     この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
-     いずれの場合も含めます。
-     */
+  /// 接続が切断されたときに呼び出されるべき処理をまとめています。
+  /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
+  /// いずれの場合も含めます。
   private func handleDisconnect() {
     // 画面録画中であれば録画を停止して、配信を切断し、ボタンの状態を更新します。
     if RPScreenRecorder.shared().isRecording {
@@ -195,10 +185,8 @@ class GameViewController: UIViewController {
     }
   }
 
-  /**
-     配信設定画面からのUnwind Segueの着地地点として定義してあります。
-     詳細はMain.storyboardの設定をご確認ください。
-     */
+  /// 配信設定画面からのUnwind Segueの着地地点として定義してあります。
+  /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction
   func onUnwindByExit(_ segue: UIStoryboardSegue) {
     // 単純に閉じるボタンで配信設定画面を閉じただけなので、特に処理は何も行いません。
@@ -206,9 +194,7 @@ class GameViewController: UIViewController {
 
   // MARK: - Private
 
-  /**
-     ゲーム用の実装です。指定された地点に箱を追加します。
-     */
+  /// ゲーム用の実装です。指定された地点に箱を追加します。
   private func addBox(at point: CGPoint) {
     let box = UIView(frame: CGRect(x: point.x, y: point.y, width: 64, height: 64))
     box.backgroundColor = UIColor(
@@ -220,9 +206,7 @@ class GameViewController: UIViewController {
     dynamicProperties.addItem(box)
   }
 
-  /**
-     ゲーム用の実装です。箱を削除します。
-     */
+  /// ゲーム用の実装です。箱を削除します。
   private func removeBox(_ box: UIView) {
     box.removeFromSuperview()
     gravity.removeItem(box)
@@ -230,9 +214,7 @@ class GameViewController: UIViewController {
     dynamicProperties.removeItem(box)
   }
 
-  /**
-     現在の配信状態に応じてナビゲーションバーのボタンの状態を更新します。
-     */
+  /// 現在の配信状態に応じてナビゲーションバーのボタンの状態を更新します。
   private func updateBarButtonItems() {
     let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
     if isConnected {
@@ -246,10 +228,8 @@ class GameViewController: UIViewController {
 // MARK: - UICollisionBehaviorDelegate
 
 extension GameViewController: UICollisionBehaviorDelegate {
-  /**
-     ゲーム用の実装です。箱がバウンダリに接触したときの挙動を定義します。
-     ここでは画面外バウンダリに箱が接触したときに箱を削除しています。
-     */
+  /// ゲーム用の実装です。箱がバウンダリに接触したときの挙動を定義します。
+  /// ここでは画面外バウンダリに箱が接触したときに箱を削除しています。
   func collisionBehavior(
     _ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem,
     withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint
