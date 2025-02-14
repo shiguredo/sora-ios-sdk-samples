@@ -49,6 +49,7 @@ jobs:
             CODE_SIGN_IDENTITY= \
             PROVISIONING_PROFILE= \
             ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS=NO
+    # TODO(zztkm): fmt-lint で出力される警告を修正するタイミングでコメントアウトを外す
     # - name: Check uncommitted unformatted code
     #   run: |
     #     cp ../Makefile .
