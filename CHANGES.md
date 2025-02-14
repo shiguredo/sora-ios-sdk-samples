@@ -24,6 +24,7 @@
   - SwiftLint の実行をシェルスクリプトではなく、Xcode の Build Phases に設定
     - これにより、ビルド時に SwiftLint が実行されるようになる
     - ビルド時に SwiftLint を実行するようになったので、lint-format.sh から SwiftLint を削除
+  - フォーマッターとリンターの実行を Makefile と Xcode に分割したため、不要になった lint-format.sh を削除
   - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
