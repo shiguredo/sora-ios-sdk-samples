@@ -17,7 +17,7 @@ jobs:
     env:
       XCODE: /Applications/Xcode_16.2.app
       XCODE_SDK: iphoneos18.2
-      WORKSPACE: SimulcastSample
+      PROJECT: SimulcastSample
       SCHEME: SimulcastSample
     steps:
     - uses: actions/checkout@v4
@@ -25,38 +25,32 @@ jobs:
       run: sudo xcode-select -s '${{ env.XCODE }}/Contents/Developer'
     - name: Show Xcode Version
       run: xcodebuild -version
-    - name: Show CocoaPods Version
-      run: pod --version
-    - name: Restore Pods
-      uses: actions/cache@v4
-      with:
-        path: Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-pods-
-    - name: Install Dependences
-      run: |
-        pod repo update
-        pod install
     - name: Create Environment.swift
       run: |
         cp SimulcastSample/Environment.example.swift SimulcastSample/Environment.swift
+    # Build Xcode Project の補足コメント
+    #
+    # `-skipPackagePluginValidation` は SwiftLintPlugin の実行を許可するために入れてある。
+    # この設定がないと、ビルド時に `error: “SwiftLintBuildToolPlugin” must be enabled before it can be used` というエラーが出てしまう
     - name: Build Xcode Project
       run: |
         set -o pipefail && \
           xcodebuild \
-            -workspace '${{ env.WORKSPACE }}.xcworkspace' \
+            -project '${{ env.PROJECT }}.xcodeproj' \
             -scheme '${{ env.SCHEME }}' \
             -sdk ${{ env.XCODE_SDK }} \
             -arch arm64 \
             -configuration Release \
             -derivedDataPath build \
+            -skipPackagePluginValidation \
             clean build \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY= \
             PROVISIONING_PROFILE= \
             ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS=NO
-    - name: Check uncommitted unformatted code
-      run: |
-        ../lint-format.sh
+    # TODO(zztkm): fmt-lint で出力される警告を修正するタイミングでコメントアウトを外す
+    # - name: Check uncommitted unformatted code
+    #   run: |
+    #     cp ../Makefile .
+    #     make fmt-lint

@@ -10,19 +10,22 @@
 
 ## ビルド方法
 
-1. CocoaPods でライブラリを取得します。
-
-   ```
-   $ pod install
-   ```
-
-2. ``DataChannelSample/Environment.example.swift`` のファイル名を ``DataChannelSample/Environment.swift`` に変更し、接続情報を設定します。
+1. ``DataChannelSample/Environment.example.swift`` のファイル名を ``DataChannelSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp DataChannelSample/Environment.example.swift DataChannelSample/Environment.swift
    ```
 
-３. ``DataChannelSample.xcworkspace`` を Xcode で開いてビルドします。
+2. ``DataChannelSample.xcodeproj`` を Xcode で開いてビルドします。
+
+   ```
+   $ open DataChannelSample.xcodeproj
+   ```
+
+> [!TIP]
+> はじめてビルドを行う場合、 ビルドに失敗し `SwfitLintBuildToolPlugin (SwiftLintPlugin)` に関するプロンプトが表示されたら
+> 必ずプラグインを信頼して有効にしてください。そうすることで次回以降ビルドを正常に実行できます。
+
 
 ## サンプルアプリの使い方
 

@@ -18,6 +18,19 @@
   - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない
   - https://github.com/swiftlang/swift-format
   - @zztkm
+- [UPDATE] 依存管理を CocoaPods から Xcode の Swift Package Manager に移行する
+  - Sora と SwiftLint を Swift Package Manager 管理に移行する
+    - SwiftLint を直接インストールするのではなく、ビルド済 SwiftLint と Xcode 統合のためのプラグインを提供する SwiftLintPlugin 経由で利用
+    - SwiftLintPlugin を Xcode で初めて利用する場合の注意事項と対応方法を各アプリの README に記載
+  - GitHub Actions から CocoaPods 関連処理を削除
+  - CocoaPods への依存をなくしたので、Podfile を削除
+  - @zztkm
+- [UPDATE] SwiftLint の実行をシェルスクリプトではなく、Xcode の Build Phases に設定
+  - これにより、ビルド時に SwiftLint が実行されるようになる
+  - ビルド時に SwiftLint を実行するようになったので、lint-format.sh から SwiftLint を削除
+  - @zztkm
+- [UPDATE] フォーマッターとリンターの実行を Makefile と Xcode に分割したため、不要になった lint-format.sh を削除
+  - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
 - [UPDATE] GitHub Actions のビルド環境を更新する
