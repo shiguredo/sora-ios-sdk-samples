@@ -23,11 +23,11 @@
     - SwiftLint を直接インストールするのではなく、ビルド済 SwiftLint と Xcode 統合のためのプラグインを提供する SwiftLintPlugin 経由で利用
     - SwiftLintPlugin を Xcode で初めて利用する場合の注意事項と対応方法を各アプリの README に記載
   - GitHub Actions から CocoaPods 関連処理を削除
-  - CocoaPods への依存をなくしたので、Podfile を削除
+  - CocoaPods への依存をなくしたため、Podfile を削除
   - @zztkm
 - [UPDATE] SwiftLint の実行をシェルスクリプトではなく、Xcode の Build Phases に設定
   - これにより、ビルド時に SwiftLint が実行されるようになる
-  - ビルド時に SwiftLint を実行するようになったので、lint-format.sh から SwiftLint を削除
+  - ビルド時に SwiftLint を実行するようになったため、lint-format.sh から SwiftLint を削除
   - @zztkm
 - [UPDATE] フォーマッターとリンターの実行を Makefile と Xcode に分割したため、不要になった lint-format.sh を削除
   - @zztkm
