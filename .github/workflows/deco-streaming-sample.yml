@@ -28,6 +28,10 @@ jobs:
     - name: Create Environment.swift
       run: |
         cp DecoStreamingSample/Environment.example.swift DecoStreamingSample/Environment.swift
+    # Build Xcode Project の補足コメント
+    #
+    # `-skipPackagePluginValidation` は SwiftLintPlugin の実行を許可するために入れてある。
+    # この設定がないと、ビルド時に `error: “SwiftLintBuildToolPlugin” must be enabled before it can be used` というエラーが出てしまう
     - name: Build Xcode Project
       run: |
         set -o pipefail && \
