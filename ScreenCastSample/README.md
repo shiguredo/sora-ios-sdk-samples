@@ -9,19 +9,21 @@
 
 ## ビルド方法
 
-1. CocoaPods でライブラリを取得します。
-
-   ```
-   $ pod install
-   ```
-
-2. ``ScreenCastSample/Environment.example.swift`` のファイル名を ``ScreenCastSample/Environment.swift`` に変更し、接続情報を設定します。
+1. ``ScreenCastSample/Environment.example.swift`` のファイル名を ``ScreenCastSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp ScreenCastSample/Environment.example.swift ScreenCastSample/Environment.swift
    ```
 
-３. ``ScreenCastSample.xcworkspace`` を Xcode で開いてビルドします。
+2. ``ScreenCastSample.xcodeproj`` を Xcode で開いてビルドします。
+
+   ```
+   $ open ScreenCastSample.xcodeproj
+   ```
+
+> [!TIP]
+> はじめてビルドを行う場合、 ビルドに失敗し `SwfitLintBuildToolPlugin (SwiftLintPlugin)` に関するプロンプトが表示されたら
+> 必ずプラグインを信頼して有効にしてください。そうすることで次回以降ビルドを正常に実行できます。
 
 ## サンプルアプリの使い方
 
