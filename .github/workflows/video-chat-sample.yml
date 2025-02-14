@@ -52,4 +52,4 @@ jobs:
     - name: Check uncommitted unformatted code
       run: |
         cp ../Makefile .
-        make fmt-lint
+        make fmt-lint TARGET_PATH=VideoChatSample
