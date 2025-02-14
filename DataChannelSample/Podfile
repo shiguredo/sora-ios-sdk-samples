@@ -1,9 +1,0 @@
-source 'https://github.com/shiguredo/sora-ios-sdk-specs.git'
-source 'https://cdn.cocoapods.org/'
-
-platform :ios, '14.0'
-
-target 'DataChannelSample' do
-  use_frameworks!
-  pod 'Sora', '2025.1.1'
-end
