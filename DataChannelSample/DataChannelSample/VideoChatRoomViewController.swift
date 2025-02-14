@@ -21,30 +21,22 @@ class VideoChatRoomViewController: UIViewController {
   /// 送受信したチャットメッセージの履歴を表示するコントロールです。
   @IBOutlet weak var historyTableView: UITableView!
 
-  /**
-     タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
-      */
+  /// タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
   @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
 
-  /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
+  /// ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。
   private var downstreamVideoViews: [VideoView] = []
 
-  /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
+  /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
 
-  /**
-        チャットメッセージの履歴です。
-     */
+  /// チャットメッセージの履歴です。
   var history: [ChatMessage] = []
 
-  /**
-     配信画面で選択されたラベルです。このラベルでメッセージを送信します。
-     */
+  /// 配信画面で選択されたラベルです。このラベルでメッセージを送信します。
   var selectedLabel: String?
 
-  /**
-     送信するバイナリメッセージです。ランダムなバイナリを送信するように指定した場合に使います。
-     */
+  /// 送信するバイナリメッセージです。ランダムなバイナリを送信するように指定した場合に使います。
   var binaryToSend: Data?
 
   override func viewDidLoad() {
@@ -296,9 +288,7 @@ class VideoChatRoomViewController: UIViewController {
 // MARK: - Sora SDKのイベントハンドリング
 
 extension VideoChatRoomViewController {
-  /**
-     接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
-     */
+  /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
     guard (SoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
@@ -351,11 +341,9 @@ extension VideoChatRoomViewController {
     layoutVideoViews(for: memberListView.bounds.size)
   }
 
-  /**
-     接続が切断されたときに呼び出されるべき処理をまとめています。
-     この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
-     いずれの場合も含めます。
-     */
+  /// 接続が切断されたときに呼び出されるべき処理をまとめています。
+  /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
+  /// いずれの場合も含めます。
   private func handleDisconnect() {
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
     SoraSDKManager.shared.disconnect()
@@ -367,10 +355,8 @@ extension VideoChatRoomViewController {
 // MARK: - Interface Builderのための実装
 
 extension VideoChatRoomViewController {
-  /**
-     カメラボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// カメラボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
     guard let current = CameraVideoCapturer.current else {
       return
@@ -387,26 +373,20 @@ extension VideoChatRoomViewController {
     }
   }
 
-  /**
-     閉じるボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// 閉じるボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onExitButton(_ sender: UIBarButtonItem) {
     handleDisconnect()
   }
 
-  /**
-     Clear ボタンを押したときの挙動を定義します。
-     すべてのメッセージ履歴を削除します。
-     */
+  /// Clear ボタンを押したときの挙動を定義します。
+  /// すべてのメッセージ履歴を削除します。
   @IBAction func onClearButton(_ sender: Any?) {
     history = []
     updateHistoryTableView()
   }
 
-  /**
-     メッセージ送信ボタンが押されたときの挙動を定義します。
-     */
+  /// メッセージ送信ボタンが押されたときの挙動を定義します。
   @IBAction func onSendButton(_ sender: Any?) {
     guard let label = selectedLabel else {
       return
@@ -445,17 +425,13 @@ extension VideoChatRoomViewController {
     updateHistoryTableView()
   }
 
-  /**
-     画面のタップ時の挙動を定義します。
-     */
+  /// 画面のタップ時の挙動を定義します。
   @IBAction func onTapView(_ sender: UITapGestureRecognizer) {
     // キーボードが開いていれば閉じます。
     chatMessageToSendTextField.endEditing(true)
   }
 
-  /**
-     メッセージ入力キーボードのテキスト入力終了時の挙動を定義します。
-     */
+  /// メッセージ入力キーボードのテキスト入力終了時の挙動を定義します。
   @IBAction func onTextFieldDidEnd(_ sender: Any?) {
     // キーボードを閉じます。
     chatMessageToSendTextField.endEditing(true)

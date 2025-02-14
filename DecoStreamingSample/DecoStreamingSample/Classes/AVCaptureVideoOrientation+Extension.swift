@@ -3,9 +3,7 @@ import UIKit
 
 /// サンプルアプリ内で使うための、便利なExtensionを定義します。
 extension AVCaptureVideoOrientation {
-  /**
-     UIDeviceOrientationを元にAVCaptureVideoOrientationを返します。
-     */
+  /// UIDeviceOrientationを元にAVCaptureVideoOrientationを返します。
   init?(deviceOrientation: UIDeviceOrientation) {
     switch deviceOrientation {
     case .portrait: self = .portrait
@@ -16,9 +14,7 @@ extension AVCaptureVideoOrientation {
     }
   }
 
-  /**
-     UIInterfaceOrientationを元にAVCaptureVideoOrientationを返します。
-     */
+  /// UIInterfaceOrientationを元にAVCaptureVideoOrientationを返します。
   init?(interfaceOrientation: UIInterfaceOrientation) {
     switch interfaceOrientation {
     case .portrait: self = .portrait

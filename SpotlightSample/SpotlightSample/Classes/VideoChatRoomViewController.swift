@@ -5,10 +5,10 @@ import UIKit
 class VideoChatRoomViewController: UIViewController {
   @IBOutlet weak var videoViewsView: UIView!
 
-  /** ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。 */
+  /// ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。
   private var downstreamVideoViews: [VideoView] = []
 
-  /** ビデオチャットの、配信者自身の映像を表示するためのViewです。 */
+  /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
 
   override func viewWillAppear(_ animated: Bool) {
@@ -164,9 +164,7 @@ class VideoChatRoomViewController: UIViewController {
 // MARK: - Sora SDKのイベントハンドリング
 
 extension VideoChatRoomViewController {
-  /**
-     接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
-     */
+  /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
     guard (SoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
@@ -221,11 +219,9 @@ extension VideoChatRoomViewController {
     layoutVideoViews(for: videoViewsView.bounds.size)
   }
 
-  /**
-     接続が切断されたときに呼び出されるべき処理をまとめています。
-     この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
-     いずれの場合も含めます。
-     */
+  /// 接続が切断されたときに呼び出されるべき処理をまとめています。
+  /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
+  /// いずれの場合も含めます。
   private func handleDisconnect() {
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
     SoraSDKManager.shared.disconnect()
@@ -237,10 +233,8 @@ extension VideoChatRoomViewController {
 // MARK: - Interface Builderのための実装
 
 extension VideoChatRoomViewController {
-  /**
-     カメラボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// カメラボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
     guard let current = CameraVideoCapturer.current else {
       return
@@ -257,10 +251,8 @@ extension VideoChatRoomViewController {
     }
   }
 
-  /**
-     閉じるボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// 閉じるボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onExitButton(_ sender: UIBarButtonItem) {
     handleDisconnect()
   }

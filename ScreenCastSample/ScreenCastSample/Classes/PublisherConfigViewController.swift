@@ -11,18 +11,14 @@ class PublisherConfigViewController: UITableViewController {
   /// 接続試行中かどうかを表します。
   var isConnecting = false
 
-  /**
-     画面起動時の処理を記述します。
-     */
+  /// 画面起動時の処理を記述します。
   override func viewDidLoad() {
     super.viewDidLoad()
 
     channelIdTextField.text = Environment.channelId
   }
 
-  /**
-     行がタップされたときの処理を記述します。
-     */
+  /// 行がタップされたときの処理を記述します。
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // まず最初にタップされた行の選択状態を解除します。
     tableView.deselectRow(at: indexPath, animated: true)

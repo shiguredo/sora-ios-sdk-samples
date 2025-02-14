@@ -31,6 +31,8 @@
   - @zztkm
 - [UPDATE] フォーマッターとリンターの実行を Makefile と Xcode に分割したため、不要になった lint-format.sh を削除
   - @zztkm
+- [UPDATE] swift-format lint で出力される警告を修正
+  - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
 - [UPDATE] GitHub Actions のビルド環境を更新する

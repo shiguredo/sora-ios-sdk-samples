@@ -82,8 +82,9 @@ class ScreenRecorder {
         return
       }
       bitmapContext.scaleBy(x: self.inputScale, y: self.inputScale)
+      // 縦方向反転用のTransformを適用する。CGContextの座標系は左下基準なので、上下反転させる必要がある。
       bitmapContext.concatenate(
-        CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: self.inputViewSize.height))  // 縦方向反転用のTransformを適用する。CGContextの座標系は左下基準なので、上下反転させる必要がある。
+        CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: self.inputViewSize.height))
 
       // 現在のフレーム時間を計算します。
       if !(self.firstTimestamp > 0) {
@@ -118,7 +119,8 @@ class ScreenRecorder {
       return
     }
     inputViewSize = mainWindow.bounds.size
-    inputScale = 1.0  // UIScreen.main.scale のほうが良いのだが、3x Retinaのような巨大な画面で実行するとあまりにも遅すぎるので、一律1.0倍にしてます。
+    // UIScreen.main.scale のほうが良いのだが、3x Retinaのような巨大な画面で実行するとあまりにも遅すぎるので、一律1.0倍にしてます。
+    inputScale = 1.0
 
     let attributes =
       [

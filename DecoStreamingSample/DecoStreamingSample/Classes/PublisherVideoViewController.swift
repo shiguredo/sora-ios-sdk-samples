@@ -140,10 +140,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
 
   // MARK: Actions
 
-  /**
-     カメラボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// カメラボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
     switch captureDevicePosition {
     case .front:
@@ -165,10 +163,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     }
   }
 
-  /**
-     フィルタ選択ボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// フィルタ選択ボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onFilterButton(_ sender: UIBarButtonItem) {
     let alertController = UIAlertController(
       title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
@@ -181,10 +177,8 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     present(alertController, animated: true, completion: nil)
   }
 
-  /**
-     閉じるボタンを押したときの挙動を定義します。
-     詳しくはMain.storyboard内の定義をご覧ください。
-     */
+  /// 閉じるボタンを押したときの挙動を定義します。
+  /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onExitButton(_ sender: UIBarButtonItem?) {
     // 閉じるボタンを押してもいきなり画面を閉じるのではなく、明示的に配信をストップしてから、画面を閉じるようにしています。
     SoraSDKManager.shared.disconnect()
@@ -252,12 +246,10 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     updateVideoOrientationUsingStatusBarOrientation()
   }
 
-  /**
-     現在のUI上のステータスバーの向きを元に、映像の回転方向を補正します。
-     こちらのメソッドはデバイスの画面が天頂向き・地面向きの状態であったとしても、ステータスバーの向きを基準に映像を回転させることができますが、
-     その代わりにデバイス画面が天頂向き・地面向きの状態で使用すると意図しない向きに画面が回ってしまう可能性もあります。
-     そこで本サンプルでは最初の1回目の補正にのみ使用しています。
-     */
+  /// 現在のUI上のステータスバーの向きを元に、映像の回転方向を補正します。
+  /// こちらのメソッドはデバイスの画面が天頂向き・地面向きの状態であったとしても、ステータスバーの向きを基準に映像を回転させることができますが、
+  /// その代わりにデバイス画面が天頂向き・地面向きの状態で使用すると意図しない向きに画面が回ってしまう可能性もあります。
+  /// そこで本サンプルでは最初の1回目の補正にのみ使用しています。
   private func updateVideoOrientationUsingStatusBarOrientation() {
     DispatchQueue.main.async {
       let statusBarOrientation = UIApplication.shared.statusBarOrientation
@@ -271,12 +263,10 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
     }
   }
 
-  /**
-     現在のデバイス自体の向きを元に、映像の回転方向を補正します。
-     こちらのメソッドはデバイスの向きを元に補正するため、デバイス画面が天頂向き・地面向きの状態で使用すると映像を回転させないで終了するようになっています。
-     （明示的にどちらかの方向にデバイスが傾けられているときにだけ、映像を回転させます）
-     そこで本サンプルではデバイスが回転したときのイベントに合わせて使用しています。
-     */
+  /// 現在のデバイス自体の向きを元に、映像の回転方向を補正します。
+  /// こちらのメソッドはデバイスの向きを元に補正するため、デバイス画面が天頂向き・地面向きの状態で使用すると映像を回転させないで終了するようになっています。
+  /// （明示的にどちらかの方向にデバイスが傾けられているときにだけ、映像を回転させます）
+  /// そこで本サンプルではデバイスが回転したときのイベントに合わせて使用しています。
   private func updateVideoOrientationUsingDeviceOrientation() {
     let deviceOrientation = UIDevice.current.orientation
     guard deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
@@ -322,14 +312,12 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
 extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-  /**
-     ビデオキャプチャが、新しいフレームをキャプチャしたときに呼び出されます。
-
-     このサンプルアプリでは、キャプチャされたフレームを適切に変換してSora SDKのmediaStreamに流すことで、配信を行っています。
-     注意点として、このdelegate methodはパフォーマンス維持のため、
-     メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
-     したがってメインスレッド上で直接操作する必要があるコードを呼び出す場合は注意が必要です。
-     */
+  /// ビデオキャプチャが、新しいフレームをキャプチャしたときに呼び出されます。
+  ///
+  /// このサンプルアプリでは、キャプチャされたフレームを適切に変換してSora SDKのmediaStreamに流すことで、配信を行っています。
+  /// 注意点として、このdelegate methodはパフォーマンス維持のため、
+  /// メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
+  /// したがってメインスレッド上で直接操作する必要があるコードを呼び出す場合は注意が必要です。
   func captureOutput(
     _ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer,
     from connection: AVCaptureConnection
@@ -366,9 +354,7 @@ extension PublisherVideoViewController: AVCaptureVideoDataOutputSampleBufferDele
     }
   }
 
-  /**
-     ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
-     */
+  /// ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
   func captureOutput(
     _ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer,
     from connection: AVCaptureConnection
