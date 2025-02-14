@@ -96,6 +96,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B3C0DE3C2D5ED1ED00DAA341 /* PBXTargetDependency */,
 			);
 			name = DataChannelSample;
 			productName = DataChannelSample;
@@ -128,6 +129,7 @@
 			mainGroup = 91C851C2279FD1CA002C4B55;
 			packageReferences = (
 				B3CDDD522D5DF94E002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */,
+				B3C0DE3A2D5ED1DC00DAA341 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			productRefGroup = 91C851CC279FD1CB002C4B55 /* Products */;
 			projectDirPath = "";
@@ -205,6 +207,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B3C0DE3C2D5ED1ED00DAA341 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = B3C0DE3B2D5ED1ED00DAA341 /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		91C851D4279FD1CB002C4B55 /* Main.storyboard */ = {
@@ -422,6 +431,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B3C0DE3A2D5ED1DC00DAA341 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.58.2;
+			};
+		};
 		B3CDDD522D5DF94E002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
@@ -433,6 +450,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B3C0DE3B2D5ED1ED00DAA341 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3C0DE3A2D5ED1DC00DAA341 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
 		B3CDDD532D5DF94E002E4981 /* Sora */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B3CDDD522D5DF94E002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;

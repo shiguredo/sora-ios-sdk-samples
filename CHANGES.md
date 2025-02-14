@@ -19,7 +19,11 @@
   - https://github.com/swiftlang/swift-format
   - @zztkm
 - [UPDATE] 依存管理を CocoaPods から Xcode の Swift Package Manager に移行する
-  - Sora を Swift Package Manager 管理に移行する
+  - Sora と SwiftLint を Swift Package Manager 管理に移行する
+    - SwiftLint を直接インストールするのではなく、ビルド済 SwiftLint と Xcode 統合のためのプラグインを提供する SwiftLintPlugin 経由で利用
+  - SwiftLint の実行をシェルスクリプトではなく、Xcode の Build Phases に設定
+    - これにより、ビルド時に SwiftLint が実行されるようになる
+    - ビルド時に SwiftLint を実行するようになったので、lint-format.sh から SwiftLint を削除
   - @zztkm
 - [UPDATE] GitHub Actions の定期実行をやめる
   - @zztkm
