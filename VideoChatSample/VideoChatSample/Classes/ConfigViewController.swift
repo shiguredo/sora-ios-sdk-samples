@@ -98,27 +98,29 @@ class ConfigViewController: UITableViewController {
     default: fatalError()
     }
 
-    let h264ProfileLevelId =
-      h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty
-      ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
     var configuration = Configuration(
       urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv,
       multistreamEnabled: true)
-    configuration.videoCodec = videoCodec
-    configuration.dataChannelSignaling = dataChannelSignaling
-    configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
-
-    let videoVp9Params = vp9ProfileId != nil ? ["profile_id": vp9ProfileId!] : nil
-    configuration.videoVp9Params = videoVp9Params
-
-    let videoAv1Params = av1Profile != nil ? ["profile": av1Profile!] : nil
-    configuration.videoAv1Params = videoAv1Params
-
-    let videoH264Params =
-      h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
-    configuration.videoH264Params = videoH264Params
-
-    configuration.signalingConnectMetadata = Environment.signalingConnectMetadata
+      // Configured with the specified settings
+      configuration.connectionTimeout = 60
+      configuration.cameraSettings.isEnabled = false
+      configuration.cameraSettings.resolution = .hd720p
+      configuration.cameraSettings.frameRate = 30
+      configuration.videoBitRate = 3_000
+      configuration.webRTCConfiguration.degradationPreference = .maintainResolution
+      configuration.videoCodec = .vp9
+      configuration.audioEnabled = true
+      configuration.audioCodec = .opus
+      configuration.audioBitRate = 384
+      configuration.signalingConnectMetadata = ["access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFubmVsX2lkIjoiaGlldW5oMDkxMF8yMDkwMjU0NV90ZXN0LXNvcmEifQ.GDMyWwN22iaiPBob_VyW7_00Y5Hh7mUJCnzuxJMJ8Ls"]
+      configuration.clientId = "iphone-\(UIDevice.current.identifierForVendor?.uuidString ?? "")"
+      configuration.dataChannelSignaling = true
+      configuration.dataChannels = [
+        [
+        "label": Environment.dataChanelLabel,
+        "direction": "sendrecv"
+        ]
+      ]
 
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
