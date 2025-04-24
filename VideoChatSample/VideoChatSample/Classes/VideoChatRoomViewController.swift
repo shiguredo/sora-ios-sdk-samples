@@ -1,5 +1,6 @@
 import Sora
 import UIKit
+import AVFoundation
 
 /// ビデオチャットを行う画面です。
 class VideoChatRoomViewController: UIViewController {
@@ -8,6 +9,13 @@ class VideoChatRoomViewController: UIViewController {
 
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
+    private let captureSessionQueue = DispatchQueue(
+        label: "captureSessionQueue", qos: .userInitiated, attributes: DispatchQueue.Attributes())
+    private let captureSession = AVCaptureSession()
+    private var authorizationStatus: AVAuthorizationStatus?
+    private var configurationFinished: Bool = false
+    private var captureDevicePosition: AVCaptureDevice.Position = .front
+    private var currentFilter: CIFilter?
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -20,6 +28,41 @@ class VideoChatRoomViewController: UIViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+      if authorizationStatus == nil {
+          // 映像キャプチャデバイス（要するにカメラ）を使用するには、最初にユーザーからの明示的な許可を得る必要があります。
+          // ここでは許可状況を確認し、それに応じて処理を分岐しています。
+          switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
+          case .authorized:
+              // 既に許可が得られているので、そのまま続行します。
+              authorizationStatus = .authorized
+          case .notDetermined:
+              // まだ一度もユーザーに対して許可を得るダイアログを表示していないため、ここで許可を得るためのダイアログを表示します。
+              // ユーザーがダイアログに対して返事を返すまでの間、captureSessionQueueを停止させ、処理をサスペンドしています。
+              // ユーザーがダイアログに対して処理を返してきたら、そのステータスに応じて処理を続行するため、captureSessionQueueを再開させます。
+              captureSessionQueue.suspend()
+              AVCaptureDevice.requestAccess(for: AVMediaType.video) { [weak self] granted in
+                  if !granted {
+                      self?.authorizationStatus = .denied
+                  } else {
+                      self?.authorizationStatus = .authorized
+                  }
+                  self?.captureSessionQueue.resume()
+              }
+          default:
+              // 既に明示的に拒否されているため、そのまま続行します。
+              authorizationStatus = .denied
+          }
+      }
+      
+      // captureSessionをセットアップしたのち、映像キャプチャを開始します。
+      // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
+      // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
+      captureSessionQueue.async { [weak self] in
+          if let finished = self?.configurationFinished, !finished {
+              self?.configureCaptureSession()
+          }
+          self?.captureSession.startRunning()
+      }
 
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
@@ -44,6 +87,24 @@ class VideoChatRoomViewController: UIViewController {
           self?.handleDisconnect()
         }
       }
+        
+        mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
+            guard let self, label.starts(with: "#") else {
+                return
+            }
+            
+            switch label {
+            case Environment.dataChanelLabel:
+                if let message = String(data: data, encoding: .utf8) {
+                    print("hieunh: \(message)")
+                    handleDisconnect()
+                } else {
+                    print("message data could not be converted to string")
+                }
+            default:
+                print("not my label")
+            }
+        }
     }
 
     // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
@@ -52,6 +113,10 @@ class VideoChatRoomViewController: UIViewController {
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+      // captureSessionを停止します。
+      captureSessionQueue.async { [weak self] in
+          self?.captureSession.stopRunning()
+      }
 
     // viewDidAppearで設定したコールバックを、対になるここで削除します。
     if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
@@ -219,10 +284,12 @@ extension VideoChatRoomViewController {
   /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
   /// いずれの場合も含めます。
   private func handleDisconnect() {
-    // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    SoraSDKManager.shared.disconnect()
-    // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-    performSegue(withIdentifier: "Exit", sender: self)
+      DispatchQueue.main.async {
+          // 明示的に配信をストップしてから、画面を閉じるようにしています。
+          SoraSDKManager.shared.disconnect()
+          // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+          self.performSegue(withIdentifier: "Exit", sender: self)
+      }
   }
 }
 
@@ -250,6 +317,175 @@ extension VideoChatRoomViewController {
   /// 閉じるボタンを押したときの挙動を定義します。
   /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onExitButton(_ sender: UIBarButtonItem) {
+      sendMessageToDataChannel(message: "helloworld!")
     handleDisconnect()
   }
+}
+
+// MARK: Config Capture Session
+extension VideoChatRoomViewController {
+    private func configureCaptureSession() {
+        // 映像キャプチャデバイスの仕様が許可されている場合のみ続行します。
+        // 拒否されている場合は映像キャプチャデバイスを使用できないため、ここで終了します。
+        guard authorizationStatus == .authorized else {
+            configurationFinished = false
+            return
+        }
+        
+        // ここからデバイスのセットアップを行います。
+        // 全て終わったら自動的にコミットされます。
+        captureSession.beginConfiguration()
+        defer {
+            captureSession.commitConfiguration()
+        }
+        
+        // 入力デバイスのセットアップを行い、captureSessionに設定します。
+        guard
+            let captureDevice = AVCaptureDevice.default(
+                AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video,
+                position: captureDevicePosition)
+        else {
+            configurationFinished = false
+            return
+        }
+        guard let captureDeviceInput = try? AVCaptureDeviceInput(device: captureDevice) else {
+            configurationFinished = false
+            return
+        }
+        for input in captureSession.inputs {
+            captureSession.removeInput(input)
+        }
+        if captureSession.canAddInput(captureDeviceInput) {
+            captureSession.addInput(captureDeviceInput)
+        }
+        
+        // 出力側のセットアップを行い、captureSessionに設定します。
+        let videoDataOutput = AVCaptureVideoDataOutput()
+        videoDataOutput.setSampleBufferDelegate(self, queue: captureSessionQueue)
+        for output in captureSession.outputs {
+            captureSession.removeOutput(output)
+        }
+        if captureSession.canAddOutput(videoDataOutput) {
+            captureSession.addOutput(videoDataOutput)
+        }
+        
+        // captureSession経由で、カメラの出力プリセットの設定を行います。
+        // デフォルトではカメラの出力できる最も美しい画質で動画を出力するのですが、
+        // あまりにも高画質になるとフィルタをかける際に処理コストが高くなりすぎたりするため、
+        // ここでは適切な画質に設定しています。
+        if captureSession.canSetSessionPreset(.hd1280x720) {
+            captureSession.sessionPreset = .hd1280x720
+        } else {
+            captureSession.sessionPreset = .medium
+        }
+        
+        // captureSessionのセットアップが完了したので、最後にこのカメラキャプチャが出力する動画の向きを設定します。
+        updateVideoOrientationUsingStatusBarOrientation()
+    }
+    
+    /// 現在のUI上のステータスバーの向きを元に、映像の回転方向を補正します。
+    /// こちらのメソッドはデバイスの画面が天頂向き・地面向きの状態であったとしても、ステータスバーの向きを基準に映像を回転させることができますが、
+    /// その代わりにデバイス画面が天頂向き・地面向きの状態で使用すると意図しない向きに画面が回ってしまう可能性もあります。
+    /// そこで本サンプルでは最初の1回目の補正にのみ使用しています。
+    private func updateVideoOrientationUsingStatusBarOrientation() {
+        DispatchQueue.main.async {
+            let statusBarOrientation = UIApplication.shared.statusBarOrientation
+            let videoOrientation =
+            AVCaptureVideoOrientation(interfaceOrientation: statusBarOrientation) ?? .portrait
+            for output in self.captureSession.outputs {
+                if let connection = output.connection(with: .video) {
+                    connection.videoOrientation = videoOrientation
+                }
+            }
+        }
+    }
+    
+    /// 現在のデバイス自体の向きを元に、映像の回転方向を補正します。
+    /// こちらのメソッドはデバイスの向きを元に補正するため、デバイス画面が天頂向き・地面向きの状態で使用すると映像を回転させないで終了するようになっています。
+    /// （明示的にどちらかの方向にデバイスが傾けられているときにだけ、映像を回転させます）
+    /// そこで本サンプルではデバイスが回転したときのイベントに合わせて使用しています。
+    private func updateVideoOrientationUsingDeviceOrientation() {
+        let deviceOrientation = UIDevice.current.orientation
+        guard deviceOrientation.isPortrait || deviceOrientation.isLandscape else {
+            return
+        }
+        guard let videoOrientation = AVCaptureVideoOrientation(deviceOrientation: deviceOrientation)
+        else {
+            return
+        }
+        for output in captureSession.outputs {
+            if let connection = output.connection(with: .video) {
+                connection.videoOrientation = videoOrientation
+            }
+        }
+    }
+}
+
+// MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
+extension VideoChatRoomViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+    /// ビデオキャプチャが、新しいフレームをキャプチャしたときに呼び出されます。
+    ///
+    /// このサンプルアプリでは、キャプチャされたフレームを適切に変換してSora SDKのmediaStreamに流すことで、配信を行っています。
+    /// 注意点として、このdelegate methodはパフォーマンス維持のため、
+    /// メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
+    /// したがってメインスレッド上で直接操作する必要があるコードを呼び出す場合は注意が必要です。
+    func captureOutput(
+        _ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer,
+        from connection: AVCaptureConnection
+    ) {
+        guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+              let mediaStream = mediaChannel.senderStream
+        else {
+            return
+        }
+        if let filter = currentFilter {
+            // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
+            //
+            // フィルタの実装方法について:
+            // ここでは一番簡単なCore Imageを使ったフィルタリングを実装しています。
+            // 大本のビデオフレームバッファ (CMSampleBuffer) から画像フレームバッファ (CVPixelBuffer) を取りだし、
+            // Core ImageのCIImageに変換して、フィルタをかけます。
+            // 最後にフィルタリングされたCIImageをCIContext経由で元々の画像フレームバッファ領域に上書きレンダリングしています。
+            // 元々の画像フレームバッファ領域に直接上書きしているので、大本のビデオフレームバッファをそのまま引き続き使用することができ、
+            // 最終的にはこのビデオフレームバッファをSora SDKの提供するVideoFrameに変換して配信することができます。
+            guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+                return
+            }
+            let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
+            filter.setValue(cameraImage, forKey: kCIInputImageKey)
+            guard let filteredImage = filter.outputImage else {
+                return
+            }
+            let context = CIContext(options: nil)
+            context.render(filteredImage, to: pixelBuffer)
+            mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+        } else {
+            // フィルタが選択されていないので、キャプチャした動画をそのまま配信させます。
+            mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+        }
+    }
+    
+    /// ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
+    func captureOutput(
+        _ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer,
+        from connection: AVCaptureConnection
+    ) {
+        // このサンプルアプリでは何もしません。
+    }
+}
+
+// Data Channel
+extension VideoChatRoomViewController {
+    private func sendMessageToDataChannel(message: String) {
+        guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
+            return
+        }
+        
+        // メッセージを送信します。
+        if let data: Data = message.data(using: .utf8),
+           let error = mediaChannel.sendMessage(label: Environment.dataChanelLabel, data: data) {
+            NSLog("cannot send message: \(error)")
+            return
+        }
+    }
 }

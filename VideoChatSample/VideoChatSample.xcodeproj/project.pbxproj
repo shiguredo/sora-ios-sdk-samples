@@ -13,6 +13,7 @@
 		0E55EF191F2FAC7300B5EFA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */; };
 		0E55EF1C1F2FAC7300B5EFA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF1A1F2FAC7300B5EFA8 /* LaunchScreen.storyboard */; };
 		35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9D27A389AE000B0ED7 /* Environment.swift */; };
+		3D9374252DB0AD020094E2A0 /* AVCaptureVideoOrientation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9374242DB0ACF10094E2A0 /* AVCaptureVideoOrientation+Extension.swift */; };
 		B3CDDD682D5DFB27002E4981 /* Sora in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD672D5DFB27002E4981 /* Sora */; };
 		B3CDDD6A2D5DFB27002E4981 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD692D5DFB27002E4981 /* WebRTC */; };
 		C57842AE1F41A18B001AF8AB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */; };
@@ -29,6 +30,7 @@
 		0E55EF1B1F2FAC7300B5EFA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0E55EF1D1F2FAC7300B5EFA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35DC8E9D27A389AE000B0ED7 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		3D9374242DB0ACF10094E2A0 /* AVCaptureVideoOrientation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureVideoOrientation+Extension.swift"; sourceTree = "<group>"; };
 		C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoChatRoomViewController.swift; sourceTree = "<group>"; };
 		C57842B11F41A374001AF8AB /* SoraSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoraSDKManager.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 		C57842AC1F41A134001AF8AB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3D9374242DB0ACF10094E2A0 /* AVCaptureVideoOrientation+Extension.swift */,
 				C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */,
 				C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */,
 				C57842B11F41A374001AF8AB /* SoraSDKManager.swift */,
@@ -212,6 +215,7 @@
 			files = (
 				C57842AE1F41A18B001AF8AB /* ConfigViewController.swift in Sources */,
 				C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */,
+				3D9374252DB0AD020094E2A0 /* AVCaptureVideoOrientation+Extension.swift in Sources */,
 				C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */,
 				0E55EF121F2FAC7300B5EFA8 /* AppDelegate.swift in Sources */,
 				35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */,
