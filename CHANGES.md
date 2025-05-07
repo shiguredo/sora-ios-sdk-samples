@@ -11,6 +11,13 @@
 
 ## develop
 
+## sora-ios-sdk-2025.1.2
+
+**リリース日**: 2025-05-07
+
+- [UPDATE] Sora iOS SDK を 2025.1.2 にあげる
+  - @zztkm
+
 ## sora-ios-sdk-2025.1.1
 
 **リリース日**: 2025-01-23
