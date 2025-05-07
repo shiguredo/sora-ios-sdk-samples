@@ -5,7 +5,7 @@ platform :ios, '14.0'
 
 target 'SpotlightSample' do
   use_frameworks!
-  pod 'Sora', '2025.1.1'
+  pod 'Sora', '2025.1.2'
 
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
