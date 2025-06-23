@@ -44,6 +44,9 @@
   - lint-format.sh で一括実行していたコマンドを個別に実行できるようにした
   - デフォルトでは make コマンドを実行したディレクトリから再帰的に .swift ファイルを探すが、`TARGET_PATH` 変数を与えることで特定のディレクトリ以下の .swift ファイルを対象にすることも可能
   - @zztkm
+- [ADD] SoraiOSSDKSamples.xcworkspace を追加する
+  - 1つの Xcode で複数のプロジェクトを管理するためのワークスペース
+  - @zztkm
 
 ## sora-ios-sdk-2025.1.1
 
