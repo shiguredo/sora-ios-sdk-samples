@@ -46,6 +46,9 @@
   - @zztkm
 - [ADD] .github ディレクトリに copilot-instructions.md を追加
   - @torikizi
+- [ADD] SoraiOSSDKSamples.xcworkspace を追加する
+  - 1つの Xcode で複数のプロジェクトを管理するためのワークスペース
+  - @zztkm
 
 ## sora-ios-sdk-2025.1.1
 
