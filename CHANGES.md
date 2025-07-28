@@ -48,6 +48,19 @@
   - @torikizi
 - [ADD] SoraiOSSDKSamples.xcworkspace を追加する
   - 1つの Xcode で複数のプロジェクトを管理するためのワークスペース
+
+## sora-ios-sdk-2025.1.3
+
+**リリース日**: 2025-07-28
+
+- [UPDATE] Sora iOS SDK を 2025.1.3 にあげる
+  - @zztkm
+
+## sora-ios-sdk-2025.1.2
+
+**リリース日**: 2025-05-07
+
+- [UPDATE] Sora iOS SDK を 2025.1.2 にあげる
   - @zztkm
 
 ## sora-ios-sdk-2025.1.1
