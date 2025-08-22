@@ -121,7 +121,7 @@ class ConfigViewController: UITableViewController {
 
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
-    // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
+    // role 引数には .sendrecv を指定します。
     SoraSDKManager.shared.connect(
       channelId: channelId,
       videoCodec: videoCodec,

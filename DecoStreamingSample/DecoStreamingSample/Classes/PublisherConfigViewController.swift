@@ -58,7 +58,6 @@ class PublisherConfigViewController: UITableViewController {
     SoraSDKManager.shared.connect(
       channelId: channelId,
       role: .sendonly,
-      multistreamEnabled: true,
       videoCodec: videoCodec
     ) { [weak self] error in
       // 接続処理が終了したので false にします。
