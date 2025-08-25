@@ -102,8 +102,7 @@ class ConfigViewController: UITableViewController {
       h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty
       ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
     var configuration = Configuration(
-      urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv,
-      multistreamEnabled: true)
+      urlCandidates: Environment.urls, channelId: channelId, role: .sendrecv)
     configuration.videoCodec = videoCodec
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
@@ -122,7 +121,7 @@ class ConfigViewController: UITableViewController {
 
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
-    // role 引数には .sendrecv を指定し、マルチストリームを有効にします。
+    // role 引数には .sendrecv を指定します。
     SoraSDKManager.shared.connect(
       with: configuration
     ) { [weak self] error in

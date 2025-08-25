@@ -11,8 +11,16 @@
 
 ## develop
 
+- [CHANGE] マルチストリーム設定を廃止する
+  - レガシーストリーム機能は 2025 年 6 月リリースの Sora にて廃止されたため、サンプルアプリケーションでもマルチストリーム設定を廃止する
+  - Sora がデフォルトでレガシーストリームを使用するように設定されている場合、接続エラーになる
+  - @t-miya
+
 ### misc
 
+- [UPDATE] Github Actions のビルド環境を更新する
+  - Xcode の version を 16.3 に変更
+  - SDK を iOS 18.3 に変更
 - [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
   - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
   - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない

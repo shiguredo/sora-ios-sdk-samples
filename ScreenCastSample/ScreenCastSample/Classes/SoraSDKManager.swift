@@ -26,7 +26,6 @@ class SoraSDKManager {
   func connect(
     channelId: String,
     role: Role,
-    multistreamEnabled: Bool,
     videoCodec: VideoCodec = .default,
     completionHandler: ((Error?) -> Void)?
   ) {
@@ -36,13 +35,12 @@ class SoraSDKManager {
     }
 
     // Configurationを生成して、接続設定を行います。
-    // 必須となる設定はurl, channelId, role, multistreamEnabledのみです。
+    // 必須となる設定はurl, channelId, roleのみです。
     // その他の設定にはデフォルト値が指定されていますが、ここで必要に応じて自由に調整することが可能です。
     var configuration = Configuration(
       urlCandidates: Environment.urls,
       channelId: channelId,
-      role: role,
-      multistreamEnabled: multistreamEnabled)
+      role: role)
 
     // 引数で指定された値を設定します。
     configuration.videoCodec = videoCodec
