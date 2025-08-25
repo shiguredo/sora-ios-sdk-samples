@@ -18,6 +18,9 @@
 
 ### misc
 
+- [UPDATE] Github Actions のビルド環境を更新する
+  - Xcode の version を 16.3 に変更
+  - SDK を iOS 18.3 に変更
 - [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
   - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
   - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない
