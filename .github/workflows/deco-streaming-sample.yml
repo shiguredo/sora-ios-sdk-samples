@@ -39,10 +39,10 @@ jobs:
             -project '${{ env.PROJECT }}.xcodeproj' \
             -scheme '${{ env.SCHEME }}' \
             -sdk ${{ env.XCODE_SDK }} \
+            -arch arm64 \
             -configuration Release \
             -derivedDataPath build \
             -skipPackagePluginValidation \
-            -destination 'generic/platform=iOS' \
             clean build \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
