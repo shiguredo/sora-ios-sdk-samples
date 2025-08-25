@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/shiguredo/sora-ios-sdk",
       "state" : {
-        "revision" : "53b0a5c2b18106d28e1577445da5d18865a38417",
-        "version" : "2025.1.2"
+        "revision" : "7d840aa74688a87d7a95141d6c3d420c823d1b05",
+        "version" : "2025.2.0-canary.4"
       }
     },
     {
