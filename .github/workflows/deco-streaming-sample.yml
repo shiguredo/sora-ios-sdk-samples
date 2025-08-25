@@ -39,7 +39,6 @@ jobs:
             -project '${{ env.PROJECT }}.xcodeproj' \
             -scheme '${{ env.SCHEME }}' \
             -sdk ${{ env.XCODE_SDK }} \
-            -arch arm64 \
             -configuration Release \
             -derivedDataPath build \
             -skipPackagePluginValidation \
