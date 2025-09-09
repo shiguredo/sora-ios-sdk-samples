@@ -19,9 +19,9 @@ Please read https://github.com/shiguredo/oss before use.
 - iOS 15 以降
 - アーキテクチャ arm64 (シミュレーターの動作は未保証)
 - macOS 15.0 以降
-- Xcode 16.2
+- Xcode 16.4
 - Swift 5.10
-- WebRTC SFU Sora 2024.2.0 以降
+- WebRTC SFU Sora 2025.1.0 以降
 
 Xcode と Swift のバージョンによっては、 取得できるバイナリに互換性がない可能性があります。
 
