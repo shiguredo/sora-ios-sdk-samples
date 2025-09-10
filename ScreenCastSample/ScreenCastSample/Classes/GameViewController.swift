@@ -160,13 +160,14 @@ class GameViewController: UIViewController {
           // サーバーから切断されたときのコールバックを設定します。
           mediaChannel.handlers.onDisconnect = { [weak self] event in
             guard let self = self else { return }
-              switch event {
-              case .ok(let code, let reason):
-                  NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-              case .error(let error):
-                  NSLog("[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-              }
-              
+            switch event {
+            case .ok(let code, let reason):
+              NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+            case .error(let error):
+              NSLog(
+                "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
+            }
+
             self.handleDisconnect()
           }
         }
