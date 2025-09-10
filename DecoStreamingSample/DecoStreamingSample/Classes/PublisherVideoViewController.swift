@@ -67,10 +67,17 @@ class PublisherVideoViewController: UIViewController, UIPickerViewDelegate, UIPi
       navigationItem.title = "配信中: \(mediaChannel.configuration.channelId)"
 
       // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { [weak self] _ in
-        NSLog("[sample] mediaChannel.handlers.onDisconnect")
+      mediaChannel.handlers.onDisconnect = { [weak self] event in
+        guard let self = self else { return }
+          switch event {
+          case .ok(let code, let reason):
+              NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+          case .error(let error):
+              NSLog("[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
+          }
+          
         DispatchQueue.main.async {
-          self?.onExitButton(nil)
+          self.onExitButton(nil)
         }
       }
     }
