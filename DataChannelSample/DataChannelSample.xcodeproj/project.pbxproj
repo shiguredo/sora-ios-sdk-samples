@@ -358,7 +358,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DQ232CBKHS;
+				DEVELOPMENT_TEAM = TSH5N2HH34;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DataChannelSample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -386,7 +386,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DQ232CBKHS;
+				DEVELOPMENT_TEAM = TSH5N2HH34;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DataChannelSample/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -443,8 +443,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
 			requirement = {
-				kind = exactVersion;
-				version = "2025.2.0";
+				branch = "feature/update-libwebrtc-m140";
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -474,7 +474,7 @@
 			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = "2025.2.0";
+				version = "2025.3.0-canary.0";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
