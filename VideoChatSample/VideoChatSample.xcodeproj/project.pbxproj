@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,8 @@
 		0E55EF191F2FAC7300B5EFA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF181F2FAC7300B5EFA8 /* Assets.xcassets */; };
 		0E55EF1C1F2FAC7300B5EFA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E55EF1A1F2FAC7300B5EFA8 /* LaunchScreen.storyboard */; };
 		35DC8E9E27A389AE000B0ED7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DC8E9D27A389AE000B0ED7 /* Environment.swift */; };
+		B3CDDD682D5DFB27002E4981 /* Sora in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD672D5DFB27002E4981 /* Sora */; };
+		B3CDDD6A2D5DFB27002E4981 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD692D5DFB27002E4981 /* WebRTC */; };
 		C57842AE1F41A18B001AF8AB /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AD1F41A18B001AF8AB /* ConfigViewController.swift */; };
 		C57842B01F41A196001AF8AB /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842AF1F41A196001AF8AB /* VideoChatRoomViewController.swift */; };
 		C57842B21F41A374001AF8AB /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57842B11F41A374001AF8AB /* SoraSDKManager.swift */; };
@@ -37,6 +39,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3CDDD682D5DFB27002E4981 /* Sora in Frameworks */,
+				B3CDDD6A2D5DFB27002E4981 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +104,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B346E1E72D5ED86F009E7B8F /* PBXTargetDependency */,
 			);
 			name = VideoChatSample;
 			productName = VideoChatSample;
@@ -134,6 +139,10 @@
 				Base,
 			);
 			mainGroup = 0E55EF051F2FAC7300B5EFA8;
+			packageReferences = (
+				B3CDDD662D5DFB27002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */,
+				B346E1E52D5ED864009E7B8F /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			productRefGroup = 0E55EF0F1F2FAC7300B5EFA8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -210,6 +219,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B346E1E72D5ED86F009E7B8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = B346E1E62D5ED86F009E7B8F /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0E55EF151F2FAC7300B5EFA8 /* Main.storyboard */ = {
@@ -337,7 +353,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -355,7 +372,10 @@
 				);
 				INFOPLIST_FILE = VideoChatSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.VideoChatSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -373,7 +393,10 @@
 				);
 				INFOPLIST_FILE = VideoChatSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.VideoChatSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -402,6 +425,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B346E1E52D5ED864009E7B8F /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.58.2;
+			};
+		};
+		B3CDDD662D5DFB27002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = "2025.2.0";
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B346E1E62D5ED86F009E7B8F /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B346E1E52D5ED864009E7B8F /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		B3CDDD672D5DFB27002E4981 /* Sora */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3CDDD662D5DFB27002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = Sora;
+		};
+		B3CDDD692D5DFB27002E4981 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3CDDD662D5DFB27002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0E55EF061F2FAC7300B5EFA8 /* Project object */;
 }

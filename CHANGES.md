@@ -1,15 +1,68 @@
 # 変更履歴
 
+- CHANGE
+  - 下位互換のない変更
 - UPDATE
   - 下位互換がある変更
 - ADD
   - 下位互換がある追加
-- CHANGE
-  - 下位互換のない変更
 - FIX
   - バグ修正
 
-## develop
+## 2025.2
+
+## sora-ios-sdk-2025.2.0
+
+**リリース日**: 2025-09-18
+
+- [CHANGE] マルチストリーム設定を廃止する
+  - レガシーストリーム機能は 2025 年 6 月リリースの Sora にて廃止されたため、サンプルアプリケーションでもマルチストリーム設定を廃止する
+  - Sora がデフォルトでレガシーストリームを使用するように設定されている場合、接続エラーになる
+  - @t-miya
+- [UPDATE] onDisconnect 時のログを詳細化する
+  - SoraEvent の内容を出力する処理を追加
+  - @miosakuma
+
+### misc
+
+- [UPDATE] Github Actions のビルド環境を更新する
+  - Xcode の version を 16.3 に変更
+  - SDK を iOS 18.3 に変更
+- [CHANGE] フォーマッターを SwiftFormat から swift-format に変更する
+  - SwiftFormat のための設定ファイルである `.swiftformat` と `.swift-version` を削除
+  - フォーマット設定はデフォルトを採用したため、`.swift-format` は利用しない
+  - https://github.com/swiftlang/swift-format
+  - @zztkm
+- [UPDATE] 依存管理を CocoaPods から Xcode の Swift Package Manager に移行する
+  - Sora と SwiftLint を Swift Package Manager 管理に移行する
+    - SwiftLint を直接インストールするのではなく、ビルド済 SwiftLint と Xcode 統合のためのプラグインを提供する SwiftLintPlugin 経由で利用
+    - SwiftLintPlugin を Xcode で初めて利用する場合の注意事項と対応方法を各アプリの README に記載
+  - GitHub Actions から CocoaPods 関連処理を削除
+  - CocoaPods への依存をなくしたため、Podfile を削除
+  - @zztkm
+- [UPDATE] SwiftLint の実行をシェルスクリプトではなく、Xcode の Build Phases に設定
+  - これにより、ビルド時に SwiftLint が実行されるようになる
+  - ビルド時に SwiftLint を実行するようになったため、lint-format.sh から SwiftLint を削除
+  - @zztkm
+- [UPDATE] フォーマッターとリンターの実行を Makefile と Xcode に分割したため、不要になった lint-format.sh を削除
+  - @zztkm
+- [UPDATE] swift-format lint で出力される警告を修正
+  - @zztkm
+- [UPDATE] GitHub Actions の定期実行をやめる
+  - @zztkm
+- [UPDATE] GitHub Actions のビルド環境を更新する
+  - runner を macos-15 に変更
+  - Xcode の version を 16.2 に変更
+  - SDK を iOS 18.2 に変更
+  - @zztkm
+- [ADD] swift-format 実行用の Makefile を追加する
+  - lint-format.sh で一括実行していたコマンドを個別に実行できるようにした
+  - デフォルトでは make コマンドを実行したディレクトリから再帰的に .swift ファイルを探すが、`TARGET_PATH` 変数を与えることで特定のディレクトリ以下の .swift ファイルを対象にすることも可能
+  - @zztkm
+- [ADD] .github ディレクトリに copilot-instructions.md を追加
+  - @torikizi
+- [ADD] SoraiOSSDKSamples.xcworkspace を追加する
+  - 1つの Xcode で複数のプロジェクトを管理するためのワークスペース
 
 ## sora-ios-sdk-2025.1.3
 

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,8 @@
 		91E3D010265B92F0003E19EC /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D00D265B92F0003E19EC /* ConfigViewController.swift */; };
 		91E3D011265B92F0003E19EC /* SoraSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D00E265B92F0003E19EC /* SoraSDKManager.swift */; };
 		91E3D012265B92F0003E19EC /* VideoChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E3D00F265B92F0003E19EC /* VideoChatRoomViewController.swift */; };
+		B3CDDD632D5DFACE002E4981 /* Sora in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD622D5DFACE002E4981 /* Sora */; };
+		B3CDDD652D5DFACE002E4981 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = B3CDDD642D5DFACE002E4981 /* WebRTC */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3CDDD632D5DFACE002E4981 /* Sora in Frameworks */,
+				B3CDDD652D5DFACE002E4981 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +118,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B346E1E42D5ED842009E7B8F /* PBXTargetDependency */,
 			);
 			name = SpotlightSample;
 			productName = SpotlightSample;
@@ -143,6 +148,10 @@
 				Base,
 			);
 			mainGroup = 911C1BCF2653AA3E007B1B59;
+			packageReferences = (
+				B3CDDD612D5DFACE002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */,
+				B346E1E22D5ED82D009E7B8F /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			productRefGroup = 911C1BD92653AA3E007B1B59 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -219,6 +228,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B346E1E42D5ED842009E7B8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = B346E1E32D5ED842009E7B8F /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		911C1BE12653AA3E007B1B59 /* Main.storyboard */ = {
@@ -416,6 +432,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B346E1E22D5ED82D009E7B8F /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.58.2;
+			};
+		};
+		B3CDDD612D5DFACE002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = "2025.2.0";
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B346E1E32D5ED842009E7B8F /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B346E1E22D5ED82D009E7B8F /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		B3CDDD622D5DFACE002E4981 /* Sora */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3CDDD612D5DFACE002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = Sora;
+		};
+		B3CDDD642D5DFACE002E4981 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B3CDDD612D5DFACE002E4981 /* XCRemoteSwiftPackageReference "sora-ios-sdk" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 911C1BD02653AA3E007B1B59 /* Project object */;
 }

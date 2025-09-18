@@ -9,19 +9,22 @@
 
 ## ビルド方法
 
-1. CocoaPods でライブラリを取得します。
 
-   ```
-   $ pod install
-   ```
-
-2. ``VideoChatSample/Environment.example.swift`` のファイル名を ``VideoChatSample/Environment.swift`` に変更し、接続情報を設定します。
+1. ``VideoChatSample/Environment.example.swift`` のファイル名を ``VideoChatSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp VideoChatSample/Environment.example.swift VideoChatSample/Environment.swift
    ```
 
-３. ``VideoChatSample.xcworkspace`` を Xcode で開いてビルドします。
+2. ``VideoChatSample.xcodeproj`` を Xcode で開いてビルドします。
+
+   ```
+   $ open VideoChatSample.xcodeproj
+   ```
+
+> [!TIP]
+> はじめてビルドを行う場合、 ビルドに失敗し `SwfitLintBuildToolPlugin (SwiftLintPlugin)` に関するプロンプトが表示されたら
+> 必ずプラグインを信頼して有効にしてください。そうすることで次回以降ビルドを正常に実行できます。
 
 ## サンプルアプリの使い方
 

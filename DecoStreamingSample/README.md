@@ -10,19 +10,21 @@ Sora iOS SDK を用いて実装する方法を説明しています。
 
 ## ビルド方法
 
-1. CocoaPods でライブラリを取得します。
-
-   ```
-   $ pod install
-   ```
-
-2. ``DecoStreamingSample/Environment.example.swift`` のファイル名を ``DecoStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
+1. ``DecoStreamingSample/Environment.example.swift`` のファイル名を ``DecoStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
    $ cp DecoStreamingSample/Environment.example.swift DecoStreamingSample/Environment.swift
    ```
 
-３. ``DecoStreamingSample.xcworkspace`` を Xcode で開いてビルドします。
+2. ``DecoStreamingSample.xcodeproj`` を Xcode で開いてビルドします。
+
+   ```
+   $ open DecoStreamingSample.xcodeproj
+   ```
+
+> [!TIP]
+> はじめてビルドを行う場合、 ビルドに失敗し `SwfitLintBuildToolPlugin (SwiftLintPlugin)` に関するプロンプトが表示されたら
+> 必ずプラグインを信頼して有効にしてください。そうすることで次回以降ビルドを正常に実行できます。
 
 ## サンプルアプリの使い方
 
@@ -30,11 +32,7 @@ Sora iOS SDK を用いて実装する方法を説明しています。
 
 このサンプルアプリは配信専用となっています。
 このサンプルアプリで配信している動画を閲覧するには、
-別途 RealTimeStreamingSample (生放送配信サンプルアプリ) などの視聴環境が必要です。
-
-このサンプルアプリでは、同時に複数のクライアントが同じクライアントIDに接続して配信を行う事はできません。
-最初に接続した配信者が優先され、後から同じクライアントIDに接続した配信者はエラーになります。
-視聴者側には特に制限がなく、無制限に配信を見る事ができます。
+別途 VideoChatSample (ビデオチャット) などの視聴環境が必要です。
 
 ## 実装上の詳細について
 
