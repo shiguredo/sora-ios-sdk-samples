@@ -443,8 +443,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
 			requirement = {
-				branch = "feature/update-libwebrtc-m140";
-				kind = branch;
+				kind = exactVersion;
+				version = "2025.3.0-canary.0";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
