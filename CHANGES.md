@@ -11,6 +11,11 @@
 
 ## 2025.3
 
+### misc
+
+- [UPDATE] actions/checkout を v5 に上げる
+  - @miosakuma
+
 ## 2025.2
 
 ## sora-ios-sdk-2025.2.0
