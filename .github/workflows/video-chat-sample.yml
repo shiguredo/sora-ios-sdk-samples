@@ -20,7 +20,7 @@ jobs:
       PROJECT: VideoChatSample
       SCHEME: VideoChatSample
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Select Xcode Version
       run: sudo xcode-select -s '${{ env.XCODE }}/Contents/Developer'
     - name: Show Xcode Version
