@@ -341,7 +341,7 @@
                                 <action selector="onExitButton:" destination="iOn-KG-Rc0" id="BTN-MB-Pnp"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="2aw-lv-VLe">
+                        <barButtonItem key="rightBarButtonItem" image="camera.rotate" catalog="system" id="2aw-lv-VLe">
                             <connections>
                                 <action selector="onCameraButton:" destination="iOn-KG-Rc0" id="kFJ-KT-eJM"/>
                             </connections>

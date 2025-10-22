@@ -11,6 +11,9 @@
 
 ## 2025.3
 
+- [CHANGE] フロントカメラ・バックカメラの切り替えボタンアイコンを camara.rotate に置き換える
+  - @t-miya
+
 ### misc
 
 - [UPDATE] actions/checkout を v5 に上げる

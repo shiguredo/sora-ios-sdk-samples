@@ -36,7 +36,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="箱ツムツム" id="C1G-DF-frv">
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="camera" id="C6m-dc-Fad">
+                            <barButtonItem image="camera.rotate" catalog="system" id="C6m-dc-Fad">
                                 <connections>
                                     <action selector="onCameraButton:" destination="FNV-zp-GV6" id="Nsl-bn-clz"/>
                                     <segue destination="KNc-zj-vCw" kind="presentation" id="lXH-1Q-C9B"/>

@@ -179,7 +179,7 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem systemItem="camera" id="HZo-Na-kX0">
+                            <barButtonItem image="camera.rotate" catalog="system" id="HZo-Na-kX0">
                                 <connections>
                                     <action selector="onCameraButton:" destination="xvX-rK-0JQ" id="K48-9X-mnk"/>
                                 </connections>
