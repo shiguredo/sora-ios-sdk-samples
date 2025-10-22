@@ -27,8 +27,14 @@ class VideoChatRoomViewController: UIViewController {
   /// ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。
   private var downstreamVideoViews: [VideoView] = []
 
+  /// カメラのミュートボタンです。
+  @IBOutlet weak var cameraMuteButton: UIBarButtonItem?
+
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
+
+  /// カメラのソフトミュート状態です。
+  private var isCameraSoftMuted = false
 
   /// チャットメッセージの履歴です。
   var history: [ChatMessage] = []
@@ -290,6 +296,19 @@ class VideoChatRoomViewController: UIViewController {
       }
     }
   }
+
+  /// カメラミュートボタンの見た目と状態を更新します。
+  private func updateCameraMuteButton(isMuted: Bool) {
+    isCameraSoftMuted = isMuted
+    let symbolName = isMuted ? "camera.slash" : "camera"
+    guard let button = cameraMuteButton else { return }
+    if let image = UIImage(systemName: symbolName) {
+      button.image = image
+    } else {
+      button.image = UIImage(named: symbolName)
+    }
+    button.accessibilityLabel = isMuted ? "カメラを再開" : "カメラを停止"
+  }
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -344,6 +363,18 @@ extension VideoChatRoomViewController {
     }
     upstream?.videoRenderer = upstreamVideoView
 
+    cameraMuteButton?.isEnabled = upstream != nil
+    if let upstream {
+      updateCameraMuteButton(isMuted: !upstream.videoEnabled)
+      upstream.handlers.onSwitchVideo = { [weak self] isEnabled in
+        DispatchQueue.main.async {
+          self?.updateCameraMuteButton(isMuted: !isEnabled)
+        }
+      }
+    } else {
+      updateCameraMuteButton(isMuted: false)
+    }
+
     // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
     layoutVideoViews(for: memberListView.bounds.size)
   }
@@ -364,7 +395,7 @@ extension VideoChatRoomViewController {
 extension VideoChatRoomViewController {
   /// カメラボタンを押したときの挙動を定義します。
   /// 詳しくはMain.storyboard内の定義をご覧ください。
-  @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
+  @IBAction func onSwitchCameraButton(_ sender: UIBarButtonItem) {
     guard let current = CameraVideoCapturer.current else {
       return
     }
@@ -378,6 +409,19 @@ extension VideoChatRoomViewController {
         NSLog(error.localizedDescription)
       }
     }
+  }
+
+  /// カメラミュートボタンを押したときの挙動を定義します。
+  @IBAction func onCameraMuteButton(_ sender: UIBarButtonItem) {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+      let upstream = mediaChannel.senderStream
+    else {
+      return
+    }
+
+    let nextMuted = !isCameraSoftMuted
+    upstream.videoEnabled = !nextMuted
+    updateCameraMuteButton(isMuted: nextMuted)
   }
 
   /// 閉じるボタンを押したときの挙動を定義します。
