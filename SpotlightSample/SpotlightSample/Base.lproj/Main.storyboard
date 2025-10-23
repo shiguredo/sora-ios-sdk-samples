@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -12,7 +12,7 @@
             <objects>
                 <navigationController id="uhR-pc-WPX" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Z9F-cb-B5S">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -42,12 +42,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ShA-Zi-CkT">
-                                                    <rect key="frame" x="118" y="11" width="237" height="22"/>
+                                                    <rect key="frame" x="114" y="11" width="241" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VUT-cm-blp">
-                                                    <rect key="frame" x="20" y="11.5" width="86" height="21"/>
+                                                    <rect key="frame" x="20" y="11.5" width="82" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -97,7 +97,7 @@
                             <tableViewSection headerTitle="アクティブ配信数" footerTitle="配信される発声者の最大人数を選択します。" id="PNL-Rl-ZYX">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Q4z-FJ-AI5">
-                                        <rect key="frame" x="0.0" y="282.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="283" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q4z-FJ-AI5" id="Wq3-51-LRH">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -130,14 +130,14 @@
                             <tableViewSection headerTitle="映像の種類" footerTitle="スポットライト使用時に受信する映像の種類を選択します。" id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="w4c-l2-ytM">
-                                        <rect key="frame" x="0.0" y="402" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="403" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w4c-l2-ytM" id="Umz-ts-ydC">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="S3w-p8-QFj">
-                                                    <rect key="frame" x="150" y="6.5" width="205" height="32"/>
+                                                    <rect key="frame" x="155" y="6.5" width="200" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
                                                         <segment title="none"/>
@@ -147,7 +147,7 @@
                                                     </segments>
                                                 </segmentedControl>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="フォーカス有" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fty-6u-bYK">
-                                                    <rect key="frame" x="20" y="11.5" width="104" height="21"/>
+                                                    <rect key="frame" x="20" y="11.5" width="95.5" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="87" id="Fid-Ec-eXd"/>
                                                     </constraints>
@@ -166,14 +166,14 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="K3y-kZ-Rjr">
-                                        <rect key="frame" x="0.0" y="446" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="447" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K3y-kZ-Rjr" id="ORC-qT-cWy">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cWJ-SD-e0P">
-                                                    <rect key="frame" x="150" y="6.5" width="205" height="32"/>
+                                                    <rect key="frame" x="155" y="6.5" width="200" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
                                                         <segment title="none"/>
@@ -206,14 +206,14 @@
                             <tableViewSection headerTitle="サイマルキャスト" id="6PQ-4D-44e" userLabel="サイマルキャスト">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="QOr-Zy-rST">
-                                        <rect key="frame" x="0.0" y="574" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="559.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QOr-Zy-rST" id="2Np-ls-Sob">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="サイマルキャスト" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bc5-W6-GoS" userLabel="サイマルキャスト">
-                                                    <rect key="frame" x="16" y="0.0" width="139" height="44"/>
+                                                    <rect key="frame" x="16" y="0.0" width="127.5" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="P3X-tz-l2r"/>
                                                     </constraints>
@@ -222,7 +222,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="r8Z-CJ-cKv" userLabel="Simulcast Segmented Control">
-                                                    <rect key="frame" x="268" y="6.5" width="91" height="32"/>
+                                                    <rect key="frame" x="273" y="6.5" width="86" height="32"/>
                                                     <segments>
                                                         <segment title="無効"/>
                                                         <segment title="有効"/>
@@ -244,14 +244,14 @@
                             <tableViewSection headerTitle="データチャンネルシグナリング設定" id="wzX-Nd-nfH">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="x2C-JV-nCg">
-                                        <rect key="frame" x="0.0" y="674" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="659.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x2C-JV-nCg" id="SYC-jP-UQJ">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データチャンネル" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Y9-dB-VgN">
-                                                    <rect key="frame" x="16" y="0.0" width="139" height="44"/>
+                                                    <rect key="frame" x="16" y="0.0" width="127.5" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="EFq-5n-nbF"/>
                                                     </constraints>
@@ -260,7 +260,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2ub-UV-wPB" userLabel="Data Channel Signaling Segmented Control">
-                                                    <rect key="frame" x="183" y="6.5" width="176" height="32"/>
+                                                    <rect key="frame" x="194" y="6.5" width="165" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
                                                         <segment title="無効"/>
@@ -279,7 +279,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="raM-Em-77Z">
-                                        <rect key="frame" x="0.0" y="718" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="703.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="raM-Em-77Z" id="aJm-LC-2GF">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -318,7 +318,7 @@
                             <tableViewSection id="6GQ-II-yrh">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="OP6-lF-bDi">
-                                        <rect key="frame" x="0.0" y="798" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="783.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OP6-lF-bDi" id="AZP-Dj-9uN">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -375,7 +375,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nuo-VV-0s9" userLabel="VideoViewList">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="74" width="375" height="593"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -393,13 +393,27 @@
                                 <action selector="onExitButton:" destination="iOn-KG-Rc0" id="BTN-MB-Pnp"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="camera.rotate" catalog="system" id="2aw-lv-VLe">
-                            <connections>
-                                <action selector="onCameraButton:" destination="iOn-KG-Rc0" id="kFJ-KT-eJM"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="camera.rotate" catalog="system" id="2aw-lv-VLe" userLabel="FlipCameraButton">
+                                <connections>
+                                    <action selector="onFlipCameraButton:" destination="iOn-KG-Rc0" id="upQ-8B-hV8"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="video" catalog="system" id="Phk-Jg-cmF" userLabel="MuteCameraButton">
+                                <connections>
+                                    <action selector="onCameraMuteButton:" destination="iOn-KG-Rc0" id="9M8-Fy-Gvg"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="mic" catalog="system" id="Plo-Oe-t5R" userLabel="MuteMicButton">
+                                <connections>
+                                    <action selector="onMicMuteButton:" destination="iOn-KG-Rc0" id="bp5-Tv-2O7"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="cameraMuteButton" destination="Phk-Jg-cmF" id="Nqn-FG-jbX"/>
+                        <outlet property="micMuteButton" destination="Plo-Oe-t5R" id="x7S-FZ-GGa"/>
                         <outlet property="videoViewsView" destination="Nuo-VV-0s9" id="wkm-Af-1nX"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>
                     </connections>
@@ -411,6 +425,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="camera.rotate" catalog="system" width="128" height="93"/>
+        <image name="mic" catalog="system" width="110" height="128"/>
+        <image name="video" catalog="system" width="128" height="82"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
