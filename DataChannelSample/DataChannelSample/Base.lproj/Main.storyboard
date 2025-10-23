@@ -878,6 +878,11 @@
                                     <action selector="onCameraMuteButton:" destination="iOn-KG-Rc0" id="9Tb-EI-gyx"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem image="mic" catalog="system" id="R8H-hN-cBg" userLabel="MuteMicButton">
+                                <connections>
+                                    <action selector="onMicMuteButton:" destination="iOn-KG-Rc0" id="4Qg-E8-a35"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
@@ -904,8 +909,8 @@
     <resources>
         <image name="arrow.up.message.fill" catalog="system" width="128" height="104"/>
         <image name="camera" catalog="system" width="128" height="93"/>
-        <image name="camera.slash" catalog="system" width="128" height="93"/>
         <image name="camera.rotate" catalog="system" width="128" height="93"/>
+        <image name="mic" catalog="system" width="110" height="128"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
