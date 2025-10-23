@@ -868,12 +868,12 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="camera.rotate" catalog="system" id="2aw-lv-VLe" userLabel="SwitchCameraButton">
+                            <barButtonItem image="camera.rotate" catalog="system" id="2aw-lv-VLe" userLabel="FlipCameraButton">
                                 <connections>
-                                    <action selector="onSwitchCameraButton:" destination="iOn-KG-Rc0" id="kFJ-KT-eJM"/>
+                                    <action selector="onFlipCameraButton:" destination="iOn-KG-Rc0" id="EYO-uw-Frn"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="camera" catalog="system" id="tSN-bH-E6q" userLabel="MuteCameraButton">
+                            <barButtonItem image="video" catalog="system" id="tSN-bH-E6q" userLabel="MuteCameraButton">
                                 <connections>
                                     <action selector="onCameraMuteButton:" destination="iOn-KG-Rc0" id="9Tb-EI-gyx"/>
                                 </connections>
@@ -886,11 +886,13 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="cameraMuteButton" destination="tSN-bH-E6q" id="hJE-wb-QkO"/>
                         <outlet property="chatMessageToSendTextField" destination="Veg-bZ-Lpb" id="h4k-qp-xAj"/>
                         <outlet property="connectedUrlLabel" destination="v8z-cH-FLv" id="NYb-mb-txT"/>
                         <outlet property="historyTableView" destination="kU8-9t-saE" id="Thh-c8-g1D"/>
                         <outlet property="labelPopUpButton" destination="uUg-Ke-hc9" id="4xY-cd-Lhn"/>
                         <outlet property="memberListView" destination="yae-cW-sBy" id="Ghk-FM-gJW"/>
+                        <outlet property="micMuteButton" destination="R8H-hN-cBg" id="Dgm-Ja-RCk"/>
                         <outlet property="tapGestureRecognizer" destination="Ad3-oS-nEC" id="QWd-qa-9Ju"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>
                     </connections>
@@ -908,9 +910,9 @@
     </scenes>
     <resources>
         <image name="arrow.up.message.fill" catalog="system" width="128" height="104"/>
-        <image name="camera" catalog="system" width="128" height="93"/>
         <image name="camera.rotate" catalog="system" width="128" height="93"/>
         <image name="mic" catalog="system" width="110" height="128"/>
+        <image name="video" catalog="system" width="128" height="82"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

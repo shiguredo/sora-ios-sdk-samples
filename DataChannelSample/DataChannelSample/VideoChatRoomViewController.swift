@@ -31,7 +31,7 @@ class VideoChatRoomViewController: UIViewController {
   @IBOutlet weak var cameraMuteButton: UIBarButtonItem?
 
   /// マイクのミュートボタンです。
-  @IBOutlet weak var onMicMuteButton: UIBarButtonItem?
+  @IBOutlet weak var micMuteButton: UIBarButtonItem?
 
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
@@ -304,10 +304,12 @@ class VideoChatRoomViewController: UIViewController {
   }
 
   /// カメラミュートボタンの見た目と状態を更新します。
+  /// 用意されているシステムアイコンの都合上、video シンボルを使用します
   private func updateCameraMuteButton(isMuted: Bool) {
     isCameraSoftMuted = isMuted
-    let symbolName = isMuted ? "camera.slash" : "camera"
+    let symbolName: String = isMuted ? "video.slash" : "video"
     guard let button = cameraMuteButton else { return }
+    let image = UIImage(systemName: symbolName)
     if let image = UIImage(systemName: symbolName) {
       button.image = image
     } else {
@@ -320,7 +322,7 @@ class VideoChatRoomViewController: UIViewController {
   private func updateMicMuteButton(isMuted: Bool) {
     isMicSoftMuted = isMuted
     let symbolName: String = isMuted ? "mic.slash" : "mic"
-    guard let button = onMicMuteButton else { return }
+    guard let button = micMuteButton else { return }
     if let image = UIImage(systemName: symbolName) {
       button.image = image
     } else {
@@ -384,6 +386,7 @@ extension VideoChatRoomViewController {
     }
     upstream?.videoRenderer = upstreamVideoView
 
+    // カメラミュートの状態に応じてボタン等の UI を更新する
     cameraMuteButton?.isEnabled = upstream != nil
     if let upstream {
       updateCameraMuteButton(isMuted: !upstream.videoEnabled)
@@ -393,6 +396,7 @@ extension VideoChatRoomViewController {
         }
       }
     } else {
+      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの false にしておく
       updateCameraMuteButton(isMuted: false)
     }
 
@@ -414,9 +418,9 @@ extension VideoChatRoomViewController {
 // MARK: - Interface Builderのための実装
 
 extension VideoChatRoomViewController {
-  /// カメラボタンを押したときの挙動を定義します。
+  /// 前面/背面カメラ切り替えボタンを押したときの挙動を定義します。
   /// 詳しくはMain.storyboard内の定義をご覧ください。
-  @IBAction func onSwitchCameraButton(_ sender: UIBarButtonItem) {
+  @IBAction func onFlipCameraButton(_ sender: UIBarButtonItem) {
     guard let current = CameraVideoCapturer.current else {
       return
     }
@@ -445,6 +449,7 @@ extension VideoChatRoomViewController {
     updateCameraMuteButton(isMuted: nextMuted)
   }
 
+  /// マイクミュートボタンを押したときの挙動を定義します。
   @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
     guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let upstream = mediaChannel.senderStream
