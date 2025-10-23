@@ -358,6 +358,8 @@ extension VideoChatRoomViewController {
       videoView.contentMode = .scaleAspectFill
       videoView.layer.borderColor = UIColor.white.cgColor
       videoView.layer.borderWidth = 1.0
+      videoView.connectionMode = .manual
+      videoView.start()
       memberListView.addSubview(videoView)
       upstreamVideoView = videoView
     }
