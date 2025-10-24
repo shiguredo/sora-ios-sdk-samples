@@ -11,6 +11,18 @@
 
 ## 2025.3
 
+- [UPDATE] ScreenCastSample の配信開始/停止ボタンアイコンを置き換える
+  - 開始を `camera` から `record.circle` の置き換える
+  - 停止を `pause` から `stop.circle.fill` に置き換える
+  - @t-miya
+- [UPDATE] 前面カメラ・背面カメラの切り替えボタンアイコンを置き換える
+  - `camera` から `camera.rotate` に置き換える
+  - @t-miya
+- [ADD] カメラミュートボタンとマイクミュートボタンを追加する
+  - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
+  - RTP 送出のみを停止するソフトミュート
+  - @t-miya
+
 ### misc
 
 - [UPDATE] actions/checkout を v5 に上げる

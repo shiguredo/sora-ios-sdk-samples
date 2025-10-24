@@ -6,8 +6,20 @@ class VideoChatRoomViewController: UIViewController {
   /// ビデオチャットの、配信者以外の参加者の映像を表示するためのViewです。
   private var downstreamVideoViews: [VideoView] = []
 
+  /// カメラのミュートボタンです。
+  @IBOutlet weak var cameraMuteButton: UIBarButtonItem?
+
+  /// マイクのミュートボタンです。
+  @IBOutlet weak var micMuteButton: UIBarButtonItem?
+
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
+
+  /// カメラのソフトミュート状態です。
+  private var isCameraSoftMuted: Bool = false
+
+  /// マイクのミュート状態です。
+  private var isMicSoftMuted: Bool = false
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -164,6 +176,34 @@ class VideoChatRoomViewController: UIViewController {
       view.bringSubviewToFront(videoView)
     }
   }
+
+  /// カメラミュートボタンの見た目と状態を更新します。
+  /// 用意されているシステムアイコンの都合上、video シンボルを使用します
+  private func updateCameraMuteButton(isMuted: Bool) {
+    isCameraSoftMuted = isMuted
+    let symbolName: String = isMuted ? "video.slash" : "video"
+    guard let button = cameraMuteButton else { return }
+    let image = UIImage(systemName: symbolName)
+    if let image = UIImage(systemName: symbolName) {
+      button.image = image
+    } else {
+      button.image = UIImage(named: symbolName)
+    }
+    button.accessibilityLabel = isMuted ? "カメラを再開" : "カメラを停止"
+  }
+
+  /// マイクミュートボタンの見た目と状態を更新します。
+  private func updateMicMuteButton(isMuted: Bool) {
+    isMicSoftMuted = isMuted
+    let symbolName: String = isMuted ? "mic.slash" : "mic"
+    guard let button = micMuteButton else { return }
+    if let image = UIImage(systemName: symbolName) {
+      button.image = image
+    } else {
+      button.image = UIImage(named: symbolName)
+    }
+    button.accessibilityLabel = isMuted ? "マイクを再開" : "マイクを停止"
+  }
 }
 
 // MARK: - Sora SDKのイベントハンドリング
@@ -213,10 +253,40 @@ extension VideoChatRoomViewController {
       videoView.contentMode = .scaleAspectFill
       videoView.layer.borderColor = UIColor.white.cgColor
       videoView.layer.borderWidth = 1.0
+      videoView.connectionMode = .manual
+      videoView.start()
       view.addSubview(videoView)
       upstreamVideoView = videoView
     }
     upstream?.videoRenderer = upstreamVideoView
+
+    // カメラミュートの状態に応じてボタン等の UI を更新する
+    cameraMuteButton?.isEnabled = upstream != nil
+    if let upstream {
+      updateCameraMuteButton(isMuted: !upstream.videoEnabled)
+      upstream.handlers.onSwitchVideo = { [weak self] isEnabled in
+        DispatchQueue.main.async {
+          self?.updateCameraMuteButton(isMuted: !isEnabled)
+        }
+      }
+    } else {
+      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの false にしておく
+      updateCameraMuteButton(isMuted: false)
+    }
+
+    // マイクミュートの状態に応じてボタン等の UI を更新する
+    micMuteButton?.isEnabled = upstream != nil
+    if let upstream {
+      updateMicMuteButton(isMuted: !upstream.audioEnabled)
+      upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
+        DispatchQueue.main.async {
+          self?.updateMicMuteButton(isMuted: !isEnabled)
+        }
+      }
+    } else {
+      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの false にしておく
+      updateMicMuteButton(isMuted: false)
+    }
 
     // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
     layoutVideoViews(for: view.bounds.size)
@@ -236,9 +306,9 @@ extension VideoChatRoomViewController {
 // MARK: - Interface Builderのための実装
 
 extension VideoChatRoomViewController {
-  /// カメラボタンを押したときの挙動を定義します。
+  /// 前面/背面カメラ切り替えボタンを押したときの挙動を定義します。
   /// 詳しくはMain.storyboard内の定義をご覧ください。
-  @IBAction func onCameraButton(_ sender: UIBarButtonItem) {
+  @IBAction func onFlipCameraButton(_ sender: UIBarButtonItem) {
     guard let current = CameraVideoCapturer.current else {
       return
     }
@@ -249,9 +319,35 @@ extension VideoChatRoomViewController {
 
     CameraVideoCapturer.flip(current) { error in
       if let error {
-        NSLog("[sample] " + error.localizedDescription)
+        NSLog(error.localizedDescription)
       }
     }
+  }
+
+  /// カメラミュートボタンを押したときの挙動を定義します。
+  @IBAction func onCameraMuteButton(_ sender: UIBarButtonItem) {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+      let upstream = mediaChannel.senderStream
+    else {
+      return
+    }
+
+    let nextMuted = !isCameraSoftMuted
+    upstream.videoEnabled = !nextMuted
+    updateCameraMuteButton(isMuted: nextMuted)
+  }
+
+  /// マイクミュートボタンを押したときの挙動を定義します。
+  @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+      let upstream = mediaChannel.senderStream
+    else {
+      return
+    }
+
+    let nextMuted: Bool = !isMicSoftMuted
+    upstream.audioEnabled = !nextMuted
+    updateMicMuteButton(isMuted: nextMuted)
   }
 
   /// 閉じるボタンを押したときの挙動を定義します。
