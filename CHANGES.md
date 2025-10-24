@@ -19,7 +19,7 @@
   - `camera` から `camera.rotate` に置き換える
   - @t-miya
 - [ADD] VideoChatSample にカメラハードミュート機能を追加する
-  - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにマイクミュートボタンの挙動を変更する
+  - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
   - @t-miya
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample

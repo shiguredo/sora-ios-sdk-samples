@@ -25,6 +25,8 @@ class VideoChatRoomViewController: UIViewController {
       }
     }
 
+    // カメラミュートボタンのアクセシビリティラベル
+    // 推した際の次の状態を返す
     var accessibilityLabel: String {
       switch self {
       case .recording: return "カメラをソフトミュート"
@@ -219,8 +221,8 @@ class VideoChatRoomViewController: UIViewController {
     }
   }
 
-  /// カメラミュートボタンの見た目と状態を更新します。
-  /// 用意されているシステムアイコンの都合上、video シンボルを使用します
+  // カメラミュートボタンの見た目と状態を更新します。
+  // 用意されているシステムアイコンの都合上、video シンボルを使用します
   private func updateCameraMuteButton(state: CameraMuteState) {
     cameraMuteState = state
     let symbolName = state.symbolName
@@ -234,6 +236,7 @@ class VideoChatRoomViewController: UIViewController {
     button.accessibilityLabel = state.accessibilityLabel
   }
 
+  // ミュート処理状況からカメラミュートボタンが有効かどうかの状態を更新します。
   private func updateCameraMuteButtonEnabledState() {
     guard let button = cameraMuteButton else { return }
     button.isEnabled = isCameraMuteButtonAvailable && !isCameraMuteOperationInProgress
@@ -368,9 +371,8 @@ extension VideoChatRoomViewController {
     switch nextState {
     case .recording:
       // ハードミュート -> ON
-      // ハードミュートで RTP 送出も停止するため再開します
-      upstream.videoEnabled = true
-      guard previousState == .hardMuted else {
+      guard (previousState == .hardMuted) else {
+        upstream.videoEnabled = true
         cameraCapture = nil
         return
       }
@@ -390,18 +392,12 @@ extension VideoChatRoomViewController {
           if let error {
             // 再開失敗
             NSLog("[sample] Failed to restart camera: \(error.localizedDescription)")
-            // capturer への参照を戻してリトライできるようにします
+            // 状態をハードミュートに戻してリトライできるように参照を保持する
+            self.updateCameraMuteButton(state: .hardMuted)
             self.cameraCapture = capturer
-            self.updateCameraMuteButton(state: previousState)
-            // 直前の状態に戻します
-            switch previousState {
-            case .recording:
-              upstream.videoEnabled = true
-            case .softMuted, .hardMuted:
-              upstream.videoEnabled = false
-            }
+            upstream.videoEnabled = false
           } else {
-            // CameraVideoCapturer.current が再稼働したため、 self.cameraCapture は誤使用を防ぐためにも nil にします
+            // CameraVideoCapturer.current が再稼働したため、誤使用を防ぐためにも nil に戻す
             self.cameraCapture = nil
             upstream.videoEnabled = true
           }
@@ -420,7 +416,7 @@ extension VideoChatRoomViewController {
       }
       cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      //　キャプチャー停止処理
+      // キャプチャー停止処理
       capturer.stop { [weak self, weak upstream] error in
         DispatchQueue.main.async {
           guard let self = self, let upstream = upstream else { return }
@@ -487,11 +483,6 @@ extension VideoChatRoomViewController {
     guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let upstream = mediaChannel.senderStream
     else {
-      return
-    }
-
-    // 他の状態遷移処理であれば中断します
-    guard !isCameraMuteOperationInProgress else {
       return
     }
 
