@@ -18,6 +18,9 @@
 - [UPDATE] 前面カメラ・背面カメラの切り替えボタンアイコンを置き換える
   - `camera` から `camera.rotate` に置き換える
   - @t-miya
+- [ADD] VideoChatSample にカメラハードミュート機能を追加する
+  - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
+  - @t-miya
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
   - RTP 送出のみを停止するソフトミュート
