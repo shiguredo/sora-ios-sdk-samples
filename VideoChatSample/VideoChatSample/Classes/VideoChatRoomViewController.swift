@@ -274,6 +274,20 @@ extension VideoChatRoomViewController {
       updateCameraMuteButton(isMuted: false)
     }
 
+    // マイクミュートの状態に応じてボタン等の UI を更新する
+    micMuteButton?.isEnabled = upstream != nil
+    if let upstream {
+      updateMicMuteButton(isMuted: !upstream.audioEnabled)
+      upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
+        DispatchQueue.main.async {
+          self?.updateMicMuteButton(isMuted: !isEnabled)
+        }
+      }
+    } else {
+      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの false にしておく
+      updateMicMuteButton(isMuted: false)
+    }
+
     // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
     layoutVideoViews(for: view.bounds.size)
   }
