@@ -26,7 +26,7 @@ class VideoChatRoomViewController: UIViewController {
     }
 
     // カメラミュートボタンのアクセシビリティラベル
-    // 推した際の次の状態を返す
+    // 推した際の次の状態を返します
     var accessibilityLabel: String {
       switch self {
       case .recording: return "カメラをソフトミュート"
@@ -313,15 +313,15 @@ extension VideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      let stateToReflect: CameraMuteState
+      let toMuteState: CameraMuteState
       if cameraMuteState == .hardMuted {
-        stateToReflect = .hardMuted
+        toMuteState = .hardMuted
       } else if upstream.videoEnabled {
-        stateToReflect = .recording
+        toMuteState = .recording
       } else {
-        stateToReflect = .softMuted
+        toMuteState = .softMuted
       }
-      updateCameraMuteButton(state: stateToReflect)
+      updateCameraMuteButton(state: toMuteState)
       upstream.handlers.onSwitchVideo = { [weak self] isEnabled in
         DispatchQueue.main.async {
           self?.handleUpstreamVideoSwitch(isEnabled: isEnabled)
@@ -353,7 +353,10 @@ extension VideoChatRoomViewController {
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
-    guard cameraMuteState != .hardMuted else { return }
+    guard cameraMuteState != .hardMuted else {
+      NSLog("[sample] Unexpected onSwitchVideo callback during hardMuted state")
+      return
+    }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     updateCameraMuteButton(state: nextState)
   }
@@ -366,19 +369,18 @@ extension VideoChatRoomViewController {
     upstream: MediaStream
   ) {
     let previousState = cameraMuteState
-    updateCameraMuteButton(state: nextState)
 
     switch nextState {
     case .recording:
       // ハードミュート -> ON
-      guard (previousState == .hardMuted) else {
+      guard previousState == .hardMuted else {
+        updateCameraMuteButton(state: nextState)
         upstream.videoEnabled = true
         cameraCapture = nil
         return
       }
       guard let capturer = cameraCapture else {
         NSLog("[sample] Camera capturer is unavailable for restart.")
-        cameraCapture = nil
         updateCameraMuteButton(state: previousState)
         upstream.videoEnabled = false
         return
@@ -399,11 +401,13 @@ extension VideoChatRoomViewController {
           } else {
             // CameraVideoCapturer.current が再稼働したため、誤使用を防ぐためにも nil に戻す
             self.cameraCapture = nil
+            self.updateCameraMuteButton(state: .recording)
             upstream.videoEnabled = true
           }
         }
       }
     case .softMuted:
+      updateCameraMuteButton(state: nextState)
       // ON -> ソフトミュート
       upstream.videoEnabled = false
     case .hardMuted:
@@ -411,11 +415,13 @@ extension VideoChatRoomViewController {
       // 無駄なRTP送出抑制のためハードミュートでも videoEnabled=false にします
       upstream.videoEnabled = false
       guard let capturer = CameraVideoCapturer.current else {
+        updateCameraMuteButton(state: nextState)
         // 既に停止済み
         return
       }
       cameraCapture = capturer
       isCameraMuteOperationInProgress = true
+      updateCameraMuteButton(state: nextState)
       // キャプチャー停止処理
       capturer.stop { [weak self, weak upstream] error in
         DispatchQueue.main.async {
