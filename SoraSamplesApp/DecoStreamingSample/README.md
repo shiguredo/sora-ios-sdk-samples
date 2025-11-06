@@ -1,0 +1,39 @@
+# DecoStreamingSample (デコ動画配信サンプル)
+
+このサンプルでは、カメラで撮影した動画をクライアントサイドで加工して動画配信するアプリを、
+Sora iOS SDK を用いて実装する方法を説明しています。
+カメラで撮影した動画を自由に加工して配信できるため、アプリの幅が広がります。
+
+## ビルド環境
+
+サンプルアプリをビルドする際の環境については [システム条件](../README.md#システム条件) をご確認ください。
+
+## ビルド方法
+
+1. ``DecoStreamingSample/Environment.example.swift`` のファイル名を ``DecoStreamingSample/Environment.swift`` に変更し、接続情報を設定します。
+
+   ```
+   $ cp DecoStreamingSample/Environment.example.swift DecoStreamingSample/Environment.swift
+   ```
+
+2. ``DecoStreamingSample.xcodeproj`` を Xcode で開いてビルドします。
+
+   ```
+   $ open DecoStreamingSample.xcodeproj
+   ```
+
+> [!TIP]
+> はじめてビルドを行う場合、 ビルドに失敗し `SwfitLintBuildToolPlugin (SwiftLintPlugin)` に関するプロンプトが表示されたら
+> 必ずプラグインを信頼して有効にしてください。そうすることで次回以降ビルドを正常に実行できます。
+
+## サンプルアプリの使い方
+
+配信を開始したあと、右上のカメラアイコンをタッチすると、自由に動画にフィルタをかけることができます。
+
+このサンプルアプリは配信専用となっています。
+このサンプルアプリで配信している動画を閲覧するには、
+別途 VideoChatSample (ビデオチャット) などの視聴環境が必要です。
+
+## 実装上の詳細について
+
+実装上の詳細につきましてはサンプルアプリのソースコード上に詳細なコメントを用意してありますので、適時そちらをご確認ください。

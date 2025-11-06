@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uhR-pc-WPX">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="ZyM-zk-CvL">
+            <objects>
+                <navigationController id="uhR-pc-WPX" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Z9F-cb-B5S">
+                        <rect key="frame" x="0.0" y="20" width="375" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="XQ9-0y-Y6c" kind="relationship" relationship="rootViewController" id="4S2-4A-GWH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K1P-Ks-MNr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4" y="166"/>
+        </scene>
+        <!--サイマルキャスト-->
+        <scene sceneID="dP0-qG-ZjG">
+            <objects>
+                <tableViewController id="XQ9-0y-Y6c" customClass="SimulcastConfigViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ctw-eU-DZo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="接続設定" id="0Rf-Eq-cRJ">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="oj7-Fl-M80">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oj7-Fl-M80" id="FFO-qy-WYA">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ShA-Zi-CkT">
+                                                    <rect key="frame" x="130" y="11" width="225" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャンネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VUT-cm-blp">
+                                                    <rect key="frame" x="20" y="11.5" width="98" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ShA-Zi-CkT" firstAttribute="centerY" secondItem="FFO-qy-WYA" secondAttribute="centerY" id="2nP-PK-M6L"/>
+                                                <constraint firstAttribute="trailing" secondItem="ShA-Zi-CkT" secondAttribute="trailing" constant="20" id="Fqo-do-HHK"/>
+                                                <constraint firstItem="ShA-Zi-CkT" firstAttribute="leading" secondItem="VUT-cm-blp" secondAttribute="trailing" constant="12" id="OcE-fD-atT"/>
+                                                <constraint firstItem="VUT-cm-blp" firstAttribute="leading" secondItem="FFO-qy-WYA" secondAttribute="leading" constant="20" id="oBM-JW-DjA"/>
+                                                <constraint firstItem="VUT-cm-blp" firstAttribute="centerY" secondItem="FFO-qy-WYA" secondAttribute="centerY" id="xCG-hX-ac8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="映像コーデック" footerTitle="使用する映像コーデックを選択します。" id="fXu-bU-AWH">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KG5-jM-cSB">
+                                        <rect key="frame" x="0.0" y="163" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KG5-jM-cSB" id="wuW-MK-FoO">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jHA-3S-8CN">
+                                                    <rect key="frame" x="20" y="6.5" width="335" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="VP8"/>
+                                                        <segment title="VP9"/>
+                                                        <segment title="AV1"/>
+                                                        <segment title="H.264"/>
+                                                        <segment title="H.265"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="jHA-3S-8CN" secondAttribute="trailing" constant="20" id="RJO-3N-nuM"/>
+                                                <constraint firstItem="jHA-3S-8CN" firstAttribute="leading" secondItem="wuW-MK-FoO" secondAttribute="leading" constant="20" id="RPY-zq-2ep"/>
+                                                <constraint firstItem="jHA-3S-8CN" firstAttribute="centerY" secondItem="wuW-MK-FoO" secondAttribute="centerY" id="tGp-3e-Ezm"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="映像の種類" footerTitle="配信開始時に受信する映像の種類を選択します。" id="PNL-Rl-ZYX">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Q4z-FJ-AI5">
+                                        <rect key="frame" x="0.0" y="283" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q4z-FJ-AI5" id="Wq3-51-LRH">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="d7C-wH-w61">
+                                                    <rect key="frame" x="20" y="6.5" width="335" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="r0"/>
+                                                        <segment title="r1"/>
+                                                        <segment title="r2"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="d7C-wH-w61" secondAttribute="trailing" constant="20" id="eMl-wt-OqN"/>
+                                                <constraint firstItem="d7C-wH-w61" firstAttribute="centerY" secondItem="Wq3-51-LRH" secondAttribute="centerY" id="wYq-tM-jKo"/>
+                                                <constraint firstItem="d7C-wH-w61" firstAttribute="leading" secondItem="Wq3-51-LRH" secondAttribute="leading" constant="20" id="yD2-dd-7YB"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="データチャンネルシグナリング設定" id="2mW-ks-9Aa" userLabel="データチャネルシグナリング設定">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
+                                        <rect key="frame" x="0.0" y="395.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="データチャンネル" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQp-k7-8lk">
+                                                    <rect key="frame" x="16" y="0.0" width="127.5" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="UUE-IN-l5i"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Yin-69-X2b" userLabel="Data Channel Signaling Segmented Control">
+                                                    <rect key="frame" x="194" y="6.5" width="165" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Yin-69-X2b" secondAttribute="trailing" id="5FA-Pl-IaY"/>
+                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="top" secondItem="FHd-dF-Glf" secondAttribute="top" id="7hU-ys-8uk"/>
+                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="leading" secondItem="FHd-dF-Glf" secondAttribute="leadingMargin" id="J0h-0A-Qv6"/>
+                                                <constraint firstItem="Yin-69-X2b" firstAttribute="centerY" secondItem="FHd-dF-Glf" secondAttribute="centerY" id="NC1-5e-WV2"/>
+                                                <constraint firstItem="Yin-69-X2b" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ZQp-k7-8lk" secondAttribute="trailing" id="dZF-DU-jXE"/>
+                                                <constraint firstItem="ZQp-k7-8lk" firstAttribute="centerY" secondItem="FHd-dF-Glf" secondAttribute="centerY" id="tPa-UW-Z5P"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="nNp-of-iKv">
+                                        <rect key="frame" x="0.0" y="439.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nNp-of-iKv" id="5WM-B3-sQG">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WS 切断を無視" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m43-3j-VWg">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="EVo-2N-E0l"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xJE-0n-qMR" userLabel="Ignore Disconnect WebSocket Segmented Control">
+                                                    <rect key="frame" x="194" y="6.5" width="165" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="xJE-0n-qMR" secondAttribute="trailing" id="4WD-rw-UAP"/>
+                                                <constraint firstItem="m43-3j-VWg" firstAttribute="top" secondItem="5WM-B3-sQG" secondAttribute="top" id="L8y-Ca-bME"/>
+                                                <constraint firstItem="xJE-0n-qMR" firstAttribute="centerY" secondItem="5WM-B3-sQG" secondAttribute="centerY" id="NfX-fb-uOF"/>
+                                                <constraint firstItem="m43-3j-VWg" firstAttribute="leading" secondItem="5WM-B3-sQG" secondAttribute="leadingMargin" id="Ojv-K6-7zO"/>
+                                                <constraint firstItem="m43-3j-VWg" firstAttribute="centerY" secondItem="5WM-B3-sQG" secondAttribute="centerY" id="emx-pK-IOb"/>
+                                                <constraint firstItem="xJE-0n-qMR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="m43-3j-VWg" secondAttribute="trailing" id="zDJ-Pi-ve3"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="jyY-Nr-Fab">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="BED-Ai-FrD">
+                                        <rect key="frame" x="0.0" y="519.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BED-Ai-FrD" id="nyM-DP-OqN">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャットに入室する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="86L-LO-9wN">
+                                                    <rect key="frame" x="116" y="11.5" width="143.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="86L-LO-9wN" firstAttribute="centerX" secondItem="nyM-DP-OqN" secondAttribute="centerX" id="PQ8-kL-lh1"/>
+                                                <constraint firstItem="86L-LO-9wN" firstAttribute="centerY" secondItem="nyM-DP-OqN" secondAttribute="centerY" id="aV9-5q-cb3"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="XQ9-0y-Y6c" id="ZUi-Be-c06"/>
+                            <outlet property="delegate" destination="XQ9-0y-Y6c" id="45w-CT-sgg"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="サイマルキャスト" id="n9f-bV-9X1"/>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
+                        <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
+                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="xJE-0n-qMR" id="2UT-ca-FfM"/>
+                        <outlet property="simulcastRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
+                        <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
+                        <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LEb-Vr-gaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1017" y="166"/>
+        </scene>
+        <!--チャット中: channel_id-->
+        <scene sceneID="hlW-Xb-Uw7">
+            <objects>
+                <viewController id="iOn-KG-Rc0" customClass="SimulcastVideoChatRoomViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="9pm-c6-E2k"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ygh-iV-c9J"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cV4-uL-vzX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nuo-VV-0s9" userLabel="VideoViewList">
+                                <rect key="frame" x="0.0" y="74" width="375" height="593"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Nuo-VV-0s9" secondAttribute="trailing" id="O4C-ho-Blt"/>
+                            <constraint firstItem="Nuo-VV-0s9" firstAttribute="leading" secondItem="cV4-uL-vzX" secondAttribute="leading" id="Row-Xb-jzc"/>
+                            <constraint firstItem="Nuo-VV-0s9" firstAttribute="top" secondItem="9pm-c6-E2k" secondAttribute="bottom" id="SJw-zR-LeM"/>
+                            <constraint firstItem="Ygh-iV-c9J" firstAttribute="top" secondItem="Nuo-VV-0s9" secondAttribute="bottom" id="vkS-WX-knn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="チャット中: channel_id" id="WKj-Mi-l5M">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="vg8-NP-zds">
+                            <connections>
+                                <action selector="onExitButton:" destination="iOn-KG-Rc0" id="BTN-MB-Pnp"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="camera.rotate" catalog="system" id="2aw-lv-VLe" userLabel="FlipCameraButton">
+                                <connections>
+                                    <action selector="onFlipCameraButton:" destination="iOn-KG-Rc0" id="A1w-bY-lMF"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="video" catalog="system" id="uqN-nX-Hbv" userLabel="MuteCameraButton">
+                                <connections>
+                                    <action selector="onCameraMuteButton:" destination="iOn-KG-Rc0" id="cDg-CL-yWE"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="mic" catalog="system" id="37l-wQ-059" userLabel="MuteMicButton">
+                                <connections>
+                                    <action selector="onMicMuteButton:" destination="iOn-KG-Rc0" id="dRz-FM-hM1"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cameraMuteButton" destination="uqN-nX-Hbv" id="O3b-aG-fpu"/>
+                        <outlet property="micMuteButton" destination="37l-wQ-059" id="qI4-fe-auJ"/>
+                        <outlet property="videoViewsView" destination="Nuo-VV-0s9" id="wkm-Af-1nX"/>
+                        <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QNt-Sn-t3p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="L83-jf-Dqb" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2000.8" y="165.06746626686657"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="camera.rotate" catalog="system" width="128" height="93"/>
+        <image name="mic" catalog="system" width="110" height="128"/>
+        <image name="video" catalog="system" width="128" height="82"/>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
