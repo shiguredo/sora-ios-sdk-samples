@@ -1,3 +1,0 @@
-CFBundleDisplayName = "ビデオチャット";
-NSCameraUsageDescription = "SoraSDK を使用するためには、 Info.plist に NSCameraUsageDescription を設定する必要があります。";
-NSMicrophoneUsageDescription = "SoraSDK を使用するためには、 Info.plist に NSMicrophoneUsageDescription を設定する必要があります。";
