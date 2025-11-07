@@ -2,14 +2,13 @@ import Foundation
 
 enum DataChannelEnvironment {
     // 接続するサーバーのシグナリング URL
-    // 配列で複数の URL を指定することが可能です
-    static let urls = [URL(string: "wss://sora.tmiya83.com/signaling")!]
+    static var urls: [URL] { Environment.urls }
 
     // チャネル ID
-    static let channelId = "sora"
+    static var channelId: String { Environment.channelId }
 
     // type: connect に含めるメタデータ
-    static let signalingConnectMetadata: Encodable? = nil
+    static var signalingConnectMetadata: Encodable? { Environment.signalingConnectMetadata }
 
     // DataChannel メッセージングに使うラベル
     static let dataChannelLabels = ["#spam", "#egg"]
