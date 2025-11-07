@@ -321,7 +321,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   /// マイクミュートボタンの見た目と状態を更新します。
   private func updateMicMuteButton(isMuted: Bool) {
     isMicSoftMuted = isMuted
-    let symbolName: String = isMuted ? "mic.slash" : "microphone"
+    let symbolName: String = isMuted ? "mic.slash" : "mic"
     guard let button = micMuteButton else { return }
     if let image = UIImage(systemName: symbolName) {
       button.image = image
