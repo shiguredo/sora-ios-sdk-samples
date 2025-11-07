@@ -26,7 +26,7 @@ class VideoChatRoomViewController: UIViewController {
     }
 
     // カメラミュートボタンのアクセシビリティラベル
-    // 推した際の次の状態を返します
+    // 押した際の次の状態を返します
     var accessibilityLabel: String {
       switch self {
       case .recording: return "カメラをソフトミュート"
@@ -425,7 +425,8 @@ extension VideoChatRoomViewController {
       updateCameraMuteButton(state: nextState)
     case .hardMuted:
       // ソフトミュート -> ハードミュート
-      // ハードミュートでも失敗時の不意の音声送出を防ぐため videoEnabled=false にします
+      // ハードミュート時はキャプチャ停止時のフレーム表示で停止するため、
+      // 事前に黒塗りフレームとなる videoEnabled=false を入れます
       upstream.videoEnabled = false
       guard let capturer = CameraVideoCapturer.current else {
         updateCameraMuteButton(state: nextState)
