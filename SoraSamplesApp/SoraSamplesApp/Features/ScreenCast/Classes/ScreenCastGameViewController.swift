@@ -3,13 +3,8 @@ import Sora
 import UIKit
 
 /// 0.0~1.0の間の乱数を生成する関数です。
-private func randomFloat() -> Float {
-  Float(arc4random()) / Float(UInt32.max)
-}
-
-/// 0.0~1.0の間の乱数を生成する関数です。
 private func randomCGFloat() -> CGFloat {
-  CGFloat(randomFloat())
+  CGFloat.random(in: 0...1)
 }
 
 // MARK: -

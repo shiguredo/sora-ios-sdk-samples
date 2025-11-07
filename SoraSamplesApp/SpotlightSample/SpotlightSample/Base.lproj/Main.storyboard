@@ -404,7 +404,7 @@
                                     <action selector="onCameraMuteButton:" destination="iOn-KG-Rc0" id="9M8-Fy-Gvg"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="mic" catalog="system" id="Plo-Oe-t5R" userLabel="MuteMicButton">
+                            <barButtonItem image="microphone" catalog="system" id="Plo-Oe-t5R" userLabel="MuteMicButton">
                                 <connections>
                                     <action selector="onMicMuteButton:" destination="iOn-KG-Rc0" id="bp5-Tv-2O7"/>
                                 </connections>
@@ -426,7 +426,7 @@
     </scenes>
     <resources>
         <image name="camera.rotate" catalog="system" width="128" height="93"/>
-        <image name="mic" catalog="system" width="110" height="128"/>
+        <image name="microphone" catalog="system" width="110" height="128"/>
         <image name="video" catalog="system" width="128" height="82"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -185,7 +185,6 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     isCameraSoftMuted = isMuted
     let symbolName: String = isMuted ? "video.slash" : "video"
     guard let button = cameraMuteButton else { return }
-    let image = UIImage(systemName: symbolName)
     if let image = UIImage(systemName: symbolName) {
       button.image = image
     } else {
@@ -197,7 +196,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   /// マイクミュートボタンの見た目と状態を更新します。
   private func updateMicMuteButton(isMuted: Bool) {
     isMicSoftMuted = isMuted
-    let symbolName: String = isMuted ? "mic.slash" : "mic"
+    let symbolName: String = isMuted ? "mic.slash" : "microphone"
     guard let button = micMuteButton else { return }
     if let image = UIImage(systemName: symbolName) {
       button.image = image
