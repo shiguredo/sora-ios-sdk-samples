@@ -13,6 +13,11 @@ struct MainMenuView: View {
 
   private let samples: [SampleItem] = [
     SampleItem(
+      title: "Video Chat Sample",
+      subtitle: "ビデオチャット",
+      storyboardName: "VideoChat"
+    ),
+    SampleItem(
       title: "DataChannel Sample",
       subtitle: "DataChannel を使ったメッセージング",
       storyboardName: "DataChannel"
