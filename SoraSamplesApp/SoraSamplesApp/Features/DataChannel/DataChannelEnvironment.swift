@@ -11,5 +11,5 @@ enum DataChannelEnvironment {
     static var signalingConnectMetadata: Encodable? { Environment.signalingConnectMetadata }
 
     // DataChannel メッセージングに使うラベル
-    static let dataChannelLabels = ["#spam", "#egg"]
+    static var dataChannelLabels: [String] { Environment.dataChannelLabels }
 }

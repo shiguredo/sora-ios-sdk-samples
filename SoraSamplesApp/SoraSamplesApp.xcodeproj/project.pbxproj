@@ -19,12 +19,6 @@
 		D6ECA4932EB1BC2C00F7ECAD /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/DataChannel/DataChannelEnvironment.example.swift,
-				Features/DecoStreaming/DecoStreamingEnvironment.example.swift,
-				Features/ScreenCast/ScreenCastEnvironment.example.swift,
-				Features/Simulcast/SimulcastEnvironment.example.swift,
-				Features/Spotlight/SpotlightEnvironment.example.swift,
-				Features/VoiceChat/VoiceChatEnvironment.example.swift,
 				Info.plist,
 			);
 			target = D6ECA4162EB1B9F800F7ECAD /* SoraSamplesApp */;
