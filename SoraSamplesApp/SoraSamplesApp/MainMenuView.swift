@@ -36,11 +36,6 @@ struct MainMenuView: View {
       title: "Spotlight Sample",
       subtitle: "スポットライト視聴",
       storyboardName: "Spotlight"
-    ),
-    SampleItem(
-      title: "Voice Chat Sample",
-      subtitle: "音声チャット",
-      storyboardName: "VoiceChat"
     )
   ]
 
