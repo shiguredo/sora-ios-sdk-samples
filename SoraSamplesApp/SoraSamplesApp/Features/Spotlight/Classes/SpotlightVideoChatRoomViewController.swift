@@ -10,9 +10,45 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
+  // 最後にハンドラ登録した Upstream を覚えておくためのプロパティ
+  private weak var observedUpstream: MediaStream?
+
+  // カメラのミュート状態を制御するためのコントローラーです
+  private let cameraMuteController = CameraMuteController()
 
   /// カメラのミュートボタンです。
-  @IBOutlet weak var cameraMuteButton: UIBarButtonItem?
+  @IBOutlet weak var cameraMuteButton: UIBarButtonItem? {
+    didSet {
+      cameraMuteController.button = cameraMuteButton
+    }
+  }
+
+  // カメラのミュート状態です
+  // CameraMuteController 経由で取得します
+  private var cameraMuteState: CameraMuteState {
+    cameraMuteController.currentState
+  }
+
+  // カメラのキャプチャです
+  // CameraMuteController 経由で取得します
+  private var cameraCapture: CameraVideoCapturer? {
+    get { cameraMuteController.cameraCapture }
+    set { cameraMuteController.cameraCapture = newValue }
+  }
+
+  // カメラのミュートボタンが有効かを返します
+  // CameraMuteController 経由で取得します
+  private var isCameraMuteButtonAvailable: Bool {
+    get { cameraMuteController.isButtonAvailable }
+    set { cameraMuteController.isButtonAvailable = newValue }
+  }
+
+  // カメラのミュート状態の移行処理が進行中か返します
+  // CameraMuteController 経由で取得します
+  private var isCameraMuteOperationInProgress: Bool {
+    get { cameraMuteController.isOperationInProgress }
+    set { cameraMuteController.isOperationInProgress = newValue }
+  }
 
   /// マイクのミュートボタンです。
   @IBOutlet weak var micMuteButton: UIBarButtonItem?
@@ -179,20 +215,6 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     }
   }
 
-  /// カメラミュートボタンの見た目と状態を更新します。
-  /// 用意されているシステムアイコンの都合上、video シンボルを使用します
-  private func updateCameraMuteButton(isMuted: Bool) {
-    isCameraSoftMuted = isMuted
-    let symbolName: String = isMuted ? "video.slash" : "video"
-    guard let button = cameraMuteButton else { return }
-    if let image = UIImage(systemName: symbolName) {
-      button.image = image
-    } else {
-      button.image = UIImage(named: symbolName)
-    }
-    button.accessibilityLabel = isMuted ? "カメラを再開" : "カメラを停止"
-  }
-
   /// マイクミュートボタンの見た目と状態を更新します。
   private func updateMicMuteButton(isMuted: Bool) {
     isMicSoftMuted = isMuted
@@ -263,18 +285,28 @@ extension SpotlightVideoChatRoomViewController {
     }
     upstream?.videoRenderer = upstreamVideoView
 
-    // カメラミュートの状態に応じてボタン等の UI を更新する
-    cameraMuteButton?.isEnabled = upstream != nil
+    // カメラミュートの状態に応じてボタン等の UI を更新します。
+    isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      updateCameraMuteButton(isMuted: !upstream.videoEnabled)
+      let toMuteState: CameraMuteState
+      if cameraMuteState == .hardMuted {
+        toMuteState = .hardMuted
+      } else if upstream.videoEnabled {
+        toMuteState = .recording
+      } else {
+        toMuteState = .softMuted
+      }
+      cameraMuteController.updateButton(to: toMuteState)
       upstream.handlers.onSwitchVideo = { [weak self] isEnabled in
         DispatchQueue.main.async {
-          self?.updateCameraMuteButton(isMuted: !isEnabled)
+          self?.handleUpstreamVideoSwitch(isEnabled: isEnabled)
         }
       }
     } else {
-      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの false にしておく
-      updateCameraMuteButton(isMuted: false)
+      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの recording にしておく
+      cameraMuteController.updateButton(to: .recording)
+      cameraCapture = nil
+      isCameraMuteOperationInProgress = false
     }
 
     // マイクミュートの状態に応じてボタン等の UI を更新する
@@ -295,10 +327,112 @@ extension SpotlightVideoChatRoomViewController {
     layoutVideoViews(for: videoViewsView.bounds.size)
   }
 
+  private func handleUpstreamVideoSwitch(isEnabled: Bool) {
+    // ハードミュート中にこのコールバックが来る想定はないが、安全のためログを出して抜ける
+    guard cameraMuteState != .hardMuted else {
+      NSLog("[sample] Unexpected onSwitchVideo callback during hardMuted state")
+      return
+    }
+    let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
+    cameraMuteController.updateButton(to: nextState)
+  }
+
+  // カメラのミュート状態遷移を適用します。
+  // recording -> soft_mute -> hard_mute -> recording の順に遷移することを前提とします。
+  // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
+  private func applyCameraMuteStateTransition(
+    to nextState: CameraMuteState,
+    upstream: MediaStream
+  ) {
+    let previousState = cameraMuteState
+
+    switch nextState {
+    case .recording:
+      // ハードミュート -> ON
+      guard previousState == .hardMuted else {
+        cameraMuteController.updateButton(to: nextState)
+        upstream.videoEnabled = true
+        cameraCapture = nil
+        return
+      }
+      guard let capturer = cameraCapture else {
+        NSLog("[sample] Camera capturer is unavailable for restart.")
+        cameraMuteController.updateButton(to: previousState)
+        upstream.videoEnabled = false
+        return
+      }
+      isCameraMuteOperationInProgress = true
+      // キャプチャーの再開処理
+      capturer.restart { [weak self, weak upstream] error in
+        DispatchQueue.main.async {
+          guard let self = self, let upstream = upstream else { return }
+          self.isCameraMuteOperationInProgress = false
+          if let error {
+            // 再開失敗
+            NSLog("[sample] Failed to restart camera: \(error.localizedDescription)")
+            // 状態を直前の状態に戻してリトライできるように参照を保持する
+            self.cameraMuteController.restoreState(
+              to: previousState,
+              upstream: upstream,
+              capturer: capturer
+            )
+          } else {
+            // CameraVideoCapturer.current が再稼働したため、誤使用を防ぐためにも nil に戻す
+            self.cameraCapture = nil
+            self.cameraMuteController.updateButton(to: .recording)
+            upstream.videoEnabled = true
+          }
+        }
+      }
+    case .softMuted:
+      // ON -> ソフトミュート
+      upstream.videoEnabled = false
+      cameraMuteController.updateButton(to: nextState)
+    case .hardMuted:
+      // ソフトミュート -> ハードミュート
+      // ハードミュートでも失敗時の不意の音声送出を防ぐため videoEnabled=false にします
+      upstream.videoEnabled = false
+      guard let capturer = CameraVideoCapturer.current else {
+        self.cameraMuteController.updateButton(to: nextState)
+        // 既に停止済み
+        return
+      }
+      cameraCapture = capturer
+      isCameraMuteOperationInProgress = true
+      // キャプチャー停止処理
+      capturer.stop { [weak self, weak upstream] error in
+        DispatchQueue.main.async {
+          guard let self = self, let upstream = upstream else { return }
+          self.isCameraMuteOperationInProgress = false
+          if let error {
+            // 停止失敗
+            NSLog("[sample] Failed to stop camera: \(error.localizedDescription)")
+            // 直前の状態に戻します
+            self.cameraMuteController.restoreState(
+              to: previousState,
+              upstream: upstream,
+              capturer: capturer
+            )
+          } else {
+              self.cameraMuteController.updateButton(to: .hardMuted)
+          }
+        }
+      }
+    }
+  }
+
   /// 接続が切断されたときに呼び出されるべき処理をまとめています。
   /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
   /// いずれの場合も含めます。
   private func handleDisconnect() {
+    // ハンドラを明示的に解除する
+    // 通常は起こらないが古いストリームからのコールバックが送られる可能性が0でないため
+    observedUpstream?.handlers.onSwitchVideo = nil
+    observedUpstream?.handlers.onSwitchAudio = nil
+    observedUpstream = nil
+    // カメラミュート関連の処理は中断するようにフラグ等を更新します
+    cameraCapture = nil
+    isCameraMuteOperationInProgress = false
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
     SpotlightSoraSDKManager.shared.disconnect()
     // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
@@ -335,9 +469,8 @@ extension SpotlightVideoChatRoomViewController {
       return
     }
 
-    let nextMuted = !isCameraSoftMuted
-    upstream.videoEnabled = !nextMuted
-    updateCameraMuteButton(isMuted: nextMuted)
+    let nextState = cameraMuteState.next()
+    applyCameraMuteStateTransition(to: nextState, upstream: upstream)
   }
 
   /// マイクミュートボタンを押したときの挙動を定義します。
