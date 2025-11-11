@@ -358,6 +358,9 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     cameraMuteController.updateButton(to: nextState)
   }
 
+  // カメラのミュート状態遷移を適用します。
+  // recording -> soft_mute -> hard_mute -> recording の順に遷移することを前提とします。
+  // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
   private func applyCameraMuteStateTransition(to nextState: CameraMuteState, upstream: MediaStream) {
     let previousState = cameraMuteState
 
