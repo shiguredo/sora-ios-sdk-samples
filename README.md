@@ -25,43 +25,97 @@ Please read https://github.com/shiguredo/oss before use.
 
 Xcode と Swift のバージョンによっては、 取得できるバイナリに互換性がない可能性があります。
 
+## ビルド方法
+
+1. ``SoraSamplesApp/SoraSamplesApp/Environment.example.swift`` のファイル名を ``SoraSamplesApp/SoraSamplesApp/Environment.swift`` に変更し、接続情報を設定します。
+
+   ```
+   $ cp SoraSamplesApp/SoraSamplesApp/Environment.example.swift SoraSamplesApp/SoraSamplesApp/Environment.swift
+   ```
+
+2. ``SoraSamplesApp/SoraSamplesApp.xcodeproj`` を Xcode で開いてビルドします。
+
+   ```
+   $ SoraSamplesApp/SoraSamplesApp.xcodeproj
+   ```
+
+> [!TIP]
+> はじめてビルドを行う場合、 ビルドに失敗し `SwfitLintBuildToolPlugin (SwiftLintPlugin)` に関するプロンプトが表示されたら
+> 必ずプラグインを信頼して有効にしてください。そうすることで次回以降ビルドを正常に実行できます。
+
 ## サンプルの紹介
+
+各サンプルは SoraSamplesApp に内包されています。ソースコードは SoraSamplesApp/SoraSamplesApp/Features に格納されています。
 
 ### VideoChatSample (ビデオチャット)
 
-[VideoChatSample (ビデオチャット)](/VideoChatSample)
+同じクライアントIDに対して最大で12人までが接続し、同時にビデオチャットに参加できます。
+実際に配信されていることを確認したい場合には、複数台のデバイスにこのサンプルアプリをインストールするか、
+または他の Sora クライアントを用いて同時に接続する必要があります。
 
-このサンプルでは、複数人が同時に参加できるビデオチャットアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+三人以上が同じクライアントIDに対して接続されている場合、画面が複数人で分割されます。
+自分自身の配信している動画はポップアップで表示されます。
+
+> [!caution]
+12人より多くの人数が同時に接続する場合の挙動については保証されません。
 
 ### DecoStreamingSample (デコ動画配信)
 
-[DecoStreamingSample (デコ動画配信)](/DecoStreamingSample)
+カメラで撮影した動画をクライアントサイドで加工して動画配信します。
+カメラで撮影した動画を自由に加工して配信できるため、アプリの幅が広がります。
 
-このサンプルでは、カメラで撮影した動画をクライアントサイドで加工して動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+配信を開始したあと、右上のカメラアイコンをタッチすると、自由に動画にフィルタをかけることができます。
+
+> [!important]
+> DecoStreamingSample は配信専用となっています。配信している動画を閲覧するには、
+> 別途 VideoChatSample (ビデオチャット) などの視聴環境が必要です。
 
 ### ScreenCastSample (スクリーンキャスト)
 
-[ScreenCastSample (スクリーンキャスト)](/ScreenCastSample)
+クライアントアプリの画面を動画配信します。ScreenCastSample ではサンプルゲームのプレイ内容を動画配信します。
 
-このサンプルでは、クライアントアプリの画面を動画配信するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+#### サンプルゲーム
+
+ScreenCastSample 画面に遷移するとサンプルゲームが起動します。
+画面をタッチすると物理演算された箱が次々と現れて積み上がっていくゲームになっています。
+
+#### サンプルゲームプレイの配信開始と終了
+
+右上の録画アイコンをタッチすると配信設定後、プレイ中のゲーム画面の配信が開始されます。
+右上の停止アイコンをタッチすると配信を終了します。
+
+> [!important]
+> ScreenCastSample は配信専用となっています。配信している動画を閲覧するには、
+> 別途 VideoChatSample (ビデオチャット) などの視聴環境が必要です。
+
+#### 注意事項
+
+サンプルアプリで使用している ReplayKit の実装都合上、
+H.264 形式のビデオフォーマットを使用すると配信が途中で止まる不具合があります。
+ReplayKit と同時に使用する場合は、 VP9 などの他のビデオフォーマットでご利用ください。
 
 ### SimulcastSample (サイマルキャスト)
 
-[SimulcastSample (サイマルキャスト)](/SimulcastSample)
+サイマルキャスト機能を利用した動画配信とビデオチャットへ参加できます。
+VideoChatSample をベースとしています。
 
-このサンプルでは、Sora のサイマルキャスト機能を利用するアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+> [!TIP]
+> サイマルキャストについては https://sora-ios-sdk.shiguredo.jp/simulcast をご確認ください。
 
 ### SpotlightSample (スポットライト)
 
-[SpotlightSample (スポットライト)](/SpotlightSample)
+スポットライト機能を利用した動画配信とビデオチャットへ参加できます。
+VideoChatSample をベースとしています。
 
-このサンプルでは、Sora のスポットライト機能をを利用したアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+> [!TIP]
+> スポットライトについては https://sora-ios-sdk.shiguredo.jp/spotlight をご確認ください。
 
 ### DataChannelSample (メッセージング)
 
-[DataChannelSample (メッセージング)](/DataChannelSample)
+ビデオチャットと同様の仕様に加えて任意のメッセージを送受信できます。
+メッセージの送受信に使うラベルは `Environment.swift` で変更できます。
 
-このサンプルでは、Sora のメッセージング機能をを利用したアプリを Sora iOS SDK を用いて実装する方法を説明しています。
+映像とラベルは関連していません。同一のチャネルに接続したどのクライアントも任意のラベルでメッセージを送信できます。
 
 ## ライセンス
 

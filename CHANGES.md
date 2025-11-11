@@ -11,6 +11,10 @@
 
 ## 2025.3
 
+- [CHANGE] 各サンプルを SoraSampleApp に統合する
+  - SoraSampleApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
+  - 個別のサンプルプロジェクトを削除する
+  - @t-miya
 - [UPDATE] ScreenCastSample の配信開始/停止ボタンアイコンを置き換える
   - 開始を `camera` から `record.circle` の置き換える
   - 停止を `pause` から `stop.circle.fill` に置き換える
@@ -18,7 +22,8 @@
 - [UPDATE] 前面カメラ・背面カメラの切り替えボタンアイコンを置き換える
   - `camera` から `camera.rotate` に置き換える
   - @t-miya
-- [ADD] VideoChatSample にカメラハードミュート機能を追加する
+- [ADD] カメラハードミュート機能を追加する
+  - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
   - @t-miya
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
