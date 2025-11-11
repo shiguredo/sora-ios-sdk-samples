@@ -1,5 +1,5 @@
 //
-//  SoraSamplesAppApp.swift
+//  SoraSamplesApp.swift
 //  SoraSamplesApp
 //
 //  Created by tatsuyamiyazaki on 2025/10/29.
@@ -9,7 +9,7 @@
 import SwiftUI
 
 @main
-struct SoraSamplesAppApp: App {
+struct SoraSamplesApp: App {
     var body: some Scene {
         WindowGroup {
             MainMenuView()
