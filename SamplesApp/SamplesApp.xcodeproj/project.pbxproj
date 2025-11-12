@@ -12,11 +12,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D6ECA4172EB1B9F800F7ECAD /* SoraSamplesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoraSamplesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6ECA4172EB1B9F800F7ECAD /* SamplesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SamplesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6ECA49A2EB1C3D300F7ECAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D6ECA4182EB1B9F800F7ECAD /* SoraSamplesApp */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SoraSamplesApp; sourceTree = "<group>"; };
+		D6ECA4182EB1B9F800F7ECAD /* SamplesApp */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SamplesApp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,7 +36,8 @@
 		0E55EF051F2FAC7300B5EFA8 = {
 			isa = PBXGroup;
 			children = (
-				D6ECA4182EB1B9F800F7ECAD /* SoraSamplesApp */,
+				D6ECA4182EB1B9F800F7ECAD /* SamplesApp */,
+				D6ECA49B2EB1C3EC00F7ECAD /* Configs */,
 				D6ECA4942EB1BD1E00F7ECAD /* Frameworks */,
 				0E55EF0F1F2FAC7300B5EFA8 /* Products */,
 			);
@@ -44,7 +46,7 @@
 		0E55EF0F1F2FAC7300B5EFA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D6ECA4172EB1B9F800F7ECAD /* SoraSamplesApp.app */,
+				D6ECA4172EB1B9F800F7ECAD /* SamplesApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -56,12 +58,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D6ECA49B2EB1C3EC00F7ECAD /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				D6ECA49A2EB1C3D300F7ECAD /* Info.plist */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D6ECA4162EB1B9F800F7ECAD /* SoraSamplesApp */ = {
+		D6ECA4162EB1B9F800F7ECAD /* SamplesApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D6ECA4212EB1B9F900F7ECAD /* Build configuration list for PBXNativeTarget "SoraSamplesApp" */;
+			buildConfigurationList = D6ECA4212EB1B9F900F7ECAD /* Build configuration list for PBXNativeTarget "SamplesApp" */;
 			buildPhases = (
 				D6ECA4132EB1B9F800F7ECAD /* Sources */,
 				D6ECA4142EB1B9F800F7ECAD /* Frameworks */,
@@ -73,15 +83,15 @@
 				D6CC807F2EBC3AAD00355EC2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D6ECA4182EB1B9F800F7ECAD /* SoraSamplesApp */,
+				D6ECA4182EB1B9F800F7ECAD /* SamplesApp */,
 			);
-			name = SoraSamplesApp;
+			name = SamplesApp;
 			packageProductDependencies = (
 				D6ECA4952EB1BD1E00F7ECAD /* Sora */,
 				D6ECA4972EB1BD1E00F7ECAD /* WebRTC */,
 			);
-			productName = SoraSamplesApp;
-			productReference = D6ECA4172EB1B9F800F7ECAD /* SoraSamplesApp.app */;
+			productName = SamplesApp;
+			productReference = D6ECA4172EB1B9F800F7ECAD /* SamplesApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +109,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0E55EF091F2FAC7300B5EFA8 /* Build configuration list for PBXProject "SoraSamplesApp" */;
+			buildConfigurationList = 0E55EF091F2FAC7300B5EFA8 /* Build configuration list for PBXProject "SamplesApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -117,7 +127,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D6ECA4162EB1B9F800F7ECAD /* SoraSamplesApp */,
+				D6ECA4162EB1B9F800F7ECAD /* SamplesApp */,
 			);
 		};
 /* End PBXProject section */
@@ -276,16 +286,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 84F2944LR9;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Configs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -295,7 +301,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.SoraSamplesApp;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.SamplesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -320,16 +326,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 84F2944LR9;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Configs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -338,7 +340,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.SoraSamplesApp;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.shiguredo.sora.ios.SamplesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -353,7 +355,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0E55EF091F2FAC7300B5EFA8 /* Build configuration list for PBXProject "SoraSamplesApp" */ = {
+		0E55EF091F2FAC7300B5EFA8 /* Build configuration list for PBXProject "SamplesApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0E55EF1E1F2FAC7300B5EFA8 /* Debug */,
@@ -362,7 +364,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D6ECA4212EB1B9F900F7ECAD /* Build configuration list for PBXNativeTarget "SoraSamplesApp" */ = {
+		D6ECA4212EB1B9F900F7ECAD /* Build configuration list for PBXNativeTarget "SamplesApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D6ECA4222EB1B9F900F7ECAD /* Debug */,

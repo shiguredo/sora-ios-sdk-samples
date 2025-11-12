@@ -27,7 +27,7 @@
         <!--箱ツムツム-->
         <scene sceneID="u12-nO-MTa">
             <objects>
-                <viewController id="FNV-zp-GV6" customClass="ScreenCastGameViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="FNV-zp-GV6" customClass="ScreenCastGameViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PMb-WS-GuQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -78,7 +78,7 @@
         <!--動画を配信する-->
         <scene sceneID="g8e-9F-8uS">
             <objects>
-                <tableViewController id="eYs-0e-Hk9" customClass="ScreenCastConfigViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="eYs-0e-Hk9" customClass="ScreenCastConfigViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="yH7-ky-fXM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

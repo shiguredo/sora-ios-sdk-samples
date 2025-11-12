@@ -27,16 +27,16 @@ Xcode と Swift のバージョンによっては、 取得できるバイナリ
 
 ## ビルド方法
 
-1. ``SoraSamplesApp/SoraSamplesApp/Environment.example.swift`` のファイル名を ``SoraSamplesApp/SoraSamplesApp/Environment.swift`` に変更し、接続情報を設定します。
+1. ``SamplesApp/SamplesApp/Environment.example.swift`` のファイル名を ``SamplesApp/SamplesApp/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
-   $ cp SoraSamplesApp/SoraSamplesApp/Environment.example.swift SoraSamplesApp/SoraSamplesApp/Environment.swift
+   $ cp SamplesApp/SamplesApp/Environment.example.swift SamplesApp/SamplesApp/Environment.swift
    ```
 
-2. ``SoraSamplesApp/SoraSamplesApp.xcodeproj`` を Xcode で開いてビルドします。
+2. ``SamplesApp/SamplesApp.xcodeproj`` を Xcode で開いてビルドします。
 
    ```
-   $ SoraSamplesApp/SoraSamplesApp.xcodeproj
+   $ SamplesApp/SamplesApp.xcodeproj
    ```
 
 > [!TIP]
@@ -45,7 +45,7 @@ Xcode と Swift のバージョンによっては、 取得できるバイナリ
 
 ## サンプルの紹介
 
-各サンプルは SoraSamplesApp に内包されています。ソースコードは SoraSamplesApp/SoraSamplesApp/Features に格納されています。
+各サンプルは SamplesApp に内包されています。ソースコードは SamplesApp/SamplesApp/Features 下にそれぞれ配置されています。
 
 ### VideoChatSample (ビデオチャット)
 

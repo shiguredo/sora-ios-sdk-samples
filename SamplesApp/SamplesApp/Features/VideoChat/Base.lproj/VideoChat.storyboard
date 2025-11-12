@@ -26,7 +26,7 @@
         <!--ビデオチャットに参加-->
         <scene sceneID="dP0-qG-ZjG">
             <objects>
-                <tableViewController id="XQ9-0y-Y6c" customClass="VideoChatConfigViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="XQ9-0y-Y6c" customClass="VideoChatConfigViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="ctw-eU-DZo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -325,7 +325,7 @@
         <!--チャット中: channel_id-->
         <scene sceneID="hlW-Xb-Uw7">
             <objects>
-                <viewController id="iOn-KG-Rc0" customClass="VideoChatRoomViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="iOn-KG-Rc0" customClass="VideoChatRoomViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9pm-c6-E2k"/>
                         <viewControllerLayoutGuide type="bottom" id="Ygh-iV-c9J"/>

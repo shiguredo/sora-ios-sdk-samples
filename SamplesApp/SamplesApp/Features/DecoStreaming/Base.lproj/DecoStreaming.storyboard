@@ -27,7 +27,7 @@
         <!--動画を配信する-->
         <scene sceneID="b98-nx-uSF">
             <objects>
-                <tableViewController id="rqw-Qa-Bhk" customClass="DecoStreamingConfigViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="rqw-Qa-Bhk" customClass="DecoStreamingConfigViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Pjx-xc-7Pg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -139,7 +139,7 @@
         <!--配信中: channel_id-->
         <scene sceneID="drW-Ch-rVM">
             <objects>
-                <viewController id="xvX-rK-0JQ" customClass="DecoStreamingVideoViewController" customModule="SoraSamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="xvX-rK-0JQ" customClass="DecoStreamingVideoViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UZN-8d-qUA"/>
                         <viewControllerLayoutGuide type="bottom" id="myl-V2-T9l"/>
