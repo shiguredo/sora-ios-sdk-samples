@@ -3,7 +3,9 @@ import Sora
 import UIKit
 
 /// 実際に動画を配信する画面です。
-class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
+  UIPickerViewDataSource
+{
   @IBOutlet weak var editButton: UIBarButtonItem!
   @IBOutlet weak var filterPickerView: UIPickerView!
 

@@ -168,7 +168,8 @@ class DataChannelConfigViewController: UITableViewController {
     configuration.spotlightEnabled = spotlightEnabledSwitch.isOn ? .enabled : .disabled
     configuration.spotlightNumber = selectedSpotlightNumber()
     configuration.spotlightFocusRid = selectedSpotlightRid(for: spotlightFocusRidSegmentedControl)
-    configuration.spotlightUnfocusRid = selectedSpotlightRid(for: spotlightUnfocusRidSegmentedControl)
+    configuration.spotlightUnfocusRid = selectedSpotlightRid(
+      for: spotlightUnfocusRidSegmentedControl)
     configuration.signalingConnectMetadata = DataChannelEnvironment.signalingConnectMetadata
     configuration.dataChannelSignaling = true
     configuration.ignoreDisconnectWebSocket = selectedIgnoreDisconnectWebSocket()
@@ -237,7 +238,8 @@ class DataChannelConfigViewController: UITableViewController {
   }
 
   private func selectedDataChannelDirection() -> String {
-    value(from: ["sendonly", "recvonly", "sendrecv"], control: dataChannelDirectionSegmentedControl)
+    value(
+      from: ["sendonly", "recvonly", "sendrecv"], control: dataChannelDirectionSegmentedControl)
   }
 
   private func selectedDataChannelCompress() -> Bool? {

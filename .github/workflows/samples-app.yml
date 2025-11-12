@@ -1,8 +1,8 @@
-name: Build SimulcastSample
+name: Build SamplesApp
 
 defaults:
   run:
-    working-directory: ./SimulcastSample
+    working-directory: ./SamplesApp
 
 on:
   push:
@@ -17,8 +17,8 @@ jobs:
     env:
       XCODE: /Applications/Xcode_16.3.app
       XCODE_SDK: iphoneos18.4
-      PROJECT: SimulcastSample
-      SCHEME: SimulcastSample
+      PROJECT: SamplesApp
+      SCHEME: SamplesApp
     steps:
     - uses: actions/checkout@v5
     - name: Select Xcode Version
@@ -27,7 +27,7 @@ jobs:
       run: xcodebuild -version
     - name: Create Environment.swift
       run: |
-        cp SimulcastSample/Environment.example.swift SimulcastSample/Environment.swift
+        cp SamplesApp/Environment.swift.example SamplesApp/Environment.swift
     # Build Xcode Project の補足コメント
     #
     # `-skipPackagePluginValidation` は SwiftLintPlugin の実行を許可するために入れてある。
@@ -52,4 +52,4 @@ jobs:
     - name: Check uncommitted unformatted code
       run: |
         cp ../Makefile .
-        make fmt-lint TARGET_PATH=SimulcastSample
+        make fmt-lint TARGET_PATH=SamplesApp

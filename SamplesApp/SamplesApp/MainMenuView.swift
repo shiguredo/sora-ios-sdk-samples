@@ -41,7 +41,7 @@ struct MainMenuView: View {
       title: "Spotlight Sample",
       subtitle: "スポットライト視聴",
       storyboardName: "Spotlight"
-    )
+    ),
   ]
 
   var body: some View {
@@ -161,8 +161,10 @@ private struct SampleHost: UIViewControllerRepresentable {
     NSLayoutConstraint.activate([
       label.centerXAnchor.constraint(equalTo: controller.view.centerXAnchor),
       label.centerYAnchor.constraint(equalTo: controller.view.centerYAnchor),
-      label.leadingAnchor.constraint(greaterThanOrEqualTo: controller.view.leadingAnchor, constant: 20),
-      label.trailingAnchor.constraint(lessThanOrEqualTo: controller.view.trailingAnchor, constant: -20)
+      label.leadingAnchor.constraint(
+        greaterThanOrEqualTo: controller.view.leadingAnchor, constant: 20),
+      label.trailingAnchor.constraint(
+        lessThanOrEqualTo: controller.view.trailingAnchor, constant: -20),
     ])
 
     return controller

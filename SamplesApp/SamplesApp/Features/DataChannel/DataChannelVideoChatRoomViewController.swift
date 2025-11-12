@@ -361,7 +361,8 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   // カメラのミュート状態遷移を適用します。
   // recording -> soft_mute -> hard_mute -> recording の順に遷移することを前提とします。
   // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
-  private func applyCameraMuteStateTransition(to nextState: CameraMuteState, upstream: MediaStream) {
+  private func applyCameraMuteStateTransition(to nextState: CameraMuteState, upstream: MediaStream)
+  {
     let previousState = cameraMuteState
 
     switch nextState {
@@ -671,7 +672,8 @@ extension DataChannelVideoChatRoomViewController: UITableViewDelegate, UITableVi
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     // メッセージの詳細を表示するセルを用意します。
-    let cell = historyTableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell")
+    let cell =
+      historyTableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell")
       as? ChatMessageHistoryTableViewCell
     guard let chatCell = cell else {
       return UITableViewCell()

@@ -10,9 +10,9 @@ import SwiftUI
 
 @main
 struct SamplesApp: App {
-    var body: some Scene {
-        WindowGroup {
-            MainMenuView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      MainMenuView()
     }
+  }
 }

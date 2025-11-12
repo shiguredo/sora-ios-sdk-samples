@@ -415,7 +415,7 @@ extension VideoChatRoomViewController {
               capturer: capturer
             )
           } else {
-              self.cameraMuteController.updateButton(to: .hardMuted)
+            self.cameraMuteController.updateButton(to: .hardMuted)
           }
         }
       }
