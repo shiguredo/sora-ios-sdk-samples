@@ -27,7 +27,7 @@ jobs:
       run: xcodebuild -version
     - name: Create Environment.swift
       run: |
-        cp SamplesApp/Environment.swift.example SamplesApp/Environment.swift
+        cp SamplesApp/Environment.example.swift SamplesApp/Environment.swift
     # Build Xcode Project の補足コメント
     #
     # `-skipPackagePluginValidation` は SwiftLintPlugin の実行を許可するために入れてある。
