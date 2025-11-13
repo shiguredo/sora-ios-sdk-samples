@@ -27,10 +27,10 @@ Xcode と Swift のバージョンによっては、 取得できるバイナリ
 
 ## ビルド方法
 
-1. ``SamplesApp/SamplesApp/Environment.example.swift`` のファイル名を ``SamplesApp/SamplesApp/Environment.swift`` に変更し、接続情報を設定します。
+1. ``SamplesApp/Configs/Environment.example.swift`` のファイル名を ``SamplesApp/Configs/Environment.swift`` に変更し、接続情報を設定します。
 
    ```
-   $ cp SamplesApp/SamplesApp/Environment.example.swift SamplesApp/SamplesApp/Environment.swift
+   $ cp SamplesApp/Configs/Environment.example.swift SamplesApp/Configs/Environment.swift
    ```
 
 2. ``SamplesApp/SamplesApp.xcodeproj`` を Xcode で開いてビルドします。
@@ -113,7 +113,7 @@ VideoChatSample をベースとしています。
 ### DataChannelSample (メッセージング)
 
 ビデオチャットと同様の仕様に加えて任意のメッセージを送受信できます。
-メッセージの送受信に使うラベルは `Environment.swift` で変更できます。
+メッセージの送受信に使うラベルは `SamplesApp/Configs/Environment.swift` で変更できます。
 
 映像とラベルは関連していません。同一のチャネルに接続したどのクライアントも任意のラベルでメッセージを送信できます。
 

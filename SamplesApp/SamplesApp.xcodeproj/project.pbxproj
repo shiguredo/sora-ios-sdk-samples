@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		D6ECA4962EB1BD1E00F7ECAD /* Sora in Frameworks */ = {isa = PBXBuildFile; productRef = D6ECA4952EB1BD1E00F7ECAD /* Sora */; };
 		D6ECA4982EB1BD1E00F7ECAD /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = D6ECA4972EB1BD1E00F7ECAD /* WebRTC */; };
+		D6ECA4A22EB1CA5D00F7ECAD /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ECA4A12EB1CA5D00F7ECAD /* Environment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D6ECA4172EB1B9F800F7ECAD /* SamplesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SamplesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6ECA49A2EB1C3D300F7ECAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6ECA4A12EB1CA5D00F7ECAD /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -61,6 +63,7 @@
 		D6ECA49B2EB1C3EC00F7ECAD /* Configs */ = {
 			isa = PBXGroup;
 			children = (
+				D6ECA4A12EB1CA5D00F7ECAD /* Environment.swift */,
 				D6ECA49A2EB1C3D300F7ECAD /* Info.plist */,
 			);
 			path = Configs;
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6ECA4A22EB1CA5D00F7ECAD /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,7 +290,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84F2944LR9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -326,7 +330,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84F2944LR9;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
