@@ -1,3 +1,4 @@
+/// XCode 上での UI プレビュー用です
 import SwiftUI
 
 struct ContentView: View {

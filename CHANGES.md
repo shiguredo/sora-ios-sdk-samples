@@ -11,8 +11,8 @@
 
 ## 2025.3
 
-- [CHANGE] 各サンプルを SoraSampleApp に統合する
-  - SoraSampleApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
+- [CHANGE] 各サンプルを SamplesApp に統合する
+  - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
   - 個別のサンプルプロジェクトを削除する
   - @t-miya
 - [UPDATE] ScreenCastSample の配信開始/停止ボタンアイコンを置き換える
