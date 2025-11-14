@@ -11,7 +11,7 @@
 
 ## 2025.3
 
-- [CHANGE] 各サンプルを SamplesApp に統合する
+- [CHANGE] 全てのサンプルを SamplesApp に統合する
   - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
   - 個別のサンプルプロジェクトを削除する
   - @t-miya
