@@ -1,7 +1,7 @@
 import UIKit
 
 /// ビットレート選択肢
-enum VideoBitRateOptions {
+private enum VideoBitRateOptions {
   static let list: [(title: String, value: Int?)] = [
     ("未指定", nil),
     ("100", 100),
