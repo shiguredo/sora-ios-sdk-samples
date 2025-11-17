@@ -9,7 +9,12 @@
 - FIX
   - バグ修正
 
-## 2025.2
+## 2025.3
+
+### misc
+
+- [UPDATE] `Claude Assistant` の `claude-response` を `ubuntu-slim` に移行する
+  - @zztkm
 
 ## sora-ios-sdk-2025.2.0
 
