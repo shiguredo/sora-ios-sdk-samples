@@ -15,6 +15,12 @@ class VideoChatRoomViewController: UIViewController {
       cameraMuteController.button = cameraMuteButton
     }
   }
+  /// 前面/背面カメラ切り替えボタンです。
+  @IBOutlet weak var flipCameraButton: UIBarButtonItem? {
+    didSet {
+      cameraMuteController.flipButton = flipCameraButton
+    }
+  }
 
   /// マイクのミュートボタンです。
   @IBOutlet weak var micMuteButton: UIBarButtonItem?

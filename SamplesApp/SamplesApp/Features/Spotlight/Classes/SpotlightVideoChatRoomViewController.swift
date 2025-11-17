@@ -22,6 +22,12 @@ class SpotlightVideoChatRoomViewController: UIViewController {
       cameraMuteController.button = cameraMuteButton
     }
   }
+  /// 前面/背面カメラ切り替えボタンです。
+  @IBOutlet weak var flipCameraButton: UIBarButtonItem? {
+    didSet {
+      cameraMuteController.flipButton = flipCameraButton
+    }
+  }
 
   // カメラのミュート状態です
   // CameraMuteController 経由で取得します

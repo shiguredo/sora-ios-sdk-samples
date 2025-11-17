@@ -412,6 +412,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="flipCameraButton" destination="2aw-lv-VLe" id="A1V-30-7vD"/>
                         <outlet property="cameraMuteButton" destination="Phk-Jg-cmF" id="Nqn-FG-jbX"/>
                         <outlet property="micMuteButton" destination="Plo-Oe-t5R" id="x7S-FZ-GGa"/>
                         <outlet property="videoViewsView" destination="Nuo-VV-0s9" id="wkm-Af-1nX"/>

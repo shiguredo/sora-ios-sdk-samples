@@ -886,6 +886,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="flipCameraButton" destination="2aw-lv-VLe" id="e7i-9a-mS9"/>
                         <outlet property="cameraMuteButton" destination="tSN-bH-E6q" id="hJE-wb-QkO"/>
                         <outlet property="chatMessageToSendTextField" destination="Veg-bZ-Lpb" id="h4k-qp-xAj"/>
                         <outlet property="connectedUrlLabel" destination="v8z-cH-FLv" id="NYb-mb-txT"/>
