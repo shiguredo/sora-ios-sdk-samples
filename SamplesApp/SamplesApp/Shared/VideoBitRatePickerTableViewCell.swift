@@ -21,7 +21,7 @@ enum VideoBitRateOptions {
   ]
 }
 
-/// ビットレート設定用の UI UITableViewCell
+/// ビットレート設定用の UITableViewCell
 class VideoBitRatePickerTableViewCell: UITableViewCell, UIPickerViewDelegate,
   UIPickerViewDataSource
 {
