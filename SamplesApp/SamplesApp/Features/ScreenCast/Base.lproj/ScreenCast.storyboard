@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1ll-sw-UrR">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="gsv-Wc-KQ9">
+            <objects>
+                <navigationController id="1ll-sw-UrR" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="XaW-cO-qOX">
+                        <rect key="frame" x="0.0" y="20" width="375" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="FNV-zp-GV6" kind="relationship" relationship="rootViewController" id="fcl-tD-eHq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="m4C-XL-8Au" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-638" y="125"/>
+        </scene>
+        <!--箱ツムツム-->
+        <scene sceneID="u12-nO-MTa">
+            <objects>
+                <viewController id="FNV-zp-GV6" customClass="ScreenCastGameViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PMb-WS-GuQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="d7J-2n-ms5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="箱ツムツム" id="C1G-DF-frv">
+                        <rightBarButtonItems>
+                            <barButtonItem image="record.circle" catalog="system" id="C6m-dc-Fad">
+                                <connections>
+                                    <action selector="onCameraButton:" destination="FNV-zp-GV6" id="Nsl-bn-clz"/>
+                                    <segue destination="KNc-zj-vCw" kind="presentation" id="lXH-1Q-C9B"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="stop.circle.fill" catalog="system" id="hiS-u9-Ads">
+                                <connections>
+                                    <action selector="onPauseButton:" destination="FNV-zp-GV6" id="bev-Z3-ify"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cameraButton" destination="C6m-dc-Fad" id="4MV-rI-Kif"/>
+                        <outlet property="pauseButton" destination="hiS-u9-Ads" id="utm-jy-m4L"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gxz-tc-1lr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Op7-0k-iAq" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="178" y="125"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Koi-4P-OCZ">
+            <objects>
+                <navigationController id="KNc-zj-vCw" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="maQ-dj-Seb">
+                        <rect key="frame" x="0.0" y="16" width="375" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="eYs-0e-Hk9" kind="relationship" relationship="rootViewController" id="3DX-7r-3cq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PzB-cl-dVa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1215" y="125"/>
+        </scene>
+        <!--動画を配信する-->
+        <scene sceneID="g8e-9F-8uS">
+            <objects>
+                <tableViewController id="eYs-0e-Hk9" customClass="ScreenCastConfigViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="yH7-ky-fXM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="接続設定" id="xtG-5j-9Ne">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="4ZP-Gz-duW">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4ZP-Gz-duW" id="IL3-Hx-ZH5">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vqy-RN-mcL">
+                                                    <rect key="frame" x="130" y="11" width="225" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャンネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAn-h0-4Pa">
+                                                    <rect key="frame" x="20" y="11.5" width="98" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="vqy-RN-mcL" firstAttribute="leading" secondItem="iAn-h0-4Pa" secondAttribute="trailing" constant="12" id="T2m-UI-hoy"/>
+                                                <constraint firstItem="iAn-h0-4Pa" firstAttribute="leading" secondItem="IL3-Hx-ZH5" secondAttribute="leading" constant="20" id="Uae-HE-Xug"/>
+                                                <constraint firstItem="iAn-h0-4Pa" firstAttribute="centerY" secondItem="IL3-Hx-ZH5" secondAttribute="centerY" id="gam-lG-XDv"/>
+                                                <constraint firstItem="vqy-RN-mcL" firstAttribute="centerY" secondItem="IL3-Hx-ZH5" secondAttribute="centerY" id="miq-1V-YBs"/>
+                                                <constraint firstAttribute="trailing" secondItem="vqy-RN-mcL" secondAttribute="trailing" constant="20" id="sYX-g0-UCp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデックを選択します。" id="ocv-Ju-I1p">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Wzi-jE-Ww3">
+                                        <rect key="frame" x="0.0" y="163" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wzi-jE-Ww3" id="Yf9-II-IQk">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="LWj-Kb-ulw">
+                                                    <rect key="frame" x="20" y="6.5" width="335" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="VP8"/>
+                                                        <segment title="VP9"/>
+                                                        <segment title="AV1"/>
+                                                        <segment title="H.264"/>
+                                                        <segment title="H.265"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="LWj-Kb-ulw" secondAttribute="trailing" constant="20" id="H5S-9b-LoS"/>
+                                                <constraint firstItem="LWj-Kb-ulw" firstAttribute="centerY" secondItem="Yf9-II-IQk" secondAttribute="centerY" id="ffD-yf-1B9"/>
+                                                <constraint firstItem="LWj-Kb-ulw" firstAttribute="leading" secondItem="Yf9-II-IQk" secondAttribute="leading" constant="20" id="qa4-u7-RIk"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="0K7-Gv-Cld">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RWd-Sd-Ae5">
+                                        <rect key="frame" x="0.0" y="255.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RWd-Sd-Ae5" id="7mB-C2-N5q">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="配信を開始する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="emx-tf-fIX">
+                                                    <rect key="frame" x="132" y="11.5" width="111.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="emx-tf-fIX" firstAttribute="centerX" secondItem="7mB-C2-N5q" secondAttribute="centerX" id="XYo-Q5-uDW"/>
+                                                <constraint firstItem="emx-tf-fIX" firstAttribute="centerY" secondItem="7mB-C2-N5q" secondAttribute="centerY" id="f18-Bc-DuR"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="eYs-0e-Hk9" id="qbn-2d-4cL"/>
+                            <outlet property="delegate" destination="eYs-0e-Hk9" id="H1s-m8-1IL"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="動画を配信する" id="lNA-b2-xqJ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="KeT-kf-btZ">
+                            <connections>
+                                <segue destination="Op7-0k-iAq" kind="unwind" identifier="Exit" unwindAction="onUnwindByExit:" id="npC-F3-iYY"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="channelIdTextField" destination="vqy-RN-mcL" id="MND-pd-Jbn"/>
+                        <outlet property="videoCodecSegmentedControl" destination="LWj-Kb-ulw" id="fKI-gG-gFn"/>
+                        <segue destination="Op7-0k-iAq" kind="unwind" identifier="Connect" unwindAction="onUnwindByConnect:" id="N2j-vy-zcw"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1nD-Ca-Gms" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1978" y="125"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="record.circle" catalog="system" width="128" height="123"/>
+        <image name="stop.circle.fill" catalog="system" width="128" height="123"/>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
