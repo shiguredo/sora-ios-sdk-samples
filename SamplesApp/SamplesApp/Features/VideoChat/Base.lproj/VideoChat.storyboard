@@ -360,6 +360,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="flipCameraButton" destination="2aw-lv-VLe" id="Tua-aV-Usn"/>
                         <outlet property="cameraMuteButton" destination="tLX-pS-8Ld" id="7dG-cl-HPM"/>
                         <outlet property="micMuteButton" destination="dhE-yZ-ndO" id="tk9-0b-Xsu"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>

@@ -36,12 +36,20 @@ enum CameraMuteState {
 }
 
 /// カメラのミュート状態を制御するためのコントローラーモジュールです
-/// ボタンを押す度に、カメラ有効 -> ソフトミュート -> ハードミュート -> カメラ有効 のように
+/// ボタンを押す度に、カメラ有効 -> ソフトミュート -> ハードミュート -> カメラ有効 -> ... のように遷移します
 final class CameraMuteController {
   weak var button: UIBarButtonItem? {
     didSet {
       updateButton(to: state)
       updateButtonEnabledState()
+    }
+  }
+  // 前面背面カメラ切り替えボタンです
+  // ハードミュート中は無効化する制御のため
+  // ここでプロパティとして持ちます
+  weak var flipButton: UIBarButtonItem? {
+    didSet {
+      updateFlipButtonState()
     }
   }
 
@@ -72,6 +80,7 @@ final class CameraMuteController {
   /// ボタンのイメージやラベルをミュート状態に合わせて更新します
   func updateButton(to newState: CameraMuteState) {
     state = newState
+    updateFlipButtonState()
     guard let button else { return }
     let symbolName = newState.symbolName
     // ボタンのアイコンイメージを取得します
@@ -89,6 +98,11 @@ final class CameraMuteController {
   private func updateButtonEnabledState() {
     guard let button else { return }
     button.isEnabled = isButtonAvailable && !isOperationInProgress
+  }
+
+  // カメラのハードミュート中はカメラ切り替えボタンを無効化します
+  private func updateFlipButtonState() {
+    flipButton?.isEnabled = state != .hardMuted
   }
 
   // カメラミュート状態切り替えエラー時に、直前の状態に復帰させるための関数です
