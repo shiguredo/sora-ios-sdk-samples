@@ -2,12 +2,17 @@ import Sora
 import UIKit
 
 /// チャット接続設定画面です。
-class VideoChatConfigViewController: UITableViewController {
+class VideoChatConfigViewController: UITableViewController, UIPickerViewDelegate,
+  UIPickerViewDataSource
+{
   /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var channelIdTextField: UITextField!
 
   /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
+
+  /// 映像ビットレートを選択するための入力欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var videoBitRateTextField: UITextField!
 
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
@@ -21,6 +26,27 @@ class VideoChatConfigViewController: UITableViewController {
 
   @IBOutlet var h264ProfileLevelIdTextField: UITextField!
 
+  private let videoBitRateOptions: [(title: String, value: Int?)] = [
+    ("未指定", nil),
+    ("100", 100),
+    ("300", 300),
+    ("500", 500),
+    ("800", 800),
+    ("1000", 1000),
+    ("1500", 1500),
+    ("2000", 2000),
+    ("2500", 2500),
+    ("3000", 3000),
+    ("5000", 5000),
+    ("10000", 10000),
+    ("15000", 15000),
+    ("20000", 20000),
+    ("30000", 30000),
+  ]
+
+  private let videoBitRatePickerView = UIPickerView()
+  private var selectedVideoBitRateIndex = 0
+
   /// 接続試行中かどうかを表します。
   var isConnecting = false
 
@@ -29,12 +55,18 @@ class VideoChatConfigViewController: UITableViewController {
     super.viewDidLoad()
     channelIdTextField.text = VideoChatEnvironment.channelId
     h264ProfileLevelIdTextField.text = ""
+    configureVideoBitRatePicker()
   }
 
   /// 行がタップされたときの処理を記述します。
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // まず最初にタップされた行の選択状態を解除します。
     tableView.deselectRow(at: indexPath, animated: true)
+
+    if indexPath.section == 1, indexPath.row == 1 {
+      videoBitRateTextField.becomeFirstResponder()
+      return
+    }
 
     // 選択された行が「接続」ボタンでない限り無視します。
     guard indexPath.section == 4, indexPath.row == 0 else {
@@ -117,6 +149,10 @@ class VideoChatConfigViewController: UITableViewController {
       h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
     configuration.videoH264Params = videoH264Params
 
+    if let videoBitRateValue = videoBitRateOptions[selectedVideoBitRateIndex].value {
+      configuration.videoBitRate = videoBitRateValue
+    }
+
     configuration.signalingConnectMetadata = VideoChatEnvironment.signalingConnectMetadata
 
     // 入力された設定を元にSoraへ接続を行います。
@@ -162,5 +198,51 @@ class VideoChatConfigViewController: UITableViewController {
   /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
+  }
+
+  private func configureVideoBitRatePicker() {
+    videoBitRateTextField.inputView = videoBitRatePickerView
+    videoBitRatePickerView.delegate = self
+    videoBitRatePickerView.dataSource = self
+    videoBitRatePickerView.selectRow(selectedVideoBitRateIndex, inComponent: 0, animated: false)
+    videoBitRateTextField.text = videoBitRateOptions[selectedVideoBitRateIndex].title
+
+    let toolbar = UIToolbar()
+    toolbar.sizeToFit()
+    toolbar.setItems(
+      [
+        UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+        UIBarButtonItem(
+          title: "完了", style: .done, target: self, action: #selector(onVideoBitRatePickerDone)),
+      ],
+      animated: false)
+    videoBitRateTextField.inputAccessoryView = toolbar
+  }
+
+  @objc private func onVideoBitRatePickerDone() {
+    videoBitRateTextField.resignFirstResponder()
+  }
+
+  // MARK: UIPickerViewDataSource
+
+  func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    1
+  }
+
+  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    videoBitRateOptions.count
+  }
+
+  // MARK: UIPickerViewDelegate
+
+  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int)
+    -> String?
+  {
+    videoBitRateOptions[row].title
+  }
+
+  func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    selectedVideoBitRateIndex = row
+    videoBitRateTextField.text = videoBitRateOptions[row].title
   }
 }
