@@ -35,8 +35,8 @@
 
 - [UPDATE] actions/checkout を v5 に上げる
   - @miosakuma
-
-## 2025.2
+- [UPDATE] `Claude Assistant` の `claude-response` を `ubuntu-slim` に移行する
+  - @zztkm
 
 ## sora-ios-sdk-2025.2.0
 
