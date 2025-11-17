@@ -1,5 +1,6 @@
 import UIKit
 
+/// ビットレート選択肢
 enum VideoBitRateOptions {
   static let list: [(title: String, value: Int?)] = [
     ("未指定", nil),
@@ -20,6 +21,7 @@ enum VideoBitRateOptions {
   ]
 }
 
+/// ビットレート設定用の UI UITableViewCell
 class VideoBitRatePickerTableViewCell: UITableViewCell, UIPickerViewDelegate,
   UIPickerViewDataSource
 {
@@ -38,20 +40,9 @@ class VideoBitRatePickerTableViewCell: UITableViewCell, UIPickerViewDelegate,
     configurePicker()
   }
 
+  /// セルがタップされた際に picker を表示するために呼び出されます。
   func focusPicker() {
     valueTextField.becomeFirstResponder()
-  }
-
-  func selectBitRate(_ value: Int?) {
-    if let value,
-      let index = VideoBitRateOptions.list.firstIndex(where: { $0.value == value })
-    {
-      selectedIndex = index
-    } else {
-      selectedIndex = 0
-    }
-    pickerView.selectRow(selectedIndex, inComponent: 0, animated: false)
-    valueTextField.text = VideoBitRateOptions.list[selectedIndex].title
   }
 
   private func configurePicker() {

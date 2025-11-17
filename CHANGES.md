@@ -27,6 +27,9 @@
   - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
   - ハードミュート中は前面カメラ・背面カメラの切り替えボタンを無効にする
   - @t-miya
+- [ADD] 映像ビットレート指定を追加する
+  - `Video Chat Sample`、`Simulcast Sample`、`Spotlight Sample` に追加した
+  - @zztkm
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
   - カメラは黒塗りフレーム、マイクは無音フレームを送信するソフトミュート
