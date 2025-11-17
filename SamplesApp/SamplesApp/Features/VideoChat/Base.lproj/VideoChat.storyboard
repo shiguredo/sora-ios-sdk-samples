@@ -92,7 +92,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="5h9-Ze-g2f">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="5h9-Ze-g2f" customClass="VideoBitRatePickerTableViewCell" customModule="SamplesApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="207" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5h9-Ze-g2f" id="1UE-kK-dA8">
@@ -122,6 +122,10 @@
                                                 <constraint firstItem="M9Q-5Y-yCZ" firstAttribute="centerY" secondItem="1UE-kK-dA8" secondAttribute="centerY" id="x0j-0F-0ww"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="titleLabel" destination="7uc-VM-0cD" id="MPR-AD-R93"/>
+                                            <outlet property="valueTextField" destination="M9Q-5Y-yCZ" id="pnS-fN-6TN"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -344,8 +348,8 @@
                         <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
                         <outlet property="h264ProfileLevelIdTextField" destination="mw9-oG-2hI" id="sPB-Iw-Lzn"/>
                         <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
+                        <outlet property="videoBitRatePickerCell" destination="5h9-Ze-g2f" id="Gje-8A-cqW"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
-                        <outlet property="videoBitRateTextField" destination="M9Q-5Y-yCZ" id="AKz-4H-PJd"/>
                         <outlet property="vp9ProfileIdSegmentedControl" destination="Z2i-ih-FxO" id="Ibx-Tx-Aah"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>

@@ -92,6 +92,41 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="iCB-yx-RbE" customClass="VideoBitRatePickerTableViewCell" customModule="SamplesApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="207" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iCB-yx-RbE" id="zvg-7k-SaE">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="映像ビットレート" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sgk-JY-dsz">
+                                                    <rect key="frame" x="20" y="11.5" width="129" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="mS8-5g-x3I"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="未指定" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L31-XC-f4e">
+                                                    <rect key="frame" x="161" y="11" width="194" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Sgk-JY-dsz" firstAttribute="leading" secondItem="zvg-7k-SaE" secondAttribute="leading" constant="20" id="8GG-7z-x62"/>
+                                                <constraint firstItem="Sgk-JY-dsz" firstAttribute="centerY" secondItem="zvg-7k-SaE" secondAttribute="centerY" id="FJO-pm-jaK"/>
+                                                <constraint firstItem="L31-XC-f4e" firstAttribute="leading" secondItem="Sgk-JY-dsz" secondAttribute="trailing" constant="12" id="vY2-2f-Xvr"/>
+                                                <constraint firstAttribute="trailing" secondItem="L31-XC-f4e" secondAttribute="trailing" constant="20" id="xQ8-Io-xCo"/>
+                                                <constraint firstItem="L31-XC-f4e" firstAttribute="centerY" secondItem="zvg-7k-SaE" secondAttribute="centerY" id="ygb-xu-0TK"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="titleLabel" destination="Sgk-JY-dsz" id="iNu-cM-7hk"/>
+                                            <outlet property="valueTextField" destination="L31-XC-f4e" id="gS7-Sj-6f6"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="アクティブ配信数" footerTitle="配信される発声者の最大人数を選択します。" id="PNL-Rl-ZYX">
@@ -354,6 +389,7 @@
                         <outlet property="spotlightFocusRidSegmentedControl" destination="S3w-p8-QFj" id="8Kp-cT-pz2"/>
                         <outlet property="spotlightNumberSegmentedControl" destination="d7C-wH-w61" id="Be1-cJ-j36"/>
                         <outlet property="spotlightUnfocusRidSegmentedControl" destination="cWJ-SD-e0P" id="akT-r2-u51"/>
+                        <outlet property="videoBitRatePickerCell" destination="iCB-yx-RbE" id="GfV-wC-a9B"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>

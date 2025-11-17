@@ -33,6 +33,7 @@ class SpotlightSoraSDKManager {
     simulcast: Bool,
     dataChannelSignaling: Bool? = nil,
     ignoreDisconnectWebSocket: Bool? = nil,
+    videoBitRate: Int? = nil,
     completionHandler: ((Error?) -> Void)?
   ) {
     // 既にcurrentMediaChannelが設定されている場合は、接続済みとみなし、何もしないで終了します。
@@ -61,8 +62,9 @@ class SpotlightSoraSDKManager {
     // スポットライトを有効にします。
     configuration.spotlightEnabled = .enabled
 
-    // スポットライト用にビットレートを高めに設定します。
-    configuration.videoBitRate = 3000
+    if let videoBitRate {
+      configuration.videoBitRate = videoBitRate
+    }
 
     // Soraに接続を試みます。
     _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
