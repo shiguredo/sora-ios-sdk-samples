@@ -29,14 +29,14 @@ Xcode と Swift のバージョンによっては、 取得できるバイナリ
 
 1. ``SamplesApp/Configs/Environment.example.swift`` のファイル名を ``SamplesApp/Configs/Environment.swift`` に変更し、接続情報を設定します。
 
-   ```
-   $ cp SamplesApp/Configs/Environment.example.swift SamplesApp/Configs/Environment.swift
+   ```bash
+   cp SamplesApp/Configs/Environment.example.swift SamplesApp/Configs/Environment.swift
    ```
 
 2. ``SamplesApp/SamplesApp.xcodeproj`` を Xcode で開いてビルドします。
 
-   ```
-   $ SamplesApp/SamplesApp.xcodeproj
+   ```bash
+   open SamplesApp/SamplesApp.xcodeproj
    ```
 
 > [!TIP]
