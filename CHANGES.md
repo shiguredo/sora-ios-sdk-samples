@@ -25,10 +25,11 @@
 - [ADD] カメラハードミュート機能を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
+  - ハードミュート中は前面カメラ・背面カメラの切り替えボタンを無効にする
   - @t-miya
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
-  - RTP 送出のみを停止するソフトミュート
+  - カメラは黒塗りフレーム、マイクは無音フレームを送信するソフトミュート
   - @t-miya
 
 ### misc
