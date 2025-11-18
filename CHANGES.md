@@ -28,7 +28,7 @@
   - ハードミュート中は前面カメラ・背面カメラの切り替えボタンを無効にする
   - @t-miya
 - [ADD] 映像ビットレート指定を追加する
-  - `Video Chat Sample`、`Simulcast Sample`、`Spotlight Sample` に追加した
+  - `Video Chat Sample`、`Simulcast Sample`、`Spotlight Sample` に追加
   - @zztkm
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
