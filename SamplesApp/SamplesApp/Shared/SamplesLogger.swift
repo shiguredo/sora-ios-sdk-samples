@@ -7,6 +7,9 @@ import os
 /// private let logger = SamplesLogger.tagged("<モジュール名>")
 /// のように SamplesLogger インスタンスを生成します。
 /// その後、logger.info("メッセージ") のようにログを出力します。
+///
+/// サンプルアプリの動作確認用のログのためプライバシー指定は全て public としています。
+/// 個人情報等を含むログへの使用は想定していません。
 struct SamplesLogger {
   struct TaggedLogger {
     fileprivate let tag: String
