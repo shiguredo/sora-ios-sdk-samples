@@ -9,6 +9,9 @@ class VideoChatConfigViewController: UITableViewController {
   /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
+  /// 映像ビットレートを選択するためのセルです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var videoBitRatePickerCell: VideoBitRatePickerTableViewCell!
+
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
 
@@ -35,6 +38,11 @@ class VideoChatConfigViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // まず最初にタップされた行の選択状態を解除します。
     tableView.deselectRow(at: indexPath, animated: true)
+
+    if indexPath.section == 1, indexPath.row == 1 {
+      videoBitRatePickerCell.focusPicker()
+      return
+    }
 
     // 選択された行が「接続」ボタンでない限り無視します。
     guard indexPath.section == 4, indexPath.row == 0 else {
@@ -117,6 +125,10 @@ class VideoChatConfigViewController: UITableViewController {
       h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
     configuration.videoH264Params = videoH264Params
 
+    if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
+      configuration.videoBitRate = videoBitRateValue
+    }
+
     configuration.signalingConnectMetadata = VideoChatEnvironment.signalingConnectMetadata
 
     // 入力された設定を元にSoraへ接続を行います。
@@ -163,4 +175,5 @@ class VideoChatConfigViewController: UITableViewController {
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
   }
+
 }

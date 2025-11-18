@@ -9,6 +9,9 @@ class SpotlightConfigViewController: UITableViewController {
   /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
+  /// 映像ビットレートを選択するためのセルです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var videoBitRatePickerCell: VideoBitRatePickerTableViewCell!
+
   /// アクティブ配信数を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
@@ -17,15 +20,6 @@ class SpotlightConfigViewController: UITableViewController {
 
   /// フォーカスされた映像の Rid を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var spotlightUnfocusRidSegmentedControl: UISegmentedControl!
-
-  /// 接続試行中かどうかを表します。
-  var isConnecting = false
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    channelIdTextField.text = SpotlightEnvironment.channelId
-  }
 
   /// サイマルキャスト
   @IBOutlet var simulcastSegmentedControl: UISegmentedControl!
@@ -36,10 +30,24 @@ class SpotlightConfigViewController: UITableViewController {
   /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
+  /// 接続試行中かどうかを表します。
+  var isConnecting = false
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    channelIdTextField.text = SpotlightEnvironment.channelId
+  }
+
   /// 行がタップされたときの処理を記述します。
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // まず最初にタップされた行の選択状態を解除します。
     tableView.deselectRow(at: indexPath, animated: true)
+
+    if indexPath.section == 1, indexPath.row == 1 {
+      videoBitRatePickerCell.focusPicker()
+      return
+    }
 
     // 選択された行が「接続」ボタンでない限り無視します。
     guard shouldHandleConnect(for: indexPath) else {
@@ -68,7 +76,8 @@ class SpotlightConfigViewController: UITableViewController {
       spotlightNumber: selectedSpotlightNumber(),
       simulcast: selectedSimulcast(),
       dataChannelSignaling: selectedDataChannelSignaling(),
-      ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket()
+      ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
+      videoBitRate: videoBitRatePickerCell.selectedBitRate
     ) { [weak self] error in
       guard let self = self else { return }
       // 接続処理が終了したので false にします。
@@ -165,4 +174,5 @@ class SpotlightConfigViewController: UITableViewController {
     precondition(values.indices.contains(index), "Unexpected segmented control index.")
     return values[index]
   }
+
 }
