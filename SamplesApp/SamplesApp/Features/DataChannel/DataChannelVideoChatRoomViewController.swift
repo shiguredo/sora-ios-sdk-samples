@@ -361,7 +361,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
     guard cameraMuteState != .hardMuted else {
-      logger.warning("[sample] Unexpected onSwitchVideo callback during hardMuted state")
+      logger.error("[sample] Unexpected onSwitchVideo callback during hardMuted state")
       return
     }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted

@@ -341,7 +341,7 @@ extension VideoChatRoomViewController {
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
     // ハードミュート中にこのコールバックが来る想定はないが、安全のためログを出して抜ける
     guard cameraMuteState != .hardMuted else {
-      logger.warning(
+      logger.error(
         "[sample] Unexpected onSwitchVideo callback during hardMuted state (This should not happen)"
       )
       return
