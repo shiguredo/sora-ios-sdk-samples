@@ -78,13 +78,13 @@ class VideoChatRoomViewController: UIViewController {
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
     if let mediaChannel = VideoChatSoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
-        logger.warning("[sample] mediaChannel.handlers.onAddStream")
+        logger.info("[sample] mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
         }
       }
       mediaChannel.handlers.onRemoveStream = { [weak self] _ in
-        logger.warning("[sample] mediaChannel.handlers.onRemoveStream")
+        logger.info("[sample] mediaChannel.handlers.onRemoveStream")
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
         }
@@ -341,7 +341,9 @@ extension VideoChatRoomViewController {
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
     // ハードミュート中にこのコールバックが来る想定はないが、安全のためログを出して抜ける
     guard cameraMuteState != .hardMuted else {
-      logger.error("[sample] Unexpected onSwitchVideo callback during hardMuted state")
+      logger.warning(
+        "[sample] Unexpected onSwitchVideo callback during hardMuted state (This should not happen)"
+      )
       return
     }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted

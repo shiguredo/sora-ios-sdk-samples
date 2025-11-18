@@ -2,7 +2,7 @@ import Foundation
 import Sora
 import WebRTC
 
-private let logger = SamplesLogger.tagged("SimulcastVideoChatRoomSDKManager")
+private let logger = SamplesLogger.tagged("SimulcastSDKManager")
 
 /// Sora SDK関連の、アプリケーション全体で共通して行いたい処理を行うシングルトン・マネージャ・クラスです。
 ///
