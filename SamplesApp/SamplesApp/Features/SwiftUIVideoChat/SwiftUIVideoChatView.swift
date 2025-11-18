@@ -208,8 +208,8 @@ private struct SwiftUIVideoChatRoomView: View {
   }
 }
 
-private extension MediaStream {
-  var _objectIdentifier: ObjectIdentifier {
+extension MediaStream {
+  fileprivate var _objectIdentifier: ObjectIdentifier {
     ObjectIdentifier(self)
   }
 }
