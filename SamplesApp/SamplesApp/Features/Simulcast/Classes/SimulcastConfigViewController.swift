@@ -1,6 +1,8 @@
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("SumulcastConfig")
+
 /// チャット接続設定画面です。
 class SimulcastConfigViewController: UITableViewController {
   /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
@@ -75,7 +77,7 @@ class SimulcastConfigViewController: UITableViewController {
         // この場合は、エラー表示をユーザーに返すのが親切です。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        NSLog("[sample] SimulcastSoraSDKManager connection error: \(error)")
+        logger.warning("[sample] SimulcastSoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -87,7 +89,7 @@ class SimulcastConfigViewController: UITableViewController {
         }
       } else {
         // errorがnilの場合は、接続に成功しています。
-        NSLog("[sample] SimulcastSoraSDKManager connected.")
+        logger.info("[sample] SimulcastSoraSDKManager connected.")
 
         // 次の配信画面に遷移します。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、

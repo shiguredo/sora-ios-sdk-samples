@@ -2,6 +2,8 @@ import Foundation
 import Sora
 import WebRTC
 
+private let logger = SamplesLogger.tagged("SimulcastSDKManager")
+
 /// Sora SDK関連の、アプリケーション全体で共通して行いたい処理を行うシングルトン・マネージャ・クラスです。
 ///
 /// このようなクラスを用意しておくと、Sora SDKのConnectionをアプリケーション全体で一つだけ確実に管理する事が可能になるため、おすすめです。
@@ -66,7 +68,7 @@ class SimulcastSoraSDKManager {
       // 一方、接続に失敗した場合は、mediaChannelはnilとなり、errorが返されます。
       self?.currentMediaChannel = mediaChannel
       completionHandler?(error)
-      NSLog(
+      logger.info(
         "[sample] mediaChannel.connectedUrl: \(String(describing: mediaChannel?.connectedUrl))"
       )
     }

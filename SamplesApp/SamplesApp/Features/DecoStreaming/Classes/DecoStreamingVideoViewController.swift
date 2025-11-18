@@ -2,6 +2,8 @@ import AVFoundation
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("DecoStreamingVideoChatRoom")
+
 /// 実際に動画を配信する画面です。
 class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
   UIPickerViewDataSource
@@ -73,9 +75,11 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
         guard let self = self else { return }
         switch event {
         case .ok(let code, let reason):
-          NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+          logger.info(
+            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
         case .error(let error):
-          NSLog("[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
+          logger.error(
+            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
         }
 
         DispatchQueue.main.async {

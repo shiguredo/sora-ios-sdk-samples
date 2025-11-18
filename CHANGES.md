@@ -15,6 +15,9 @@
   - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
   - 個別のサンプルプロジェクトを削除する
   - @t-miya
+- [UPDATE] ロギングを NSLog から os.Logger に置き換える
+  - SamplesLogger モジュールを追加し、NSLog の使用箇所を置き換える
+  - @t-miya
 - [UPDATE] ScreenCastSample の配信開始/停止ボタンアイコンを置き換える
   - 開始を `camera` から `record.circle` の置き換える
   - 停止を `pause` から `stop.circle.fill` に置き換える
