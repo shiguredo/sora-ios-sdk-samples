@@ -1,7 +1,12 @@
 import os
 
-/// SamplesApp 全体で利用する os.Logger ラッパーです
-/// タグでモジュール名を指定してメッセージと一緒にロギングします
+/// SamplesApp 全体で利用する os.Logger ラッパーです。
+/// タグでモジュール名を指定してメッセージと一緒にロギングします。
+///
+/// ログを出力したい各モジュール先頭で
+/// private let logger = SamplesLogger.tagged("<モジュール名>")
+/// のように SamplesLogger インスタンスを生成します。
+/// その後、logger.info("メッセージ") のようにログを出力します。
 struct SamplesLogger {
   struct TaggedLogger {
     fileprivate let tag: String
