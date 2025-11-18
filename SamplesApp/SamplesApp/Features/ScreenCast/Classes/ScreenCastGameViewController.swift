@@ -2,6 +2,8 @@ import ReplayKit
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("ScreenCastGame")
+
 /// 0.0~1.0の間の乱数を生成する関数です。
 private func randomCGFloat() -> CGFloat {
   CGFloat.random(in: 0...1)
@@ -149,7 +151,7 @@ class ScreenCastGameViewController: UIViewController {
         if let error {
           // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
           // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
-          NSLog("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
+          logger.warning("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
           self?.handleDisconnect()
         } else if let mediaChannel = ScreenCastSoraSDKManager.shared.currentMediaChannel {
           // サーバーから切断されたときのコールバックを設定します。
@@ -157,9 +159,10 @@ class ScreenCastGameViewController: UIViewController {
             guard let self = self else { return }
             switch event {
             case .ok(let code, let reason):
-              NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+              logger.info(
+                "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
             case .error(let error):
-              NSLog(
+              logger.error(
                 "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
             }
 
@@ -270,20 +273,20 @@ private func resizeSampleBuffer(
 
   // CIImage をリサイズする
   guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-    NSLog("cannot get pixel buffer")
+    logger.error("cannot get pixel buffer")
     return nil
   }
   let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
 
   guard let filter = CIFilter(name: "CILanczosScaleTransform") else {
-    NSLog("not found filter")
+    logger.error("not found filter")
     return nil
   }
   filter.setDefaults()
   filter.setValue(ciImage, forKey: kCIInputImageKey)
   filter.setValue(scale, forKey: kCIInputScaleKey)
   guard let resizedCIImage = filter.outputImage else {
-    NSLog("resize CIImage failed")
+    logger.error("resize CIImage failed")
     return nil
   }
 
@@ -302,7 +305,7 @@ private func resizeSampleBuffer(
     attrs,
     &newPixelBuffer)
   guard status == kCVReturnSuccess else {
-    NSLog("cannot create new pixel buffer \(status)")
+    logger.error("cannot create new pixel buffer \(status)")
     return nil
   }
   ciContext.render(
@@ -312,7 +315,7 @@ private func resizeSampleBuffer(
     colorSpace: CGColorSpaceCreateDeviceRGB())
   status = CVPixelBufferLockBaseAddress(newPixelBuffer, .readOnly)
   guard status == kCVReturnSuccess else {
-    NSLog("cannot render to new pixel buffer \(status)")
+    logger.error("cannot render to new pixel buffer \(status)")
     return nil
   }
 
@@ -326,7 +329,7 @@ private func resizeSampleBuffer(
     imageBuffer: newPixelBuffer,
     formatDescriptionOut: &videoInfo)
   guard status == errSecSuccess else {
-    NSLog("cannot create video format description \(status)")
+    logger.error("cannot create video format description \(status)")
     return nil
   }
 
@@ -340,7 +343,7 @@ private func resizeSampleBuffer(
     sampleTiming: &timingInfo,
     sampleBufferOut: &newSampleBuffer)
   guard status == errSecSuccess else {
-    NSLog("cannot create new sample buffer \(status)")
+    logger.error("cannot create new sample buffer \(status)")
     return nil
   }
 

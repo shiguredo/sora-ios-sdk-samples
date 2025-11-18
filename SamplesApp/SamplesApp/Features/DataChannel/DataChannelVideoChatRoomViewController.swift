@@ -1,6 +1,8 @@
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("DataChannelVideoChatRoom")
+
 /// ビデオチャットを行う画面です。
 class DataChannelVideoChatRoomViewController: UIViewController {
   // 以下のプロパティは UI コンポーネントを保持します。
@@ -167,9 +169,11 @@ class DataChannelVideoChatRoomViewController: UIViewController {
         guard let self = self else { return }
         switch event {
         case .ok(let code, let reason):
-          NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+          logger.info(
+            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
         case .error(let error):
-          NSLog("[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
+          logger.error(
+            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
         }
 
         DispatchQueue.main.async {
@@ -197,13 +201,13 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
     if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
-        NSLog("mediaChannel.handlers.onAddStream")
+        logger.info("mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
         }
       }
       mediaChannel.handlers.onRemoveStream = { [weak self] _ in
-        NSLog("mediaChannel.handlers.onRemoveStream")
+        logger.info("mediaChannel.handlers.onRemoveStream")
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
         }
@@ -357,7 +361,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
     guard cameraMuteState != .hardMuted else {
-      NSLog("[sample] Unexpected onSwitchVideo callback during hardMuted state")
+      logger.warning("[sample] Unexpected onSwitchVideo callback during hardMuted state")
       return
     }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
@@ -380,7 +384,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
         return
       }
       guard let capturer = cameraCapture else {
-        NSLog("[sample] Camera capturer is unavailable for restart.")
+        logger.warning("[sample] Camera capturer is unavailable for restart.")
         cameraMuteController.updateButton(to: previousState)
         upstream.videoEnabled = false
         return
@@ -391,7 +395,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
           guard let self = self, let upstream = upstream else { return }
           self.isCameraMuteOperationInProgress = false
           if let error {
-            NSLog("[sample] Failed to restart camera: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to restart camera: \(error.localizedDescription)")
             self.cameraMuteController.restoreState(
               to: previousState,
               upstream: upstream,
@@ -420,7 +424,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
           guard let self = self, let upstream = upstream else { return }
           self.isCameraMuteOperationInProgress = false
           if let error {
-            NSLog("[sample] Failed to stop camera: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to stop camera: \(error.localizedDescription)")
             self.cameraMuteController.restoreState(
               to: previousState,
               upstream: upstream,
@@ -574,7 +578,7 @@ extension DataChannelVideoChatRoomViewController {
 
     CameraVideoCapturer.flip(current) { error in
       if let error {
-        NSLog(error.localizedDescription)
+        logger.error(error.localizedDescription)
       }
     }
   }
@@ -641,7 +645,7 @@ extension DataChannelVideoChatRoomViewController {
     }
 
     if let error = mediaChannel.sendMessage(label: label, data: data) {
-      NSLog("cannot send message: \(error)")
+      logger.error("cannot send message: \(error)")
       return
     }
 

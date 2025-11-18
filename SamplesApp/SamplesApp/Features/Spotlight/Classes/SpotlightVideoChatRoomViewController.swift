@@ -1,6 +1,8 @@
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("SpotlightVideoChatRoom")
+
 /// ビデオチャットを行う画面です。
 class SpotlightVideoChatRoomViewController: UIViewController {
   @IBOutlet weak var videoViewsView: UIView!
@@ -81,13 +83,13 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
     if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
-        NSLog("[sample] mediaChannel.handlers.onAddStream")
+        logger.info("[sample] mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
         }
       }
       mediaChannel.handlers.onRemoveStream = { [weak self] _ in
-        NSLog("[sample] mediaChannel.handlers.onRemoveStream")
+        logger.info("[sample] mediaChannel.handlers.onRemoveStream")
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
         }
@@ -98,9 +100,11 @@ class SpotlightVideoChatRoomViewController: UIViewController {
         guard let self = self else { return }
         switch event {
         case .ok(let code, let reason):
-          NSLog("[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+          logger.info(
+            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
         case .error(let error):
-          NSLog("[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
+          logger.error(
+            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
         }
 
         DispatchQueue.main.async {
@@ -336,7 +340,7 @@ extension SpotlightVideoChatRoomViewController {
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
     // ハードミュート中にこのコールバックが来る想定はないが、安全のためログを出して抜ける
     guard cameraMuteState != .hardMuted else {
-      NSLog("[sample] Unexpected onSwitchVideo callback during hardMuted state")
+      logger.error("[sample] Unexpected onSwitchVideo callback during hardMuted state")
       return
     }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
@@ -362,7 +366,7 @@ extension SpotlightVideoChatRoomViewController {
         return
       }
       guard let capturer = cameraCapture else {
-        NSLog("[sample] Camera capturer is unavailable for restart.")
+        logger.warning("[sample] Camera capturer is unavailable for restart.")
         cameraMuteController.updateButton(to: previousState)
         upstream.videoEnabled = false
         return
@@ -375,7 +379,7 @@ extension SpotlightVideoChatRoomViewController {
           self.isCameraMuteOperationInProgress = false
           if let error {
             // 再開失敗
-            NSLog("[sample] Failed to restart camera: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to restart camera: \(error.localizedDescription)")
             // 状態を直前の状態に戻してリトライできるように参照を保持する
             self.cameraMuteController.restoreState(
               to: previousState,
@@ -412,7 +416,7 @@ extension SpotlightVideoChatRoomViewController {
           self.isCameraMuteOperationInProgress = false
           if let error {
             // 停止失敗
-            NSLog("[sample] Failed to stop camera: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to stop camera: \(error.localizedDescription)")
             // 直前の状態に戻します
             self.cameraMuteController.restoreState(
               to: previousState,
@@ -462,7 +466,7 @@ extension SpotlightVideoChatRoomViewController {
 
     CameraVideoCapturer.flip(current) { error in
       if let error {
-        NSLog("[sample] " + error.localizedDescription)
+        logger.error("[sample] " + error.localizedDescription)
       }
     }
   }

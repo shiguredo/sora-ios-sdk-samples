@@ -1,6 +1,8 @@
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("DataChannelConfig")
+
 /// チャット接続設定画面です。
 class DataChannelConfigViewController: UITableViewController {
   // 以下のプロパティは UI コンポーネントを保持します。
@@ -99,7 +101,7 @@ class DataChannelConfigViewController: UITableViewController {
       self.isConnecting = false
 
       if let error {
-        NSLog("DataChannelSoraSDKManager connection error: \(error)")
+        logger.warning("DataChannelSoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -112,7 +114,7 @@ class DataChannelConfigViewController: UITableViewController {
         return
       }
 
-      NSLog("DataChannelSoraSDKManager connected.")
+      logger.warning("DataChannelSoraSDKManager connected.")
       DispatchQueue.main.async {
         self.performSegue(withIdentifier: "Connect", sender: self)
       }

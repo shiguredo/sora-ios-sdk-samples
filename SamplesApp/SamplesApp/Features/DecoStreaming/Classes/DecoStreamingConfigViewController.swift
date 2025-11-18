@@ -1,6 +1,8 @@
 import Sora
 import UIKit
 
+private let logger = SamplesLogger.tagged("DecoStreamingConfig")
+
 /// 配信設定画面です。
 class DecoStreamingConfigViewController: UITableViewController {
   /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
@@ -68,7 +70,7 @@ class DecoStreamingConfigViewController: UITableViewController {
         // この場合は、エラー表示をユーザーに返すのが親切です。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        NSLog("[sample] DecoStreamingSoraSDKManager connection error: \(error)")
+        logger.warning("[sample] DecoStreamingSoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -80,7 +82,7 @@ class DecoStreamingConfigViewController: UITableViewController {
         }
       } else {
         // errorがnilの場合は、接続に成功しています。
-        NSLog("[sample] DecoStreamingSoraSDKManager connected.")
+        logger.info("[sample] DecoStreamingSoraSDKManager connected.")
 
         // 次の配信画面に遷移します。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
