@@ -1,11 +1,16 @@
 import SwiftUI
 import UIKit
 
-private struct SampleItem: Identifiable, Equatable {
+private struct SampleItem: Identifiable {
+  enum Destination {
+    case storyboard(name: String)
+    case swiftUIView(() -> AnyView)
+  }
+
   let id = UUID()
   let title: String
   let subtitle: String
-  let storyboardName: String
+  let destination: Destination
 }
 
 struct MainMenuView: View {
@@ -15,32 +20,37 @@ struct MainMenuView: View {
     SampleItem(
       title: "Video Chat Sample",
       subtitle: "ビデオチャット",
-      storyboardName: "VideoChat"
+      destination: .storyboard(name: "VideoChat")
+    ),
+    SampleItem(
+      title: "SwiftUI Video Chat Sample",
+      subtitle: "SwiftUI + SwiftUIVideoView のビデオチャット",
+      destination: .swiftUIView { AnyView(SwiftUIVideoChatSampleView()) }
     ),
     SampleItem(
       title: "DataChannel Sample",
       subtitle: "DataChannel を使ったメッセージング",
-      storyboardName: "DataChannel"
+      destination: .storyboard(name: "DataChannel")
     ),
     SampleItem(
       title: "Deco Streaming Sample",
       subtitle: "エフェクト付き映像配信",
-      storyboardName: "DecoStreaming"
+      destination: .storyboard(name: "DecoStreaming")
     ),
     SampleItem(
       title: "Screen Cast Sample",
       subtitle: "画面共有",
-      storyboardName: "ScreenCast"
+      destination: .storyboard(name: "ScreenCast")
     ),
     SampleItem(
       title: "Simulcast Sample",
       subtitle: "サイマルキャスト配信",
-      storyboardName: "Simulcast"
+      destination: .storyboard(name: "Simulcast")
     ),
     SampleItem(
       title: "Spotlight Sample",
       subtitle: "スポットライト視聴",
-      storyboardName: "Spotlight"
+      destination: .storyboard(name: "Spotlight")
     ),
   ]
 
@@ -127,10 +137,27 @@ private struct SampleHost: UIViewControllerRepresentable {
   }
 
   func makeUIViewController(context: Context) -> UIViewController {
-    let storyboard = UIStoryboard(name: sample.storyboardName, bundle: .main)
+    switch sample.destination {
+    case .storyboard(let name):
+      return makeStoryboardViewController(
+        named: name,
+        coordinator: context.coordinator
+      )
+    case .swiftUIView(let builder):
+      return makeSwiftUIViewController(builder: builder, coordinator: context.coordinator)
+    }
+  }
+
+  func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+
+  private func makeStoryboardViewController(
+    named name: String,
+    coordinator: Coordinator
+  ) -> UIViewController {
+    let storyboard = UIStoryboard(name: name, bundle: .main)
 
     guard let initialViewController = storyboard.instantiateInitialViewController() else {
-      return errorViewController()
+      return errorViewController(name: name)
     }
 
     let navigationController: UINavigationController
@@ -141,15 +168,24 @@ private struct SampleHost: UIViewControllerRepresentable {
     }
 
     navigationController.modalPresentationStyle = .fullScreen
-    context.coordinator.installCloseButtonIfNeeded(on: navigationController)
+    coordinator.installCloseButtonIfNeeded(on: navigationController)
     return navigationController
   }
 
-  func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+  private func makeSwiftUIViewController(
+    builder: () -> AnyView,
+    coordinator: Coordinator
+  ) -> UIViewController {
+    let hostingController = UIHostingController(rootView: builder())
+    let navigationController = UINavigationController(rootViewController: hostingController)
+    navigationController.modalPresentationStyle = .fullScreen
+    coordinator.installCloseButtonIfNeeded(on: navigationController)
+    return navigationController
+  }
 
-  private func errorViewController() -> UIViewController {
+  private func errorViewController(name: String) -> UIViewController {
     let label = UILabel()
-    label.text = "\(sample.storyboardName) を読み込めませんでした"
+    label.text = "\(name) を読み込めませんでした"
     label.textAlignment = .center
     label.numberOfLines = 0
 

@@ -59,6 +59,12 @@ Xcode と Swift のバージョンによっては、 取得できるバイナリ
 > [!caution]
 12人より多くの人数が同時に接続する場合の挙動については保証されません。
 
+### SwiftUIVideoChatSample (SwiftUI ビデオチャット)
+
+SwiftUI だけで UI を構築したビデオチャットサンプルです。  
+`SwiftUIVideoView` を利用して `Sora.VideoView` を SwiftUI から扱い、上り映像と下り映像を SwiftUI のビューとして描画します。
+画面構成やファイルは `SamplesApp/SamplesApp/Features/SwiftUIVideoChat` に配置されています。
+
 ### DecoStreamingSample (デコ動画配信)
 
 カメラで撮影した動画をクライアントサイドで加工して動画配信します。

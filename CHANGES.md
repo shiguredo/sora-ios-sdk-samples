@@ -31,6 +31,9 @@
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
   - カメラは黒塗りフレーム、マイクは無音フレームを送信するソフトミュート
   - @t-miya
+- [ADD] SwiftUI Video Chat Sample を追加する
+  - SwiftUIVideoView を使った SwiftUI 製 UI のビデオチャットサンプルを追加する
+  - @codex
 
 ### misc
 

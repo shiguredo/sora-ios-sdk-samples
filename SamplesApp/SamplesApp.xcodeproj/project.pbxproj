@@ -392,8 +392,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/shiguredo/sora-ios-sdk";
 			requirement = {
-				kind = exactVersion;
-				version = "2025.3.0-canary.0";
+				branch = "feature/poc-swift-ui-video-view";
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
