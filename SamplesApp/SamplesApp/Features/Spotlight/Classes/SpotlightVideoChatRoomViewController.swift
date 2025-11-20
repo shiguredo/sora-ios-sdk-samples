@@ -393,7 +393,8 @@ extension SpotlightVideoChatRoomViewController {
       // ここで CameraCapture を生成します。
       // カメラ有効状態でハードミュートから復帰し場合は元の CameraCapture の参照を使用します。
       let startNewCapturerIfNeeded = restartCapturer == nil
-      let startSetup = startNewCapturerIfNeeded
+      let startSetup =
+        startNewCapturerIfNeeded
         ? CameraMuteController.createCapturerForStart(
           using: SpotlightSoraSDKManager.shared.currentMediaChannel?.configuration.cameraSettings,
           upstream: upstream)

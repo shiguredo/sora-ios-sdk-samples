@@ -85,7 +85,8 @@ final class CameraMuteController {
     upstream: MediaStream
   ) -> (capturer: CameraVideoCapturer, format: AVCaptureDevice.Format, frameRate: Int)? {
     let settings = cameraSettings ?? .default
-    let device = CameraVideoCapturer.device(for: settings.position)
+    let device =
+      CameraVideoCapturer.device(for: settings.position)
       ?? CameraVideoCapturer.devices.first
     guard let device else {
       return nil
