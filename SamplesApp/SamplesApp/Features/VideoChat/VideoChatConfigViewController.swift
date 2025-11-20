@@ -130,6 +130,12 @@ class VideoChatConfigViewController: UITableViewController {
       h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
     configuration.videoH264Params = videoH264Params
 
+    // 開始時カメラ有効の入力値を configuration に渡します
+    let shouldEnableCameraOnConnect =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    configuration.videoEnabled = true
+    configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
+
     if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
       configuration.videoBitRate = videoBitRateValue
     }
@@ -188,7 +194,7 @@ class VideoChatConfigViewController: UITableViewController {
       return
     }
     // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
-    roomViewController.shouldStartCameraEnabled =
+    roomViewController.isStartCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 

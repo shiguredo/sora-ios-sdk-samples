@@ -187,7 +187,7 @@ class SpotlightConfigViewController: UITableViewController {
       return
     }
     // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
-    roomViewController.shouldStartCameraEnabled =
+    roomViewController.isStartCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 

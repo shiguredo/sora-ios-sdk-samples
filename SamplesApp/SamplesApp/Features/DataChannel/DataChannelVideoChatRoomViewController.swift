@@ -389,30 +389,50 @@ class DataChannelVideoChatRoomViewController: UIViewController {
         cameraCapture = nil
         return
       }
-      guard let capturer = cameraCapture else {
-        logger.warning("[sample] Camera capturer is unavailable for restart.")
+      let restartCapturer = cameraCapture
+      // カメラ無効で接続開始した場合は restartCapturer=cameraCapture==null となり
+      // ここで CameraCapture を生成します。
+      // カメラ有効状態でハードミュートから復帰し場合は元の CameraCapture の参照を使用します。
+      let startNewCapturerIfNeeded = restartCapturer == nil
+      let startSetup = startNewCapturerIfNeeded
+        ? CameraMuteController.createCapturerForStart(
+          using: DataChannelSoraSDKManager.shared.currentMediaChannel?.configuration.cameraSettings,
+          upstream: upstream)
+        : nil
+      guard let capturer = restartCapturer ?? startSetup?.capturer,
+        let format = startSetup?.format ?? restartCapturer?.format,
+        let frameRate = startSetup?.frameRate ?? restartCapturer?.frameRate
+      else {
+        logger.warning("[sample] Camera capturer is unavailable for start.")
         cameraMuteController.updateButton(to: previousState)
         upstream.videoEnabled = false
         return
       }
+      cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      capturer.restart { [weak self, weak upstream] error in
+      let completion: (Error?) -> Void = { [weak self, weak upstream] error in
         DispatchQueue.main.async {
           guard let self = self, let upstream = upstream else { return }
           self.isCameraMuteOperationInProgress = false
           if let error {
-            logger.warning("[sample] Failed to restart camera: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to start/restart camera: \(error.localizedDescription)")
             self.cameraMuteController.restoreState(
               to: previousState,
               upstream: upstream,
-              capturer: capturer
+              capturer: restartCapturer
             )
+            self.cameraCapture = restartCapturer
           } else {
             self.cameraCapture = nil
             self.cameraMuteController.updateButton(to: .recording)
             upstream.videoEnabled = true
           }
         }
+      }
+      if startNewCapturerIfNeeded {
+        capturer.start(format: format, frameRate: frameRate, completionHandler: completion)
+      } else {
+        capturer.restart(completionHandler: completion)
       }
     case .softMuted:
       upstream.videoEnabled = false

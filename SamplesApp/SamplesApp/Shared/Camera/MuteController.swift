@@ -1,4 +1,5 @@
 /// 配信中のカメラミュートの挙動を制御するコントローラーモジュールです
+import AVFoundation
 import Sora
 import UIKit
 
@@ -75,6 +76,33 @@ final class CameraMuteController {
   // カメラミュートの現在の状態を返します
   var currentState: CameraMuteState {
     state
+  }
+
+  /// 接続設定のカメラ設定と upstream から CameraVideoCapturer を新規生成するヘルパーです。
+  /// 起動に必要なデバイス/フォーマット/フレームレートを解決できなかった場合は nil を返します。
+  static func createCapturerForStart(
+    using cameraSettings: CameraSettings?,
+    upstream: MediaStream
+  ) -> (capturer: CameraVideoCapturer, format: AVCaptureDevice.Format, frameRate: Int)? {
+    let settings = cameraSettings ?? .default
+    let device = CameraVideoCapturer.device(for: settings.position)
+      ?? CameraVideoCapturer.devices.first
+    guard let device else {
+      return nil
+    }
+    guard
+      let format = CameraVideoCapturer.format(
+        width: settings.resolution.width,
+        height: settings.resolution.height,
+        for: device,
+        frameRate: settings.frameRate),
+      let frameRate = CameraVideoCapturer.maxFrameRate(settings.frameRate, for: format)
+    else {
+      return nil
+    }
+    let capturer = CameraVideoCapturer(device: device)
+    capturer.stream = upstream
+    return (capturer, format, frameRate)
   }
 
   /// ボタンのイメージやラベルをミュート状態に合わせて更新します
