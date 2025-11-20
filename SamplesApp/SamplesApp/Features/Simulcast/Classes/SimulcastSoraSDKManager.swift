@@ -32,6 +32,7 @@ class SimulcastSoraSDKManager {
     simulcastRid: SimulcastRid?,
     dataChannelSignaling: Bool? = nil,
     ignoreDisconnectWebSocket: Bool? = nil,
+    startCameraEnabled: Bool,
     videoBitRate: Int? = nil,
     completionHandler: ((Error?) -> Void)?
   ) {
@@ -50,6 +51,7 @@ class SimulcastSoraSDKManager {
     configuration.simulcastRid = simulcastRid
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+    configuration.cameraSettings.isEnabled = startCameraEnabled
     configuration.signalingConnectMetadata = SimulcastEnvironment.signalingConnectMetadata
 
     // bundle_id を指定します。

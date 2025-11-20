@@ -17,6 +17,9 @@ class DataChannelConfigViewController: UITableViewController {
   /// 映像の配信を指定するコントロールです。
   @IBOutlet var videoEnabledSwitch: UISwitch!
 
+  /// 接続時のカメラ有効設定を切り替えるためのコントロールです。
+  @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// 動画のコーデックを指定するためのコントロールです。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
@@ -186,6 +189,11 @@ class DataChannelConfigViewController: UITableViewController {
       ordered: ordered
     )
 
+    // 開始時カメラ有効の入力値を configuration に渡します
+    let shouldEnableCameraOnConnect =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
+
     return configuration
   }
 
@@ -262,5 +270,16 @@ class DataChannelConfigViewController: UITableViewController {
     let index = control.selectedSegmentIndex
     precondition(values.indices.contains(index), "Unexpected segmented control index.")
     return values[index]
+  }
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    guard segue.identifier == "Connect",
+      let roomViewController = segue.destination as? DataChannelVideoChatRoomViewController
+    else {
+      return
+    }
+    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
+    roomViewController.isStartCameraEnabled =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 }

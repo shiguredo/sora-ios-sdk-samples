@@ -127,6 +127,39 @@
                                             <outlet property="valueTextField" destination="o0Z-p1-EIg" id="3ft-R3-89R"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="DqU-TH-Tmt">
+                                        <rect key="frame" x="0.0" y="251" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DqU-TH-Tmt" id="l4E-Py-J7S">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続時カメラ有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="weG-ct-cP8">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="JUC-Ho-fHY"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rvR-7R-0On">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="rvR-7R-0On" secondAttribute="trailing" id="5sF-Wj-4cc"/>
+                                                <constraint firstItem="weG-ct-cP8" firstAttribute="centerY" secondItem="l4E-Py-J7S" secondAttribute="centerY" id="Lyi-Wm-Qfi"/>
+                                                <constraint firstItem="weG-ct-cP8" firstAttribute="leading" secondItem="l4E-Py-J7S" secondAttribute="leadingMargin" id="RiZ-9I-Ml2"/>
+                                                <constraint firstItem="rvR-7R-0On" firstAttribute="centerY" secondItem="l4E-Py-J7S" secondAttribute="centerY" id="eD6-3R-Amd"/>
+                                                <constraint firstItem="rvR-7R-0On" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="weG-ct-cP8" secondAttribute="trailing" id="hBu-yR-W7v"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="映像の種類" footerTitle="配信開始時に受信する映像の種類を選択します。" id="PNL-Rl-ZYX">
@@ -263,6 +296,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="サイマルキャスト" id="n9f-bV-9X1"/>
                     <connections>
+                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="rvR-7R-0On" id="3KP-wL-PCX"/>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
                         <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="xJE-0n-qMR" id="2UT-ca-FfM"/>

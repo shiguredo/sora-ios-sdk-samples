@@ -14,6 +14,9 @@ class SpotlightConfigViewController: UITableViewController {
   /// 映像ビットレートを選択するためのセルです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoBitRatePickerCell: VideoBitRatePickerTableViewCell!
 
+  /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// アクティブ配信数を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
@@ -79,6 +82,7 @@ class SpotlightConfigViewController: UITableViewController {
       simulcast: selectedSimulcast(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
+      startCameraEnabled: cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0,
       videoBitRate: videoBitRatePickerCell.selectedBitRate
     ) { [weak self] error in
       guard let self = self else { return }
@@ -175,6 +179,17 @@ class SpotlightConfigViewController: UITableViewController {
     let index = control.selectedSegmentIndex
     precondition(values.indices.contains(index), "Unexpected segmented control index.")
     return values[index]
+  }
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    guard segue.identifier == "Connect",
+      let roomViewController = segue.destination as? SpotlightVideoChatRoomViewController
+    else {
+      return
+    }
+    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
+    roomViewController.isStartCameraEnabled =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 
 }

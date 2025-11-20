@@ -14,6 +14,9 @@ class VideoChatConfigViewController: UITableViewController {
   /// 映像ビットレートを選択するためのセルです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoBitRatePickerCell: VideoBitRatePickerTableViewCell!
 
+  /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
 
@@ -127,6 +130,11 @@ class VideoChatConfigViewController: UITableViewController {
       h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
     configuration.videoH264Params = videoH264Params
 
+    // 開始時カメラ有効の入力値を configuration に渡します
+    let shouldEnableCameraOnConnect =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
+
     if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
       configuration.videoBitRate = videoBitRateValue
     }
@@ -176,6 +184,17 @@ class VideoChatConfigViewController: UITableViewController {
   /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
+  }
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    guard segue.identifier == "Connect",
+      let roomViewController = segue.destination as? VideoChatRoomViewController
+    else {
+      return
+    }
+    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
+    roomViewController.isStartCameraEnabled =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 
 }

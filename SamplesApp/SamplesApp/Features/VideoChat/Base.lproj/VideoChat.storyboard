@@ -127,6 +127,40 @@
                                             <outlet property="valueTextField" destination="M9Q-5Y-yCZ" id="pnS-fN-6TN"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="sYV-kJ-Kuy">
+                                        <rect key="frame" x="0.0" y="251" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sYV-kJ-Kuy" id="wtF-DB-xje">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続時カメラ有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ytD-S4-0DP">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="Cf1-Yj-pYn"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="nwx-wg-dwz">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="nwx-wg-dwz" secondAttribute="trailing" id="Dvb-Qk-gx4"/>
+                                                <constraint firstItem="ytD-S4-0DP" firstAttribute="leading" secondItem="wtF-DB-xje" secondAttribute="leadingMargin" id="NJd-eB-4yb"/>
+                                                <constraint firstItem="nwx-wg-dwz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ytD-S4-0DP" secondAttribute="trailing" id="YsT-uk-OB9"/>
+                                                <constraint firstItem="ytD-S4-0DP" firstAttribute="centerY" secondItem="wtF-DB-xje" secondAttribute="centerY" id="kLY-a6-Xyw"/>
+                                                <constraint firstItem="ytD-S4-0DP" firstAttribute="top" secondItem="wtF-DB-xje" secondAttribute="top" id="kQh-dP-Saw"/>
+                                                <constraint firstItem="nwx-wg-dwz" firstAttribute="centerY" secondItem="wtF-DB-xje" secondAttribute="centerY" id="pD7-ae-7SL"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="データチャンネルシグナリング設定" id="dEy-Xn-hbH">
@@ -344,6 +378,7 @@
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
                     <connections>
                         <outlet property="av1ProfileSegmentedControl" destination="Dr3-pY-7YN" id="L8b-ua-igw"/>
+                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="nwx-wg-dwz" id="ckW-4D-dkv"/>
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
                         <outlet property="h264ProfileLevelIdTextField" destination="mw9-oG-2hI" id="sPB-Iw-Lzn"/>

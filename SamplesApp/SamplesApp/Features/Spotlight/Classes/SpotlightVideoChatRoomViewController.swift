@@ -67,6 +67,12 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   /// マイクのミュート状態です。
   private var isMicSoftMuted: Bool = false
 
+  /// 接続開始時にカメラを有効にするかどうか。設定画面から渡されます。
+  var isStartCameraEnabled: Bool = true
+
+  // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
+  private var didApplyInitialCameraState = false
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -242,6 +248,21 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 // MARK: - Sora SDKのイベントハンドリング
 
 extension SpotlightVideoChatRoomViewController {
+  // カメラの初期状態を適用します。
+  // 開始時カメラ無効、で接続した際に一度だけカメラハードミュートを有効にします。
+  private func applyInitialCameraStateIfNeeded(upstream: MediaStream) {
+    guard !didApplyInitialCameraState else {
+      return
+    }
+    didApplyInitialCameraState = true
+
+    guard !isStartCameraEnabled else {
+      return
+    }
+
+    applyCameraMuteStateTransition(to: .hardMuted, upstream: upstream)
+  }
+
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
@@ -298,8 +319,10 @@ extension SpotlightVideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
+      applyInitialCameraStateIfNeeded(upstream: upstream)
+
       let toMuteState: CameraMuteState
-      if cameraMuteState == .hardMuted {
+      if cameraMuteState == .hardMuted || (!isStartCameraEnabled && didApplyInitialCameraState) {
         toMuteState = .hardMuted
       } else if upstream.videoEnabled {
         toMuteState = .recording
@@ -365,27 +388,42 @@ extension SpotlightVideoChatRoomViewController {
         cameraCapture = nil
         return
       }
-      guard let capturer = cameraCapture else {
-        logger.warning("[sample] Camera capturer is unavailable for restart.")
+      let restartCapturer = cameraCapture
+      // カメラ無効で接続開始した場合は restartCapturer=cameraCapture==null となり
+      // ここで CameraCapture を生成します。
+      // カメラ有効状態でハードミュートから復帰し場合は元の CameraCapture の参照を使用します。
+      let startNewCapturerIfNeeded = restartCapturer == nil
+      let startSetup =
+        startNewCapturerIfNeeded
+        ? CameraMuteController.createCapturerForStart(
+          using: SpotlightSoraSDKManager.shared.currentMediaChannel?.configuration.cameraSettings,
+          upstream: upstream)
+        : nil
+      guard let capturer = restartCapturer ?? startSetup?.capturer,
+        let format = startSetup?.format ?? restartCapturer?.format,
+        let frameRate = startSetup?.frameRate ?? restartCapturer?.frameRate
+      else {
+        logger.warning("[sample] Camera capturer is unavailable for start.")
         cameraMuteController.updateButton(to: previousState)
         upstream.videoEnabled = false
         return
       }
+      cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      // キャプチャーの再開処理
-      capturer.restart { [weak self, weak upstream] error in
+      let completion: (Error?) -> Void = { [weak self, weak upstream] error in
         DispatchQueue.main.async {
           guard let self = self, let upstream = upstream else { return }
           self.isCameraMuteOperationInProgress = false
           if let error {
             // 再開失敗
-            logger.warning("[sample] Failed to restart camera: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to start/restart camera: \(error.localizedDescription)")
             // 状態を直前の状態に戻してリトライできるように参照を保持する
             self.cameraMuteController.restoreState(
               to: previousState,
               upstream: upstream,
-              capturer: capturer
+              capturer: restartCapturer
             )
+            self.cameraCapture = restartCapturer
           } else {
             // CameraVideoCapturer.current が再稼働したため、誤使用を防ぐためにも nil に戻す
             self.cameraCapture = nil
@@ -393,6 +431,11 @@ extension SpotlightVideoChatRoomViewController {
             upstream.videoEnabled = true
           }
         }
+      }
+      if startNewCapturerIfNeeded {
+        capturer.start(format: format, frameRate: frameRate, completionHandler: completion)
+      } else {
+        capturer.restart(completionHandler: completion)
       }
     case .softMuted:
       // ON -> ソフトミュート
