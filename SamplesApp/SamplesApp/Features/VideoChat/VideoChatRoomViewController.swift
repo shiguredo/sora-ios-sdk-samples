@@ -62,6 +62,12 @@ class VideoChatRoomViewController: UIViewController {
   /// マイクのミュート状態です。
   private var isMicSoftMuted: Bool = false
 
+  /// 接続開始時にカメラを有効にするかどうか。設定画面から渡されます。
+  var isStartCameraEnabled: Bool = true
+
+  // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
+  private var didApplyInitialCameraState = false
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -237,6 +243,21 @@ class VideoChatRoomViewController: UIViewController {
 // MARK: - Sora SDKのイベントハンドリング
 
 extension VideoChatRoomViewController {
+  // カメラの初期状態を適用します。
+  // 開始時カメラ無効、で接続した際に一度だけカメラハードミュートを有効にします。
+  private func applyInitialCameraStateIfNeeded(upstream: MediaStream) {
+    guard !didApplyInitialCameraState else {
+      return
+    }
+    didApplyInitialCameraState = true
+
+    guard !isStartCameraEnabled else {
+      return
+    }
+
+    applyCameraMuteStateTransition(to: .hardMuted, upstream: upstream)
+  }
+
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
@@ -299,8 +320,10 @@ extension VideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
+      applyInitialCameraStateIfNeeded(upstream: upstream)
+
       let toMuteState: CameraMuteState
-      if cameraMuteState == .hardMuted {
+      if cameraMuteState == .hardMuted || (!isStartCameraEnabled && didApplyInitialCameraState) {
         toMuteState = .hardMuted
       } else if upstream.videoEnabled {
         toMuteState = .recording

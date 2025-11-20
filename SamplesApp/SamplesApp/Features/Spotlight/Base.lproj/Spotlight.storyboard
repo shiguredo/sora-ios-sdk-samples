@@ -127,6 +127,39 @@
                                             <outlet property="valueTextField" destination="L31-XC-f4e" id="gS7-Sj-6f6"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="cfv-Ig-uSm">
+                                        <rect key="frame" x="0.0" y="251" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cfv-Ig-uSm" id="Cdq-Hu-Bwb">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続時カメラ有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mt5-vx-Tje">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="NvF-aS-lPx"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="o3o-I9-L1M">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Mt5-vx-Tje" firstAttribute="leading" secondItem="Cdq-Hu-Bwb" secondAttribute="leadingMargin" id="7nR-6i-gXc"/>
+                                                <constraint firstItem="o3o-I9-L1M" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Mt5-vx-Tje" secondAttribute="trailing" id="Ryd-lR-Gko"/>
+                                                <constraint firstItem="o3o-I9-L1M" firstAttribute="centerY" secondItem="Cdq-Hu-Bwb" secondAttribute="centerY" id="m4K-DH-lto"/>
+                                                <constraint firstItem="Mt5-vx-Tje" firstAttribute="centerY" secondItem="Cdq-Hu-Bwb" secondAttribute="centerY" id="qFT-hF-Bnb"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="o3o-I9-L1M" secondAttribute="trailing" id="rGB-xb-akr"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="アクティブ配信数" footerTitle="配信される発声者の最大人数を選択します。" id="PNL-Rl-ZYX">
@@ -389,6 +422,7 @@
                         <outlet property="spotlightFocusRidSegmentedControl" destination="S3w-p8-QFj" id="8Kp-cT-pz2"/>
                         <outlet property="spotlightNumberSegmentedControl" destination="d7C-wH-w61" id="Be1-cJ-j36"/>
                         <outlet property="spotlightUnfocusRidSegmentedControl" destination="cWJ-SD-e0P" id="akT-r2-u51"/>
+                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="o3o-I9-L1M" id="RWJ-Rx-AW9"/>
                         <outlet property="videoBitRatePickerCell" destination="iCB-yx-RbE" id="GfV-wC-a9B"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
