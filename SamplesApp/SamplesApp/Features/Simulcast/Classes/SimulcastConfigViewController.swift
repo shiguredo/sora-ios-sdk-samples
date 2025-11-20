@@ -161,6 +161,7 @@ class SimulcastConfigViewController: UITableViewController {
     else {
       return
     }
+    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
     roomViewController.shouldStartCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
