@@ -133,7 +133,6 @@ class VideoChatConfigViewController: UITableViewController {
     // 開始時カメラ有効の入力値を configuration に渡します
     let shouldEnableCameraOnConnect =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
-    configuration.videoEnabled = true
     configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
 
     if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
