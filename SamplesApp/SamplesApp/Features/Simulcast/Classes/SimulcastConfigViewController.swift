@@ -69,6 +69,7 @@ class SimulcastConfigViewController: UITableViewController {
       simulcastRid: selectedSimulcastRid(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
+      startCameraEnabled: cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0,
       videoBitRate: videoBitRatePickerCell.selectedBitRate
     ) { [weak self] error in
       guard let self = self else { return }

@@ -35,6 +35,7 @@ class SpotlightSoraSDKManager {
     simulcast: Bool,
     dataChannelSignaling: Bool? = nil,
     ignoreDisconnectWebSocket: Bool? = nil,
+    startCameraEnabled: Bool,
     videoBitRate: Int? = nil,
     completionHandler: ((Error?) -> Void)?
   ) {
@@ -56,6 +57,7 @@ class SpotlightSoraSDKManager {
     configuration.simulcastEnabled = simulcast
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
+    configuration.cameraSettings.isEnabled = startCameraEnabled
     configuration.signalingConnectMetadata = SpotlightEnvironment.signalingConnectMetadata
 
     // bundle_id を設定します。
