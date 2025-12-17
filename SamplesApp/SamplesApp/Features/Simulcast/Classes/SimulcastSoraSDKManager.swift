@@ -29,7 +29,7 @@ class SimulcastSoraSDKManager {
   func connect(
     channelId: String,
     videoCodec: VideoCodec,
-    simulcastRid: SimulcastRid?,
+    simulcastRequestRid: SimulcastRequestRid?,
     dataChannelSignaling: Bool? = nil,
     ignoreDisconnectWebSocket: Bool? = nil,
     startCameraEnabled: Bool,
@@ -48,7 +48,7 @@ class SimulcastSoraSDKManager {
       urlCandidates: SimulcastEnvironment.urls, channelId: channelId, role: .sendrecv)
     // 引数で指定された値を設定します。
     configuration.videoCodec = videoCodec
-    configuration.simulcastRid = simulcastRid
+    configuration.simulcastRequestRid = simulcastRequestRid
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
     configuration.cameraSettings.isEnabled = startCameraEnabled

@@ -17,7 +17,7 @@ class SimulcastConfigViewController: UITableViewController {
   /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
-  /// 配信開始時のサイマルキャスト rid を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// 配信開始時に受信するサイマルキャストの映像の種類 (SimulcastRequestRid) を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var simulcastRidSegmentedControl: UISegmentedControl!
 
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
@@ -66,7 +66,7 @@ class SimulcastConfigViewController: UITableViewController {
     SimulcastSoraSDKManager.shared.connect(
       channelId: channelId,
       videoCodec: selectedVideoCodec(),
-      simulcastRid: selectedSimulcastRid(),
+      simulcastRequestRid: selectedSimulcastRequestRid(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
       startCameraEnabled: cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0,
@@ -132,8 +132,8 @@ class SimulcastConfigViewController: UITableViewController {
     )
   }
 
-  private func selectedSimulcastRid() -> SimulcastRid? {
-    optionalValue(from: [nil, .r0, .r1, .r2], control: simulcastRidSegmentedControl)
+  private func selectedSimulcastRequestRid() -> SimulcastRequestRid? {
+    optionalValue(from: [nil, SimulcastRequestRid.none, .r0, .r1, .r2], control: simulcastRidSegmentedControl)
   }
 
   private func selectedDataChannelSignaling() -> Bool? {

@@ -175,6 +175,7 @@
                                                     <rect key="frame" x="20" y="6.5" width="335" height="32"/>
                                                     <segments>
                                                         <segment title="未指定"/>
+                                                        <segment title="none"/>
                                                         <segment title="r0"/>
                                                         <segment title="r1"/>
                                                         <segment title="r2"/>
