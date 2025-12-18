@@ -15,6 +15,10 @@
   - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
   - 個別のサンプルプロジェクトを削除する
   - @t-miya
+- [UPDATE] システム条件を変更する
+  - Xcode 26.1.1
+  - WebRTC SFU Sora 2025.2.0 以降
+  - @zztkm
 - [UPDATE] ロギングを NSLog から os.Logger に置き換える
   - SamplesLogger モジュールを追加し、NSLog の使用箇所を置き換える
   - @t-miya
@@ -25,6 +29,9 @@
 - [UPDATE] 前面カメラ・背面カメラの切り替えボタンアイコンを置き換える
   - `camera` から `camera.rotate` に置き換える
   - @t-miya
+- [UPDATE] SimulcastSample の設定値である SimulcastRid を SimulcastRequestRid に移行する
+  - これによりシステム条件の WebRTC SFU Sora のバージョンが 2025.2.0 以降になる
+  - @zztkm
 - [ADD] 接続メニューに `接続時カメラ有効` 項目を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - `無効` で接続した場合はカメラハードミュート状態で開始する
