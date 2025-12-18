@@ -29,7 +29,7 @@ class SimulcastSoraSDKManager {
   func connect(
     channelId: String,
     videoCodec: VideoCodec,
-    simulcastRequestRid: SimulcastRequestRid?,
+    simulcastRequestRid: SimulcastRequestRid,
     dataChannelSignaling: Bool? = nil,
     ignoreDisconnectWebSocket: Bool? = nil,
     startCameraEnabled: Bool,

@@ -132,8 +132,8 @@ class SimulcastConfigViewController: UITableViewController {
     )
   }
 
-  private func selectedSimulcastRequestRid() -> SimulcastRequestRid? {
-    optionalValue(from: [nil, SimulcastRequestRid.none, .r0, .r1, .r2], control: simulcastRidSegmentedControl)
+  private func selectedSimulcastRequestRid() -> SimulcastRequestRid {
+    value(from: [.unspecified, .none, .r0, .r1, .r2], control: simulcastRidSegmentedControl)
   }
 
   private func selectedDataChannelSignaling() -> Bool? {
