@@ -18,7 +18,7 @@ class SimulcastConfigViewController: UITableViewController {
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
   /// 配信開始時に受信するサイマルキャストの映像の種類 (SimulcastRequestRid) を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
-  @IBOutlet var simulcastRidSegmentedControl: UISegmentedControl!
+  @IBOutlet var simulcastRequestRidSegmentedControl: UISegmentedControl!
 
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
@@ -133,7 +133,10 @@ class SimulcastConfigViewController: UITableViewController {
   }
 
   private func selectedSimulcastRequestRid() -> SimulcastRequestRid {
-    value(from: [.unspecified, .none, .r0, .r1, .r2], control: simulcastRidSegmentedControl)
+    value(
+      from: [.unspecified, .none, .r0, .r1, .r2],
+      control: simulcastRequestRidSegmentedControl
+    )
   }
 
   private func selectedDataChannelSignaling() -> Bool? {

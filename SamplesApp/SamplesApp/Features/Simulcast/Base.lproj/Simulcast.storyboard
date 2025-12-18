@@ -301,7 +301,7 @@
                         <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
                         <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
                         <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="xJE-0n-qMR" id="2UT-ca-FfM"/>
-                        <outlet property="simulcastRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
+                        <outlet property="simulcastRequestRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
                         <outlet property="videoBitRatePickerCell" destination="ubp-Ic-GE0" id="zzH-QH-NHn"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
