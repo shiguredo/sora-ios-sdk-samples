@@ -42,6 +42,11 @@ struct MainMenuView: View {
       subtitle: "スポットライト視聴",
       storyboardName: "Spotlight"
     ),
+    SampleItem(
+      title: "RPC Sample",
+      subtitle: "DataChannel RPC",
+      storyboardName: "RPC"
+    ),
   ]
 
   var body: some View {
