@@ -11,9 +11,6 @@
 
 ## 2025.3
 
-- [CHANGE] Shared/Camera/MuteController.swift を Shared/Camera/CameraMuteController.swift にリネームする
-  - Shared/Audio/AudioMuteController.swift 追加に伴い、対称性をとるための変更
-  - @t-miya
 - [CHANGE] 全てのサンプルを SamplesApp に統合する
   - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
   - 個別のサンプルプロジェクトを削除する
@@ -47,6 +44,7 @@
 - [ADD] カメラハードミュート機能を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
+  - 映像ミュート制御モジュールとして CameraMuteController を追加する
   - ハードミュート中は前面カメラ・背面カメラの切り替えボタンを無効にする
   - @t-miya
 - [ADD] 映像ビットレート指定を追加する
