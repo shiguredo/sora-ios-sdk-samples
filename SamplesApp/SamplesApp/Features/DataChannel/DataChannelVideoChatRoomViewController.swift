@@ -31,6 +31,8 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
   // カメラのミュート状態を制御するためのコントローラーです
   private let cameraMuteController = CameraMuteController()
+  // マイクのミュート状態を制御するためのコントローラーです
+  private let audioMuteController = AudioMuteController()
 
   /// カメラのミュートボタンです。
   @IBOutlet weak var cameraMuteButton: UIBarButtonItem? {
@@ -46,7 +48,11 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   }
 
   /// マイクのミュートボタンです。
-  @IBOutlet weak var micMuteButton: UIBarButtonItem?
+  @IBOutlet weak var micMuteButton: UIBarButtonItem? {
+    didSet {
+      audioMuteController.button = micMuteButton
+    }
+  }
 
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
@@ -352,17 +358,15 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     }
   }
 
-  /// マイクミュートボタンの見た目と状態を更新します。
-  private func updateMicMuteButton(isMuted: Bool) {
-    isMicSoftMuted = isMuted
-    let symbolName: String = isMuted ? "mic.slash" : "mic"
-    guard let button = micMuteButton else { return }
-    if let image = UIImage(systemName: symbolName) {
-      button.image = image
+  private func handleUpstreamAudioSwitch(isEnabled: Bool) {
+    // onSwitchAudio は enabled/disabled のみ通知されるため、disabled 時は現在状態から推測します
+    if isEnabled {
+      audioMuteController.updateButton(to: .enabled)
+    } else if audioMuteController.currentState == .hardMuted {
+      audioMuteController.updateButton(to: .hardMuted)
     } else {
-      button.image = UIImage(named: symbolName)
+      audioMuteController.updateButton(to: .softMuted)
     }
-    button.accessibilityLabel = isMuted ? "マイクを再開" : "マイクを停止"
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
@@ -570,17 +574,21 @@ extension DataChannelVideoChatRoomViewController {
     }
 
     // マイクミュートの状態に応じてボタン等の UI を更新する
-    micMuteButton?.isEnabled = upstream != nil
+    audioMuteController.isButtonAvailable = upstream != nil
     if let upstream {
-      updateMicMuteButton(isMuted: !upstream.audioEnabled)
+      let nextState: AudioMuteState =
+        upstream.audioEnabled
+        ? .enabled
+        : (audioMuteController.currentState == .hardMuted ? .hardMuted : .softMuted)
+      audioMuteController.updateButton(to: nextState)
       upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
         DispatchQueue.main.async {
-          self?.updateMicMuteButton(isMuted: !isEnabled)
+          self?.handleUpstreamAudioSwitch(isEnabled: isEnabled)
         }
       }
     } else {
-      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの false にしておく
-      updateMicMuteButton(isMuted: false)
+      // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの enabled にしておく
+      audioMuteController.updateButton(to: .enabled)
     }
 
     // 最後に今セットアップしたVideoViewを正しく画面上でレイアウトします。
@@ -641,15 +649,10 @@ extension DataChannelVideoChatRoomViewController {
 
   /// マイクミュートボタンを押したときの挙動を定義します。
   @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel,
-      let upstream = mediaChannel.senderStream
-    else {
+    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel else {
       return
     }
-
-    let nextMuted: Bool = !isMicSoftMuted
-    upstream.audioEnabled = !nextMuted
-    updateMicMuteButton(isMuted: nextMuted)
+    audioMuteController.toggle(using: mediaChannel)
   }
 
   /// 閉じるボタンを押したときの挙動を定義します。
