@@ -32,6 +32,12 @@
 - [UPDATE] 前面カメラ・背面カメラの切り替えボタンアイコンを置き換える
   - `camera` から `camera.rotate` に置き換える
   - @t-miya
+- [ADD] 音声ハードミュート機能を追加する
+  - DataChannel、Simulcast、Spotlight、VideoChat が対象
+  - 録音 -> ソフトミュート -> ハードミュート -> 録音 と遷移するようにマイクミュートボタンの挙動を変更する
+  - 音声ミュート制御モジュールとして AudioMuteController を追加する
+  - 音声ソフトミュート切り替えは MediaChannel.setAudioSoftMute(Bool) を利用するようにする
+  - @t-miya
 - [ADD] 接続メニューに `接続時カメラ有効` 項目を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - `無効` で接続した場合はカメラハードミュート状態で開始する
@@ -39,6 +45,7 @@
 - [ADD] カメラハードミュート機能を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
+  - 映像ミュート制御モジュールとして CameraMuteController を追加する
   - ハードミュート中は前面カメラ・背面カメラの切り替えボタンを無効にする
   - @t-miya
 - [ADD] 映像ビットレート指定を追加する
