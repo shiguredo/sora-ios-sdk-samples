@@ -41,6 +41,7 @@
 - [ADD] 接続メニューに `接続時カメラ有効` 項目を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - `無効` で接続した場合はカメラハードミュート状態で開始する
+  - @t-miya
 - [ADD] カメラハードミュート機能を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - 録画 -> ソフトミュート -> ハードミュート -> 録画 と遷移するようにカメラミュートボタンの挙動を変更する
