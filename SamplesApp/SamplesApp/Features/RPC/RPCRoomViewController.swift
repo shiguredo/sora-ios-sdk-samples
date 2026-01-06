@@ -3,12 +3,88 @@ import UIKit
 
 private let logger = SamplesLogger.tagged("RPCRoom")
 
+// MARK: - RPCMethod Display Helper
+
+private extension RPCMethod {
+  var displayName: String {
+    switch self {
+    case .requestSimulcastRid:
+      return "RequestSimulcastRid"
+    case .requestSpotlightRid:
+      return "RequestSpotlightRid"
+    case .resetSpotlightRid:
+      return "ResetSpotlightRid"
+    case .putSignalingNotifyMetadata:
+      return "PutSignalingNotifyMetadata"
+    case .putSignalingNotifyMetadataItem:
+      return "PutSignalingNotifyMetadataItem"
+    }
+  }
+}
+
 private struct RPCLogItem {
   let timestamp: Date
   let direction: String
   let label: String
   let summary: String
   let detail: String
+}
+
+// MARK: - JSON Value helpers for metadata operations
+
+/// Any 型の値をエンコード可能にするラッパー型
+private struct AnyCodable: Codable {
+  let value: Any
+
+  init(_ value: Any) {
+    self.value = value
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
+    if let intValue = value as? Int {
+      try container.encode(intValue)
+    } else if let doubleValue = value as? Double {
+      try container.encode(doubleValue)
+    } else if let stringValue = value as? String {
+      try container.encode(stringValue)
+    } else if let boolValue = value as? Bool {
+      try container.encode(boolValue)
+    } else if let arrayValue = value as? [Any] {
+      try container.encode(arrayValue.map(AnyCodable.init))
+    } else if let dictValue = value as? [String: Any] {
+      let mapped = dictValue.mapValues(AnyCodable.init)
+      try container.encode(mapped)
+    } else if value is NSNull {
+      try container.encodeNil()
+    } else {
+      throw EncodingError.invalidValue(value, EncodingError.Context(
+        codingPath: container.codingPath,
+        debugDescription: "AnyCodable cannot encode \(type(of: value))"
+      ))
+    }
+  }
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    if container.decodeNil() {
+      value = NSNull()
+    } else if let boolValue = try? container.decode(Bool.self) {
+      value = boolValue
+    } else if let intValue = try? container.decode(Int.self) {
+      value = intValue
+    } else if let doubleValue = try? container.decode(Double.self) {
+      value = doubleValue
+    } else if let stringValue = try? container.decode(String.self) {
+      value = stringValue
+    } else if let arrayValue = try? container.decode([AnyCodable].self) {
+      value = arrayValue.map(\.value)
+    } else if let dictValue = try? container.decode([String: AnyCodable].self) {
+      value = dictValue.mapValues(\.value)
+    } else {
+      throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode AnyCodable")
+    }
+  }
 }
 
 private final class ResolutionVideoView: UIView, VideoRenderer {
@@ -72,123 +148,7 @@ private final class ResolutionVideoView: UIView, VideoRenderer {
   }
 }
 
-private struct RequestSimulcastRidParams: Encodable {
-  let rid: String
-  let sender_connection_id: String?
-}
 
-private struct RequestSpotlightRidParams: Encodable {
-  let send_connection_id: String?
-  let spotlight_focus_rid: String
-  let spotlight_unfocus_rid: String
-}
-
-private struct ResetSpotlightRidParams: Encodable {
-  let send_connection_id: String?
-}
-
-private struct PutSignalingNotifyMetadataParams: Encodable {
-  let metadata: [String: JSONValue]
-  let push: Bool?
-}
-
-private struct PutSignalingNotifyMetadataItemParams: Encodable {
-  let key: String
-  let value: JSONValue
-  let push: Bool?
-}
-
-private enum JSONValue: Encodable {
-  case object([String: JSONValue])
-  case array([JSONValue])
-  case string(String)
-  case number(Double)
-  case bool(Bool)
-  case null
-
-  init?(any value: Any) {
-    if let dictionary = value as? [String: Any] {
-      var mapped: [String: JSONValue] = [:]
-      for (key, item) in dictionary {
-        guard let jsonValue = JSONValue(any: item) else {
-          return nil
-        }
-        mapped[key] = jsonValue
-      }
-      self = .object(mapped)
-      return
-    }
-    if let array = value as? [Any] {
-      let mapped = array.compactMap { JSONValue(any: $0) }
-      guard mapped.count == array.count else {
-        return nil
-      }
-      self = .array(mapped)
-      return
-    }
-    if let string = value as? String {
-      self = .string(string)
-      return
-    }
-    if let bool = value as? Bool {
-      self = .bool(bool)
-      return
-    }
-    if let number = value as? NSNumber {
-      if CFGetTypeID(number) == CFBooleanGetTypeID() {
-        self = .bool(number.boolValue)
-      } else {
-        self = .number(number.doubleValue)
-      }
-      return
-    }
-    if value is NSNull {
-      self = .null
-      return
-    }
-    return nil
-  }
-
-  func encode(to encoder: Encoder) throws {
-    switch self {
-    case .object(let object):
-      var container = encoder.container(keyedBy: DynamicCodingKeys.self)
-      for (key, value) in object {
-        try container.encode(value, forKey: DynamicCodingKeys(stringValue: key))
-      }
-    case .array(let array):
-      var container = encoder.unkeyedContainer()
-      for value in array {
-        try container.encode(value)
-      }
-    case .string(let string):
-      var container = encoder.singleValueContainer()
-      try container.encode(string)
-    case .number(let number):
-      var container = encoder.singleValueContainer()
-      try container.encode(number)
-    case .bool(let value):
-      var container = encoder.singleValueContainer()
-      try container.encode(value)
-    case .null:
-      var container = encoder.singleValueContainer()
-      try container.encodeNil()
-    }
-  }
-}
-
-private struct DynamicCodingKeys: CodingKey {
-  let stringValue: String
-  let intValue: Int? = nil
-
-  init?(intValue: Int) {
-    return nil
-  }
-
-  init(stringValue: String) {
-    self.stringValue = stringValue
-  }
-}
 
 /// RPC の送受信画面です。
 class RPCRoomViewController: UIViewController {
@@ -271,14 +231,6 @@ class RPCRoomViewController: UIViewController {
         self?.handleSignaling(signaling)
       }
 
-      mediaChannel.handlers.onReceiveRPCResponse = { [weak self] _, response in
-        self?.handleRPCResponse(response)
-      }
-
-      mediaChannel.handlers.onReceiveRPCError = { [weak self] _, detail in
-        self?.handleRPCError(detail)
-      }
-
       mediaChannel.handlers.onDataChannel = { [weak self] mediaChannel in
         self?.updateRPCMethods(using: mediaChannel)
       }
@@ -317,8 +269,6 @@ class RPCRoomViewController: UIViewController {
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
       mediaChannel.handlers.onReceiveSignaling = nil
-      mediaChannel.handlers.onReceiveRPCResponse = nil
-      mediaChannel.handlers.onReceiveRPCError = nil
       mediaChannel.handlers.onDataChannel = nil
       mediaChannel.handlers.onDisconnect = nil
     }
@@ -349,7 +299,7 @@ class RPCRoomViewController: UIViewController {
 
   private func setupMethodMenu() {
     let actions = availableMethods.map { method in
-      UIAction(title: method.rawValue, state: method == selectedMethod ? .on : .off) { [weak self] _ in
+      UIAction(title: method.displayName, state: method == selectedMethod ? .on : .off) { [weak self] _ in
         self?.selectedMethod = method
         self?.updateMethodUI()
       }
@@ -373,7 +323,7 @@ class RPCRoomViewController: UIViewController {
       selectedMethod == .putSignalingNotifyMetadata
         || selectedMethod == .putSignalingNotifyMetadataItem
     )
-    methodButton.setTitle(selectedMethod.rawValue, for: .normal)
+    methodButton.setTitle(selectedMethod.displayName, for: .normal)
     setupMethodMenu()
   }
 
@@ -382,105 +332,158 @@ class RPCRoomViewController: UIViewController {
       return
     }
 
-    do {
-      let expectsResponse = !isNotification
-      let (params, logDetail) = try makeParams(for: selectedMethod)
-      let sent = mediaChannel.callRPC(
-        method: selectedMethod,
-        params: params,
-        expectsResponse: expectsResponse
-      ) { [weak self] result in
-        guard case .failure(let error) = result else {
-          return
+    Task {
+      do {
+        switch selectedMethod {
+        case .requestSimulcastRid:
+          let params = RequestSimulcastRidParams(
+            rid: selectedSimulcastRid(),
+            senderConnectionId: trimmedSenderConnectionId()
+          )
+          if isNotification {
+            try await mediaChannel.rpc(
+              method: RequestSimulcastRid.self,
+              params: params,
+              isNotificationRequest: true
+            )
+          } else {
+            let response = try await mediaChannel.rpc(
+              method: RequestSimulcastRid.self,
+              params: params
+            )
+            if let response = response {
+              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+            }
+          }
+          appendLog(
+            direction: isNotification ? "send(notification)" : "send",
+            label: "rpc",
+            summary: selectedMethod.displayName,
+            detail: makeRequestDetail(method: RequestSimulcastRid.name, params: paramsDictionary(from: params))
+          )
+
+        case .requestSpotlightRid:
+          let params = RequestSpotlightRidParams(
+            sendConnectionId: trimmedSenderConnectionId(),
+            spotlightFocusRid: selectedSimulcastRid(),
+            spotlightUnfocusRid: .none
+          )
+          if isNotification {
+            try await mediaChannel.rpc(
+              method: RequestSpotlightRid.self,
+              params: params,
+              isNotificationRequest: true
+            )
+          } else {
+            let response = try await mediaChannel.rpc(
+              method: RequestSpotlightRid.self,
+              params: params
+            )
+            if let response = response {
+              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+            }
+          }
+          appendLog(
+            direction: isNotification ? "send(notification)" : "send",
+            label: "rpc",
+            summary: selectedMethod.displayName,
+            detail: makeRequestDetail(method: RequestSpotlightRid.name, params: paramsDictionary(from: params))
+          )
+
+        case .resetSpotlightRid:
+          let params = ResetSpotlightRidParams(
+            sendConnectionId: trimmedSenderConnectionId()
+          )
+          if isNotification {
+            try await mediaChannel.rpc(
+              method: ResetSpotlightRid.self,
+              params: params,
+              isNotificationRequest: true
+            )
+          } else {
+            let response = try await mediaChannel.rpc(
+              method: ResetSpotlightRid.self,
+              params: params
+            )
+            if let response = response {
+              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+            }
+          }
+          appendLog(
+            direction: isNotification ? "send(notification)" : "send",
+            label: "rpc",
+            summary: selectedMethod.displayName,
+            detail: makeRequestDetail(method: ResetSpotlightRid.name, params: paramsDictionary(from: params))
+          )
+
+        case .putSignalingNotifyMetadata:
+          let (metadataDict, _) = try parseMetadata()
+          let params = PutSignalingNotifyMetadataParams(
+            metadata: metadataDict,
+            push: pushSwitch.isOn ? true : nil
+          )
+          if isNotification {
+            try await mediaChannel.rpc(
+              method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
+              params: params,
+              isNotificationRequest: true
+            )
+          } else {
+            let response = try await mediaChannel.rpc(
+              method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
+              params: params
+            )
+            if let response = response {
+              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+            }
+          }
+          appendLog(
+            direction: isNotification ? "send(notification)" : "send",
+            label: "rpc",
+            summary: selectedMethod.displayName,
+            detail: makeRequestDetail(method: PutSignalingNotifyMetadata<[String: AnyCodable]>.name, params: paramsDictionary(from: params))
+          )
+
+        case .putSignalingNotifyMetadataItem:
+          let (key, _, value) = try parseMetadataItem()
+          let params = PutSignalingNotifyMetadataItemParams<AnyCodable>(
+            key: key,
+            value: AnyCodable(value),
+            push: pushSwitch.isOn ? true : nil
+          )
+          if isNotification {
+            try await mediaChannel.rpc(
+              method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
+              params: params,
+              isNotificationRequest: true
+            )
+          } else {
+            let response = try await mediaChannel.rpc(
+              method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
+              params: params
+            )
+            if let response = response {
+              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+            }
+          }
+          appendLog(
+            direction: isNotification ? "send(notification)" : "send",
+            label: "rpc",
+            summary: selectedMethod.displayName,
+            detail: makeRequestDetail(method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name, params: paramsDictionary(from: params))
+          )
         }
-        logger.error("cannot send RPC request: \(error)")
-        self?.presentAlert(title: "送信に失敗しました", message: error.localizedDescription)
+      } catch {
+        logger.error("failed to send RPC: \(error)")
+        presentAlert(title: "送信に失敗しました", message: error.localizedDescription)
       }
-
-      if !sent {
-        return
-      }
-
-      appendLog(
-        direction: isNotification ? "send(notification)" : "send",
-        label: "rpc",
-        summary: selectedMethod.rawValue,
-        detail: logDetail
-      )
-    } catch {
-      logger.error("failed to build RPC request: \(error)")
-      presentAlert(title: "送信内容が不正です", message: error.localizedDescription)
     }
   }
 
-  private func makeParams(for method: RPCMethod) throws -> (Encodable, String) {
-    switch method {
-    case .requestSimulcastRid:
-      let params = RequestSimulcastRidParams(
-        rid: selectedSimulcastRidString(),
-        sender_connection_id: trimmedSenderConnectionId()
-      )
-      var logParams: [String: Any] = ["rid": selectedSimulcastRidString()]
-      if let senderConnectionId = trimmedSenderConnectionId() {
-        logParams["sender_connection_id"] = senderConnectionId
-      }
-      let detail = makeRequestDetail(method: method.rawValue, params: logParams)
-      return (params, detail)
-    case .requestSpotlightRid:
-      let focusRid = selectedSimulcastRidString()
-      let params = RequestSpotlightRidParams(
-        send_connection_id: trimmedSenderConnectionId(),
-        spotlight_focus_rid: focusRid,
-        spotlight_unfocus_rid: "none"
-      )
-      var logParams: [String: Any] = [
-        "spotlight_focus_rid": focusRid,
-        "spotlight_unfocus_rid": "none"
-      ]
-      if let senderConnectionId = trimmedSenderConnectionId() {
-        logParams["send_connection_id"] = senderConnectionId
-      }
-      let detail = makeRequestDetail(method: method.rawValue, params: logParams)
-      return (params, detail)
-    case .resetSpotlightRid:
-      let params = ResetSpotlightRidParams(
-        send_connection_id: trimmedSenderConnectionId()
-      )
-      var logParams: [String: Any] = [:]
-      if let senderConnectionId = trimmedSenderConnectionId() {
-        logParams["send_connection_id"] = senderConnectionId
-      }
-      let detail = makeRequestDetail(method: method.rawValue, params: logParams)
-      return (params, detail)
-    case .putSignalingNotifyMetadata:
-      let (metadataAny, metadataJSON) = try parseMetadata()
-      let params = PutSignalingNotifyMetadataParams(
-        metadata: metadataJSON,
-        push: pushSwitch.isOn ? true : nil
-      )
-      var logParams: [String: Any] = ["metadata": metadataAny]
-      if pushSwitch.isOn {
-        logParams["push"] = true
-      }
-      let detail = makeRequestDetail(method: method.rawValue, params: logParams)
-      return (params, detail)
-    case .putSignalingNotifyMetadataItem:
-      let (key, valueAny, valueJSON) = try parseMetadataItem()
-      let params = PutSignalingNotifyMetadataItemParams(
-        key: key,
-        value: valueJSON,
-        push: pushSwitch.isOn ? true : nil
-      )
-      var logParams: [String: Any] = [
-        "key": key,
-        "value": valueAny
-      ]
-      if pushSwitch.isOn {
-        logParams["push"] = true
-      }
-      let detail = makeRequestDetail(method: method.rawValue, params: logParams)
-      return (params, detail)
-    }
+  private func selectedSimulcastRid() -> Rid {
+    let index = simulcastRidSegmentedControl.selectedSegmentIndex
+    let rids: [Rid] = [.none, .r0, .r1, .r2]
+    return rids.indices.contains(index) ? rids[index] : .none
   }
 
   private func selectedSimulcastRidString() -> String {
@@ -498,7 +501,17 @@ class RPCRoomViewController: UIViewController {
     return text
   }
 
-  private func parseMetadata() throws -> ([String: Any], [String: JSONValue]) {
+  private func paramsDictionary<T: Encodable>(from params: T) -> [String: Any] {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = []
+    if let data = try? encoder.encode(params),
+       let dictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+      return dictionary
+    }
+    return [:]
+  }
+
+  private func parseMetadata() throws -> ([String: AnyCodable], [String: Any]) {
     let text = metadataTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
     if text.isEmpty {
       return ([:], [:])
@@ -510,17 +523,14 @@ class RPCRoomViewController: UIViewController {
     guard let dictionary = object as? [String: Any] else {
       throw NSError(domain: "RPC", code: 2, userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
     }
-    var mapped: [String: JSONValue] = [:]
+    var mapped: [String: AnyCodable] = [:]
     for (key, value) in dictionary {
-      guard let jsonValue = JSONValue(any: value) else {
-        throw NSError(domain: "RPC", code: 3, userInfo: [NSLocalizedDescriptionKey: "metadata に JSON にできない値が含まれています。"])
-      }
-      mapped[key] = jsonValue
+      mapped[key] = AnyCodable(value)
     }
-    return (dictionary, mapped)
+    return (mapped, dictionary)
   }
 
-  private func parseMetadataItem() throws -> (String, Any, JSONValue) {
+  private func parseMetadataItem() throws -> (String, Any, AnyCodable) {
     let text = metadataTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
     if text.isEmpty {
       throw NSError(domain: "RPC", code: 4, userInfo: [NSLocalizedDescriptionKey: "key と value を JSON で指定してください。"])
@@ -538,9 +548,7 @@ class RPCRoomViewController: UIViewController {
     guard let valueAny = dictionary["value"] else {
       throw NSError(domain: "RPC", code: 8, userInfo: [NSLocalizedDescriptionKey: "value を指定してください。"])
     }
-    guard let valueJSON = JSONValue(any: valueAny) else {
-      throw NSError(domain: "RPC", code: 9, userInfo: [NSLocalizedDescriptionKey: "value が JSON に変換できません。"])
-    }
+    let valueJSON = AnyCodable(valueAny)
     return (key, valueAny, valueJSON)
   }
 
@@ -568,8 +576,20 @@ class RPCRoomViewController: UIViewController {
     }
 
     if let simulcastRpcRids = offer.simulcastRpcRids, !simulcastRpcRids.isEmpty {
+      let ridStrings = simulcastRpcRids.map { rid in
+        switch rid {
+        case .none:
+          return "none"
+        case .r0:
+          return "r0"
+        case .r1:
+          return "r1"
+        case .r2:
+          return "r2"
+        }
+      }
       DispatchQueue.main.async {
-        self.simulcastRpcRidsLabel.text = simulcastRpcRids.joined(separator: ", ")
+        self.simulcastRpcRidsLabel.text = ridStrings.joined(separator: ", ")
       }
     } else {
       DispatchQueue.main.async {
@@ -579,19 +599,27 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func updateRPCMethods(using mediaChannel: MediaChannel) {
-    let methods = mediaChannel.rpcMethods.map(\.rawValue)
+    let methods = mediaChannel.rpcMethods.map(\.displayName)
     DispatchQueue.main.async {
       self.rpcMethodsLabel.text = methods.isEmpty ? "未取得" : methods.joined(separator: ", ")
-      let simulcastRids = mediaChannel.rpcSimulcastRids
+      let simulcastRids = mediaChannel.rpcSimulcastRids.map { rid in
+        switch rid {
+        case .none:
+          return "none"
+        case .r0:
+          return "r0"
+        case .r1:
+          return "r1"
+        case .r2:
+          return "r2"
+        }
+      }
       self.simulcastRpcRidsLabel.text = simulcastRids.isEmpty ? "未取得" : simulcastRids.joined(separator: ", ")
     }
   }
 
-  private func handleRPCResponse(_ response: RPCResponse) {
-    if response.id == nil && response.result == nil {
-      return
-    }
-    let detail = rpcResponseDetailText(response)
+  private func handleRPCResponse(response: RPCResponse<Any>, result: Any) {
+    let detail = rpcResponseDetailText(result)
     appendLog(direction: "recv", label: "rpc", summary: "success", detail: detail)
   }
 
@@ -600,14 +628,9 @@ class RPCRoomViewController: UIViewController {
     appendLog(direction: "recv", label: "rpc", summary: "error(\(detail.code))", detail: info)
   }
 
-  private func rpcResponseDetailText(_ response: RPCResponse) -> String {
+  private func rpcResponseDetailText(_ result: Any) -> String {
     var lines: [String] = []
-    if let id = response.id {
-      lines.append("id: \(rpcIdText(id))")
-    }
-    if let result = response.result {
-      lines.append("result: \(stringifyJSON(result))")
-    }
+    lines.append("result: \(stringifyJSON(result))")
     return lines.isEmpty ? "response" : lines.joined(separator: "\n")
   }
 
@@ -620,15 +643,6 @@ class RPCRoomViewController: UIViewController {
       lines.append("data: \(stringifyJSON(data))")
     }
     return lines.joined(separator: "\n")
-  }
-
-  private func rpcIdText(_ id: RPCID) -> String {
-    switch id {
-    case .int(let value):
-      return String(value)
-    case .string(let value):
-      return value
-    }
   }
 
   private func stringifyJSON(_ object: Any) -> String {
@@ -736,7 +750,7 @@ class RPCRoomViewController: UIViewController {
     channelIdLabel.numberOfLines = 1
     channelIdLabel.text = "Channel ID: -"
 
-    methodButton.setTitle(selectedMethod.rawValue, for: .normal)
+    methodButton.setTitle(selectedMethod.displayName, for: .normal)
     methodButton.contentHorizontalAlignment = .leading
 
     simulcastRidSegmentedControl.selectedSegmentIndex = 0
@@ -861,8 +875,8 @@ extension RPCRoomViewController: UITableViewDataSource, UITableViewDelegate {
     let item = logs[indexPath.row]
     let time = timeFormatter.string(from: item.timestamp)
     cell.textLabel?.text = "\(time) [\(item.direction)] \(item.label) \(item.summary)"
-    cell.detailTextLabel?.text = item.detail
     cell.detailTextLabel?.numberOfLines = 0
+    cell.detailTextLabel?.text = item.detail
     cell.selectionStyle = .none
     return cell
   }
