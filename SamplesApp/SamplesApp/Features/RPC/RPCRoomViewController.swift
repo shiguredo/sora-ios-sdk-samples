@@ -3,6 +3,37 @@ import UIKit
 
 private let logger = SamplesLogger.tagged("RPCRoom")
 
+// MARK: - RPC Error Definition
+
+enum RPCError: LocalizedError {
+  case invalidJsonString
+  case metadataNotJsonObject
+  case emptyMetadataItem
+  case invalidJsonForItem
+  case metadataItemNotJsonObject
+  case invalidMetadataKey
+  case missingMetadataValue
+
+  var errorDescription: String? {
+    switch self {
+    case .invalidJsonString:
+      return "JSON の文字列が不正です。"
+    case .metadataNotJsonObject:
+      return "metadata は JSON オブジェクトで指定してください。"
+    case .emptyMetadataItem:
+      return "key と value を JSON で指定してください。"
+    case .invalidJsonForItem:
+      return "JSON の文字列が不正です。"
+    case .metadataItemNotJsonObject:
+      return "metadata は JSON オブジェクトで指定してください。"
+    case .invalidMetadataKey:
+      return "key は文字列で指定してください。"
+    case .missingMetadataValue:
+      return "value を指定してください。"
+    }
+  }
+}
+
 // MARK: - RPCMethod Display Helper
 
 extension RPCMethod {
@@ -225,6 +256,14 @@ class RPCRoomViewController: UIViewController {
       channelIdLabel.text = "Channel ID: \(mediaChannel.configuration.channelId)"
       let urlText = mediaChannel.connectedUrl?.absoluteString ?? "-"
       connectedUrlLabel.text = "Connected URL: \(urlText)"
+
+      // ハンドラを初期化（重複登録を防止）
+      mediaChannel.handlers.onDataChannelMessage = nil
+      mediaChannel.handlers.onAddStream = nil
+      mediaChannel.handlers.onRemoveStream = nil
+      mediaChannel.handlers.onReceiveSignaling = nil
+      mediaChannel.handlers.onDataChannel = nil
+      mediaChannel.handlers.onDisconnect = nil
 
       mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
         self?.handleDataChannelMessage(label: label, data: data)
@@ -478,6 +517,14 @@ class RPCRoomViewController: UIViewController {
               params: params,
               isNotificationRequest: true
             )
+            appendLog(
+              direction: "send(notification)",
+              label: "rpc",
+              summary: selectedMethod.displayName,
+              detail: makeRequestDetail(
+                method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
+                params: paramsDictionary(from: params))
+            )
           } else {
             let response = try await mediaChannel.rpc(
               method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
@@ -488,15 +535,15 @@ class RPCRoomViewController: UIViewController {
                 direction: "recv", label: "rpc", summary: "success",
                 detail: stringifyJSON(response.result))
             }
+            appendLog(
+              direction: "send",
+              label: "rpc",
+              summary: selectedMethod.displayName,
+              detail: makeRequestDetail(
+                method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
+                params: paramsDictionary(from: params))
+            )
           }
-          appendLog(
-            direction: isNotification ? "send(notification)" : "send",
-            label: "rpc",
-            summary: selectedMethod.displayName,
-            detail: makeRequestDetail(
-              method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
-              params: paramsDictionary(from: params))
-          )
         }
       } catch {
         logger.error("failed to send RPC: \(error)")
@@ -544,14 +591,11 @@ class RPCRoomViewController: UIViewController {
       return ([:], [:])
     }
     guard let data = text.data(using: .utf8) else {
-      throw NSError(
-        domain: "RPC", code: 1, userInfo: [NSLocalizedDescriptionKey: "JSON の文字列が不正です。"])
+      throw RPCError.invalidJsonString
     }
     let object = try JSONSerialization.jsonObject(with: data, options: [])
     guard let dictionary = object as? [String: Any] else {
-      throw NSError(
-        domain: "RPC", code: 2,
-        userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
+      throw RPCError.metadataNotJsonObject
     }
     var mapped: [String: AnyCodable] = [:]
     for (key, value) in dictionary {
@@ -563,27 +607,20 @@ class RPCRoomViewController: UIViewController {
   private func parseMetadataItem() throws -> (String, Any, AnyCodable) {
     let text = metadataTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
     if text.isEmpty {
-      throw NSError(
-        domain: "RPC", code: 4,
-        userInfo: [NSLocalizedDescriptionKey: "key と value を JSON で指定してください。"])
+      throw RPCError.emptyMetadataItem
     }
     guard let data = text.data(using: .utf8) else {
-      throw NSError(
-        domain: "RPC", code: 5, userInfo: [NSLocalizedDescriptionKey: "JSON の文字列が不正です。"])
+      throw RPCError.invalidJsonForItem
     }
     let object = try JSONSerialization.jsonObject(with: data, options: [])
     guard let dictionary = object as? [String: Any] else {
-      throw NSError(
-        domain: "RPC", code: 6,
-        userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
+      throw RPCError.metadataItemNotJsonObject
     }
     guard let key = dictionary["key"] as? String, !key.isEmpty else {
-      throw NSError(
-        domain: "RPC", code: 7, userInfo: [NSLocalizedDescriptionKey: "key は文字列で指定してください。"])
+      throw RPCError.invalidMetadataKey
     }
     guard let valueAny = dictionary["value"] else {
-      throw NSError(
-        domain: "RPC", code: 8, userInfo: [NSLocalizedDescriptionKey: "value を指定してください。"])
+      throw RPCError.missingMetadataValue
     }
     let valueJSON = AnyCodable(valueAny)
     return (key, valueAny, valueJSON)
@@ -717,11 +754,11 @@ class RPCRoomViewController: UIViewController {
       summary: summary,
       detail: detail
     )
-    logs.append(item)
     DispatchQueue.main.async {
-      self.historyTableView.reloadData()
-      let lastRow = IndexPath(row: self.logs.count - 1, section: 0)
-      self.historyTableView.scrollToRow(at: lastRow, at: .bottom, animated: true)
+      self.logs.append(item)
+      let newIndexPath = IndexPath(row: self.logs.count - 1, section: 0)
+      self.historyTableView.insertRows(at: [newIndexPath], with: .automatic)
+      self.historyTableView.scrollToRow(at: newIndexPath, at: .bottom, animated: true)
     }
   }
 

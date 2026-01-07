@@ -5,6 +5,12 @@ private let logger = SamplesLogger.tagged("RPCConfig")
 
 /// RPC サンプルの接続設定画面です。
 class RPCConfigViewController: UITableViewController {
+  // MARK: - Connect Button IndexPath Constants
+
+  private enum ConnectButtonLocation {
+    static let section = 4
+    static let row = 0
+  }
   @IBOutlet var channelIdTextField: UITextField!
   @IBOutlet var roleSegmentedControl: UISegmentedControl!
   @IBOutlet var videoEnabledSwitch: UISwitch!
@@ -83,7 +89,7 @@ class RPCConfigViewController: UITableViewController {
   }
 
   private func shouldHandleConnect(for indexPath: IndexPath) -> Bool {
-    indexPath.section == 4 && indexPath.row == 0
+    indexPath.section == ConnectButtonLocation.section && indexPath.row == ConnectButtonLocation.row
   }
 
   private func trimmedChannelId() -> String? {
