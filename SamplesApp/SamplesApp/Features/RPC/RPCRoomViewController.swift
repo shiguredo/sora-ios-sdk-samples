@@ -90,6 +90,7 @@ private struct AnyCodable: Codable {
 private final class ResolutionVideoView: UIView, VideoRenderer {
   private let soraVideoView = VideoView()
   var onFrameSizeChanged: ((CGSize) -> Void)?
+  private var lastSize: CGSize = .zero
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -117,13 +118,20 @@ private final class ResolutionVideoView: UIView, VideoRenderer {
 
   func onChange(size: CGSize) {
     soraVideoView.onChange(size: size)
-    onFrameSizeChanged?(size)
+    if size != lastSize {
+      lastSize = size
+      onFrameSizeChanged?(size)
+    }
   }
 
   func render(videoFrame: VideoFrame?) {
     soraVideoView.render(videoFrame: videoFrame)
     if let videoFrame {
-      onFrameSizeChanged?(CGSize(width: videoFrame.width, height: videoFrame.height))
+      let newSize = CGSize(width: videoFrame.width, height: videoFrame.height)
+      if newSize != lastSize {
+        lastSize = newSize
+        onFrameSizeChanged?(newSize)
+      }
     }
   }
 
