@@ -61,65 +61,7 @@ private struct RPCLogItem {
   let detail: String
 }
 
-// MARK: - JSON Value helpers for metadata operations
-
-/// Any 型の値をエンコード可能にするラッパー型
-private struct AnyCodable: Codable {
-  let value: Any
-
-  init(_ value: Any) {
-    self.value = value
-  }
-
-  func encode(to encoder: Encoder) throws {
-    var container = encoder.singleValueContainer()
-    if let intValue = value as? Int {
-      try container.encode(intValue)
-    } else if let doubleValue = value as? Double {
-      try container.encode(doubleValue)
-    } else if let stringValue = value as? String {
-      try container.encode(stringValue)
-    } else if let boolValue = value as? Bool {
-      try container.encode(boolValue)
-    } else if let arrayValue = value as? [Any] {
-      try container.encode(arrayValue.map(AnyCodable.init))
-    } else if let dictValue = value as? [String: Any] {
-      let mapped = dictValue.mapValues(AnyCodable.init)
-      try container.encode(mapped)
-    } else if value is NSNull {
-      try container.encodeNil()
-    } else {
-      throw EncodingError.invalidValue(
-        value,
-        EncodingError.Context(
-          codingPath: container.codingPath,
-          debugDescription: "AnyCodable cannot encode \(type(of: value))"
-        ))
-    }
-  }
-
-  init(from decoder: Decoder) throws {
-    let container = try decoder.singleValueContainer()
-    if container.decodeNil() {
-      value = NSNull()
-    } else if let boolValue = try? container.decode(Bool.self) {
-      value = boolValue
-    } else if let intValue = try? container.decode(Int.self) {
-      value = intValue
-    } else if let doubleValue = try? container.decode(Double.self) {
-      value = doubleValue
-    } else if let stringValue = try? container.decode(String.self) {
-      value = stringValue
-    } else if let arrayValue = try? container.decode([AnyCodable].self) {
-      value = arrayValue.map(\.value)
-    } else if let dictValue = try? container.decode([String: AnyCodable].self) {
-      value = dictValue.mapValues(\.value)
-    } else {
-      throw DecodingError.dataCorruptedError(
-        in: container, debugDescription: "Cannot decode AnyCodable")
-    }
-  }
-}
+// MARK: - Video View helper
 
 private final class ResolutionVideoView: UIView, VideoRenderer {
   private let soraVideoView = VideoView()
@@ -192,6 +134,8 @@ private final class ResolutionVideoView: UIView, VideoRenderer {
 
 /// RPC の送受信画面です。
 class RPCRoomViewController: UIViewController {
+  private let metadataTextViewHeight: CGFloat = 120
+
   @IBOutlet weak var historyTableView: UITableView!
   @IBOutlet weak var memberListView: UIView!
   @IBOutlet weak var resolutionLabel: UILabel!
@@ -241,11 +185,7 @@ class RPCRoomViewController: UIViewController {
     rpcMethodsLabel.text = "未取得"
     simulcastRpcRidsLabel.text = "未取得"
     resolutionLabel.text = "Resolution: -"
-    metadataTextView.text = """
-      {
-        "example_key_1": "example_value_1"
-      }
-      """
+    metadataTextView.text = ""
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -256,14 +196,6 @@ class RPCRoomViewController: UIViewController {
       channelIdLabel.text = "Channel ID: \(mediaChannel.configuration.channelId)"
       let urlText = mediaChannel.connectedUrl?.absoluteString ?? "-"
       connectedUrlLabel.text = "Connected URL: \(urlText)"
-
-      // ハンドラを初期化（重複登録を防止）
-      mediaChannel.handlers.onDataChannelMessage = nil
-      mediaChannel.handlers.onAddStream = nil
-      mediaChannel.handlers.onRemoveStream = nil
-      mediaChannel.handlers.onReceiveSignaling = nil
-      mediaChannel.handlers.onDataChannel = nil
-      mediaChannel.handlers.onDisconnect = nil
 
       mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
         self?.handleDataChannelMessage(label: label, data: data)
@@ -387,29 +319,12 @@ class RPCRoomViewController: UIViewController {
             rid: selectedSimulcastRid(),
             senderConnectionId: trimmedSenderConnectionId()
           )
-          if isNotification {
-            try await mediaChannel.rpc(
-              method: RequestSimulcastRid.self,
-              params: params,
-              isNotificationRequest: true
-            )
-          } else {
-            let response = try await mediaChannel.rpc(
-              method: RequestSimulcastRid.self,
-              params: params
-            )
-            if let response = response {
-              appendLog(
-                direction: "recv", label: "rpc", summary: "success",
-                detail: stringifyJSON(response.result))
-            }
-          }
-          appendLog(
-            direction: isNotification ? "send(notification)" : "send",
-            label: "rpc",
-            summary: selectedMethod.displayName,
-            detail: makeRequestDetail(
-              method: RequestSimulcastRid.name, params: paramsDictionary(from: params))
+          try await sendRPCAndLog(
+            mediaChannel: mediaChannel,
+            method: RequestSimulcastRid.self,
+            params: params,
+            methodName: RequestSimulcastRid.name,
+            isNotification: isNotification
           )
 
         case .requestSpotlightRid:
@@ -418,58 +333,24 @@ class RPCRoomViewController: UIViewController {
             spotlightFocusRid: selectedSimulcastRid(),
             spotlightUnfocusRid: .none
           )
-          if isNotification {
-            try await mediaChannel.rpc(
-              method: RequestSpotlightRid.self,
-              params: params,
-              isNotificationRequest: true
-            )
-          } else {
-            let response = try await mediaChannel.rpc(
-              method: RequestSpotlightRid.self,
-              params: params
-            )
-            if let response = response {
-              appendLog(
-                direction: "recv", label: "rpc", summary: "success",
-                detail: stringifyJSON(response.result))
-            }
-          }
-          appendLog(
-            direction: isNotification ? "send(notification)" : "send",
-            label: "rpc",
-            summary: selectedMethod.displayName,
-            detail: makeRequestDetail(
-              method: RequestSpotlightRid.name, params: paramsDictionary(from: params))
+          try await sendRPCAndLog(
+            mediaChannel: mediaChannel,
+            method: RequestSpotlightRid.self,
+            params: params,
+            methodName: RequestSpotlightRid.name,
+            isNotification: isNotification
           )
 
         case .resetSpotlightRid:
           let params = ResetSpotlightRidParams(
             sendConnectionId: trimmedSenderConnectionId()
           )
-          if isNotification {
-            try await mediaChannel.rpc(
-              method: ResetSpotlightRid.self,
-              params: params,
-              isNotificationRequest: true
-            )
-          } else {
-            let response = try await mediaChannel.rpc(
-              method: ResetSpotlightRid.self,
-              params: params
-            )
-            if let response = response {
-              appendLog(
-                direction: "recv", label: "rpc", summary: "success",
-                detail: stringifyJSON(response.result))
-            }
-          }
-          appendLog(
-            direction: isNotification ? "send(notification)" : "send",
-            label: "rpc",
-            summary: selectedMethod.displayName,
-            detail: makeRequestDetail(
-              method: ResetSpotlightRid.name, params: paramsDictionary(from: params))
+          try await sendRPCAndLog(
+            mediaChannel: mediaChannel,
+            method: ResetSpotlightRid.self,
+            params: params,
+            methodName: ResetSpotlightRid.name,
+            isNotification: isNotification
           )
 
         case .putSignalingNotifyMetadata:
@@ -478,30 +359,12 @@ class RPCRoomViewController: UIViewController {
             metadata: metadataDict,
             push: pushSwitch.isOn ? true : nil
           )
-          if isNotification {
-            try await mediaChannel.rpc(
-              method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
-              params: params,
-              isNotificationRequest: true
-            )
-          } else {
-            let response = try await mediaChannel.rpc(
-              method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
-              params: params
-            )
-            if let response = response {
-              appendLog(
-                direction: "recv", label: "rpc", summary: "success",
-                detail: stringifyJSON(response.result))
-            }
-          }
-          appendLog(
-            direction: isNotification ? "send(notification)" : "send",
-            label: "rpc",
-            summary: selectedMethod.displayName,
-            detail: makeRequestDetail(
-              method: PutSignalingNotifyMetadata<[String: AnyCodable]>.name,
-              params: paramsDictionary(from: params))
+          try await sendRPCAndLog(
+            mediaChannel: mediaChannel,
+            method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
+            params: params,
+            methodName: PutSignalingNotifyMetadata<[String: AnyCodable]>.name,
+            isNotification: isNotification
           )
 
         case .putSignalingNotifyMetadataItem:
@@ -511,45 +374,53 @@ class RPCRoomViewController: UIViewController {
             value: AnyCodable(value),
             push: pushSwitch.isOn ? true : nil
           )
-          if isNotification {
-            try await mediaChannel.rpc(
-              method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
-              params: params,
-              isNotificationRequest: true
-            )
-            appendLog(
-              direction: "send(notification)",
-              label: "rpc",
-              summary: selectedMethod.displayName,
-              detail: makeRequestDetail(
-                method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
-                params: paramsDictionary(from: params))
-            )
-          } else {
-            let response = try await mediaChannel.rpc(
-              method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
-              params: params
-            )
-            if let response = response {
-              appendLog(
-                direction: "recv", label: "rpc", summary: "success",
-                detail: stringifyJSON(response.result))
-            }
-            appendLog(
-              direction: "send",
-              label: "rpc",
-              summary: selectedMethod.displayName,
-              detail: makeRequestDetail(
-                method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
-                params: paramsDictionary(from: params))
-            )
-          }
+          try await sendRPCAndLog(
+            mediaChannel: mediaChannel,
+            method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
+            params: params,
+            methodName: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
+            isNotification: isNotification
+          )
         }
       } catch {
         logger.error("failed to send RPC: \(error)")
         presentAlert(title: "送信に失敗しました", message: error.localizedDescription)
       }
     }
+  }
+
+  private func sendRPCAndLog<Method: RPCMethodProtocol>(
+    mediaChannel: MediaChannel,
+    method: Method.Type,
+    params: Method.Params,
+    methodName: String,
+    isNotification: Bool
+  ) async throws {
+    if isNotification {
+      try await mediaChannel.rpc(
+        method: method,
+        params: params,
+        isNotificationRequest: true
+      )
+    } else {
+      let response = try await mediaChannel.rpc(
+        method: method,
+        params: params
+      )
+      if let response = response {
+        appendLog(
+          direction: "recv", label: "rpc", summary: "success",
+          detail: stringifyJSON(response.result))
+      }
+    }
+
+    appendLog(
+      direction: isNotification ? "send(notification)" : "send",
+      label: "rpc",
+      summary: selectedMethod.displayName,
+      detail: makeRequestDetail(
+        method: methodName, params: paramsDictionary(from: params))
+    )
   }
 
   private func selectedSimulcastRid() -> Rid {
@@ -897,7 +768,8 @@ class RPCRoomViewController: UIViewController {
     headerView = header
     historyTableView.tableHeaderView = header
 
-    metadataTextView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+    metadataTextView.heightAnchor.constraint(equalToConstant: metadataTextViewHeight).isActive =
+      true
 
     let tapGestureRecognizer = UITapGestureRecognizer(
       target: self, action: #selector(onTapView(_:)))

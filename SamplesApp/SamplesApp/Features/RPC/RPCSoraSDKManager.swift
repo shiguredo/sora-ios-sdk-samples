@@ -3,20 +3,30 @@ import Sora
 import WebRTC
 
 /// Sora SDK関連の、アプリケーション全体で共通して行いたい処理を行うシングルトン・マネージャ・クラスです。
+///
+/// このようなクラスを用意しておくと、Sora SDKのConnectionをアプリケーション全体で一つだけ確実に管理する事が可能になるため、おすすめです。
 class RPCSoraSDKManager {
   /// RPCSoraSDKManagerのシングルトンインスタンスです。
   static let shared = RPCSoraSDKManager()
 
   /// 現在接続中のSora SDKのMediaChannelです。
+  ///
+  /// 殆どの場合、アプリケーション全体で一つだけ同時にMediaChannelに接続することになるので、シングルトンとして用意すると便利に使えます。
   private(set) var currentMediaChannel: MediaChannel?
 
   /// シングルトンにしたいので、イニシャライザはprivateにしてあります。
+  ///
+  /// イニシャライザの初期化処理では、Sora SDK のログレベルを設定します。
+  /// SDK のログを表示することで、送受信されるシグナリングの内容や接続エラーを確認できます。
   private init() {
     Logger.shared.level = .debug
     Sora.setWebRTCLogLevel(.info)
   }
 
   /// 新たにSoraに接続を試みます。接続に成功した場合、currentMediaChannelが更新されます。
+  ///
+  /// 既に接続されており、currentMediaChannelが設定されている場合は新たに接続ができないようにしてあります。
+  /// その場合は、一旦先に `disconnect()` を呼び出して、現在の接続を終了してください。
   func connect(
     with configuration: Configuration,
     completionHandler: ((Error?) -> Void)?
@@ -31,6 +41,8 @@ class RPCSoraSDKManager {
   }
 
   /// 既に接続済みのmediaChannelから切断します。
+  ///
+  /// currentMediaChannelがnilで、まだ接続されていないときは、何もしないで終了します。
   func disconnect() {
     guard let mediaChannel = currentMediaChannel else {
       return
