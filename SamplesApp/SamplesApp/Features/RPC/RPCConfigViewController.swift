@@ -109,7 +109,8 @@ class RPCConfigViewController: UITableViewController {
     configuration.spotlightEnabled = spotlightEnabledSwitch.isOn ? .enabled : .disabled
     configuration.spotlightNumber = selectedSpotlightNumber()
     configuration.spotlightFocusRid = selectedSpotlightRid(for: spotlightFocusRidSegmentedControl)
-    configuration.spotlightUnfocusRid = selectedSpotlightRid(for: spotlightUnfocusRidSegmentedControl)
+    configuration.spotlightUnfocusRid = selectedSpotlightRid(
+      for: spotlightUnfocusRidSegmentedControl)
     configuration.signalingConnectMetadata = RPCEnvironment.signalingConnectMetadata
     configuration.dataChannelSignaling = true
     configuration.ignoreDisconnectWebSocket = selectedIgnoreDisconnectWebSocket()

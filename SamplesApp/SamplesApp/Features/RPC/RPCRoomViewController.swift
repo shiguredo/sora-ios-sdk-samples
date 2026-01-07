@@ -5,8 +5,8 @@ private let logger = SamplesLogger.tagged("RPCRoom")
 
 // MARK: - RPCMethod Display Helper
 
-private extension RPCMethod {
-  var displayName: String {
+extension RPCMethod {
+  fileprivate var displayName: String {
     switch self {
     case .requestSimulcastRid:
       return "RequestSimulcastRid"
@@ -58,10 +58,12 @@ private struct AnyCodable: Codable {
     } else if value is NSNull {
       try container.encodeNil()
     } else {
-      throw EncodingError.invalidValue(value, EncodingError.Context(
-        codingPath: container.codingPath,
-        debugDescription: "AnyCodable cannot encode \(type(of: value))"
-      ))
+      throw EncodingError.invalidValue(
+        value,
+        EncodingError.Context(
+          codingPath: container.codingPath,
+          debugDescription: "AnyCodable cannot encode \(type(of: value))"
+        ))
     }
   }
 
@@ -82,7 +84,8 @@ private struct AnyCodable: Codable {
     } else if let dictValue = try? container.decode([String: AnyCodable].self) {
       value = dictValue.mapValues(\.value)
     } else {
-      throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode AnyCodable")
+      throw DecodingError.dataCorruptedError(
+        in: container, debugDescription: "Cannot decode AnyCodable")
     }
   }
 }
@@ -156,8 +159,6 @@ private final class ResolutionVideoView: UIView, VideoRenderer {
   }
 }
 
-
-
 /// RPC の送受信画面です。
 class RPCRoomViewController: UIViewController {
   @IBOutlet weak var historyTableView: UITableView!
@@ -184,7 +185,7 @@ class RPCRoomViewController: UIViewController {
     .requestSpotlightRid,
     .resetSpotlightRid,
     .putSignalingNotifyMetadata,
-    .putSignalingNotifyMetadataItem
+    .putSignalingNotifyMetadataItem,
   ]
   private var selectedMethod: RPCMethod = .requestSimulcastRid
   private var logs: [RPCLogItem] = []
@@ -210,10 +211,10 @@ class RPCRoomViewController: UIViewController {
     simulcastRpcRidsLabel.text = "未取得"
     resolutionLabel.text = "Resolution: -"
     metadataTextView.text = """
-    {
-      "example_key_1": "example_value_1"
-    }
-    """
+      {
+        "example_key_1": "example_value_1"
+      }
+      """
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -307,7 +308,8 @@ class RPCRoomViewController: UIViewController {
 
   private func setupMethodMenu() {
     let actions = availableMethods.map { method in
-      UIAction(title: method.displayName, state: method == selectedMethod ? .on : .off) { [weak self] _ in
+      UIAction(title: method.displayName, state: method == selectedMethod ? .on : .off) {
+        [weak self] _ in
         self?.selectedMethod = method
         self?.updateMethodUI()
       }
@@ -317,20 +319,18 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func updateMethodUI() {
-    simulcastRowView?.isHidden = !(selectedMethod == .requestSimulcastRid || selectedMethod == .requestSpotlightRid)
-    senderConnectionIdTextField.isHidden = !(
-      selectedMethod == .requestSimulcastRid
-        || selectedMethod == .requestSpotlightRid
-        || selectedMethod == .resetSpotlightRid
-    )
-    pushRowView?.isHidden = !(
-      selectedMethod == .putSignalingNotifyMetadata
-        || selectedMethod == .putSignalingNotifyMetadataItem
-    )
-    metadataTextView.isHidden = !(
-      selectedMethod == .putSignalingNotifyMetadata
-        || selectedMethod == .putSignalingNotifyMetadataItem
-    )
+    simulcastRowView?.isHidden =
+      !(selectedMethod == .requestSimulcastRid || selectedMethod == .requestSpotlightRid)
+    senderConnectionIdTextField.isHidden =
+      !(selectedMethod == .requestSimulcastRid
+      || selectedMethod == .requestSpotlightRid
+      || selectedMethod == .resetSpotlightRid)
+    pushRowView?.isHidden =
+      !(selectedMethod == .putSignalingNotifyMetadata
+      || selectedMethod == .putSignalingNotifyMetadataItem)
+    metadataTextView.isHidden =
+      !(selectedMethod == .putSignalingNotifyMetadata
+      || selectedMethod == .putSignalingNotifyMetadataItem)
     methodButton.setTitle(selectedMethod.displayName, for: .normal)
     setupMethodMenu()
   }
@@ -360,14 +360,17 @@ class RPCRoomViewController: UIViewController {
               params: params
             )
             if let response = response {
-              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+              appendLog(
+                direction: "recv", label: "rpc", summary: "success",
+                detail: stringifyJSON(response.result))
             }
           }
           appendLog(
             direction: isNotification ? "send(notification)" : "send",
             label: "rpc",
             summary: selectedMethod.displayName,
-            detail: makeRequestDetail(method: RequestSimulcastRid.name, params: paramsDictionary(from: params))
+            detail: makeRequestDetail(
+              method: RequestSimulcastRid.name, params: paramsDictionary(from: params))
           )
 
         case .requestSpotlightRid:
@@ -388,14 +391,17 @@ class RPCRoomViewController: UIViewController {
               params: params
             )
             if let response = response {
-              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+              appendLog(
+                direction: "recv", label: "rpc", summary: "success",
+                detail: stringifyJSON(response.result))
             }
           }
           appendLog(
             direction: isNotification ? "send(notification)" : "send",
             label: "rpc",
             summary: selectedMethod.displayName,
-            detail: makeRequestDetail(method: RequestSpotlightRid.name, params: paramsDictionary(from: params))
+            detail: makeRequestDetail(
+              method: RequestSpotlightRid.name, params: paramsDictionary(from: params))
           )
 
         case .resetSpotlightRid:
@@ -414,14 +420,17 @@ class RPCRoomViewController: UIViewController {
               params: params
             )
             if let response = response {
-              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+              appendLog(
+                direction: "recv", label: "rpc", summary: "success",
+                detail: stringifyJSON(response.result))
             }
           }
           appendLog(
             direction: isNotification ? "send(notification)" : "send",
             label: "rpc",
             summary: selectedMethod.displayName,
-            detail: makeRequestDetail(method: ResetSpotlightRid.name, params: paramsDictionary(from: params))
+            detail: makeRequestDetail(
+              method: ResetSpotlightRid.name, params: paramsDictionary(from: params))
           )
 
         case .putSignalingNotifyMetadata:
@@ -442,14 +451,18 @@ class RPCRoomViewController: UIViewController {
               params: params
             )
             if let response = response {
-              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+              appendLog(
+                direction: "recv", label: "rpc", summary: "success",
+                detail: stringifyJSON(response.result))
             }
           }
           appendLog(
             direction: isNotification ? "send(notification)" : "send",
             label: "rpc",
             summary: selectedMethod.displayName,
-            detail: makeRequestDetail(method: PutSignalingNotifyMetadata<[String: AnyCodable]>.name, params: paramsDictionary(from: params))
+            detail: makeRequestDetail(
+              method: PutSignalingNotifyMetadata<[String: AnyCodable]>.name,
+              params: paramsDictionary(from: params))
           )
 
         case .putSignalingNotifyMetadataItem:
@@ -471,14 +484,18 @@ class RPCRoomViewController: UIViewController {
               params: params
             )
             if let response = response {
-              appendLog(direction: "recv", label: "rpc", summary: "success", detail: stringifyJSON(response.result))
+              appendLog(
+                direction: "recv", label: "rpc", summary: "success",
+                detail: stringifyJSON(response.result))
             }
           }
           appendLog(
             direction: isNotification ? "send(notification)" : "send",
             label: "rpc",
             summary: selectedMethod.displayName,
-            detail: makeRequestDetail(method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name, params: paramsDictionary(from: params))
+            detail: makeRequestDetail(
+              method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
+              params: paramsDictionary(from: params))
           )
         }
       } catch {
@@ -501,7 +518,8 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func trimmedSenderConnectionId() -> String? {
-    guard let text = senderConnectionIdTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+    guard
+      let text = senderConnectionIdTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
       !text.isEmpty
     else {
       return nil
@@ -513,7 +531,8 @@ class RPCRoomViewController: UIViewController {
     let encoder = JSONEncoder()
     encoder.outputFormatting = []
     if let data = try? encoder.encode(params),
-       let dictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+      let dictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+    {
       return dictionary
     }
     return [:]
@@ -525,11 +544,14 @@ class RPCRoomViewController: UIViewController {
       return ([:], [:])
     }
     guard let data = text.data(using: .utf8) else {
-      throw NSError(domain: "RPC", code: 1, userInfo: [NSLocalizedDescriptionKey: "JSON の文字列が不正です。"])
+      throw NSError(
+        domain: "RPC", code: 1, userInfo: [NSLocalizedDescriptionKey: "JSON の文字列が不正です。"])
     }
     let object = try JSONSerialization.jsonObject(with: data, options: [])
     guard let dictionary = object as? [String: Any] else {
-      throw NSError(domain: "RPC", code: 2, userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
+      throw NSError(
+        domain: "RPC", code: 2,
+        userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
     }
     var mapped: [String: AnyCodable] = [:]
     for (key, value) in dictionary {
@@ -541,27 +563,35 @@ class RPCRoomViewController: UIViewController {
   private func parseMetadataItem() throws -> (String, Any, AnyCodable) {
     let text = metadataTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
     if text.isEmpty {
-      throw NSError(domain: "RPC", code: 4, userInfo: [NSLocalizedDescriptionKey: "key と value を JSON で指定してください。"])
+      throw NSError(
+        domain: "RPC", code: 4,
+        userInfo: [NSLocalizedDescriptionKey: "key と value を JSON で指定してください。"])
     }
     guard let data = text.data(using: .utf8) else {
-      throw NSError(domain: "RPC", code: 5, userInfo: [NSLocalizedDescriptionKey: "JSON の文字列が不正です。"])
+      throw NSError(
+        domain: "RPC", code: 5, userInfo: [NSLocalizedDescriptionKey: "JSON の文字列が不正です。"])
     }
     let object = try JSONSerialization.jsonObject(with: data, options: [])
     guard let dictionary = object as? [String: Any] else {
-      throw NSError(domain: "RPC", code: 6, userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
+      throw NSError(
+        domain: "RPC", code: 6,
+        userInfo: [NSLocalizedDescriptionKey: "metadata は JSON オブジェクトで指定してください。"])
     }
     guard let key = dictionary["key"] as? String, !key.isEmpty else {
-      throw NSError(domain: "RPC", code: 7, userInfo: [NSLocalizedDescriptionKey: "key は文字列で指定してください。"])
+      throw NSError(
+        domain: "RPC", code: 7, userInfo: [NSLocalizedDescriptionKey: "key は文字列で指定してください。"])
     }
     guard let valueAny = dictionary["value"] else {
-      throw NSError(domain: "RPC", code: 8, userInfo: [NSLocalizedDescriptionKey: "value を指定してください。"])
+      throw NSError(
+        domain: "RPC", code: 8, userInfo: [NSLocalizedDescriptionKey: "value を指定してください。"])
     }
     let valueJSON = AnyCodable(valueAny)
     return (key, valueAny, valueJSON)
   }
 
   private func handleDataChannelMessage(label: String, data: Data) {
-    let text = String(data: data, encoding: .utf8) ?? data.map(\.description).joined(separator: ", ")
+    let text =
+      String(data: data, encoding: .utf8) ?? data.map(\.description).joined(separator: ", ")
 
     if label == "push" {
       appendLog(direction: "recv", label: label, summary: "push", detail: text)
@@ -622,7 +652,8 @@ class RPCRoomViewController: UIViewController {
           return "r2"
         }
       }
-      self.simulcastRpcRidsLabel.text = simulcastRids.isEmpty ? "未取得" : simulcastRids.joined(separator: ", ")
+      self.simulcastRpcRidsLabel.text =
+        simulcastRids.isEmpty ? "未取得" : simulcastRids.joined(separator: ", ")
     }
   }
 
@@ -645,7 +676,7 @@ class RPCRoomViewController: UIViewController {
   private func rpcErrorDetailText(_ detail: RPCErrorDetail) -> String {
     var lines: [String] = [
       "code: \(detail.code)",
-      "message: \(detail.message)"
+      "message: \(detail.message)",
     ]
     if let data = detail.data {
       lines.append("data: \(stringifyJSON(data))")
@@ -667,7 +698,7 @@ class RPCRoomViewController: UIViewController {
     let payload: [String: Any] = [
       "jsonrpc": "2.0",
       "method": method,
-      "params": params
+      "params": params,
     ]
     guard JSONSerialization.isValidJSONObject(payload),
       let data = try? JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted]),
@@ -782,8 +813,10 @@ class RPCRoomViewController: UIViewController {
 
     sendRequestButton.setTitle("Send Request", for: .normal)
     sendNotificationButton.setTitle("Send Notification", for: .normal)
-    sendRequestButton.addTarget(self, action: #selector(onSendRequestButton(_:)), for: .touchUpInside)
-    sendNotificationButton.addTarget(self, action: #selector(onSendNotificationButton(_:)), for: .touchUpInside)
+    sendRequestButton.addTarget(
+      self, action: #selector(onSendRequestButton(_:)), for: .touchUpInside)
+    sendNotificationButton.addTarget(
+      self, action: #selector(onSendNotificationButton(_:)), for: .touchUpInside)
 
     let header = UIView()
     let stack = UIStackView()
@@ -821,14 +854,16 @@ class RPCRoomViewController: UIViewController {
     stack.addArrangedSubview(sendButtonsRow)
 
     stack.addArrangedSubview(labeledInfoRow(title: "rpc_methods", valueLabel: rpcMethodsLabel))
-    stack.addArrangedSubview(labeledInfoRow(title: "simulcast_rpc_rids", valueLabel: simulcastRpcRidsLabel))
+    stack.addArrangedSubview(
+      labeledInfoRow(title: "simulcast_rpc_rids", valueLabel: simulcastRpcRidsLabel))
 
     headerView = header
     historyTableView.tableHeaderView = header
 
     metadataTextView.heightAnchor.constraint(equalToConstant: 120).isActive = true
 
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapView(_:)))
+    let tapGestureRecognizer = UITapGestureRecognizer(
+      target: self, action: #selector(onTapView(_:)))
     view.addGestureRecognizer(tapGestureRecognizer)
   }
 
