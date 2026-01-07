@@ -134,7 +134,8 @@ final class CameraMuteController {
     flipButton?.isEnabled = state != .hardMuted
   }
 
-  // カメラミュート状態切り替えエラー時に、直前の状態に復帰させるための関数です
+  // カメラミュート状態切り替えエラー時に、直前の状態に復帰させるための関数です。
+  // capturer は「復帰後も生存させたい CameraVideoCapturer」を呼び出し側が渡します。
   func restoreState(
     to previousState: CameraMuteState,
     upstream: MediaStream,
@@ -144,13 +145,13 @@ final class CameraMuteController {
     switch previousState {
     case .recording:
       upstream.videoEnabled = true
-      cameraCapture = nil
     case .softMuted:
       upstream.videoEnabled = false
-      cameraCapture = nil
     case .hardMuted:
       upstream.videoEnabled = false
-      cameraCapture = capturer
     }
+    // 状態遷移の失敗でキャプチャが動作中のままになる可能性があるため、
+    // 呼び出し側が渡した参照があれば保持して生存期間を安定させます。
+    cameraCapture = capturer
   }
 }
