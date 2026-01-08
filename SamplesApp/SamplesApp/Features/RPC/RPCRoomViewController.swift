@@ -147,7 +147,6 @@ class RPCRoomViewController: UIViewController {
   private let pushSwitch = UISwitch()
   private let metadataTextView = UITextView()
   private let rpcMethodsLabel = UILabel()
-  private let simulcastRpcRidsLabel = UILabel()
   private let sendRequestButton = UIButton(type: .system)
   private let sendNotificationButton = UIButton(type: .system)
   private var headerView: UIView?
@@ -183,7 +182,6 @@ class RPCRoomViewController: UIViewController {
     updateMethodUI()
 
     rpcMethodsLabel.text = "未取得"
-    simulcastRpcRidsLabel.text = "未取得"
     resolutionLabel.text = "Resolution: -"
     metadataTextView.text = ""
   }
@@ -520,48 +518,12 @@ class RPCRoomViewController: UIViewController {
         self.rpcMethodsLabel.text = "未取得"
       }
     }
-
-    if let simulcastRpcRids = offer.simulcastRpcRids, !simulcastRpcRids.isEmpty {
-      let ridStrings = simulcastRpcRids.map { rid in
-        switch rid {
-        case .none:
-          return "none"
-        case .r0:
-          return "r0"
-        case .r1:
-          return "r1"
-        case .r2:
-          return "r2"
-        }
-      }
-      DispatchQueue.main.async {
-        self.simulcastRpcRidsLabel.text = ridStrings.joined(separator: ", ")
-      }
-    } else {
-      DispatchQueue.main.async {
-        self.simulcastRpcRidsLabel.text = "未取得"
-      }
-    }
   }
 
   private func updateRPCMethods(using mediaChannel: MediaChannel) {
     let methods = mediaChannel.rpcMethods.map(\.displayName)
     DispatchQueue.main.async {
       self.rpcMethodsLabel.text = methods.isEmpty ? "未取得" : methods.joined(separator: ", ")
-      let simulcastRids = mediaChannel.rpcSimulcastRids.map { rid in
-        switch rid {
-        case .none:
-          return "none"
-        case .r0:
-          return "r0"
-        case .r1:
-          return "r1"
-        case .r2:
-          return "r2"
-        }
-      }
-      self.simulcastRpcRidsLabel.text =
-        simulcastRids.isEmpty ? "未取得" : simulcastRids.joined(separator: ", ")
     }
   }
 
@@ -716,9 +678,6 @@ class RPCRoomViewController: UIViewController {
     rpcMethodsLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
     rpcMethodsLabel.numberOfLines = 0
 
-    simulcastRpcRidsLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
-    simulcastRpcRidsLabel.numberOfLines = 0
-
     sendRequestButton.setTitle("Send Request", for: .normal)
     sendNotificationButton.setTitle("Send Notification", for: .normal)
     sendRequestButton.addTarget(
@@ -762,8 +721,6 @@ class RPCRoomViewController: UIViewController {
     stack.addArrangedSubview(sendButtonsRow)
 
     stack.addArrangedSubview(labeledInfoRow(title: "rpc_methods", valueLabel: rpcMethodsLabel))
-    stack.addArrangedSubview(
-      labeledInfoRow(title: "simulcast_rpc_rids", valueLabel: simulcastRpcRidsLabel))
 
     headerView = header
     historyTableView.tableHeaderView = header
