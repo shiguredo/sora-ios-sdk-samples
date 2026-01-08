@@ -135,24 +135,48 @@ private final class ResolutionVideoView: UIView, VideoRenderer {
 /// RPC の送受信画面です。
 class RPCRoomViewController: UIViewController {
   private let metadataTextViewHeight: CGFloat = 120
+  private var isAudioSoftMuted: Bool = false
 
   @IBOutlet weak var historyTableView: UITableView!
   @IBOutlet weak var memberListView: UIView!
   @IBOutlet weak var resolutionLabel: UILabel!
+  @IBOutlet weak var micMuteButton: UIBarButtonItem?
   private let connectedUrlLabel = UILabel()
   private let channelIdLabel = UILabel()
   private let methodButton = UIButton(type: .system)
   private let simulcastRidSegmentedControl = UISegmentedControl(items: ["none", "r0", "r1", "r2"])
+  private let spotlightFocusRidSegmentedControl = UISegmentedControl(items: [
+    "none", "r0", "r1", "r2",
+  ])
+  private let spotlightUnfocusRidSegmentedControl = UISegmentedControl(items: [
+    "none", "r0", "r1", "r2",
+  ])
   private let senderConnectionIdTextField = UITextField()
   private let pushSwitch = UISwitch()
   private let metadataTextView = UITextView()
+  private let metadataItemKeyTextField = UITextField()
+  private let metadataItemValueTextView = UITextView()
   private let rpcMethodsLabel = UILabel()
   private let sendRequestButton = UIButton(type: .system)
   private let sendNotificationButton = UIButton(type: .system)
   private var headerView: UIView?
   private var simulcastRowView: UIView?
+  private var spotlightFocusRowView: UIView?
+  private var spotlightUnfocusRowView: UIView?
   private var pushRowView: UIView?
+  private var metadataItemKeyRowView: UIView?
+  private var metadataItemValueRowView: UIView?
   private var downstreamVideoView: ResolutionVideoView?
+
+  private let metadataPresset = """
+    {
+      "example_key": "example_value"
+    }
+    """
+
+  private let metadataItemValuePresset = """
+    {"example":"value"}
+    """
 
   private let availableMethods: [RPCMethod] = [
     .requestSimulcastRid,
@@ -270,6 +294,15 @@ class RPCRoomViewController: UIViewController {
     sendRPC(isNotification: true)
   }
 
+  @IBAction private func onMicMuteButton(_ sender: Any?) {
+    guard let mediaChannel = RPCSoraSDKManager.shared.currentMediaChannel else {
+      return
+    }
+    isAudioSoftMuted.toggle()
+    mediaChannel.setAudioSoftMute(isAudioSoftMuted)
+    updateMicButtonTitle()
+  }
+
   @objc private func onTapView(_ sender: UITapGestureRecognizer) {
     senderConnectionIdTextField.endEditing(true)
     metadataTextView.endEditing(true)
@@ -289,7 +322,11 @@ class RPCRoomViewController: UIViewController {
 
   private func updateMethodUI() {
     simulcastRowView?.isHidden =
-      !(selectedMethod == .requestSimulcastRid || selectedMethod == .requestSpotlightRid)
+      !(selectedMethod == .requestSimulcastRid)
+    spotlightFocusRowView?.isHidden =
+      !(selectedMethod == .requestSpotlightRid)
+    spotlightUnfocusRowView?.isHidden =
+      !(selectedMethod == .requestSpotlightRid)
     senderConnectionIdTextField.isHidden =
       !(selectedMethod == .requestSimulcastRid
       || selectedMethod == .requestSpotlightRid
@@ -298,10 +335,30 @@ class RPCRoomViewController: UIViewController {
       !(selectedMethod == .putSignalingNotifyMetadata
       || selectedMethod == .putSignalingNotifyMetadataItem)
     metadataTextView.isHidden =
-      !(selectedMethod == .putSignalingNotifyMetadata
-      || selectedMethod == .putSignalingNotifyMetadataItem)
+      !(selectedMethod == .putSignalingNotifyMetadata)
+    metadataItemKeyRowView?.isHidden =
+      !(selectedMethod == .putSignalingNotifyMetadataItem)
+    metadataItemValueRowView?.isHidden =
+      !(selectedMethod == .putSignalingNotifyMetadataItem)
+
+    // PutSignalingNotifyMetadata 選択時はプリセット JSON を入力
+    if selectedMethod == .putSignalingNotifyMetadata {
+      metadataTextView.text = metadataPresset.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    // PutSignalingNotifyMetadataItem 選択時は key フィールドをクリア、プリセット JSON を入力
+    if selectedMethod == .putSignalingNotifyMetadataItem {
+      metadataItemKeyTextField.text = ""
+      metadataItemValueTextView.text = metadataItemValuePresset.trimmingCharacters(
+        in: .whitespacesAndNewlines)
+    }
+
     methodButton.setTitle(selectedMethod.displayName, for: .normal)
     setupMethodMenu()
+  }
+
+  private func updateMicButtonTitle() {
+    micMuteButton?.title = isAudioSoftMuted ? "Mic Off" : "Mic"
   }
 
   private func sendRPC(isNotification: Bool) {
@@ -328,8 +385,8 @@ class RPCRoomViewController: UIViewController {
         case .requestSpotlightRid:
           let params = RequestSpotlightRidParams(
             sendConnectionId: trimmedSenderConnectionId(),
-            spotlightFocusRid: selectedSimulcastRid(),
-            spotlightUnfocusRid: .none
+            spotlightFocusRid: selectedSpotlightFocusRid(),
+            spotlightUnfocusRid: selectedSpotlightUnfocusRid()
           )
           try await sendRPCAndLog(
             mediaChannel: mediaChannel,
@@ -366,10 +423,10 @@ class RPCRoomViewController: UIViewController {
           )
 
         case .putSignalingNotifyMetadataItem:
-          let (key, _, value) = try parseMetadataItem()
+          let (key, _, valueJSON) = try parseMetadataItem()
           let params = PutSignalingNotifyMetadataItemParams<AnyCodable>(
             key: key,
-            value: AnyCodable(value),
+            value: valueJSON,
             push: pushSwitch.isOn ? true : nil
           )
           try await sendRPCAndLog(
@@ -433,6 +490,18 @@ class RPCRoomViewController: UIViewController {
     return rids.indices.contains(index) ? rids[index] : "none"
   }
 
+  private func selectedSpotlightFocusRid() -> Rid {
+    let index = spotlightFocusRidSegmentedControl.selectedSegmentIndex
+    let rids: [Rid] = [.none, .r0, .r1, .r2]
+    return rids.indices.contains(index) ? rids[index] : .none
+  }
+
+  private func selectedSpotlightUnfocusRid() -> Rid {
+    let index = spotlightUnfocusRidSegmentedControl.selectedSegmentIndex
+    let rids: [Rid] = [.none, .r0, .r1, .r2]
+    return rids.indices.contains(index) ? rids[index] : .none
+  }
+
   private func trimmedSenderConnectionId() -> String? {
     guard
       let text = senderConnectionIdTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -474,23 +543,21 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func parseMetadataItem() throws -> (String, Any, AnyCodable) {
-    let text = metadataTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-    if text.isEmpty {
-      throw RPCError.emptyMetadataItem
-    }
-    guard let data = text.data(using: .utf8) else {
-      throw RPCError.invalidJsonForItem
-    }
-    let object = try JSONSerialization.jsonObject(with: data, options: [])
-    guard let dictionary = object as? [String: Any] else {
-      throw RPCError.metadataItemNotJsonObject
-    }
-    guard let key = dictionary["key"] as? String, !key.isEmpty else {
+    let key = metadataItemKeyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    let valueText = metadataItemValueTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+    if key.isEmpty {
       throw RPCError.invalidMetadataKey
     }
-    guard let valueAny = dictionary["value"] else {
+    if valueText.isEmpty {
       throw RPCError.missingMetadataValue
     }
+
+    guard let data = valueText.data(using: .utf8) else {
+      throw RPCError.invalidJsonForItem
+    }
+
+    let valueAny = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
     let valueJSON = AnyCodable(valueAny)
     return (key, valueAny, valueJSON)
   }
@@ -675,6 +742,15 @@ class RPCRoomViewController: UIViewController {
     metadataTextView.font = UIFont.preferredFont(forTextStyle: .body)
     metadataTextView.isScrollEnabled = false
 
+    metadataItemKeyTextField.borderStyle = .roundedRect
+    metadataItemKeyTextField.placeholder = "key"
+
+    metadataItemValueTextView.layer.borderColor = UIColor.separator.cgColor
+    metadataItemValueTextView.layer.borderWidth = 1
+    metadataItemValueTextView.layer.cornerRadius = 6
+    metadataItemValueTextView.font = UIFont.preferredFont(forTextStyle: .body)
+    metadataItemValueTextView.isScrollEnabled = false
+
     rpcMethodsLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
     rpcMethodsLabel.numberOfLines = 0
 
@@ -707,12 +783,37 @@ class RPCRoomViewController: UIViewController {
     let simulcastRow = labeledRow(title: "rid", control: simulcastRidSegmentedControl)
     simulcastRowView = simulcastRow
     stack.addArrangedSubview(simulcastRow)
+
+    let spotlightFocusRow = labeledRow(
+      title: "focus_rid", control: spotlightFocusRidSegmentedControl)
+    spotlightFocusRowView = spotlightFocusRow
+    stack.addArrangedSubview(spotlightFocusRow)
+
+    let spotlightUnfocusRow = labeledRow(
+      title: "unfocus_rid", control: spotlightUnfocusRidSegmentedControl)
+    spotlightUnfocusRowView = spotlightUnfocusRow
+    stack.addArrangedSubview(spotlightUnfocusRow)
+
     stack.addArrangedSubview(senderConnectionIdTextField)
 
     let pushRow = labeledRow(title: "push", control: pushSwitch)
     pushRowView = pushRow
     stack.addArrangedSubview(pushRow)
     stack.addArrangedSubview(metadataTextView)
+
+    let metadataItemKeyRow = labeledRow(title: "key", control: metadataItemKeyTextField)
+    metadataItemKeyRowView = metadataItemKeyRow
+    stack.addArrangedSubview(metadataItemKeyRow)
+
+    let metadataItemValueLabel = UILabel()
+    metadataItemValueLabel.text = "value"
+    let metadataItemValueContainer = UIStackView(arrangedSubviews: [
+      metadataItemValueLabel, metadataItemValueTextView,
+    ])
+    metadataItemValueContainer.axis = .vertical
+    metadataItemValueContainer.spacing = 4
+    metadataItemValueRowView = metadataItemValueContainer
+    stack.addArrangedSubview(metadataItemValueContainer)
 
     let sendButtonsRow = UIStackView(arrangedSubviews: [sendRequestButton, sendNotificationButton])
     sendButtonsRow.axis = .horizontal
@@ -726,6 +827,10 @@ class RPCRoomViewController: UIViewController {
     historyTableView.tableHeaderView = header
 
     metadataTextView.heightAnchor.constraint(equalToConstant: metadataTextViewHeight).isActive =
+      true
+
+    metadataItemValueTextView.heightAnchor.constraint(equalToConstant: metadataTextViewHeight)
+      .isActive =
       true
 
     let tapGestureRecognizer = UITapGestureRecognizer(

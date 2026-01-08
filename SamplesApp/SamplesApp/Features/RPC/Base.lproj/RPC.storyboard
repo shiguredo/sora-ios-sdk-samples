@@ -584,6 +584,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="RPC" id="RPC-ROOM-Navigation">
+                        <barButtonItem key="rightBarButtonItem" title="Mic" id="RPC-ROOM-MicMuteButton">
+                            <connections>
+                                <action selector="onMicMuteButton:" destination="RPC-ROOM-1" id="RPC-ROOM-MicMuteAction"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="leftBarButtonItem" systemItem="stop" id="RPC-ROOM-ExitButton">
                             <connections>
                                 <action selector="onExitButton:" destination="RPC-ROOM-1" id="RPC-ROOM-ExitAction"/>
@@ -593,6 +598,7 @@
                     <connections>
                         <outlet property="historyTableView" destination="RPC-ROOM-Table" id="RPC-ROOM-Outlet-History"/>
                         <outlet property="memberListView" destination="RPC-ROOM-VideoContainer" id="RPC-ROOM-Outlet-MemberList"/>
+                        <outlet property="micMuteButton" destination="RPC-ROOM-MicMuteButton" id="RPC-ROOM-Outlet-MicMute"/>
                         <outlet property="resolutionLabel" destination="RPC-ROOM-ResolutionLabel" id="RPC-ROOM-Outlet-Resolution"/>
                         <segue destination="RPC-ROOM-Exit" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="RPC-ROOM-Unwind"/>
                     </connections>
