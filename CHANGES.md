@@ -55,6 +55,13 @@
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
   - カメラは黒塗りフレーム、マイクは無音フレームを送信するソフトミュート
   - @t-miya
+- [ADD] RPC サンプルを追加する
+  - Sora SDK の RPC 機能を実装・利用するためのサンプルアプリケーション
+  - @zztkm
+- [ADD] 共有ユーティリティ AnyCodable を追加する
+  - Any 型の値をエンコード・デコード可能にするラッパー型
+  - JSON の動的なデータ構造をハンドルする際に使用
+  - @zztkm
 
 ### misc
 
