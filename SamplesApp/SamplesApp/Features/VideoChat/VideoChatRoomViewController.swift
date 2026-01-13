@@ -409,7 +409,8 @@ extension VideoChatRoomViewController {
         } catch {
           await MainActor.run {
             self.isCameraMuteOperationInProgress = false
-            logger.warning("[sample] Failed to hard mute video: \(error.localizedDescription)")
+            logger.warning("[sample] Failed to unhard mute video: \(error.localizedDescription)")
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
