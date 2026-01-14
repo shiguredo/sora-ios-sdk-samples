@@ -69,6 +69,7 @@ class SpotlightConfigViewController: UITableViewController {
       return
     }
     isConnecting = true
+    let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
@@ -82,7 +83,6 @@ class SpotlightConfigViewController: UITableViewController {
       simulcast: selectedSimulcast(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
-      startCameraEnabled: cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0,
       videoBitRate: videoBitRatePickerCell.selectedBitRate
     ) { [weak self] error in
       guard let self = self else { return }
@@ -112,6 +112,28 @@ class SpotlightConfigViewController: UITableViewController {
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
         DispatchQueue.main.async {
+          if !startCameraEnabled,
+            let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel
+          {
+            if let error = mediaChannel.setVideoSoftMute(true) {
+              logger.warning("[sample] Failed to soft mute video: \(error.localizedDescription)")
+            }
+            Task { [weak self] in
+              do {
+                try await mediaChannel.setVideoHardMute(true)
+              } catch {
+                logger.warning(
+                  "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
+              }
+              await MainActor.run {
+                guard let self else { return }
+                // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+                self.performSegue(withIdentifier: "Connect", sender: self)
+              }
+            }
+            return
+          }
+
           // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
           self.performSegue(withIdentifier: "Connect", sender: self)
         }

@@ -329,7 +329,7 @@ extension VideoChatRoomViewController {
       applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel, upstream: upstream)
 
       let toMuteState: CameraMuteState
-      if cameraMuteState == .hardMuted || (!isStartCameraEnabled && didApplyInitialCameraState) {
+      if cameraMuteState == .hardMuted {
         toMuteState = .hardMuted
       } else if upstream.videoEnabled {
         toMuteState = .recording
@@ -422,30 +422,26 @@ extension VideoChatRoomViewController {
       // ソフトミュート -> ハードミュート
       // ハードミュートでも失敗時の不意の映像送出を防ぐため videoEnabled=false にします
       _ = mediaChannel.setVideoSoftMute(true)
-      guard let capturer = CameraVideoCapturer.current else {
-        cameraMuteController.updateButton(to: nextState)
-        cameraCapture = nil
-        return
-      }
-      cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      Task { [weak self, weak upstream] in
-        guard let self, let upstream else { return }
+      cameraMuteController.updateButton(to: nextState)
+      cameraCapture = nil
+      Task { [weak self] in
         do {
           try await mediaChannel.setVideoHardMute(true)
           await MainActor.run {
+            guard let self else { return }
             self.isCameraMuteOperationInProgress = false
             self.cameraMuteController.updateButton(to: .hardMuted)
           }
         } catch {
           await MainActor.run {
+            guard let self else { return }
             self.isCameraMuteOperationInProgress = false
             logger.warning("[sample] Failed to hard mute video: \(error.localizedDescription)")
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: capturer
-            )
+            if previousState == .recording {
+              _ = mediaChannel.setVideoSoftMute(false)
+            }
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }

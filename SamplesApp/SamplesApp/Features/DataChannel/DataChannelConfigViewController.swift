@@ -96,6 +96,11 @@ class DataChannelConfigViewController: UITableViewController {
     }
     isConnecting = true
 
+    let shouldEnableCameraOnConnect = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    let role = selectedRole()
+    let shouldApplyInitialVideoHardMute =
+      !shouldEnableCameraOnConnect && videoEnabledSwitch.isOn && role != .recvonly
+
     DataChannelSoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
     let configuration = makeConfiguration(channelId: channelId)
 
@@ -119,6 +124,27 @@ class DataChannelConfigViewController: UITableViewController {
 
       logger.warning("DataChannelSoraSDKManager connected.")
       DispatchQueue.main.async {
+        if shouldApplyInitialVideoHardMute,
+          let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel
+        {
+          if let error = mediaChannel.setVideoSoftMute(true) {
+            logger.warning("[sample] Failed to soft mute video: \(error.localizedDescription)")
+          }
+          Task { [weak self] in
+            do {
+              try await mediaChannel.setVideoHardMute(true)
+            } catch {
+              logger.warning(
+                "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
+            }
+            await MainActor.run {
+              guard let self else { return }
+              self.performSegue(withIdentifier: "Connect", sender: self)
+            }
+          }
+          return
+        }
+
         self.performSegue(withIdentifier: "Connect", sender: self)
       }
     }
@@ -190,9 +216,9 @@ class DataChannelConfigViewController: UITableViewController {
     )
 
     // 開始時カメラ有効の入力値を configuration に渡します
-    let shouldEnableCameraOnConnect =
-      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
-    configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
+    // MediaChannel.setVideoHardMute を利用するため、cameraSettings.isEnabled は常に true にします。
+    // 「接続時カメラ有効」が無効の場合は、接続直後に映像をハードミュートして開始します。
+    configuration.cameraSettings.isEnabled = true
 
     return configuration
   }
