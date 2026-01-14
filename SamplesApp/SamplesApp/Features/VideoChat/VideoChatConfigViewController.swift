@@ -187,7 +187,8 @@ class VideoChatConfigViewController: UITableViewController {
               do {
                 try await mediaChannel.setVideoHardMute(true)
               } catch {
-                logger.warning("[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
+                logger.warning(
+                  "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
               }
               await MainActor.run {
                 guard let self else { return }

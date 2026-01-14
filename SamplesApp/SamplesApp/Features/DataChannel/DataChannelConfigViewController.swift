@@ -96,7 +96,8 @@ class DataChannelConfigViewController: UITableViewController {
     }
     isConnecting = true
 
-    let shouldEnableCameraOnConnect = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    let shouldEnableCameraOnConnect =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
     let role = selectedRole()
     let shouldApplyInitialVideoHardMute =
       !shouldEnableCameraOnConnect && videoEnabledSwitch.isOn && role != .recvonly
