@@ -59,6 +59,7 @@ class SimulcastConfigViewController: UITableViewController {
       return
     }
     isConnecting = true
+    // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
     let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     // 入力された設定を元にSoraへ接続を行います。
@@ -105,6 +106,8 @@ class SimulcastConfigViewController: UITableViewController {
             if let error = mediaChannel.setVideoSoftMute(true) {
               logger.warning("[sample] Failed to soft mute video: \(error.localizedDescription)")
             }
+            // 映像ハードミュートを有効にします
+            // setVideoHardMute は async メソッドのため Task 内で実行します
             Task { [weak self] in
               do {
                 try await mediaChannel.setVideoHardMute(true)
@@ -112,6 +115,9 @@ class SimulcastConfigViewController: UITableViewController {
                 logger.warning(
                   "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
               }
+              // 配信画面に遷移します
+              // 処理順をハードミュート処理の後にするために Task 内で await して実行します
+              // また UI 操作のため MainActor(メインスレッド) で実行します
               await MainActor.run {
                 guard let self else { return }
                 // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。

@@ -96,15 +96,13 @@ class DataChannelConfigViewController: UITableViewController {
     }
     isConnecting = true
 
-    let shouldEnableCameraOnConnect =
-      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
-    let role = selectedRole()
-    let shouldApplyInitialVideoHardMute =
-      !shouldEnableCameraOnConnect && videoEnabledSwitch.isOn && role != .recvonly
+    // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
+    let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     DataChannelSoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
     let configuration = makeConfiguration(channelId: channelId)
 
+    // Sora 接続処理を実行し、配信画面に遷移します
     DataChannelSoraSDKManager.shared.connect(with: configuration) { [weak self] error in
       guard let self = self else { return }
       self.isConnecting = false
@@ -125,12 +123,11 @@ class DataChannelConfigViewController: UITableViewController {
 
       logger.warning("DataChannelSoraSDKManager connected.")
       DispatchQueue.main.async {
-        if shouldApplyInitialVideoHardMute,
+        if !startCameraEnabled,
           let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel
         {
-          if let error = mediaChannel.setVideoSoftMute(true) {
-            logger.warning("[sample] Failed to soft mute video: \(error.localizedDescription)")
-          }
+          // 映像ハードミュートを有効にします
+          // setVideoHardMute は async メソッドのため Task 内で実行します
           Task { [weak self] in
             do {
               try await mediaChannel.setVideoHardMute(true)
@@ -138,6 +135,9 @@ class DataChannelConfigViewController: UITableViewController {
               logger.warning(
                 "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
             }
+            // 配信画面に遷移します
+            // 処理順をハードミュート処理の後にするために Task 内で await して実行します
+            // また UI 操作のため MainActor(メインスレッド) で実行します
             await MainActor.run {
               guard let self else { return }
               self.performSegue(withIdentifier: "Connect", sender: self)
