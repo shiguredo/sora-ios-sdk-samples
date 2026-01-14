@@ -370,7 +370,8 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
-    // 映像ハードミュートは内部的に videoEnabled が切り替わるため、このコールバックが来ても UI は維持する
+    // 映像ハードミュートは内部的にソフトミュート実行しており videoEnabled が切り替わるため、
+    // このコールバックが来ても UI は維持します
     guard cameraMuteState != .hardMuted else { return }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     cameraMuteController.updateButton(to: nextState)

@@ -372,7 +372,8 @@ extension VideoChatRoomViewController {
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
-    // 映像ハードミュートは内部的に videoEnabled が切り替わるため、このコールバックが来ても UI は維持する
+    // 映像ハードミュートは内部的にソフトミュート実行しており videoEnabled が切り替わるため、
+    // このコールバックが来ても UI は維持します
     guard cameraMuteState != .hardMuted else { return }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     cameraMuteController.updateButton(to: nextState)
@@ -390,6 +391,7 @@ extension VideoChatRoomViewController {
 
     switch nextState {
     case .recording:
+      // 映像 ON
       guard previousState == .hardMuted else {
         cameraMuteController.updateButton(to: nextState)
         _ = mediaChannel.setVideoSoftMute(false)
@@ -397,16 +399,19 @@ extension VideoChatRoomViewController {
         return
       }
       isCameraMuteOperationInProgress = true
+      // setVideoHardMute は async メソッドのため Task 内で実行します
       Task { [weak self, weak upstream] in
         guard let self, let upstream else { return }
         do {
           try await mediaChannel.setVideoHardMute(false)
+          // UI の処理は MainActor (メインスレッド)で実行します
           await MainActor.run {
             self.isCameraMuteOperationInProgress = false
             self.cameraCapture = nil
             self.cameraMuteController.updateButton(to: .recording)
           }
         } catch {
+          // エラー時は UI を巻き戻します
           await MainActor.run {
             self.isCameraMuteOperationInProgress = false
             logger.warning("[sample] Failed to unhard mute video: \(error.localizedDescription)")
@@ -415,25 +420,26 @@ extension VideoChatRoomViewController {
         }
       }
     case .softMuted:
-      // ON -> ソフトミュート
+      // ソフトミュート
       _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: nextState)
     case .hardMuted:
-      // ソフトミュート -> ハードミュート
-      // ハードミュートでも失敗時の不意の映像送出を防ぐため videoEnabled=false にします
-      _ = mediaChannel.setVideoSoftMute(true)
+      // ハードミュート
       isCameraMuteOperationInProgress = true
       cameraMuteController.updateButton(to: nextState)
       cameraCapture = nil
+      // setVideoHardMute は async メソッドのため Task 内で実行します
       Task { [weak self] in
         do {
           try await mediaChannel.setVideoHardMute(true)
+          // UI の処理は MainActor (メインスレッド)で実行します
           await MainActor.run {
             guard let self else { return }
             self.isCameraMuteOperationInProgress = false
             self.cameraMuteController.updateButton(to: .hardMuted)
           }
         } catch {
+          // エラー時は UI を巻き戻します
           await MainActor.run {
             guard let self else { return }
             self.isCameraMuteOperationInProgress = false
