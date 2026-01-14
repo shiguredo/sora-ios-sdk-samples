@@ -389,6 +389,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
     switch nextState {
     case .recording:
+      // 映像 ON
       guard previousState == .hardMuted else {
         cameraMuteController.updateButton(to: nextState)
         _ = mediaChannel.setVideoSoftMute(false)
@@ -396,6 +397,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
         return
       }
       isCameraMuteOperationInProgress = true
+      // setVideoHardMute は async メソッドのため Task 内で実行します
       Task { [weak self] in
         do {
           try await mediaChannel.setVideoHardMute(false)
@@ -406,6 +408,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
             self.cameraMuteController.updateButton(to: .recording)
           }
         } catch {
+          // エラー時は UI を巻き戻します
           await MainActor.run {
             guard let self else { return }
             self.isCameraMuteOperationInProgress = false
@@ -415,13 +418,16 @@ class DataChannelVideoChatRoomViewController: UIViewController {
         }
       }
     case .softMuted:
+      // ソフトミュート
       _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: nextState)
     case .hardMuted:
+      // ハードミュート
       isCameraMuteOperationInProgress = true
       _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: .hardMuted)
       cameraCapture = nil
+      // setVideoHardMute は async メソッドのため Task 内で実行します
       Task { [weak self] in
         do {
           try await mediaChannel.setVideoHardMute(true)
@@ -431,6 +437,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
             self.cameraMuteController.updateButton(to: .hardMuted)
           }
         } catch {
+          // エラー時は UI を巻き戻します
           await MainActor.run {
             guard let self else { return }
             self.isCameraMuteOperationInProgress = false
