@@ -18,6 +18,9 @@
 - [CHANGE] SimulcastSample の設定値である SimulcastRid を SimulcastRequestRid に移行する
   - これによりシステム条件の WebRTC SFU Sora のバージョンが 2025.2.0 以降になる
   - @zztkm
+- [UPDATE] 各サンプル個別の SoraSDKManager を統合する
+  - DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat それぞれの XXSoraSDKManager を廃止し、 Shared/SoraSDKManager を利用するようにする
+  - @t-miya
 - [UPDATE] 映像ハードミュートを MediaChannel.setVideoHardMute(Bool) 利用で実行するようにする
   - DataChannel、Simulcast、Spotlight、VideoChat それぞれの映像ハードミュート処理に適用する
   - `接続時カメラ有効` 設定を無効で開始した際の映像ハードミュートも MediaChannel.setVideoHardMute(Bool) を利用する

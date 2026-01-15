@@ -83,7 +83,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     super.viewWillAppear(animated)
 
     // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
-    if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = "チャット中: \(mediaChannel.configuration.channelId)"
     }
   }
@@ -93,7 +93,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
-    if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
         logger.info("[sample] mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
@@ -133,7 +133,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     super.viewWillDisappear(animated)
 
     // viewDidAppearで設定したコールバックを、対になるここで削除します。
-    if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
       mediaChannel.handlers.onDisconnect = nil
@@ -270,7 +270,7 @@ extension SpotlightVideoChatRoomViewController {
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
-    guard let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       mediaChannel.streams != nil
     else {
       return
@@ -467,7 +467,7 @@ extension SpotlightVideoChatRoomViewController {
     cameraCapture = nil
     isCameraMuteOperationInProgress = false
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    SpotlightSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
     performSegue(withIdentifier: "Exit", sender: self)
   }
@@ -496,7 +496,7 @@ extension SpotlightVideoChatRoomViewController {
 
   /// カメラミュートボタンを押したときの挙動を定義します。
   @IBAction func onCameraMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let upstream = mediaChannel.senderStream
     else {
       return
@@ -508,7 +508,7 @@ extension SpotlightVideoChatRoomViewController {
 
   /// マイクミュートボタンを押したときの挙動を定義します。
   @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
     audioMuteController.toggle(using: mediaChannel)

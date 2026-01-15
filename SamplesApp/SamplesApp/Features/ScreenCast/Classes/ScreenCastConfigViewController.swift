@@ -57,11 +57,12 @@ class ScreenCastConfigViewController: UITableViewController {
     // この画面からは配信側に接続を行うため、role引数には .publisher を指定しています。
     // また今回のサンプルアプリでは、デフォルトのカメラ映像のキャプチャではなく、ReplayKit経由で取得したスクリーンキャストを使用したいため、
     // videoCapturerOptionをカスタムに設定しておきます。
-    ScreenCastSoraSDKManager.shared.connect(
+    let configuration = ScreenCastEnvironment.makeConfiguration(
       channelId: channelId,
       role: .sendonly,
       videoCodec: videoCodec
-    ) { [weak self] error in
+    )
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       // 接続処理が終了したので false にします。
       self?.isConnecting = false
 
@@ -70,7 +71,7 @@ class ScreenCastConfigViewController: UITableViewController {
         // この場合は、エラー表示をユーザーに返すのが親切です。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        logger.warning("[sample] ScreenCastSoraSDKManager connection error: \(error)")
+        logger.warning("[sample] SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -82,7 +83,7 @@ class ScreenCastConfigViewController: UITableViewController {
         }
       } else {
         // errorがnilの場合は、接続に成功しています。
-        logger.info("[sample] ScreenCastSoraSDKManager connected.")
+        logger.info("[sample] SoraSDKManager connected.")
 
         // 接続が完了したので、ゲーム画面に戻ります。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
