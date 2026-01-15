@@ -92,6 +92,9 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   /// 接続開始時にカメラを有効にするかどうか。設定画面から渡されます。
   var isStartCameraEnabled: Bool = true
 
+  /// ランダムなバイナリを送信するかどうか。設定画面から渡されます。
+  var isRandomBinaryEnabled: Bool = false
+
   // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
   private var didApplyInitialCameraState = false
 
@@ -168,7 +171,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
       // ランダムなバイナリを送信するように指定されていたら
       // テキストフィールドを入力不可にし、バイナリを生成します。
-      if SoraSDKManager.shared.dataChannelRandomBinary {
+      if isRandomBinaryEnabled {
         chatMessageToSendTextField.isEnabled = false
         generateRandomBinary()
       } else {
@@ -663,7 +666,7 @@ extension DataChannelVideoChatRoomViewController {
 
     // メッセージを送信します。
     let data: Data
-    if SoraSDKManager.shared.dataChannelRandomBinary {
+    if isRandomBinaryEnabled {
       guard let binary = binaryToSend else {
         return
       }
@@ -680,7 +683,7 @@ extension DataChannelVideoChatRoomViewController {
       return
     }
 
-    if SoraSDKManager.shared.dataChannelRandomBinary {
+    if isRandomBinaryEnabled {
       generateRandomBinary()
     } else {
       chatMessageToSendTextField.text = nil

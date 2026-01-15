@@ -99,7 +99,6 @@ class DataChannelConfigViewController: UITableViewController {
     // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
     let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
-    SoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
     let configuration = makeConfiguration(channelId: channelId)
 
     // Sora 接続処理を実行し、配信画面に遷移します
@@ -308,5 +307,6 @@ class DataChannelConfigViewController: UITableViewController {
     // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
     roomViewController.isStartCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    roomViewController.isRandomBinaryEnabled = dataChannelRandomBinarySwitch.isOn
   }
 }

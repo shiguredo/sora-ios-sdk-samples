@@ -8,9 +8,6 @@ private let logger = SamplesLogger.tagged("SoraSDKManager")
 final class SoraSDKManager {
   static let shared = SoraSDKManager()
 
-  /// DataChannel サンプルでランダムバイナリを送るかどうか。
-  var dataChannelRandomBinary: Bool = false
-
   /// 現在接続中の Sora SDK の MediaChannel です。
   private(set) var currentMediaChannel: MediaChannel?
 
