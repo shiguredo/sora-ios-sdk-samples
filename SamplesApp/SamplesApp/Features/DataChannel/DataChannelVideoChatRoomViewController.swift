@@ -127,7 +127,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     super.viewWillAppear(animated)
 
     // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
-    if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = mediaChannel.configuration.channelId
       connectedUrlLabel.text = mediaChannel.connectedUrl?.absoluteString
 
@@ -168,7 +168,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
       // ランダムなバイナリを送信するように指定されていたら
       // テキストフィールドを入力不可にし、バイナリを生成します。
-      if DataChannelSoraSDKManager.shared.dataChannelRandomBinary {
+      if SoraSDKManager.shared.dataChannelRandomBinary {
         chatMessageToSendTextField.isEnabled = false
         generateRandomBinary()
       } else {
@@ -211,7 +211,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
-    if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
         logger.info("mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
@@ -237,7 +237,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     super.viewWillDisappear(animated)
 
     // viewDidAppearで設定したコールバックを、対になるここで削除します。
-    if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
     }
@@ -473,7 +473,7 @@ extension DataChannelVideoChatRoomViewController {
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       mediaChannel.streams != nil
     else {
       return
@@ -592,7 +592,7 @@ extension DataChannelVideoChatRoomViewController {
     cameraCapture = nil
     isCameraMuteOperationInProgress = false
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    DataChannelSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
     performSegue(withIdentifier: "Exit", sender: self)
   }
@@ -621,7 +621,7 @@ extension DataChannelVideoChatRoomViewController {
 
   /// カメラミュートボタンを押したときの挙動を定義します。
   @IBAction func onCameraMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let upstream = mediaChannel.senderStream
     else {
       return
@@ -633,7 +633,7 @@ extension DataChannelVideoChatRoomViewController {
 
   /// マイクミュートボタンを押したときの挙動を定義します。
   @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
     audioMuteController.toggle(using: mediaChannel)
@@ -657,13 +657,13 @@ extension DataChannelVideoChatRoomViewController {
     guard let label = selectedLabel else {
       return
     }
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
 
     // メッセージを送信します。
     let data: Data
-    if DataChannelSoraSDKManager.shared.dataChannelRandomBinary {
+    if SoraSDKManager.shared.dataChannelRandomBinary {
       guard let binary = binaryToSend else {
         return
       }
@@ -680,7 +680,7 @@ extension DataChannelVideoChatRoomViewController {
       return
     }
 
-    if DataChannelSoraSDKManager.shared.dataChannelRandomBinary {
+    if SoraSDKManager.shared.dataChannelRandomBinary {
       generateRandomBinary()
     } else {
       chatMessageToSendTextField.text = nil

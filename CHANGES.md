@@ -11,6 +11,9 @@
 
 ## 2025.3
 
+- [CHANGE] 各サンプル個別の SoraSDKManager を統合する
+  - DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat それぞれの XXSoraSDKManager を廃止し、 Shared/SoraSDKManager を利用するようにする
+  - @t-miya
 - [CHANGE] 全てのサンプルを SamplesApp に統合する
   - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
   - 個別のサンプルプロジェクトを削除する

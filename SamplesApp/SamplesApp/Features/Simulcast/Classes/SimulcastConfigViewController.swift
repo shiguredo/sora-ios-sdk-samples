@@ -65,14 +65,15 @@ class SimulcastConfigViewController: UITableViewController {
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
     // role 引数には .sendrecv を指定します。
-    SimulcastSoraSDKManager.shared.connect(
+    let configuration = SimulcastEnvironment.makeConfiguration(
       channelId: channelId,
       videoCodec: selectedVideoCodec(),
       simulcastRequestRid: selectedSimulcastRequestRid(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
       videoBitRate: videoBitRatePickerCell.selectedBitRate
-    ) { [weak self] error in
+    )
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       // 接続処理が終了したので false にします。
       self.isConnecting = false
@@ -82,7 +83,7 @@ class SimulcastConfigViewController: UITableViewController {
         // この場合は、エラー表示をユーザーに返すのが親切です。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        logger.warning("[sample] SimulcastSoraSDKManager connection error: \(error)")
+        logger.warning("[sample] SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -94,14 +95,14 @@ class SimulcastConfigViewController: UITableViewController {
         }
       } else {
         // errorがnilの場合は、接続に成功しています。
-        logger.info("[sample] SimulcastSoraSDKManager connected.")
+        logger.info("[sample] SoraSDKManager connected.")
 
         // 次の配信画面に遷移します。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
         DispatchQueue.main.async {
           if !startCameraEnabled,
-            let mediaChannel = SimulcastSoraSDKManager.shared.currentMediaChannel
+            let mediaChannel = SoraSDKManager.shared.currentMediaChannel
           {
             // 映像ハードミュートを有効にします
             // setVideoHardMute は async メソッドのため Task 内で実行します

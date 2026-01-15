@@ -99,16 +99,16 @@ class DataChannelConfigViewController: UITableViewController {
     // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
     let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
-    DataChannelSoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
+    SoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
     let configuration = makeConfiguration(channelId: channelId)
 
     // Sora 接続処理を実行し、配信画面に遷移します
-    DataChannelSoraSDKManager.shared.connect(with: configuration) { [weak self] error in
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       self.isConnecting = false
 
       if let error {
-        logger.warning("DataChannelSoraSDKManager connection error: \(error)")
+        logger.warning("SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -121,10 +121,10 @@ class DataChannelConfigViewController: UITableViewController {
         return
       }
 
-      logger.warning("DataChannelSoraSDKManager connected.")
+      logger.warning("SoraSDKManager connected.")
       DispatchQueue.main.async {
         if !startCameraEnabled,
-          let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel
+          let mediaChannel = SoraSDKManager.shared.currentMediaChannel
         {
           // 映像ハードミュートを有効にします
           // setVideoHardMute は async メソッドのため Task 内で実行します

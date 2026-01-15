@@ -1,4 +1,5 @@
 import Foundation
+import Sora
 
 enum DecoStreamingEnvironment {
   // 接続するサーバーのシグナリング URL
@@ -9,4 +10,16 @@ enum DecoStreamingEnvironment {
 
   // type: connect に含めるメタデータ
   static var signalingConnectMetadata: Encodable? { Environment.signalingConnectMetadata }
+
+  static func makeConfiguration(
+    channelId: String,
+    role: Role,
+    videoCodec: VideoCodec
+  ) -> Configuration {
+    var configuration = Configuration(urlCandidates: urls, channelId: channelId, role: role)
+    configuration.videoCodec = videoCodec
+    configuration.cameraSettings.isEnabled = false
+    configuration.signalingConnectMetadata = signalingConnectMetadata
+    return configuration
+  }
 }
