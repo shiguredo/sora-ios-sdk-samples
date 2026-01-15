@@ -103,9 +103,6 @@ class SimulcastConfigViewController: UITableViewController {
           if !startCameraEnabled,
             let mediaChannel = SimulcastSoraSDKManager.shared.currentMediaChannel
           {
-            if let error = mediaChannel.setVideoSoftMute(true) {
-              logger.warning("[sample] Failed to soft mute video: \(error.localizedDescription)")
-            }
             // 映像ハードミュートを有効にします
             // setVideoHardMute は async メソッドのため Task 内で実行します
             Task { [weak self] in
