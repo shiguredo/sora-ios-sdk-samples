@@ -427,7 +427,6 @@ extension SimulcastVideoChatRoomViewController {
     case .hardMuted:
       // ハードミュート
       isCameraMuteOperationInProgress = true
-      _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: .hardMuted)
       cameraCapture = nil
       // setVideoHardMute は async メソッドのため Task 内で実行します
