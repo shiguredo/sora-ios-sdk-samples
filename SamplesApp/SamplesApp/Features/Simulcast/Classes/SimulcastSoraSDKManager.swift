@@ -32,7 +32,6 @@ class SimulcastSoraSDKManager {
     simulcastRequestRid: SimulcastRequestRid,
     dataChannelSignaling: Bool? = nil,
     ignoreDisconnectWebSocket: Bool? = nil,
-    startCameraEnabled: Bool,
     videoBitRate: Int? = nil,
     completionHandler: ((Error?) -> Void)?
   ) {
@@ -51,7 +50,9 @@ class SimulcastSoraSDKManager {
     configuration.simulcastRequestRid = simulcastRequestRid
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
-    configuration.cameraSettings.isEnabled = startCameraEnabled
+    // MediaChannel.setVideoHardMute を利用するため、cameraSettings.isEnabled は常に true にします。
+    // 「接続時カメラ有効」が無効の場合は、接続直後に映像をハードミュートして開始します（Config 側で対応）。
+    configuration.cameraSettings.isEnabled = true
     configuration.signalingConnectMetadata = SimulcastEnvironment.signalingConnectMetadata
 
     // bundle_id を指定します。

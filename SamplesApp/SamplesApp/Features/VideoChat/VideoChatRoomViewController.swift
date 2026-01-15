@@ -249,7 +249,7 @@ class VideoChatRoomViewController: UIViewController {
 extension VideoChatRoomViewController {
   // カメラの初期状態を適用します。
   // 開始時カメラ無効、で接続した際に一度だけカメラハードミュートを有効にします。
-  private func applyInitialCameraStateIfNeeded(upstream: MediaStream) {
+  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel, upstream: MediaStream) {
     guard !didApplyInitialCameraState else {
       return
     }
@@ -259,20 +259,22 @@ extension VideoChatRoomViewController {
       return
     }
 
-    applyCameraMuteStateTransition(to: .hardMuted, upstream: upstream)
+    applyCameraMuteStateTransition(to: .hardMuted, mediaChannel: mediaChannel, upstream: upstream)
   }
 
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
-    guard (VideoChatSoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
+    guard let mediaChannel = VideoChatSoraSDKManager.shared.currentMediaChannel,
+      mediaChannel.streams != nil
+    else {
       return
     }
 
     // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
     // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
-    let upstream = VideoChatSoraSDKManager.shared.currentMediaChannel?.senderStream
-    let downstreams = VideoChatSoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+    let upstream = mediaChannel.senderStream
+    let downstreams = mediaChannel.receiverStreams ?? []
 
     // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
     if downstreamVideoViews.count < downstreams.count {
@@ -324,10 +326,10 @@ extension VideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      applyInitialCameraStateIfNeeded(upstream: upstream)
+      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel, upstream: upstream)
 
       let toMuteState: CameraMuteState
-      if cameraMuteState == .hardMuted || (!isStartCameraEnabled && didApplyInitialCameraState) {
+      if cameraMuteState == .hardMuted {
         toMuteState = .hardMuted
       } else if upstream.videoEnabled {
         toMuteState = .recording
@@ -370,13 +372,9 @@ extension VideoChatRoomViewController {
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
-    // ハードミュート中にこのコールバックが来る想定はないが、安全のためログを出して抜ける
-    guard cameraMuteState != .hardMuted else {
-      logger.error(
-        "[sample] Unexpected onSwitchVideo callback during hardMuted state (This should not happen)"
-      )
-      return
-    }
+    // 映像ハードミュートは内部的にソフトミュート実行しており videoEnabled が切り替わるため、
+    // このコールバックが来ても UI は維持します
+    guard cameraMuteState != .hardMuted else { return }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     cameraMuteController.updateButton(to: nextState)
   }
@@ -386,95 +384,70 @@ extension VideoChatRoomViewController {
   // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
   private func applyCameraMuteStateTransition(
     to nextState: CameraMuteState,
+    mediaChannel: MediaChannel,
     upstream: MediaStream
   ) {
     let previousState = cameraMuteState
 
     switch nextState {
     case .recording:
+      // 映像 ON
       guard previousState == .hardMuted else {
         cameraMuteController.updateButton(to: nextState)
-        upstream.videoEnabled = true
+        _ = mediaChannel.setVideoSoftMute(false)
         cameraCapture = nil
         return
       }
-      let restartCapturer = cameraCapture
-      // カメラ無効で接続開始した場合は restartCapturer=cameraCapture==null となり
-      // ここで CameraCapture を生成します。
-      // カメラ有効状態でハードミュートから復帰し場合は元の CameraCapture の参照を使用します。
-      let startNewCapturerIfNeeded = restartCapturer == nil
-      let startSetup =
-        startNewCapturerIfNeeded
-        ? CameraMuteController.createCapturerForStart(
-          using: VideoChatSoraSDKManager.shared.currentMediaChannel?.configuration.cameraSettings,
-          upstream: upstream)
-        : nil
-      guard let capturer = restartCapturer ?? startSetup?.capturer,
-        let format = startSetup?.format ?? restartCapturer?.format,
-        let frameRate = startSetup?.frameRate ?? restartCapturer?.frameRate
-      else {
-        logger.warning("[sample] Camera capturer is unavailable for start.")
-        cameraMuteController.updateButton(to: previousState)
-        upstream.videoEnabled = false
-        return
-      }
-      cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      let completion: (Error?) -> Void = { [weak self, weak upstream] error in
-        DispatchQueue.main.async {
-          guard let self = self, let upstream = upstream else { return }
-          self.isCameraMuteOperationInProgress = false
-          if let error {
-            logger.warning("[sample] Failed to start/restart camera: \(error.localizedDescription)")
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: restartCapturer
-            )
-            self.cameraCapture = restartCapturer
-          } else {
+      // setVideoHardMute は async メソッドのため Task 内で実行します
+      Task { [weak self, weak upstream] in
+        guard let self, let upstream else { return }
+        do {
+          try await mediaChannel.setVideoHardMute(false)
+          // UI の処理は MainActor (メインスレッド)で実行します
+          await MainActor.run {
+            self.isCameraMuteOperationInProgress = false
             self.cameraCapture = nil
             self.cameraMuteController.updateButton(to: .recording)
-            upstream.videoEnabled = true
+          }
+        } catch {
+          // エラー時は UI を巻き戻します
+          await MainActor.run {
+            self.isCameraMuteOperationInProgress = false
+            logger.warning("[sample] Failed to unhard mute video: \(error.localizedDescription)")
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
-      if startNewCapturerIfNeeded {
-        capturer.start(format: format, frameRate: frameRate, completionHandler: completion)
-      } else {
-        capturer.restart(completionHandler: completion)
-      }
     case .softMuted:
-      // ON -> ソフトミュート
-      upstream.videoEnabled = false
+      // ソフトミュート
+      _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: nextState)
     case .hardMuted:
-      // ソフトミュート -> ハードミュート
-      // ハードミュートでも失敗時の不意の音声送出を防ぐため videoEnabled=false にします
-      upstream.videoEnabled = false
-      guard let capturer = CameraVideoCapturer.current else {
-        self.cameraMuteController.updateButton(to: nextState)
-        // 既に停止済み
-        return
-      }
-      cameraCapture = capturer
+      // ハードミュート
       isCameraMuteOperationInProgress = true
-      // キャプチャー停止処理
-      capturer.stop { [weak self, weak upstream] error in
-        DispatchQueue.main.async {
-          guard let self = self, let upstream = upstream else { return }
-          self.isCameraMuteOperationInProgress = false
-          if let error {
-            // 停止失敗
-            logger.warning("[sample] Failed to stop camera: \(error.localizedDescription)")
-            // 直前の状態に戻します
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: capturer
-            )
-          } else {
+      cameraMuteController.updateButton(to: nextState)
+      cameraCapture = nil
+      // setVideoHardMute は async メソッドのため Task 内で実行します
+      Task { [weak self] in
+        do {
+          try await mediaChannel.setVideoHardMute(true)
+          // UI の処理は MainActor (メインスレッド)で実行します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
             self.cameraMuteController.updateButton(to: .hardMuted)
+          }
+        } catch {
+          // エラー時は UI を巻き戻します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
+            logger.warning("[sample] Failed to hard mute video: \(error.localizedDescription)")
+            if previousState == .recording {
+              _ = mediaChannel.setVideoSoftMute(false)
+            }
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
@@ -530,7 +503,7 @@ extension VideoChatRoomViewController {
     }
 
     let nextState = cameraMuteState.next()
-    applyCameraMuteStateTransition(to: nextState, upstream: upstream)
+    applyCameraMuteStateTransition(to: nextState, mediaChannel: mediaChannel, upstream: upstream)
   }
 
   /// マイクミュートボタンを押したときの挙動を定義します。

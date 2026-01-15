@@ -130,10 +130,12 @@ class VideoChatConfigViewController: UITableViewController {
       h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
     configuration.videoH264Params = videoH264Params
 
-    // 開始時カメラ有効の入力値を configuration に渡します
+    // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
     let shouldEnableCameraOnConnect =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
-    configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
+    // MediaChannel.setVideoHardMute を利用するため、cameraSettings.isEnabled は常に true にします。
+    // 「接続時カメラ有効」が無効の場合は、接続直後に映像をハードミュートして開始します。
+    configuration.cameraSettings.isEnabled = true
 
     if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
       configuration.videoBitRate = videoBitRateValue
@@ -173,8 +175,34 @@ class VideoChatConfigViewController: UITableViewController {
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
         DispatchQueue.main.async {
+          guard let self else { return }
+
+          if !shouldEnableCameraOnConnect,
+            let mediaChannel = VideoChatSoraSDKManager.shared.currentMediaChannel
+          {
+            // 映像ハードミュートを有効にします
+            // setVideoHardMute は async メソッドのため Task 内で実行します
+            Task { [weak self] in
+              do {
+                try await mediaChannel.setVideoHardMute(true)
+              } catch {
+                logger.warning(
+                  "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
+              }
+              // 配信画面に遷移します
+              // 処理順をハードミュート処理の後にするために Task 内で await して実行します
+              // また UI 操作のため MainActor(メインスレッド) で実行します
+              await MainActor.run {
+                guard let self else { return }
+                // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+                self.performSegue(withIdentifier: "Connect", sender: self)
+              }
+            }
+            return
+          }
+
           // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-          self?.performSegue(withIdentifier: "Connect", sender: self)
+          self.performSegue(withIdentifier: "Connect", sender: self)
         }
       }
     }
