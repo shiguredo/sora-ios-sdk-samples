@@ -246,8 +246,7 @@ class VideoChatRoomViewController: UIViewController {
 extension VideoChatRoomViewController {
   // カメラの初期状態を適用します。
   // 開始時カメラ無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
-  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel, upstream _: MediaStream)
-  {
+  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel) {
     guard !didApplyInitialCameraState else {
       return
     }
@@ -326,7 +325,7 @@ extension VideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel, upstream: upstream)
+      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel)
 
       let toMuteState: CameraMuteState
       if cameraMuteState == .hardMuted {
