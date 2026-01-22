@@ -71,7 +71,7 @@ class SimulcastConfigViewController: UITableViewController {
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
       videoBitRate: videoBitRatePickerCell.selectedBitRate
     )
-    // // 開始時カメラ有効の入力値を configuration に渡します
+    // 開始時カメラ有効の入力値を configuration に渡します
     configuration.initialCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
     SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
