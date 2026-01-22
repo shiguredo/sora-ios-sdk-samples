@@ -96,9 +96,6 @@ class DataChannelConfigViewController: UITableViewController {
     }
     isConnecting = true
 
-    // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
-    let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
-
     let configuration = makeConfiguration(channelId: channelId)
 
     // Sora 接続処理を実行し、配信画面に遷移します
@@ -122,29 +119,6 @@ class DataChannelConfigViewController: UITableViewController {
 
       logger.warning("SoraSDKManager connected.")
       DispatchQueue.main.async {
-        if !startCameraEnabled,
-          let mediaChannel = SoraSDKManager.shared.currentMediaChannel
-        {
-          // 映像ハードミュートを有効にします
-          // setVideoHardMute は async メソッドのため Task 内で実行します
-          Task { [weak self] in
-            do {
-              try await mediaChannel.setVideoHardMute(true)
-            } catch {
-              logger.warning(
-                "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
-            }
-            // 配信画面に遷移します
-            // 処理順をハードミュート処理の後にするために Task 内で await して実行します
-            // また UI 操作のため MainActor(メインスレッド) で実行します
-            await MainActor.run {
-              guard let self else { return }
-              self.performSegue(withIdentifier: "Connect", sender: self)
-            }
-          }
-          return
-        }
-
         self.performSegue(withIdentifier: "Connect", sender: self)
       }
     }
@@ -215,10 +189,11 @@ class DataChannelConfigViewController: UITableViewController {
       ordered: ordered
     )
 
-    // 開始時カメラ有効の入力値を configuration に渡します
-    // MediaChannel.setVideoHardMute を利用するため、cameraSettings.isEnabled は常に true にします。
-    // 「接続時カメラ有効」が無効の場合は、接続直後に映像をハードミュートして開始します。
+    // カメラ自体は後から有効化できるよう、cameraSettings.isEnabled は常に true にします。
     configuration.cameraSettings.isEnabled = true
+    // 開始時カメラ有効の入力値を configuration に渡します
+    configuration.initialCameraEnabled =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     return configuration
   }
@@ -304,9 +279,6 @@ class DataChannelConfigViewController: UITableViewController {
     else {
       return
     }
-    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
-    roomViewController.isStartCameraEnabled =
-      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
     roomViewController.isRandomBinaryEnabled = dataChannelRandomBinarySwitch.isOn
   }
 }

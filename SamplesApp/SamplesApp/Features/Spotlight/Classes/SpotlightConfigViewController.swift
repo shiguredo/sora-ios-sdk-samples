@@ -69,13 +69,11 @@ class SpotlightConfigViewController: UITableViewController {
       return
     }
     isConnecting = true
-    // 接続時カメラ有効設定UIの値から接続時にカメラを有効にするかフラグを設定します
-    let startCameraEnabled = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
     // role 引数には .sendrecv を指定します。
-    let configuration = SpotlightEnvironment.makeConfiguration(
+    var configuration = SpotlightEnvironment.makeConfiguration(
       channelId: channelId,
       videoCodec: selectedVideoCodec(),
       spotlightFocusRid: selectedSpotlightRid(for: spotlightFocusRidSegmentedControl),
@@ -86,6 +84,9 @@ class SpotlightConfigViewController: UITableViewController {
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
       videoBitRate: videoBitRatePickerCell.selectedBitRate
     )
+    // 開始時カメラ有効の入力値を configuration に渡します
+    configuration.initialCameraEnabled =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
     SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       // 接続処理が終了したので false にします。
@@ -114,30 +115,6 @@ class SpotlightConfigViewController: UITableViewController {
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
         DispatchQueue.main.async {
-          if !startCameraEnabled,
-            let mediaChannel = SoraSDKManager.shared.currentMediaChannel
-          {
-            // 映像ハードミュートを有効にします
-            // setVideoHardMute は async メソッドのため Task 内で実行します
-            Task { [weak self] in
-              do {
-                try await mediaChannel.setVideoHardMute(true)
-              } catch {
-                logger.warning(
-                  "[sample] Failed to hard mute video on connect: \(error.localizedDescription)")
-              }
-              // 配信画面に遷移します
-              // 処理順をハードミュート処理の後にするために Task 内で await して実行します
-              // また UI 操作のため MainActor(メインスレッド) で実行します
-              await MainActor.run {
-                guard let self else { return }
-                // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-                self.performSegue(withIdentifier: "Connect", sender: self)
-              }
-            }
-            return
-          }
-
           // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
           self.performSegue(withIdentifier: "Connect", sender: self)
         }
@@ -213,9 +190,6 @@ class SpotlightConfigViewController: UITableViewController {
     else {
       return
     }
-    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
-    roomViewController.isStartCameraEnabled =
-      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 
 }
