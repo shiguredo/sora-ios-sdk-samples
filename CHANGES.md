@@ -18,6 +18,8 @@
 - [CHANGE] SimulcastSample の設定値である SimulcastRid を SimulcastRequestRid に移行する
   - これによりシステム条件の WebRTC SFU Sora のバージョンが 2025.2.0 以降になる
   - @zztkm
+- [UPDATE] 接続時カメラ有効設定の値を `Configuration.initialCameraEnabled` に渡すようにする
+  - @t-miya
 - [UPDATE] 各サンプル個別の SoraSDKManager を統合する
   - DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat それぞれの XXSoraSDKManager を廃止し、 Shared/SoraSDKManager を利用するようにする
   - @t-miya

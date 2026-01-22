@@ -67,9 +67,6 @@ class SimulcastVideoChatRoomViewController: UIViewController {
     }
   }
 
-  /// 接続開始時にカメラを有効にするかどうか。設定画面から渡されます。
-  var isStartCameraEnabled: Bool = true
-
   // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
   private var didApplyInitialCameraState = false
 
@@ -247,18 +244,20 @@ class SimulcastVideoChatRoomViewController: UIViewController {
 
 extension SimulcastVideoChatRoomViewController {
   // カメラの初期状態を適用します。
-  // 開始時カメラ無効、で接続した際に一度だけカメラハードミュートを有効にします。
-  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel, upstream: MediaStream) {
+  // 開始時カメラ無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
+  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel) {
     guard !didApplyInitialCameraState else {
       return
     }
     didApplyInitialCameraState = true
 
-    guard !isStartCameraEnabled else {
+    guard !mediaChannel.configuration.initialCameraEnabled else {
       return
     }
 
-    applyCameraMuteStateTransition(to: .hardMuted, mediaChannel: mediaChannel, upstream: upstream)
+    cameraMuteController.updateButton(to: .hardMuted)
+    cameraCapture = nil
+    isCameraMuteOperationInProgress = false
   }
 
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
@@ -327,7 +326,7 @@ extension SimulcastVideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel, upstream: upstream)
+      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel)
 
       let toMuteState: CameraMuteState
       if cameraMuteState == .hardMuted {
