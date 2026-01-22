@@ -251,7 +251,8 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 extension SpotlightVideoChatRoomViewController {
   // カメラの初期状態を適用します。
   // 開始時カメラ無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
-  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel, upstream _: MediaStream) {
+  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel, upstream _: MediaStream)
+  {
     guard !didApplyInitialCameraState else {
       return
     }
