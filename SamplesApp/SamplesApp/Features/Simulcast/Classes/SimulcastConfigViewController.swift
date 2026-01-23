@@ -17,6 +17,9 @@ class SimulcastConfigViewController: UITableViewController {
   /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
+  /// 開始時のマイク有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// 配信開始時に受信するサイマルキャストの映像の種類 (SimulcastRequestRid) を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var simulcastRequestRidSegmentedControl: UISegmentedControl!
 
@@ -74,6 +77,11 @@ class SimulcastConfigViewController: UITableViewController {
     // 開始時カメラ有効の入力値を configuration に渡します
     configuration.initialCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+
+    // 開始時マイク有効の入力値を configuration に渡します
+    configuration.initialMicrophoneEnabled =
+      microphoneEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+
     SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       // 接続処理が終了したので false にします。

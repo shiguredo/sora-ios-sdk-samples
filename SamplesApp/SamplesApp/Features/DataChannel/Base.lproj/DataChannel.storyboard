@@ -99,6 +99,39 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="mIc-Dc-Mic">
+                                        <rect key="frame" x="0.0" y="381.33333015441895" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mIc-Dc-Mic" id="mCv-Dc-Mic">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="開始時マイク有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mLb-Dc-Mic">
+                                                    <rect key="frame" x="20" y="0.0" width="147" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="mWd-Dc-Mic"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mSc-Dc-Mic">
+                                                    <rect key="frame" x="227" y="11.666666666666664" width="180" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="mSc-Dc-Mic" firstAttribute="centerY" secondItem="mCv-Dc-Mic" secondAttribute="centerY" id="mSy-Dc-Mic"/>
+                                                <constraint firstItem="mLb-Dc-Mic" firstAttribute="centerY" secondItem="mCv-Dc-Mic" secondAttribute="centerY" id="mCy-Dc-Mic"/>
+                                                <constraint firstItem="mLb-Dc-Mic" firstAttribute="leading" secondItem="mCv-Dc-Mic" secondAttribute="leadingMargin" id="mLd-Dc-Mic"/>
+                                                <constraint firstItem="mSc-Dc-Mic" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mLb-Dc-Mic" secondAttribute="trailing" constant="12" id="mLg-Dc-Mic"/>
+                                                <constraint firstAttribute="trailing" secondItem="mSc-Dc-Mic" secondAttribute="trailing" constant="20" id="mTr-Dc-Mic"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="配信設定" id="gIG-V2-749">
@@ -719,13 +752,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
-                    <connections>
-                        <outlet property="audioEnabledSwitch" destination="evs-2P-3Kj" id="nWP-cH-BYB"/>
-                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="dsu-2l-eS7" id="xWz-sZ-pON"/>
-                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
-                        <outlet property="dataChannelCompressSegmentedControl" destination="3mf-dj-4aG" id="2Cx-32-FSg"/>
-                        <outlet property="dataChannelDirectionSegmentedControl" destination="bEO-iq-gX8" id="LWg-2U-LiJ"/>
-                        <outlet property="dataChannelOrderedSegmentedControl" destination="wcP-eK-CYc" id="PER-pb-jc5"/>
+	                    <connections>
+	                        <outlet property="audioEnabledSwitch" destination="evs-2P-3Kj" id="nWP-cH-BYB"/>
+	                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="dsu-2l-eS7" id="xWz-sZ-pON"/>
+	                        <outlet property="microphoneEnabledOnConnectSegmentedControl" destination="mSc-Dc-Mic" id="mOu-Dc-Mic"/>
+	                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
+	                        <outlet property="dataChannelCompressSegmentedControl" destination="3mf-dj-4aG" id="2Cx-32-FSg"/>
+	                        <outlet property="dataChannelDirectionSegmentedControl" destination="bEO-iq-gX8" id="LWg-2U-LiJ"/>
+	                        <outlet property="dataChannelOrderedSegmentedControl" destination="wcP-eK-CYc" id="PER-pb-jc5"/>
                         <outlet property="dataChannelProtocolNoSendSwitch" destination="K0W-oK-H8t" id="tr9-1m-VG8"/>
                         <outlet property="dataChannelProtocolTextField" destination="VgN-c4-85a" id="YDv-26-a2l"/>
                         <outlet property="dataChannelRandomBinarySwitch" destination="3d2-1s-4Jy" id="93I-Hr-uUL"/>
