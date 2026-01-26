@@ -17,6 +17,9 @@ class VideoChatConfigViewController: UITableViewController {
   /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
+  /// 開始時のマイク有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
 
@@ -135,6 +138,10 @@ class VideoChatConfigViewController: UITableViewController {
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
     // カメラ自体は後から有効化できるよう、cameraSettings.isEnabled は常に true にします。
     configuration.cameraSettings.isEnabled = true
+
+    // 開始時マイク有効の入力値を configuration に渡します
+    configuration.initialMicrophoneEnabled =
+      microphoneEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
       configuration.videoBitRate = videoBitRateValue

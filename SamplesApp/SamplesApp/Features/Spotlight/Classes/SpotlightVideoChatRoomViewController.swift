@@ -75,6 +75,8 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 
   // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
   private var didApplyInitialCameraState = false
+  // 接続開始時のマイクの状態適用を行なったかを管理するフラグ
+  private var didApplyInitialMicrophoneState = false
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -266,6 +268,19 @@ extension SpotlightVideoChatRoomViewController {
     isCameraMuteOperationInProgress = false
   }
 
+  // マイクの初期状態を適用します。
+  // 開始時マイク無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
+  private func applyInitialMicrophoneStateIfNeeded(mediaChannel: MediaChannel) {
+    guard !didApplyInitialMicrophoneState else {
+      return
+    }
+    didApplyInitialMicrophoneState = true
+
+    let initialState: AudioMuteState =
+      mediaChannel.configuration.initialMicrophoneEnabled ? .enabled : .hardMuted
+    audioMuteController.apply(to: initialState, using: mediaChannel)
+  }
+
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
@@ -355,6 +370,7 @@ extension SpotlightVideoChatRoomViewController {
         ? .enabled
         : (audioMuteController.currentState == .hardMuted ? .hardMuted : .softMuted)
       audioMuteController.updateButton(to: nextState)
+      applyInitialMicrophoneStateIfNeeded(mediaChannel: mediaChannel)
       upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
         DispatchQueue.main.async {
           self?.handleUpstreamAudioSwitch(isEnabled: isEnabled)

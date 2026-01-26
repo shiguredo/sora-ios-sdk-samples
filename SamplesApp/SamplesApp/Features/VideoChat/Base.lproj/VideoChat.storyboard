@@ -159,6 +159,40 @@
                                                 <constraint firstItem="ytD-S4-0DP" firstAttribute="top" secondItem="wtF-DB-xje" secondAttribute="top" id="kQh-dP-Saw"/>
                                                 <constraint firstItem="nwx-wg-dwz" firstAttribute="centerY" secondItem="wtF-DB-xje" secondAttribute="centerY" id="pD7-ae-7SL"/>
                                             </constraints>
+                                    </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="mIc-0n-Mic">
+                                        <rect key="frame" x="0.0" y="295" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mIc-0n-Mic" id="mCv-0n-Mic">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="開始時マイク有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mLb-0n-Mic">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="mWd-0n-Mic"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mSc-0n-Mic">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="mSc-0n-Mic" secondAttribute="trailing" id="mTr-0n-Mic"/>
+                                                <constraint firstItem="mLb-0n-Mic" firstAttribute="leading" secondItem="mCv-0n-Mic" secondAttribute="leadingMargin" id="mLd-0n-Mic"/>
+                                                <constraint firstItem="mSc-0n-Mic" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mLb-0n-Mic" secondAttribute="trailing" id="mLg-0n-Mic"/>
+                                                <constraint firstItem="mLb-0n-Mic" firstAttribute="centerY" secondItem="mCv-0n-Mic" secondAttribute="centerY" id="mCy-0n-Mic"/>
+                                                <constraint firstItem="mLb-0n-Mic" firstAttribute="top" secondItem="mCv-0n-Mic" secondAttribute="top" id="mTp-0n-Mic"/>
+                                                <constraint firstItem="mSc-0n-Mic" firstAttribute="centerY" secondItem="mCv-0n-Mic" secondAttribute="centerY" id="mSy-0n-Mic"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -376,13 +410,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="ビデオチャットに参加" id="n9f-bV-9X1"/>
-                    <connections>
-                        <outlet property="av1ProfileSegmentedControl" destination="Dr3-pY-7YN" id="L8b-ua-igw"/>
-                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="nwx-wg-dwz" id="ckW-4D-dkv"/>
-                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
-                        <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
-                        <outlet property="h264ProfileLevelIdTextField" destination="mw9-oG-2hI" id="sPB-Iw-Lzn"/>
-                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
+	                    <connections>
+	                        <outlet property="av1ProfileSegmentedControl" destination="Dr3-pY-7YN" id="L8b-ua-igw"/>
+	                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="nwx-wg-dwz" id="ckW-4D-dkv"/>
+	                        <outlet property="microphoneEnabledOnConnectSegmentedControl" destination="mSc-0n-Mic" id="mOu-0n-Mic"/>
+	                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
+	                        <outlet property="dataChannelSignalingSegmentedControl" destination="0J6-my-JRG" id="yFu-Fl-Kqh"/>
+	                        <outlet property="h264ProfileLevelIdTextField" destination="mw9-oG-2hI" id="sPB-Iw-Lzn"/>
+	                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
                         <outlet property="videoBitRatePickerCell" destination="5h9-Ze-g2f" id="Gje-8A-cqW"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <outlet property="vp9ProfileIdSegmentedControl" destination="Z2i-ih-FxO" id="Ibx-Tx-Aah"/>

@@ -160,6 +160,39 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="mIc-Sc-Mic">
+                                        <rect key="frame" x="0.0" y="295" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mIc-Sc-Mic" id="mCv-Sc-Mic">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="開始時マイク有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mLb-Sc-Mic">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="mWd-Sc-Mic"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mSc-Sc-Mic">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="mSc-Sc-Mic" secondAttribute="trailing" id="mTr-Sc-Mic"/>
+                                                <constraint firstItem="mLb-Sc-Mic" firstAttribute="centerY" secondItem="mCv-Sc-Mic" secondAttribute="centerY" id="mCy-Sc-Mic"/>
+                                                <constraint firstItem="mLb-Sc-Mic" firstAttribute="leading" secondItem="mCv-Sc-Mic" secondAttribute="leadingMargin" id="mLd-Sc-Mic"/>
+                                                <constraint firstItem="mSc-Sc-Mic" firstAttribute="centerY" secondItem="mCv-Sc-Mic" secondAttribute="centerY" id="mSy-Sc-Mic"/>
+                                                <constraint firstItem="mSc-Sc-Mic" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mLb-Sc-Mic" secondAttribute="trailing" id="mLg-Sc-Mic"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="映像の種類" footerTitle="配信開始時に受信する映像の種類を選択します。" id="PNL-Rl-ZYX">
@@ -296,12 +329,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="サイマルキャスト" id="n9f-bV-9X1"/>
-                    <connections>
-                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="rvR-7R-0On" id="3KP-wL-PCX"/>
-                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
-                        <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
-                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="xJE-0n-qMR" id="2UT-ca-FfM"/>
-                        <outlet property="simulcastRequestRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
+	                    <connections>
+	                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="rvR-7R-0On" id="3KP-wL-PCX"/>
+	                        <outlet property="microphoneEnabledOnConnectSegmentedControl" destination="mSc-Sc-Mic" id="mOu-Sc-Mic"/>
+	                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
+	                        <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
+	                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="xJE-0n-qMR" id="2UT-ca-FfM"/>
+	                        <outlet property="simulcastRequestRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
                         <outlet property="videoBitRatePickerCell" destination="ubp-Ic-GE0" id="zzH-QH-NHn"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
