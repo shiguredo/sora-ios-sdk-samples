@@ -482,10 +482,9 @@ extension DataChannelVideoChatRoomViewController {
     }
     didApplyInitialMicrophoneState = true
 
-    guard !mediaChannel.configuration.initialMicrophoneEnabled else {
-      return
-    }
-    audioMuteController.updateButton(to: .hardMuted)
+    let initialState: AudioMuteState =
+      mediaChannel.configuration.initialMicrophoneEnabled ? .enabled : .hardMuted
+    audioMuteController.apply(to: initialState, using: mediaChannel)
   }
 
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
