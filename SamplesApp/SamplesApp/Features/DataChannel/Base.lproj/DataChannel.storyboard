@@ -919,6 +919,11 @@
                             <constraint firstItem="v8z-cH-FLv" firstAttribute="top" secondItem="9pm-c6-E2k" secondAttribute="bottom" id="P3F-ac-ljV"/>
                             <constraint firstItem="v8z-cH-FLv" firstAttribute="trailing" secondItem="cV4-uL-vzX" secondAttribute="trailingMargin" id="WvO-Xl-VtI"/>
                             <constraint firstAttribute="trailing" secondItem="yae-cW-sBy" secondAttribute="trailing" id="YYF-dY-VqM"/>
+                            <constraint firstItem="LsE-oq-zDP" firstAttribute="top" secondItem="yae-cW-sBy" secondAttribute="top" id="dYx-y0-4A1"/>
+                            <constraint firstItem="kU8-9t-saE" firstAttribute="leading" secondItem="yae-cW-sBy" secondAttribute="trailing" constant="8" id="WjG-f6-S7V"/>
+                            <constraint firstItem="uUg-Ke-hc9" firstAttribute="leading" secondItem="kU8-9t-saE" secondAttribute="leading" id="xkM-hK-8by"/>
+                            <constraint firstItem="yae-cW-sBy" firstAttribute="trailing" secondItem="cV4-uL-vzX" secondAttribute="centerX" id="Xq2-1c-NmV"/>
+                            <constraint firstItem="Ygh-iV-c9J" firstAttribute="top" secondItem="yae-cW-sBy" secondAttribute="bottom" constant="8" symbolic="YES" id="gD7-1r-wmZ"/>
                             <constraint firstItem="LsE-oq-zDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cV4-uL-vzX" secondAttribute="leading" constant="20" symbolic="YES" id="ZPx-oX-z93"/>
                             <constraint firstItem="WBm-CA-gYi" firstAttribute="leading" secondItem="Veg-bZ-Lpb" secondAttribute="trailing" constant="4" id="ZYt-VF-Fvp"/>
                             <constraint firstItem="WBm-CA-gYi" firstAttribute="trailing" secondItem="cV4-uL-vzX" secondAttribute="trailingMargin" id="eXz-eH-VTt"/>
@@ -963,6 +968,15 @@
                         <outlet property="memberListView" destination="yae-cW-sBy" id="Ghk-FM-gJW"/>
                         <outlet property="micMuteButton" destination="R8H-hN-cBg" id="Dgm-Ja-RCk"/>
                         <outlet property="tapGestureRecognizer" destination="Ad3-oS-nEC" id="QWd-qa-9Ju"/>
+                        <outletCollection property="portraitLayoutConstraints" destination="YYF-dY-VqM" id="Fno-2e-hyG"/>
+                        <outletCollection property="portraitLayoutConstraints" destination="IKb-Y7-qGu" id="gV8-P3-Rbq"/>
+                        <outletCollection property="portraitLayoutConstraints" destination="Lqs-d0-Gzk" id="Kp6-Xn-7i4"/>
+                        <outletCollection property="portraitLayoutConstraints" destination="HNT-F1-rEl" id="6gS-Jc-Yl1"/>
+                        <outletCollection property="landscapeLayoutConstraints" destination="Xq2-1c-NmV" id="Y9y-2n-qbE"/>
+                        <outletCollection property="landscapeLayoutConstraints" destination="gD7-1r-wmZ" id="4Tg-7W-9Zc"/>
+                        <outletCollection property="landscapeLayoutConstraints" destination="WjG-f6-S7V" id="T3n-7P-QqE"/>
+                        <outletCollection property="landscapeLayoutConstraints" destination="xkM-hK-8by" id="3d6-4k-vGm"/>
+                        <outletCollection property="landscapeLayoutConstraints" destination="dYx-y0-4A1" id="mU9-0q-Xo2"/>
                         <segue destination="L83-jf-Dqb" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="ZpO-rc-2lD"/>
                     </connections>
                 </viewController>
