@@ -18,6 +18,9 @@
 - [CHANGE] SimulcastSample の設定値である SimulcastRid を SimulcastRequestRid に移行する
   - これによりシステム条件の WebRTC SFU Sora のバージョンが 2025.2.0 以降になる
   - @zztkm
+- [UPDATE] DataChannel Sample の横画面での配信時レイアウトを変更する
+  - 左右分割で、左側に映像、右側にメッセージ欄のレイアウトにする
+  - @t-miya
 - [UPDATE] 接続時カメラ有効設定の値を `Configuration.initialCameraEnabled` に渡すようにする
   - @t-miya
 - [UPDATE] 各サンプル個別の SoraSDKManager を統合する
@@ -70,6 +73,10 @@
 - [ADD] カメラミュートボタンとマイクミュートボタンを追加する
   - 対象: DataChannelSample、SimulcastSample、SpotlightSample、VideoChatSample
   - カメラは黒塗りフレーム、マイクは無音フレームを送信するソフトミュート
+  - @t-miya
+- [FIX] VideoChat、Simulcast、Spotlight Sample にて画面回転時にセルフビューの一部が画面外になってしまう不具合を修正する
+  - @t-miya
+- [FIX] DataChannel Sample にて画面回転時にセルフビューが表示されなくなる不具合を修正する
   - @t-miya
 
 ### misc

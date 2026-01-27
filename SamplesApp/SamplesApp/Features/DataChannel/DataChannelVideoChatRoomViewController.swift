@@ -23,6 +23,11 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   /// 送受信したチャットメッセージの履歴を表示するコントロールです。
   @IBOutlet weak var historyTableView: UITableView!
 
+  /// 端末縦向き時のレイアウト制約です。
+  @IBOutlet private var portraitLayoutConstraints: [NSLayoutConstraint]?
+  /// 端末横向き時のレイアウト制約です。
+  @IBOutlet private var landscapeLayoutConstraints: [NSLayoutConstraint]?
+
   /// タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
   @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
 
@@ -58,6 +63,12 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   private var upstreamVideoView: VideoView?
   // 最後にハンドラ登録した Upstream を覚えておくためのプロパティ
   private weak var observedUpstream: MediaStream?
+  // レイアウトの再計算を必要な時のみ行うために MemberListView サイズをキャッシュします。
+  // 全体 View サイズが変わった場合のみレイアウト再計算を行うために使用します。
+  private var lastLaidOutMemberListViewSize: CGSize = .zero
+  // 端末が縦向きか横向きかの状態を保持しておくキャッシュです。
+  // 向きが変わった場合のみレイアウト再計算を行うために使用します。
+  private var lastKnownIsLandscape: Bool?
 
   // カメラのミュート状態です
   // CameraMuteController 経由で取得します
@@ -110,6 +121,9 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     historyTableView.delegate = self
     historyTableView.dataSource = self
     view.addGestureRecognizer(tapGestureRecognizer)
+    // View の領域内で描画されるようにします。
+    memberListView.clipsToBounds = true
+    updateSplitLayoutIfNeeded(for: view.bounds.size)
 
     // メッセージ入力キーボードの上部に Done ボタンを追加します。
     let textFieldToolBar = UIToolbar()
@@ -251,8 +265,63 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
     // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
     coordinator.animate(alongsideTransition: { [weak self] _ in
-      self?.layoutVideoViews(for: size)
+      guard let self = self else { return }
+      self.updateSplitLayoutIfNeeded(for: size)
+      self.view.layoutIfNeeded()
+      self.layoutVideoViewsIfNeeded()
+    }, completion: { [weak self] _ in
+      guard let self = self else { return }
+      self.updateSplitLayoutIfNeeded(for: self.view.bounds.size)
+      self.view.layoutIfNeeded()
+      self.layoutVideoViewsIfNeeded()
     })
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    updateSplitLayoutIfNeeded(for: view.bounds.size)
+    layoutVideoViewsIfNeeded()
+  }
+
+  // 端末が縦向きか横向きかによって映像とメッセージ欄の分割レイアウトを更新します。
+  private func updateSplitLayoutIfNeeded(for size: CGSize) {
+    // 端末が縦向きか横向きかを取得します。
+    // interfaceOrientation で取得できない場合は width と height の比較にフォールバックします。
+    let isLandscape: Bool = {
+      if let interfaceOrientation = view.window?.windowScene?.interfaceOrientation,
+        interfaceOrientation != .unknown
+      {
+        let sizeIsLandscape = size.width > size.height
+        return interfaceOrientation.isLandscape == sizeIsLandscape
+          ? interfaceOrientation.isLandscape
+          : sizeIsLandscape
+      }
+      return size.width > size.height
+    }()
+    guard lastKnownIsLandscape != isLandscape else { return }
+    lastKnownIsLandscape = isLandscape
+
+    let portraitConstraints = portraitLayoutConstraints ?? []
+    let landscapeConstraints = landscapeLayoutConstraints ?? []
+    if isLandscape {
+      NSLayoutConstraint.deactivate(portraitConstraints)
+      NSLayoutConstraint.activate(landscapeConstraints)
+    } else {
+      NSLayoutConstraint.deactivate(landscapeConstraints)
+      NSLayoutConstraint.activate(portraitConstraints)
+    }
+
+    view.setNeedsLayout()
+    lastLaidOutMemberListViewSize = .zero
+  }
+
+  // 画面回転時、等の必要に応じてレイアウトを更新
+  private func layoutVideoViewsIfNeeded() {
+    let size = memberListView.bounds.size
+    guard size != .zero else { return }
+    guard lastLaidOutMemberListViewSize != size else { return }
+    lastLaidOutMemberListViewSize = size
+    layoutVideoViews(for: size)
   }
 
   fileprivate func layoutVideoViews(for size: CGSize) {

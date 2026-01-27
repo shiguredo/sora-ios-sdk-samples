@@ -14,6 +14,9 @@ class SimulcastVideoChatRoomViewController: UIViewController {
   private var upstreamVideoView: VideoView?
   // 最後にハンドラ登録した Upstream を覚えておくためのプロパティ
   private weak var observedUpstream: MediaStream?
+  // レイアウトの再計算を必要な時のみ行うために View サイズをキャッシュします。
+  // View サイズが変わった場合のみレイアウト再計算を行うために使用します。
+  private var lastLaidOutVideoViewsSize: CGSize = .zero
 
   // カメラのミュート状態を制御するためのコントローラーです
   private let cameraMuteController = CameraMuteController()
@@ -134,13 +137,33 @@ class SimulcastVideoChatRoomViewController: UIViewController {
   }
 
   override func viewWillTransition(
-    to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator
+    to _: CGSize, with coordinator: UIViewControllerTransitionCoordinator
   ) {
     // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
     // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
     coordinator.animate(alongsideTransition: { [weak self] _ in
-      self?.layoutVideoViews(for: size)
+      guard let self else { return }
+      self.view.layoutIfNeeded()
+      self.layoutVideoViewsIfNeeded()
+    }, completion: { [weak self] _ in
+      self?.layoutVideoViewsIfNeeded()
     })
+  }
+
+  // Auto Layout の制約計算後に呼ばれるライフサイクルメソッド
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    // 映像・セルフビューを再配置します
+    layoutVideoViewsIfNeeded()
+  }
+
+  // 画面回転時、等のタイミングでレイアウトを更新します
+  private func layoutVideoViewsIfNeeded() {
+    let size = videoViewsView.bounds.size
+    guard size != .zero else { return }
+    guard lastLaidOutVideoViewsSize != size else { return }
+    lastLaidOutVideoViewsSize = size
+    layoutVideoViews(for: size)
   }
 
   fileprivate func layoutVideoViews(for size: CGSize) {
