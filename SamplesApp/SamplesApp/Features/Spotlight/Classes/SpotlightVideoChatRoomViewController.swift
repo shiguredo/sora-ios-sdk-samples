@@ -147,13 +147,15 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   ) {
     // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
     // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
-    coordinator.animate(alongsideTransition: { [weak self] _ in
-      guard let self else { return }
-      self.view.layoutIfNeeded()
-      self.layoutVideoViewsIfNeeded()
-    }, completion: { [weak self] _ in
-      self?.layoutVideoViewsIfNeeded()
-    })
+    coordinator.animate(
+      alongsideTransition: { [weak self] _ in
+        guard let self else { return }
+        self.view.layoutIfNeeded()
+        self.layoutVideoViewsIfNeeded()
+      },
+      completion: { [weak self] _ in
+        self?.layoutVideoViewsIfNeeded()
+      })
   }
 
   // Auto Layout の制約計算後に呼ばれるライフサイクルメソッド

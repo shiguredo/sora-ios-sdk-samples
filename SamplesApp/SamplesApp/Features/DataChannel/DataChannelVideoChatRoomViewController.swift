@@ -264,17 +264,19 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   ) {
     // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
     // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
-    coordinator.animate(alongsideTransition: { [weak self] _ in
-      guard let self = self else { return }
-      self.updateSplitLayoutIfNeeded(for: size)
-      self.view.layoutIfNeeded()
-      self.layoutVideoViewsIfNeeded()
-    }, completion: { [weak self] _ in
-      guard let self = self else { return }
-      self.updateSplitLayoutIfNeeded(for: self.view.bounds.size)
-      self.view.layoutIfNeeded()
-      self.layoutVideoViewsIfNeeded()
-    })
+    coordinator.animate(
+      alongsideTransition: { [weak self] _ in
+        guard let self = self else { return }
+        self.updateSplitLayoutIfNeeded(for: size)
+        self.view.layoutIfNeeded()
+        self.layoutVideoViewsIfNeeded()
+      },
+      completion: { [weak self] _ in
+        guard let self = self else { return }
+        self.updateSplitLayoutIfNeeded(for: self.view.bounds.size)
+        self.view.layoutIfNeeded()
+        self.layoutVideoViewsIfNeeded()
+      })
   }
 
   override func viewDidLayoutSubviews() {
