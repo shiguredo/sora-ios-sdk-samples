@@ -13,10 +13,10 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
     env:
-      XCODE: /Applications/Xcode_16.3.app
-      XCODE_SDK: iphoneos18.4
+      XCODE: /Applications/Xcode_26.2.app
+      XCODE_SDK: iphoneos26.2
       PROJECT: SamplesApp
       SCHEME: SamplesApp
     steps:

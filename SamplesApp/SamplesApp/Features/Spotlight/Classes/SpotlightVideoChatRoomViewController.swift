@@ -14,6 +14,9 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   private var upstreamVideoView: VideoView?
   // 最後にハンドラ登録した Upstream を覚えておくためのプロパティ
   private weak var observedUpstream: MediaStream?
+  // レイアウトの再計算を必要な時のみ行うために View サイズをキャッシュします。
+  // View サイズが変わった場合のみレイアウト再計算を行うために使用します。
+  private var lastLaidOutVideoViewsSize: CGSize = .zero
 
   // カメラのミュート状態を制御するためのコントローラーです
   private let cameraMuteController = CameraMuteController()
@@ -73,17 +76,16 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   /// マイクのミュート状態です。
   private var isMicSoftMuted: Bool = false
 
-  /// 接続開始時にカメラを有効にするかどうか。設定画面から渡されます。
-  var isStartCameraEnabled: Bool = true
-
   // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
   private var didApplyInitialCameraState = false
+  // 接続開始時のマイクの状態適用を行なったかを管理するフラグ
+  private var didApplyInitialMicrophoneState = false
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
     // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
-    if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = "チャット中: \(mediaChannel.configuration.channelId)"
     }
   }
@@ -93,7 +95,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
-    if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
         logger.info("[sample] mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
@@ -133,7 +135,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     super.viewWillDisappear(animated)
 
     // viewDidAppearで設定したコールバックを、対になるここで削除します。
-    if let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
       mediaChannel.handlers.onDisconnect = nil
@@ -141,13 +143,35 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   }
 
   override func viewWillTransition(
-    to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator
+    to _: CGSize, with coordinator: UIViewControllerTransitionCoordinator
   ) {
     // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
     // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
-    coordinator.animate(alongsideTransition: { [weak self] _ in
-      self?.layoutVideoViews(for: size)
-    })
+    coordinator.animate(
+      alongsideTransition: { [weak self] _ in
+        guard let self else { return }
+        self.view.layoutIfNeeded()
+        self.layoutVideoViewsIfNeeded()
+      },
+      completion: { [weak self] _ in
+        self?.layoutVideoViewsIfNeeded()
+      })
+  }
+
+  // Auto Layout の制約計算後に呼ばれるライフサイクルメソッド
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    // 映像・セルフビューを再配置します
+    layoutVideoViewsIfNeeded()
+  }
+
+  // 画面回転時、等のタイミングでレイアウトを更新します
+  private func layoutVideoViewsIfNeeded() {
+    let size = videoViewsView.bounds.size
+    guard size != .zero else { return }
+    guard lastLaidOutVideoViewsSize != size else { return }
+    lastLaidOutVideoViewsSize = size
+    layoutVideoViews(for: size)
   }
 
   fileprivate func layoutVideoViews(for size: CGSize) {
@@ -253,31 +277,48 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 
 extension SpotlightVideoChatRoomViewController {
   // カメラの初期状態を適用します。
-  // 開始時カメラ無効、で接続した際に一度だけカメラハードミュートを有効にします。
-  private func applyInitialCameraStateIfNeeded(upstream: MediaStream) {
+  // 開始時カメラ無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
+  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel) {
     guard !didApplyInitialCameraState else {
       return
     }
     didApplyInitialCameraState = true
 
-    guard !isStartCameraEnabled else {
+    guard !mediaChannel.configuration.initialCameraEnabled else {
       return
     }
 
-    applyCameraMuteStateTransition(to: .hardMuted, upstream: upstream)
+    cameraMuteController.updateButton(to: .hardMuted)
+    cameraCapture = nil
+    isCameraMuteOperationInProgress = false
+  }
+
+  // マイクの初期状態を適用します。
+  // 開始時マイク無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
+  private func applyInitialMicrophoneStateIfNeeded(mediaChannel: MediaChannel) {
+    guard !didApplyInitialMicrophoneState else {
+      return
+    }
+    didApplyInitialMicrophoneState = true
+
+    let initialState: AudioMuteState =
+      mediaChannel.configuration.initialMicrophoneEnabled ? .enabled : .hardMuted
+    audioMuteController.apply(to: initialState, using: mediaChannel)
   }
 
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
-    guard (SpotlightSoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+      mediaChannel.streams != nil
+    else {
       return
     }
 
     // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
     // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
-    let upstream = SpotlightSoraSDKManager.shared.currentMediaChannel?.senderStream
-    let downstreams = SpotlightSoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+    let upstream = mediaChannel.senderStream
+    let downstreams = mediaChannel.receiverStreams ?? []
 
     // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
     if downstreamVideoViews.count < downstreams.count {
@@ -323,10 +364,10 @@ extension SpotlightVideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      applyInitialCameraStateIfNeeded(upstream: upstream)
+      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel)
 
       let toMuteState: CameraMuteState
-      if cameraMuteState == .hardMuted || (!isStartCameraEnabled && didApplyInitialCameraState) {
+      if cameraMuteState == .hardMuted {
         toMuteState = .hardMuted
       } else if upstream.videoEnabled {
         toMuteState = .recording
@@ -354,6 +395,7 @@ extension SpotlightVideoChatRoomViewController {
         ? .enabled
         : (audioMuteController.currentState == .hardMuted ? .hardMuted : .softMuted)
       audioMuteController.updateButton(to: nextState)
+      applyInitialMicrophoneStateIfNeeded(mediaChannel: mediaChannel)
       upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
         DispatchQueue.main.async {
           self?.handleUpstreamAudioSwitch(isEnabled: isEnabled)
@@ -369,11 +411,9 @@ extension SpotlightVideoChatRoomViewController {
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
-    // ハードミュート中にこのコールバックが来る想定はないが、安全のためログを出して抜ける
-    guard cameraMuteState != .hardMuted else {
-      logger.error("[sample] Unexpected onSwitchVideo callback during hardMuted state")
-      return
-    }
+    // 映像ハードミュートは内部的にソフトミュート実行しており videoEnabled が切り替わるため、
+    // このコールバックが来ても UI は維持します
+    guard cameraMuteState != .hardMuted else { return }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     cameraMuteController.updateButton(to: nextState)
   }
@@ -383,99 +423,71 @@ extension SpotlightVideoChatRoomViewController {
   // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
   private func applyCameraMuteStateTransition(
     to nextState: CameraMuteState,
-    upstream: MediaStream
+    mediaChannel: MediaChannel,
+    upstream _: MediaStream
   ) {
     let previousState = cameraMuteState
 
     switch nextState {
     case .recording:
-      // ハードミュート -> ON
+      // 映像 ON
       guard previousState == .hardMuted else {
         cameraMuteController.updateButton(to: nextState)
-        upstream.videoEnabled = true
+        _ = mediaChannel.setVideoSoftMute(false)
         cameraCapture = nil
         return
       }
-      let restartCapturer = cameraCapture
-      // カメラ無効で接続開始した場合は restartCapturer=cameraCapture==null となり
-      // ここで CameraCapture を生成します。
-      // カメラ有効状態でハードミュートから復帰し場合は元の CameraCapture の参照を使用します。
-      let startNewCapturerIfNeeded = restartCapturer == nil
-      let startSetup =
-        startNewCapturerIfNeeded
-        ? CameraMuteController.createCapturerForStart(
-          using: SpotlightSoraSDKManager.shared.currentMediaChannel?.configuration.cameraSettings,
-          upstream: upstream)
-        : nil
-      guard let capturer = restartCapturer ?? startSetup?.capturer,
-        let format = startSetup?.format ?? restartCapturer?.format,
-        let frameRate = startSetup?.frameRate ?? restartCapturer?.frameRate
-      else {
-        logger.warning("[sample] Camera capturer is unavailable for start.")
-        cameraMuteController.updateButton(to: previousState)
-        upstream.videoEnabled = false
-        return
-      }
-      cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      let completion: (Error?) -> Void = { [weak self, weak upstream] error in
-        DispatchQueue.main.async {
-          guard let self = self, let upstream = upstream else { return }
-          self.isCameraMuteOperationInProgress = false
-          if let error {
-            // 再開失敗
-            logger.warning("[sample] Failed to start/restart camera: \(error.localizedDescription)")
-            // 状態を直前の状態に戻してリトライできるように参照を保持する
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: restartCapturer
-            )
-            self.cameraCapture = restartCapturer
-          } else {
-            // CameraVideoCapturer.current が再稼働したため、誤使用を防ぐためにも nil に戻す
+      // setVideoHardMute は async メソッドのため Task 内で実行します
+      Task { [weak self] in
+        do {
+          try await mediaChannel.setVideoHardMute(false)
+          // UI の処理は MainActor (メインスレッド)で実行します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
             self.cameraCapture = nil
             self.cameraMuteController.updateButton(to: .recording)
-            upstream.videoEnabled = true
+          }
+        } catch {
+          // エラー時は UI を巻き戻します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
+            logger.warning("[sample] Failed to unhard mute video: \(error.localizedDescription)")
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
-      if startNewCapturerIfNeeded {
-        capturer.start(format: format, frameRate: frameRate, completionHandler: completion)
-      } else {
-        capturer.restart(completionHandler: completion)
-      }
     case .softMuted:
-      // ON -> ソフトミュート
-      upstream.videoEnabled = false
+      // ソフトミュート
+      _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: nextState)
     case .hardMuted:
-      // ソフトミュート -> ハードミュート
-      // ハードミュートでも失敗時の不意の音声送出を防ぐため videoEnabled=false にします
-      upstream.videoEnabled = false
-      guard let capturer = CameraVideoCapturer.current else {
-        self.cameraMuteController.updateButton(to: nextState)
-        // 既に停止済み
-        return
-      }
-      cameraCapture = capturer
+      // ハードミュート
       isCameraMuteOperationInProgress = true
-      // キャプチャー停止処理
-      capturer.stop { [weak self, weak upstream] error in
-        DispatchQueue.main.async {
-          guard let self = self, let upstream = upstream else { return }
-          self.isCameraMuteOperationInProgress = false
-          if let error {
-            // 停止失敗
-            logger.warning("[sample] Failed to stop camera: \(error.localizedDescription)")
-            // 直前の状態に戻します
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: capturer
-            )
-          } else {
+      cameraMuteController.updateButton(to: .hardMuted)
+      cameraCapture = nil
+      // setVideoHardMute は async メソッドのため Task 内で実行します
+      Task { [weak self] in
+        do {
+          try await mediaChannel.setVideoHardMute(true)
+          // UI の処理は MainActor (メインスレッド)で実行します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
             self.cameraMuteController.updateButton(to: .hardMuted)
+          }
+        } catch {
+          // エラー時は UI を巻き戻します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
+            logger.warning("[sample] Failed to hard mute video: \(error.localizedDescription)")
+            if previousState == .recording {
+              _ = mediaChannel.setVideoSoftMute(false)
+            }
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
@@ -495,7 +507,7 @@ extension SpotlightVideoChatRoomViewController {
     cameraCapture = nil
     isCameraMuteOperationInProgress = false
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    SpotlightSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
     performSegue(withIdentifier: "Exit", sender: self)
   }
@@ -524,19 +536,19 @@ extension SpotlightVideoChatRoomViewController {
 
   /// カメラミュートボタンを押したときの挙動を定義します。
   @IBAction func onCameraMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let upstream = mediaChannel.senderStream
     else {
       return
     }
 
     let nextState = cameraMuteState.next()
-    applyCameraMuteStateTransition(to: nextState, upstream: upstream)
+    applyCameraMuteStateTransition(to: nextState, mediaChannel: mediaChannel, upstream: upstream)
   }
 
   /// マイクミュートボタンを押したときの挙動を定義します。
   @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = SpotlightSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
     audioMuteController.toggle(using: mediaChannel)

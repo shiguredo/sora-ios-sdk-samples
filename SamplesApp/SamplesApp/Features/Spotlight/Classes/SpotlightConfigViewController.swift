@@ -17,6 +17,9 @@ class SpotlightConfigViewController: UITableViewController {
   /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
+  /// 開始時のマイク有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// アクティブ配信数を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var spotlightNumberSegmentedControl: UISegmentedControl!
 
@@ -73,7 +76,7 @@ class SpotlightConfigViewController: UITableViewController {
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
     // role 引数には .sendrecv を指定します。
-    SpotlightSoraSDKManager.shared.connect(
+    var configuration = SpotlightEnvironment.makeConfiguration(
       channelId: channelId,
       videoCodec: selectedVideoCodec(),
       spotlightFocusRid: selectedSpotlightRid(for: spotlightFocusRidSegmentedControl),
@@ -82,9 +85,17 @@ class SpotlightConfigViewController: UITableViewController {
       simulcast: selectedSimulcast(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
-      startCameraEnabled: cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0,
       videoBitRate: videoBitRatePickerCell.selectedBitRate
-    ) { [weak self] error in
+    )
+    // 開始時カメラ有効の入力値を configuration に渡します
+    configuration.initialCameraEnabled =
+      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+
+    // 開始時マイク有効の入力値を configuration に渡します
+    configuration.initialMicrophoneEnabled =
+      microphoneEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       // 接続処理が終了したので false にします。
       self.isConnecting = false
@@ -94,7 +105,7 @@ class SpotlightConfigViewController: UITableViewController {
         // この場合は、エラー表示をユーザーに返すのが親切です。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        logger.warning("[sample] SpotlightSoraSDKManager connection error: \(error)")
+        logger.warning("[sample] SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -106,7 +117,7 @@ class SpotlightConfigViewController: UITableViewController {
         }
       } else {
         // errorがnilの場合は、接続に成功しています。
-        logger.info("[sample] SpotlightSoraSDKManager connected.")
+        logger.info("[sample] SoraSDKManager connected.")
 
         // 次の配信画面に遷移します。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
@@ -187,9 +198,6 @@ class SpotlightConfigViewController: UITableViewController {
     else {
       return
     }
-    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
-    roomViewController.isStartCameraEnabled =
-      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
   }
 
 }

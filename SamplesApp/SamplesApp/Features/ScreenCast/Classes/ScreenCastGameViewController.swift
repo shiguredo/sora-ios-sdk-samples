@@ -80,7 +80,7 @@ class ScreenCastGameViewController: UIViewController {
   /// 配信開始ボタンが押されたときの挙動を定義します。
   @IBAction
   func onCameraButton(_ sender: UIBarButtonItem) {
-    let isConnected = (ScreenCastSoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
     if isConnected {
       // 既に配信中なので何もしなくて良いです。ボタンの状態だけ更新します。
       updateBarButtonItems()
@@ -94,7 +94,7 @@ class ScreenCastGameViewController: UIViewController {
   /// 配信停止ボタンが押されたときの挙動を定義します。
   @IBAction
   func onPauseButton(_ sender: UIBarButtonItem) {
-    let isConnected = (ScreenCastSoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
     if isConnected {
       handleDisconnect()
     } else {
@@ -128,7 +128,7 @@ class ScreenCastGameViewController: UIViewController {
         guard error == nil else {
           return
         }
-        guard let currentMediaChannel = ScreenCastSoraSDKManager.shared.currentMediaChannel,
+        guard let currentMediaChannel = SoraSDKManager.shared.currentMediaChannel,
           let senderStream = currentMediaChannel.senderStream
         else {
           return
@@ -153,7 +153,7 @@ class ScreenCastGameViewController: UIViewController {
           // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
           logger.warning("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
           self?.handleDisconnect()
-        } else if let mediaChannel = ScreenCastSoraSDKManager.shared.currentMediaChannel {
+        } else if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
           // サーバーから切断されたときのコールバックを設定します。
           mediaChannel.handlers.onDisconnect = { [weak self] event in
             guard let self = self else { return }
@@ -185,7 +185,7 @@ class ScreenCastGameViewController: UIViewController {
     }
 
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    ScreenCastSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     DispatchQueue.main.async { [weak self] in
       self?.updateBarButtonItems()
     }
@@ -222,7 +222,7 @@ class ScreenCastGameViewController: UIViewController {
 
   /// 現在の配信状態に応じてナビゲーションバーのボタンの状態を更新します。
   private func updateBarButtonItems() {
-    let isConnected = (ScreenCastSoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
     if isConnected {
       navigationItem.rightBarButtonItems = [pauseButton]
     } else {

@@ -20,6 +20,9 @@ class DataChannelConfigViewController: UITableViewController {
   /// 接続時のカメラ有効設定を切り替えるためのコントロールです。
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
+  /// 開始時のマイク有効設定を切り替えるためのコントロールです。
+  @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
+
   /// 動画のコーデックを指定するためのコントロールです。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
@@ -96,15 +99,15 @@ class DataChannelConfigViewController: UITableViewController {
     }
     isConnecting = true
 
-    DataChannelSoraSDKManager.shared.dataChannelRandomBinary = dataChannelRandomBinarySwitch.isOn
     let configuration = makeConfiguration(channelId: channelId)
 
-    DataChannelSoraSDKManager.shared.connect(with: configuration) { [weak self] error in
+    // Sora 接続処理を実行し、配信画面に遷移します
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       self.isConnecting = false
 
       if let error {
-        logger.warning("DataChannelSoraSDKManager connection error: \(error)")
+        logger.warning("SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -117,7 +120,7 @@ class DataChannelConfigViewController: UITableViewController {
         return
       }
 
-      logger.warning("DataChannelSoraSDKManager connected.")
+      logger.warning("SoraSDKManager connected.")
       DispatchQueue.main.async {
         self.performSegue(withIdentifier: "Connect", sender: self)
       }
@@ -189,10 +192,15 @@ class DataChannelConfigViewController: UITableViewController {
       ordered: ordered
     )
 
+    // カメラ自体は後から有効化できるよう、cameraSettings.isEnabled は常に true にします。
+    configuration.cameraSettings.isEnabled = true
     // 開始時カメラ有効の入力値を configuration に渡します
-    let shouldEnableCameraOnConnect =
+    configuration.initialCameraEnabled =
       cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
-    configuration.cameraSettings.isEnabled = shouldEnableCameraOnConnect
+
+    // 開始時マイク有効の入力値を configuration に渡します
+    configuration.initialMicrophoneEnabled =
+      microphoneEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     return configuration
   }
@@ -278,8 +286,6 @@ class DataChannelConfigViewController: UITableViewController {
     else {
       return
     }
-    // 配信画面のViewControllerに開始時カメラ有効の設定値を渡します
-    roomViewController.isStartCameraEnabled =
-      cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+    roomViewController.isRandomBinaryEnabled = dataChannelRandomBinarySwitch.isOn
   }
 }

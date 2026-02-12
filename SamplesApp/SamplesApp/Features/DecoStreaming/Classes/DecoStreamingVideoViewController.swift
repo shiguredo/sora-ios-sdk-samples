@@ -67,7 +67,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
     super.viewWillAppear(animated)
 
     // 配信画面に遷移する直前に、配信画面のタイトルを現在のチャンネルIDを使用して書き換えています。
-    if let mediaChannel = DecoStreamingSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = "配信中: \(mediaChannel.configuration.channelId)"
 
       // サーバーから切断されたときのコールバックを設定します。
@@ -129,7 +129,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
     }
 
     // 配信画面に遷移してきたら、videoViewをvideoRendererに設定することで、配信者側の動画を画面に表示させます。
-    DecoStreamingSoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
+    SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = videoView
   }
 
   override func viewWillDisappear(_ animated: Bool) {
@@ -141,7 +141,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
     }
 
     // 配信画面を何らかの理由で抜けることになったら、videoRendererをnilに戻すことで、videoViewへの動画表示をストップさせます。
-    DecoStreamingSoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
+    SoraSDKManager.shared.currentMediaChannel?.senderStream?.videoRenderer = nil
   }
 
   override func viewWillTransition(
@@ -194,7 +194,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
   /// 詳しくはMain.storyboard内の定義をご覧ください。
   @IBAction func onExitButton(_ sender: UIBarButtonItem?) {
     // 閉じるボタンを押してもいきなり画面を閉じるのではなく、明示的に配信をストップしてから、画面を閉じるようにしています。
-    DecoStreamingSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     performSegue(withIdentifier: "Exit", sender: self)
   }
 
@@ -335,7 +335,7 @@ extension DecoStreamingVideoViewController: AVCaptureVideoDataOutputSampleBuffer
     _ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer,
     from connection: AVCaptureConnection
   ) {
-    guard let mediaChannel = DecoStreamingSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let mediaStream = mediaChannel.senderStream
     else {
       return

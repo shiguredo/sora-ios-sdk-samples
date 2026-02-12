@@ -18,6 +18,21 @@
 - [CHANGE] SimulcastSample の設定値である SimulcastRid を SimulcastRequestRid に移行する
   - これによりシステム条件の WebRTC SFU Sora のバージョンが 2025.2.0 以降になる
   - @zztkm
+- [UPDATE] DataChannel Sample の横画面での配信時レイアウトを変更する
+  - 左右分割で、左側に映像、右側にメッセージ欄のレイアウトにする
+  - @t-miya
+- [UPDATE] 接続時カメラ有効設定の値を `Configuration.initialCameraEnabled` に渡すようにする
+  - @t-miya
+- [UPDATE] 各サンプル個別の SoraSDKManager を統合する
+  - DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat それぞれの XXSoraSDKManager を廃止し、 Shared/SoraSDKManager を利用するようにする
+  - @t-miya
+- [UPDATE] 映像ハードミュートを MediaChannel.setVideoHardMute(Bool) 利用で実行するようにする
+  - DataChannel、Simulcast、Spotlight、VideoChat それぞれの映像ハードミュート処理に適用する
+  - `接続時カメラ有効` 設定を無効で開始した際の映像ハードミュートも MediaChannel.setVideoHardMute(Bool) を利用する
+  - @t-miya
+- [UPDATE] 映像ソフトミュートを MediaChannel.setVideoSoftMute(Bool) 利用で実行するようにする
+  - DataChannel、Simulcast、Spotlight、VideoChat それぞれの映像ソフトミュート処理に適用する
+  - @t-miya
 - [UPDATE] システム条件を変更する
   - Xcode 26.1.1
   - WebRTC SFU Sora 2025.2.0 以降
@@ -32,6 +47,10 @@
 - [UPDATE] 前面カメラ・背面カメラの切り替えボタンアイコンを置き換える
   - `camera` から `camera.rotate` に置き換える
   - @t-miya
+- [ADD] 接続メニューに `開始時マイク有効` 項目を追加する
+  - DataChannel、Simulcast、Spotlight、VideoChat が対象
+  - `無効` で接続した場合は音声ハードミュート相当の状態で開始する
+  - @t-miya
 - [ADD] 音声ハードミュート機能を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
   - 録音 -> ソフトミュート -> ハードミュート -> 録音 と遷移するようにマイクミュートボタンの挙動を変更する
@@ -40,7 +59,7 @@
   - @t-miya
 - [ADD] 接続メニューに `接続時カメラ有効` 項目を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
-  - `無効` で接続した場合はカメラハードミュート状態で開始する
+  - `無効` で接続した場合は映像ハードミュート相当の状態で開始する
   - @t-miya
 - [ADD] カメラハードミュート機能を追加する
   - DataChannel、Simulcast、Spotlight、VideoChat が対象
@@ -62,9 +81,16 @@
   - Any 型の値をエンコード・デコード可能にするラッパー型
   - JSON の動的なデータ構造をハンドルする際に使用
   - @zztkm
+- [FIX] VideoChat、Simulcast、Spotlight Sample にて画面回転時にセルフビューの一部が画面外になってしまう不具合を修正する
+  - @t-miya
+- [FIX] DataChannel Sample にて画面回転時にセルフビューが表示されなくなる不具合を修正する
+  - @t-miya
 
 ### misc
 
+- [UPDATE] Github Actions のビルド環境を更新する
+  - Xcode の version を 26.2 に変更
+  - SDK を iOS 26.2 に変更
 - [UPDATE] actions/checkout を v5 に上げる
   - @miosakuma
 - [UPDATE] `Claude Assistant` の `claude-response` を `ubuntu-slim` に移行する

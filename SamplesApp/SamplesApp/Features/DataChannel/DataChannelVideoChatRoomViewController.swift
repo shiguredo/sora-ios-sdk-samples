@@ -23,6 +23,11 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   /// 送受信したチャットメッセージの履歴を表示するコントロールです。
   @IBOutlet weak var historyTableView: UITableView!
 
+  /// 端末縦向き時のレイアウト制約です。
+  @IBOutlet private var portraitLayoutConstraints: [NSLayoutConstraint]?
+  /// 端末横向き時のレイアウト制約です。
+  @IBOutlet private var landscapeLayoutConstraints: [NSLayoutConstraint]?
+
   /// タップでメッセージ入力キーボードを閉じるためのジェスチャー認識器です。
   @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
 
@@ -58,6 +63,12 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   private var upstreamVideoView: VideoView?
   // 最後にハンドラ登録した Upstream を覚えておくためのプロパティ
   private weak var observedUpstream: MediaStream?
+  // レイアウトの再計算を必要な時のみ行うために MemberListView サイズをキャッシュします。
+  // 全体 View サイズが変わった場合のみレイアウト再計算を行うために使用します。
+  private var lastLaidOutMemberListViewSize: CGSize = .zero
+  // 端末が縦向きか横向きかの状態を保持しておくキャッシュです。
+  // 向きが変わった場合のみレイアウト再計算を行うために使用します。
+  private var lastKnownIsLandscape: Bool?
 
   // カメラのミュート状態です
   // CameraMuteController 経由で取得します
@@ -89,11 +100,13 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   /// マイクのミュート状態です。
   private var isMicSoftMuted: Bool = false
 
-  /// 接続開始時にカメラを有効にするかどうか。設定画面から渡されます。
-  var isStartCameraEnabled: Bool = true
+  /// ランダムなバイナリを送信するかどうか。設定画面から渡されます。
+  var isRandomBinaryEnabled: Bool = false
 
   // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
   private var didApplyInitialCameraState = false
+  // 接続開始時のマイクの状態適用を行なったかを管理するフラグ
+  private var didApplyInitialMicrophoneState = false
 
   /// チャットメッセージの履歴です。
   var history: [ChatMessage] = []
@@ -108,6 +121,9 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     historyTableView.delegate = self
     historyTableView.dataSource = self
     view.addGestureRecognizer(tapGestureRecognizer)
+    // View の領域内で描画されるようにします。
+    memberListView.clipsToBounds = true
+    updateSplitLayoutIfNeeded(for: view.bounds.size)
 
     // メッセージ入力キーボードの上部に Done ボタンを追加します。
     let textFieldToolBar = UIToolbar()
@@ -127,7 +143,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     super.viewWillAppear(animated)
 
     // チャット画面に遷移する直前に、タイトルを現在のチャンネルIDを使用して書き換えています。
-    if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = mediaChannel.configuration.channelId
       connectedUrlLabel.text = mediaChannel.connectedUrl?.absoluteString
 
@@ -168,7 +184,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
       // ランダムなバイナリを送信するように指定されていたら
       // テキストフィールドを入力不可にし、バイナリを生成します。
-      if DataChannelSoraSDKManager.shared.dataChannelRandomBinary {
+      if isRandomBinaryEnabled {
         chatMessageToSendTextField.isEnabled = false
         generateRandomBinary()
       } else {
@@ -211,7 +227,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
-    if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = { [weak self] _ in
         logger.info("mediaChannel.handlers.onAddStream")
         DispatchQueue.main.async {
@@ -237,7 +253,7 @@ class DataChannelVideoChatRoomViewController: UIViewController {
     super.viewWillDisappear(animated)
 
     // viewDidAppearで設定したコールバックを、対になるここで削除します。
-    if let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
     }
@@ -248,9 +264,66 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   ) {
     // 画面のサイズクラスが変更になるとき（画面回転などが対象です）、
     // 再レイアウトが必要になるので、アニメーションに合わせて画面の再レイアウトを粉います。
-    coordinator.animate(alongsideTransition: { [weak self] _ in
-      self?.layoutVideoViews(for: size)
-    })
+    coordinator.animate(
+      alongsideTransition: { [weak self] _ in
+        guard let self = self else { return }
+        self.updateSplitLayoutIfNeeded(for: size)
+        self.view.layoutIfNeeded()
+        self.layoutVideoViewsIfNeeded()
+      },
+      completion: { [weak self] _ in
+        guard let self = self else { return }
+        self.updateSplitLayoutIfNeeded(for: self.view.bounds.size)
+        self.view.layoutIfNeeded()
+        self.layoutVideoViewsIfNeeded()
+      })
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    updateSplitLayoutIfNeeded(for: view.bounds.size)
+    layoutVideoViewsIfNeeded()
+  }
+
+  // 端末が縦向きか横向きかによって映像とメッセージ欄の分割レイアウトを更新します。
+  private func updateSplitLayoutIfNeeded(for size: CGSize) {
+    // 端末が縦向きか横向きかを取得します。
+    // interfaceOrientation で取得できない場合は width と height の比較にフォールバックします。
+    let isLandscape: Bool = {
+      if let interfaceOrientation = view.window?.windowScene?.interfaceOrientation,
+        interfaceOrientation != .unknown
+      {
+        let sizeIsLandscape = size.width > size.height
+        return interfaceOrientation.isLandscape == sizeIsLandscape
+          ? interfaceOrientation.isLandscape
+          : sizeIsLandscape
+      }
+      return size.width > size.height
+    }()
+    guard lastKnownIsLandscape != isLandscape else { return }
+    lastKnownIsLandscape = isLandscape
+
+    let portraitConstraints = portraitLayoutConstraints ?? []
+    let landscapeConstraints = landscapeLayoutConstraints ?? []
+    if isLandscape {
+      NSLayoutConstraint.deactivate(portraitConstraints)
+      NSLayoutConstraint.activate(landscapeConstraints)
+    } else {
+      NSLayoutConstraint.deactivate(landscapeConstraints)
+      NSLayoutConstraint.activate(portraitConstraints)
+    }
+
+    view.setNeedsLayout()
+    lastLaidOutMemberListViewSize = .zero
+  }
+
+  // 画面回転時、等の必要に応じてレイアウトを更新
+  private func layoutVideoViewsIfNeeded() {
+    let size = memberListView.bounds.size
+    guard size != .zero else { return }
+    guard lastLaidOutMemberListViewSize != size else { return }
+    lastLaidOutMemberListViewSize = size
+    layoutVideoViews(for: size)
   }
 
   fileprivate func layoutVideoViews(for size: CGSize) {
@@ -370,10 +443,9 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   }
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
-    guard cameraMuteState != .hardMuted else {
-      logger.error("[sample] Unexpected onSwitchVideo callback during hardMuted state")
-      return
-    }
+    // 映像ハードミュートは内部的にソフトミュート実行しており videoEnabled が切り替わるため、
+    // このコールバックが来ても UI は維持します
+    guard cameraMuteState != .hardMuted else { return }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     cameraMuteController.updateButton(to: nextState)
   }
@@ -381,88 +453,71 @@ class DataChannelVideoChatRoomViewController: UIViewController {
   // カメラのミュート状態遷移を適用します。
   // recording -> soft_mute -> hard_mute -> recording の順に遷移することを前提とします。
   // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
-  private func applyCameraMuteStateTransition(to nextState: CameraMuteState, upstream: MediaStream)
-  {
+  private func applyCameraMuteStateTransition(
+    to nextState: CameraMuteState,
+    mediaChannel: MediaChannel,
+    upstream _: MediaStream
+  ) {
     let previousState = cameraMuteState
 
     switch nextState {
     case .recording:
+      // 映像 ON
       guard previousState == .hardMuted else {
         cameraMuteController.updateButton(to: nextState)
-        upstream.videoEnabled = true
+        _ = mediaChannel.setVideoSoftMute(false)
         cameraCapture = nil
         return
       }
-      let restartCapturer = cameraCapture
-      // カメラ無効で接続開始した場合は restartCapturer=cameraCapture==null となり
-      // ここで CameraCapture を生成します。
-      // カメラ有効状態でハードミュートから復帰し場合は元の CameraCapture の参照を使用します。
-      let startNewCapturerIfNeeded = restartCapturer == nil
-      let startSetup =
-        startNewCapturerIfNeeded
-        ? CameraMuteController.createCapturerForStart(
-          using: DataChannelSoraSDKManager.shared.currentMediaChannel?.configuration.cameraSettings,
-          upstream: upstream)
-        : nil
-      guard let capturer = restartCapturer ?? startSetup?.capturer,
-        let format = startSetup?.format ?? restartCapturer?.format,
-        let frameRate = startSetup?.frameRate ?? restartCapturer?.frameRate
-      else {
-        logger.warning("[sample] Camera capturer is unavailable for start.")
-        cameraMuteController.updateButton(to: previousState)
-        upstream.videoEnabled = false
-        return
-      }
-      cameraCapture = capturer
       isCameraMuteOperationInProgress = true
-      let completion: (Error?) -> Void = { [weak self, weak upstream] error in
-        DispatchQueue.main.async {
-          guard let self = self, let upstream = upstream else { return }
-          self.isCameraMuteOperationInProgress = false
-          if let error {
-            logger.warning("[sample] Failed to start/restart camera: \(error.localizedDescription)")
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: restartCapturer
-            )
-            self.cameraCapture = restartCapturer
-          } else {
+      // setVideoHardMute は async メソッドのため Task 内で実行します
+      Task { [weak self] in
+        do {
+          try await mediaChannel.setVideoHardMute(false)
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
             self.cameraCapture = nil
             self.cameraMuteController.updateButton(to: .recording)
-            upstream.videoEnabled = true
+          }
+        } catch {
+          // エラー時は UI を巻き戻します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
+            logger.warning("[sample] Failed to unhard mute video: \(error.localizedDescription)")
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
-      if startNewCapturerIfNeeded {
-        capturer.start(format: format, frameRate: frameRate, completionHandler: completion)
-      } else {
-        capturer.restart(completionHandler: completion)
-      }
     case .softMuted:
-      upstream.videoEnabled = false
+      // ソフトミュート
+      _ = mediaChannel.setVideoSoftMute(true)
       cameraMuteController.updateButton(to: nextState)
     case .hardMuted:
-      upstream.videoEnabled = false
-      guard let capturer = CameraVideoCapturer.current else {
-        cameraMuteController.updateButton(to: nextState)
-        return
-      }
-      cameraCapture = capturer
+      // ハードミュート
       isCameraMuteOperationInProgress = true
-      capturer.stop { [weak self, weak upstream] error in
-        DispatchQueue.main.async {
-          guard let self = self, let upstream = upstream else { return }
-          self.isCameraMuteOperationInProgress = false
-          if let error {
-            logger.warning("[sample] Failed to stop camera: \(error.localizedDescription)")
-            self.cameraMuteController.restoreState(
-              to: previousState,
-              upstream: upstream,
-              capturer: capturer
-            )
-          } else {
+      cameraMuteController.updateButton(to: .hardMuted)
+      cameraCapture = nil
+      // setVideoHardMute は async メソッドのため Task 内で実行します
+      Task { [weak self] in
+        do {
+          try await mediaChannel.setVideoHardMute(true)
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
             self.cameraMuteController.updateButton(to: .hardMuted)
+          }
+        } catch {
+          // エラー時は UI を巻き戻します
+          await MainActor.run {
+            guard let self else { return }
+            self.isCameraMuteOperationInProgress = false
+            logger.warning("[sample] Failed to hard mute video: \(error.localizedDescription)")
+            if previousState == .recording {
+              _ = mediaChannel.setVideoSoftMute(false)
+            }
+            self.cameraMuteController.updateButton(to: previousState)
           }
         }
       }
@@ -474,31 +529,48 @@ class DataChannelVideoChatRoomViewController: UIViewController {
 
 extension DataChannelVideoChatRoomViewController {
   // カメラの初期状態を適用します。
-  // 開始時カメラ無効、で接続した際に一度だけカメラハードミュートを有効にします。
-  private func applyInitialCameraStateIfNeeded(upstream: MediaStream) {
+  // 開始時カメラ無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
+  private func applyInitialCameraStateIfNeeded(mediaChannel: MediaChannel) {
     guard !didApplyInitialCameraState else {
       return
     }
     didApplyInitialCameraState = true
 
-    guard !isStartCameraEnabled else {
+    guard !mediaChannel.configuration.initialCameraEnabled else {
       return
     }
 
-    applyCameraMuteStateTransition(to: .hardMuted, upstream: upstream)
+    cameraMuteController.updateButton(to: .hardMuted)
+    cameraCapture = nil
+    isCameraMuteOperationInProgress = false
+  }
+
+  // マイクの初期状態を適用します。
+  // 開始時マイク無効、で接続した際に一度だけ UI 上もハードミュート状態に合わせます。
+  private func applyInitialMicrophoneStateIfNeeded(mediaChannel: MediaChannel) {
+    guard !didApplyInitialMicrophoneState else {
+      return
+    }
+    didApplyInitialMicrophoneState = true
+
+    let initialState: AudioMuteState =
+      mediaChannel.configuration.initialMicrophoneEnabled ? .enabled : .hardMuted
+    audioMuteController.apply(to: initialState, using: mediaChannel)
   }
 
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
-    guard (DataChannelSoraSDKManager.shared.currentMediaChannel?.streams) != nil else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
+      mediaChannel.streams != nil
+    else {
       return
     }
 
     // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
     // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
-    let upstream = DataChannelSoraSDKManager.shared.currentMediaChannel?.senderStream
-    let downstreams = DataChannelSoraSDKManager.shared.currentMediaChannel?.receiverStreams ?? []
+    let upstream = mediaChannel.senderStream
+    let downstreams = mediaChannel.receiverStreams ?? []
 
     // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
     if downstreamVideoViews.count < downstreams.count {
@@ -550,10 +622,10 @@ extension DataChannelVideoChatRoomViewController {
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
-      applyInitialCameraStateIfNeeded(upstream: upstream)
+      applyInitialCameraStateIfNeeded(mediaChannel: mediaChannel)
 
       let toMuteState: CameraMuteState
-      if cameraMuteState == .hardMuted || (!isStartCameraEnabled && didApplyInitialCameraState) {
+      if cameraMuteState == .hardMuted {
         toMuteState = .hardMuted
       } else if upstream.videoEnabled {
         toMuteState = .recording
@@ -581,6 +653,7 @@ extension DataChannelVideoChatRoomViewController {
         ? .enabled
         : (audioMuteController.currentState == .hardMuted ? .hardMuted : .softMuted)
       audioMuteController.updateButton(to: nextState)
+      applyInitialMicrophoneStateIfNeeded(mediaChannel: mediaChannel)
       upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
         DispatchQueue.main.async {
           self?.handleUpstreamAudioSwitch(isEnabled: isEnabled)
@@ -608,7 +681,7 @@ extension DataChannelVideoChatRoomViewController {
     cameraCapture = nil
     isCameraMuteOperationInProgress = false
     // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    DataChannelSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     // ExitセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
     performSegue(withIdentifier: "Exit", sender: self)
   }
@@ -637,19 +710,19 @@ extension DataChannelVideoChatRoomViewController {
 
   /// カメラミュートボタンを押したときの挙動を定義します。
   @IBAction func onCameraMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel,
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
       let upstream = mediaChannel.senderStream
     else {
       return
     }
 
     let nextState = cameraMuteState.next()
-    applyCameraMuteStateTransition(to: nextState, upstream: upstream)
+    applyCameraMuteStateTransition(to: nextState, mediaChannel: mediaChannel, upstream: upstream)
   }
 
   /// マイクミュートボタンを押したときの挙動を定義します。
   @IBAction func onMicMuteButton(_ sender: UIBarButtonItem) {
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
     audioMuteController.toggle(using: mediaChannel)
@@ -673,13 +746,13 @@ extension DataChannelVideoChatRoomViewController {
     guard let label = selectedLabel else {
       return
     }
-    guard let mediaChannel = DataChannelSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
 
     // メッセージを送信します。
     let data: Data
-    if DataChannelSoraSDKManager.shared.dataChannelRandomBinary {
+    if isRandomBinaryEnabled {
       guard let binary = binaryToSend else {
         return
       }
@@ -696,7 +769,7 @@ extension DataChannelVideoChatRoomViewController {
       return
     }
 
-    if DataChannelSoraSDKManager.shared.dataChannelRandomBinary {
+    if isRandomBinaryEnabled {
       generateRandomBinary()
     } else {
       chatMessageToSendTextField.text = nil
