@@ -8,9 +8,7 @@ private let logger = SamplesLogger.tagged("RPCRoom")
 enum RPCError: LocalizedError {
   case invalidJsonString
   case metadataNotJsonObject
-  case emptyMetadataItem
   case invalidJsonForItem
-  case metadataItemNotJsonObject
   case invalidMetadataKey
   case missingMetadataValue
 
@@ -20,12 +18,8 @@ enum RPCError: LocalizedError {
       return "JSON の文字列が不正です。"
     case .metadataNotJsonObject:
       return "metadata は JSON オブジェクトで指定してください。"
-    case .emptyMetadataItem:
-      return "key と value を JSON で指定してください。"
     case .invalidJsonForItem:
       return "JSON の文字列が不正です。"
-    case .metadataItemNotJsonObject:
-      return "metadata は JSON オブジェクトで指定してください。"
     case .invalidMetadataKey:
       return "key は文字列で指定してください。"
     case .missingMetadataValue:
@@ -34,10 +28,14 @@ enum RPCError: LocalizedError {
   }
 }
 
-// MARK: - RPCMethod Display Helper
+private enum RPCMethod {
+  case requestSimulcastRid
+  case requestSpotlightRid
+  case resetSpotlightRid
+  case putSignalingNotifyMetadata
+  case putSignalingNotifyMetadataItem
 
-extension RPCMethod {
-  fileprivate var displayName: String {
+  var displayName: String {
     switch self {
     case .requestSimulcastRid:
       return "RequestSimulcastRid"
@@ -233,10 +231,6 @@ class RPCRoomViewController: UIViewController {
         self?.handleSignaling(signaling)
       }
 
-      mediaChannel.handlers.onDataChannel = { [weak self] mediaChannel in
-        self?.updateRPCMethods(using: mediaChannel)
-      }
-
       mediaChannel.handlers.onRemoveStream = { [weak self] _ in
         DispatchQueue.main.async {
           self?.handleUpdateStreams()
@@ -271,7 +265,6 @@ class RPCRoomViewController: UIViewController {
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
       mediaChannel.handlers.onReceiveSignaling = nil
-      mediaChannel.handlers.onDataChannel = nil
       mediaChannel.handlers.onDisconnect = nil
     }
   }
@@ -409,7 +402,7 @@ class RPCRoomViewController: UIViewController {
           )
 
         case .putSignalingNotifyMetadata:
-          let (metadataDict, _) = try parseMetadata()
+          let metadataDict = try parseMetadata()
           let params = PutSignalingNotifyMetadataParams(
             metadata: metadataDict,
             push: pushSwitch.isOn ? true : nil
@@ -423,7 +416,7 @@ class RPCRoomViewController: UIViewController {
           )
 
         case .putSignalingNotifyMetadataItem:
-          let (key, _, valueJSON) = try parseMetadataItem()
+          let (key, valueJSON) = try parseMetadataItem()
           let params = PutSignalingNotifyMetadataItemParams<AnyCodable>(
             key: key,
             value: valueJSON,
@@ -484,12 +477,6 @@ class RPCRoomViewController: UIViewController {
     return rids.indices.contains(index) ? rids[index] : .none
   }
 
-  private func selectedSimulcastRidString() -> String {
-    let index = simulcastRidSegmentedControl.selectedSegmentIndex
-    let rids = ["none", "r0", "r1", "r2"]
-    return rids.indices.contains(index) ? rids[index] : "none"
-  }
-
   private func selectedSpotlightFocusRid() -> Rid {
     let index = spotlightFocusRidSegmentedControl.selectedSegmentIndex
     let rids: [Rid] = [.none, .r0, .r1, .r2]
@@ -523,10 +510,10 @@ class RPCRoomViewController: UIViewController {
     return [:]
   }
 
-  private func parseMetadata() throws -> ([String: AnyCodable], [String: Any]) {
+  private func parseMetadata() throws -> [String: AnyCodable] {
     let text = metadataTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
     if text.isEmpty {
-      return ([:], [:])
+      return [:]
     }
     guard let data = text.data(using: .utf8) else {
       throw RPCError.invalidJsonString
@@ -535,14 +522,10 @@ class RPCRoomViewController: UIViewController {
     guard let dictionary = object as? [String: Any] else {
       throw RPCError.metadataNotJsonObject
     }
-    var mapped: [String: AnyCodable] = [:]
-    for (key, value) in dictionary {
-      mapped[key] = AnyCodable(value)
-    }
-    return (mapped, dictionary)
+    return dictionary.mapValues(AnyCodable.init)
   }
 
-  private func parseMetadataItem() throws -> (String, Any, AnyCodable) {
+  private func parseMetadataItem() throws -> (String, AnyCodable) {
     let key = metadataItemKeyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
     let valueText = metadataItemValueTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -559,7 +542,7 @@ class RPCRoomViewController: UIViewController {
 
     let valueAny = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
     let valueJSON = AnyCodable(valueAny)
-    return (key, valueAny, valueJSON)
+    return (key, valueJSON)
   }
 
   private func handleDataChannelMessage(label: String, data: Data) {
@@ -585,40 +568,6 @@ class RPCRoomViewController: UIViewController {
         self.rpcMethodsLabel.text = "未取得"
       }
     }
-  }
-
-  private func updateRPCMethods(using mediaChannel: MediaChannel) {
-    let methods = mediaChannel.rpcMethods.map(\.displayName)
-    DispatchQueue.main.async {
-      self.rpcMethodsLabel.text = methods.isEmpty ? "未取得" : methods.joined(separator: ", ")
-    }
-  }
-
-  private func handleRPCResponse(response: RPCResponse<Any>, result: Any) {
-    let detail = rpcResponseDetailText(result)
-    appendLog(direction: "recv", label: "rpc", summary: "success", detail: detail)
-  }
-
-  private func handleRPCError(_ detail: RPCErrorDetail) {
-    let info = rpcErrorDetailText(detail)
-    appendLog(direction: "recv", label: "rpc", summary: "error(\(detail.code))", detail: info)
-  }
-
-  private func rpcResponseDetailText(_ result: Any) -> String {
-    var lines: [String] = []
-    lines.append("result: \(stringifyJSON(result))")
-    return lines.isEmpty ? "response" : lines.joined(separator: "\n")
-  }
-
-  private func rpcErrorDetailText(_ detail: RPCErrorDetail) -> String {
-    var lines: [String] = [
-      "code: \(detail.code)",
-      "message: \(detail.message)",
-    ]
-    if let data = detail.data {
-      lines.append("data: \(stringifyJSON(data))")
-    }
-    return lines.joined(separator: "\n")
   }
 
   private func stringifyJSON(_ object: Any) -> String {
