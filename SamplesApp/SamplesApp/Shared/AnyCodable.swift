@@ -12,7 +12,13 @@ struct AnyCodable: Codable {
 
   func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
-    if let intValue = value as? Int {
+    // JSONSerialization の Bool は NSNumber としてブリッジされるため、
+    // Bool と数値の区別には Core Foundation の型判定を使う。
+    if let numberValue = value as? NSNumber,
+      CFGetTypeID(numberValue) == CFBooleanGetTypeID()
+    {
+      try container.encode(numberValue.boolValue)
+    } else if let intValue = value as? Int {
       try container.encode(intValue)
     } else if let doubleValue = value as? Double {
       try container.encode(doubleValue)
