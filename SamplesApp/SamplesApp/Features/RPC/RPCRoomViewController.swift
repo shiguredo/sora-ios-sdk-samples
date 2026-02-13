@@ -349,6 +349,7 @@ class RPCRoomViewController: UIViewController {
 
     methodButton.setTitle(selectedMethod.displayName, for: .normal)
     setupMethodMenu()
+    refreshHeaderLayout()
   }
 
   private func updateMicButtonAppearance() {
@@ -815,6 +816,15 @@ class RPCRoomViewController: UIViewController {
       headerView.frame.size.height = size.height
       historyTableView.tableHeaderView = headerView
     }
+  }
+
+  private func refreshHeaderLayout() {
+    guard let headerView else { return }
+    headerView.setNeedsLayout()
+    headerView.layoutIfNeeded()
+    historyTableView.setNeedsLayout()
+    historyTableView.layoutIfNeeded()
+    updateHeaderLayoutIfNeeded()
   }
 
   private func labeledRow(title: String, control: UIView) -> UIView {
