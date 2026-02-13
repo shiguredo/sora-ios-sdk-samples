@@ -202,6 +202,7 @@ class RPCRoomViewController: UIViewController {
     setupHeaderView()
     setupMethodMenu()
     updateMethodUI()
+    updateMicButtonAppearance()
 
     rpcMethodsLabel.text = "未取得"
     resolutionLabel.text = "Resolution: -"
@@ -293,7 +294,7 @@ class RPCRoomViewController: UIViewController {
     }
     isAudioSoftMuted.toggle()
     mediaChannel.setAudioSoftMute(isAudioSoftMuted)
-    updateMicButtonTitle()
+    updateMicButtonAppearance()
   }
 
   @objc private func onTapView(_ sender: UITapGestureRecognizer) {
@@ -350,8 +351,18 @@ class RPCRoomViewController: UIViewController {
     setupMethodMenu()
   }
 
-  private func updateMicButtonTitle() {
-    micMuteButton?.title = isAudioSoftMuted ? "Mic Off" : "Mic"
+  private func updateMicButtonAppearance() {
+    guard let micMuteButton else {
+      return
+    }
+    let symbolName = isAudioSoftMuted ? "mic.slash" : "mic"
+    if let image = UIImage(systemName: symbolName) {
+      micMuteButton.image = image
+    } else {
+      micMuteButton.image = UIImage(named: symbolName)
+    }
+    micMuteButton.title = nil
+    micMuteButton.accessibilityLabel = isAudioSoftMuted ? "マイクミュート解除" : "マイクミュート"
   }
 
   private func sendRPC(isNotification: Bool) {

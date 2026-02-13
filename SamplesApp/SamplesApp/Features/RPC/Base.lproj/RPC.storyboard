@@ -584,7 +584,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="RPC" id="RPC-ROOM-Navigation">
-                        <barButtonItem key="rightBarButtonItem" title="Mic" id="RPC-ROOM-MicMuteButton">
+                        <barButtonItem key="rightBarButtonItem" image="mic" catalog="system" id="RPC-ROOM-MicMuteButton" userLabel="MuteMicButton">
                             <connections>
                                 <action selector="onMicMuteButton:" destination="RPC-ROOM-1" id="RPC-ROOM-MicMuteAction"/>
                             </connections>
@@ -610,6 +610,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="mic" catalog="system" width="110" height="128"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
