@@ -45,12 +45,12 @@ class RPCConfigViewController: UITableViewController {
 
     let configuration = makeConfiguration(channelId: channelId)
 
-    RPCSoraSDKManager.shared.connect(with: configuration) { [weak self] error in
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
       self.isConnecting = false
 
       if let error {
-        logger.warning("RPCSoraSDKManager connection error: \(error)")
+        logger.warning("SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -63,7 +63,7 @@ class RPCConfigViewController: UITableViewController {
         return
       }
 
-      logger.info("RPCSoraSDKManager connected.")
+      logger.info("SoraSDKManager connected.")
       DispatchQueue.main.async {
         self.performSegue(withIdentifier: "Connect", sender: self)
       }

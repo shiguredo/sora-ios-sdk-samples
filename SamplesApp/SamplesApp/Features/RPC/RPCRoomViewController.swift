@@ -212,7 +212,7 @@ class RPCRoomViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    if let mediaChannel = RPCSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = mediaChannel.configuration.channelId
       channelIdLabel.text = "Channel ID: \(mediaChannel.configuration.channelId)"
       let urlText = mediaChannel.connectedUrl?.absoluteString ?? "-"
@@ -261,7 +261,7 @@ class RPCRoomViewController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
-    if let mediaChannel = RPCSoraSDKManager.shared.currentMediaChannel {
+    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       mediaChannel.handlers.onDataChannelMessage = nil
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
@@ -289,7 +289,7 @@ class RPCRoomViewController: UIViewController {
   }
 
   @IBAction private func onMicMuteButton(_ sender: Any?) {
-    guard let mediaChannel = RPCSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
     isAudioSoftMuted.toggle()
@@ -367,7 +367,7 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func sendRPC(isNotification: Bool) {
-    guard let mediaChannel = RPCSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
 
@@ -643,12 +643,12 @@ class RPCRoomViewController: UIViewController {
     downstreamVideoView?.removeFromSuperview()
     downstreamVideoView = nil
     resolutionLabel.text = "Resolution: -"
-    RPCSoraSDKManager.shared.disconnect()
+    SoraSDKManager.shared.disconnect()
     performSegue(withIdentifier: "Exit", sender: self)
   }
 
   private func handleUpdateStreams() {
-    guard let mediaChannel = RPCSoraSDKManager.shared.currentMediaChannel else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
 
