@@ -78,8 +78,8 @@
   - Sora SDK の RPC 機能を実装・利用するためのサンプルアプリケーション
   - @zztkm
 - [ADD] 共有ユーティリティ AnyCodable を追加する
-  - Any 型の値をエンコード・デコード可能にするラッパー型
-  - JSON の動的なデータ構造をハンドルする際に使用
+  - Any 型の値を JSON エンコード/デコード可能にするラッパー型
+  - 動的な JSON を扱う場合に利用する
   - @zztkm
 - [FIX] VideoChat、Simulcast、Spotlight Sample にて画面回転時にセルフビューの一部が画面外になってしまう不具合を修正する
   - @t-miya

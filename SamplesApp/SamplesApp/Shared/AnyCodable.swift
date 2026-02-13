@@ -1,8 +1,8 @@
 import Foundation
 
-/// Any 型の値をエンコード・デコード可能にするラッパー型です。
+/// Any 型の値を JSON エンコード/デコード可能にするラッパー型です。
 ///
-/// JSON の動的なデータ構造（任意の型の値を含むオブジェクト）をハンドルする際に使用します。
+/// 動的な JSON を扱う場合に利用します。
 struct AnyCodable: Codable {
   let value: Any
 
