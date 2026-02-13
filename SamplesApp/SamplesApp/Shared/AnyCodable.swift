@@ -24,8 +24,6 @@ struct AnyCodable: Codable {
       try container.encode(doubleValue)
     } else if let stringValue = value as? String {
       try container.encode(stringValue)
-    } else if let boolValue = value as? Bool {
-      try container.encode(boolValue)
     } else if let arrayValue = value as? [Any] {
       try container.encode(arrayValue.map(AnyCodable.init))
     } else if let dictValue = value as? [String: Any] {
