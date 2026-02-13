@@ -444,6 +444,19 @@ class RPCRoomViewController: UIViewController {
     methodName: String,
     isNotification: Bool
   ) async throws {
+    let summary = selectedMethod.displayName
+    let detail = makeRequestDetail(
+      method: methodName,
+      params: paramsDictionary(from: params)
+    )
+
+    appendLog(
+      direction: isNotification ? "send(notification)" : "send",
+      label: "rpc",
+      summary: summary,
+      detail: detail
+    )
+
     if isNotification {
       try await mediaChannel.rpc(
         method: method,
@@ -461,14 +474,6 @@ class RPCRoomViewController: UIViewController {
           detail: stringifyJSON(response.result))
       }
     }
-
-    appendLog(
-      direction: isNotification ? "send(notification)" : "send",
-      label: "rpc",
-      summary: selectedMethod.displayName,
-      detail: makeRequestDetail(
-        method: methodName, params: paramsDictionary(from: params))
-    )
   }
 
   private func selectedSimulcastRid() -> Rid {
