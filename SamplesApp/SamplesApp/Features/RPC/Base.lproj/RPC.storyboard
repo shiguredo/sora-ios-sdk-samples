@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="RPC-NAV-1">
+    <device id="retina6_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="RPC-NAV-Scene">
+            <objects>
+                <navigationController id="RPC-NAV-1" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RPC-NAVBAR-1">
+                        <rect key="frame" x="0.0" y="124" width="440" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="RPC-CONFIG-1" kind="relationship" relationship="rootViewController" id="RPC-NAV-ROOT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RPC-NAV-FirstResponder" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4" y="166"/>
+        </scene>
+        <!--RPC 接続設定-->
+        <scene sceneID="RPC-CONFIG-Scene">
+            <objects>
+                <tableViewController id="RPC-CONFIG-1" customClass="RPCConfigViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="54" sectionHeaderHeight="18" sectionFooterHeight="18" id="RPC-CONFIG-Table">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="接続設定" id="RPC-CONFIG-Section-Connection">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Channel">
+                                        <rect key="frame" x="0.0" y="55.333332061767578" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Channel" id="RPC-CONFIG-Cell-Channel-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="channel_id" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Channel-TextField">
+                                                    <rect key="frame" x="114" y="16" width="306" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="onTextFieldDidEnd:" destination="RPC-CONFIG-1" eventType="editingDidEndOnExit" id="RPC-CONFIG-Channel-EditingEnd"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="チャンネルID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Channel-Label">
+                                                    <rect key="frame" x="20" y="16.666666666666668" width="98" height="21.000000000000004"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="RPC-CONFIG-Channel-TextField" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Channel-Content" secondAttribute="centerY" id="RPC-CONFIG-Channel-CenterY"/>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Channel-TextField" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Channel-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-Channel-TextField" firstAttribute="leading" secondItem="RPC-CONFIG-Channel-Label" secondAttribute="trailing" constant="12" id="RPC-CONFIG-Channel-Spacing"/>
+                                                <constraint firstItem="RPC-CONFIG-Channel-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Channel-Content" secondAttribute="leading" constant="20" id="RPC-CONFIG-Channel-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-Channel-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Channel-Content" secondAttribute="centerY" id="RPC-CONFIG-Channel-LabelCenter"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Role">
+                                        <rect key="frame" x="0.0" y="109.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Role" id="RPC-CONFIG-Cell-Role-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ロール" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Role-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="64" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="RPC-CONFIG-Role-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Role-Segmented">
+                                                    <rect key="frame" x="152" y="11.666666666666664" width="268" height="32"/>
+                                                    <segments>
+                                                        <segment title="送信のみ"/>
+                                                        <segment title="受信のみ"/>
+                                                        <segment title="双方向"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="RPC-CONFIG-Role-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Role-Content" secondAttribute="centerY" id="RPC-CONFIG-Role-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-Role-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Role-Content" secondAttribute="centerY" id="RPC-CONFIG-Role-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-Role-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Role-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-Role-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-Role-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-Role-Label" secondAttribute="trailing" constant="12" id="RPC-CONFIG-Role-LabelSpacing"/>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Role-Segmented" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Role-Trailing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Video">
+                                        <rect key="frame" x="0.0" y="163.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Video" id="RPC-CONFIG-Cell-Video-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="映像" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Video-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="80" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="RPC-CONFIG-Video-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Video-Switch">
+                                                    <rect key="frame" x="357" y="13" width="63" height="28"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Video-Switch" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Video-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-Video-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Video-Content" secondAttribute="centerY" id="RPC-CONFIG-Video-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-Video-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Video-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-Video-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-Video-Switch" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Video-Content" secondAttribute="centerY" id="RPC-CONFIG-Video-SwitchCenter"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-VideoCodec">
+                                        <rect key="frame" x="0.0" y="217.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-VideoCodec" id="RPC-CONFIG-Cell-VideoCodec-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-VideoCodec-Segmented">
+                                                    <rect key="frame" x="20" y="11.666666666666664" width="400" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="VP8"/>
+                                                        <segment title="VP9"/>
+                                                        <segment title="AV1"/>
+                                                        <segment title="H.264"/>
+                                                        <segment title="H.265"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-VideoCodec-Segmented" secondAttribute="trailing" constant="20" id="RPC-CONFIG-VideoCodec-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-VideoCodec-Segmented" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-VideoCodec-Content" secondAttribute="leading" constant="20" id="RPC-CONFIG-VideoCodec-Leading"/>
+                                                <constraint firstItem="RPC-CONFIG-VideoCodec-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-VideoCodec-Content" secondAttribute="centerY" id="RPC-CONFIG-VideoCodec-CenterY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Audio">
+                                        <rect key="frame" x="0.0" y="271.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Audio" id="RPC-CONFIG-Cell-Audio-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="音声" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Audio-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="80" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="RPC-CONFIG-Audio-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Audio-Switch">
+                                                    <rect key="frame" x="357" y="13" width="63" height="28"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Audio-Switch" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Audio-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-Audio-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Audio-Content" secondAttribute="centerY" id="RPC-CONFIG-Audio-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-Audio-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Audio-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-Audio-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-Audio-Switch" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Audio-Content" secondAttribute="centerY" id="RPC-CONFIG-Audio-SwitchCenter"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Camera">
+                                        <rect key="frame" x="0.0" y="325.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Camera" id="RPC-CONFIG-Cell-Camera-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="接続時カメラ有効" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Camera-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="147" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="RPC-CONFIG-Camera-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Camera-Segmented">
+                                                    <rect key="frame" x="227" y="11.666666666666664" width="193" height="32"/>
+                                                    <segments>
+                                                        <segment title="有効"/>
+                                                        <segment title="無効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="RPC-CONFIG-Camera-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Camera-Content" secondAttribute="centerY" id="RPC-CONFIG-Camera-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-Camera-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Camera-Content" secondAttribute="centerY" id="RPC-CONFIG-Camera-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-Camera-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Camera-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-Camera-LabelLeading"/>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Camera-Segmented" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Camera-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-Camera-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-Camera-Label" secondAttribute="trailing" constant="12" id="RPC-CONFIG-Camera-Spacing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="サイマルキャスト" id="RPC-CONFIG-Section-Simulcast">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Simulcast">
+                                        <rect key="frame" x="0.0" y="363.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Simulcast" id="RPC-CONFIG-Cell-Simulcast-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="サイマルキャスト" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Simulcast-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="130" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="RPC-CONFIG-Simulcast-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Simulcast-Switch">
+                                                    <rect key="frame" x="357" y="13" width="63" height="28"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Simulcast-Switch" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Simulcast-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-Simulcast-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Simulcast-Content" secondAttribute="centerY" id="RPC-CONFIG-Simulcast-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-Simulcast-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Simulcast-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-Simulcast-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-Simulcast-Switch" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Simulcast-Content" secondAttribute="centerY" id="RPC-CONFIG-Simulcast-SwitchCenter"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-SimulcastRid">
+                                        <rect key="frame" x="0.0" y="417.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-SimulcastRid" id="RPC-CONFIG-Cell-SimulcastRid-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="rid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SimulcastRid-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="80" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="RPC-CONFIG-SimulcastRid-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SimulcastRid-Segmented">
+                                                    <rect key="frame" x="200" y="11.666666666666664" width="220" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="r0"/>
+                                                        <segment title="r1"/>
+                                                        <segment title="r2"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="RPC-CONFIG-SimulcastRid-Segmented" secondAttribute="trailing" id="RPC-CONFIG-SimulcastRid-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-SimulcastRid-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SimulcastRid-Content" secondAttribute="centerY" id="RPC-CONFIG-SimulcastRid-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-SimulcastRid-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-SimulcastRid-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-SimulcastRid-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-SimulcastRid-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SimulcastRid-Content" secondAttribute="centerY" id="RPC-CONFIG-SimulcastRid-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-SimulcastRid-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-SimulcastRid-Label" secondAttribute="trailing" constant="20" id="RPC-CONFIG-SimulcastRid-Spacing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="スポットライト" id="RPC-CONFIG-Section-Spotlight">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-Spotlight">
+                                        <rect key="frame" x="0.0" y="509.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Spotlight" id="RPC-CONFIG-Cell-Spotlight-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スポットライト" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Spotlight-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="130" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="RPC-CONFIG-Spotlight-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-Spotlight-Switch">
+                                                    <rect key="frame" x="357" y="13" width="63" height="28"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="RPC-CONFIG-Spotlight-Switch" secondAttribute="trailing" constant="20" id="RPC-CONFIG-Spotlight-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-Spotlight-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Spotlight-Content" secondAttribute="centerY" id="RPC-CONFIG-Spotlight-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-Spotlight-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-Spotlight-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-Spotlight-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-Spotlight-Switch" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Spotlight-Content" secondAttribute="centerY" id="RPC-CONFIG-Spotlight-SwitchCenter"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-SpotlightNumber">
+                                        <rect key="frame" x="0.0" y="563.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-SpotlightNumber" id="RPC-CONFIG-Cell-SpotlightNumber-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="人数" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SpotlightNumber-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="80" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="RPC-CONFIG-SpotlightNumber-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SpotlightNumber-Segmented">
+                                                    <rect key="frame" x="200" y="11.666666666666664" width="220" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="1"/>
+                                                        <segment title="2"/>
+                                                        <segment title="3"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="RPC-CONFIG-SpotlightNumber-Segmented" secondAttribute="trailing" id="RPC-CONFIG-SpotlightNumber-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightNumber-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SpotlightNumber-Content" secondAttribute="centerY" id="RPC-CONFIG-SpotlightNumber-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightNumber-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-SpotlightNumber-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-SpotlightNumber-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightNumber-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SpotlightNumber-Content" secondAttribute="centerY" id="RPC-CONFIG-SpotlightNumber-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightNumber-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-SpotlightNumber-Label" secondAttribute="trailing" constant="20" id="RPC-CONFIG-SpotlightNumber-Spacing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-SpotlightFocus">
+                                        <rect key="frame" x="0.0" y="617.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-SpotlightFocus" id="RPC-CONFIG-Cell-SpotlightFocus-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="フォーカス rid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SpotlightFocus-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="120" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="RPC-CONFIG-SpotlightFocus-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SpotlightFocus-Segmented">
+                                                    <rect key="frame" x="200" y="11.666666666666664" width="220" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="none"/>
+                                                        <segment title="r0"/>
+                                                        <segment title="r1"/>
+                                                        <segment title="r2"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="RPC-CONFIG-SpotlightFocus-Segmented" secondAttribute="trailing" id="RPC-CONFIG-SpotlightFocus-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightFocus-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SpotlightFocus-Content" secondAttribute="centerY" id="RPC-CONFIG-SpotlightFocus-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightFocus-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-SpotlightFocus-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-SpotlightFocus-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightFocus-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SpotlightFocus-Content" secondAttribute="centerY" id="RPC-CONFIG-SpotlightFocus-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightFocus-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-SpotlightFocus-Label" secondAttribute="trailing" constant="20" id="RPC-CONFIG-SpotlightFocus-Spacing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-SpotlightUnfocus">
+                                        <rect key="frame" x="0.0" y="671.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-SpotlightUnfocus" id="RPC-CONFIG-Cell-SpotlightUnfocus-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="非フォーカス rid" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SpotlightUnfocus-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="140" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="RPC-CONFIG-SpotlightUnfocus-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-SpotlightUnfocus-Segmented">
+                                                    <rect key="frame" x="200" y="11.666666666666664" width="220" height="32"/>
+                                                    <segments>
+                                                        <segment title="未指定"/>
+                                                        <segment title="none"/>
+                                                        <segment title="r0"/>
+                                                        <segment title="r1"/>
+                                                        <segment title="r2"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="RPC-CONFIG-SpotlightUnfocus-Segmented" secondAttribute="trailing" id="RPC-CONFIG-SpotlightUnfocus-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightUnfocus-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SpotlightUnfocus-Content" secondAttribute="centerY" id="RPC-CONFIG-SpotlightUnfocus-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightUnfocus-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-SpotlightUnfocus-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-SpotlightUnfocus-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightUnfocus-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-SpotlightUnfocus-Content" secondAttribute="centerY" id="RPC-CONFIG-SpotlightUnfocus-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-SpotlightUnfocus-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-SpotlightUnfocus-Label" secondAttribute="trailing" constant="20" id="RPC-CONFIG-SpotlightUnfocus-Spacing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="DataChannel シグナリング" id="RPC-CONFIG-Section-DataChannel">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="RPC-CONFIG-Cell-IgnoreDisconnect">
+                                        <rect key="frame" x="0.0" y="763.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-IgnoreDisconnect" id="RPC-CONFIG-Cell-IgnoreDisconnect-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WebSocket 切断" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-IgnoreDisconnect-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="130" height="54"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="RPC-CONFIG-IgnoreDisconnect-LabelWidth"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-CONFIG-IgnoreDisconnect-Segmented">
+                                                    <rect key="frame" x="200" y="11.666666666666664" width="220" height="32"/>
+                                                    <segments>
+                                                        <segment title="既定"/>
+                                                        <segment title="許可"/>
+                                                        <segment title="不可"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="RPC-CONFIG-IgnoreDisconnect-Segmented" secondAttribute="trailing" id="RPC-CONFIG-IgnoreDisconnect-Trailing"/>
+                                                <constraint firstItem="RPC-CONFIG-IgnoreDisconnect-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-IgnoreDisconnect-Content" secondAttribute="centerY" id="RPC-CONFIG-IgnoreDisconnect-LabelCenter"/>
+                                                <constraint firstItem="RPC-CONFIG-IgnoreDisconnect-Label" firstAttribute="leading" secondItem="RPC-CONFIG-Cell-IgnoreDisconnect-Content" secondAttribute="leadingMargin" id="RPC-CONFIG-IgnoreDisconnect-LabelLeading"/>
+                                                <constraint firstItem="RPC-CONFIG-IgnoreDisconnect-Segmented" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-IgnoreDisconnect-Content" secondAttribute="centerY" id="RPC-CONFIG-IgnoreDisconnect-CenterY"/>
+                                                <constraint firstItem="RPC-CONFIG-IgnoreDisconnect-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RPC-CONFIG-IgnoreDisconnect-Label" secondAttribute="trailing" constant="20" id="RPC-CONFIG-IgnoreDisconnect-Spacing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="RPC-CONFIG-Section-Connect">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" textLabel="iRk-Connect-Label" selectionStyle="default" indentationWidth="10" id="RPC-CONFIG-Cell-Connect">
+                                        <rect key="frame" x="0.0" y="871.33333206176758" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-CONFIG-Cell-Connect" id="RPC-CONFIG-Cell-Connect-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="チャットに入室する" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iRk-Connect-Label">
+                                                    <rect key="frame" x="149" y="16.666666666666668" width="142" height="21.000000000000004"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="iRk-Connect-Label" firstAttribute="centerX" secondItem="RPC-CONFIG-Cell-Connect-Content" secondAttribute="centerX" id="RPC-CONFIG-Connect-LabelCenterX"/>
+                                                <constraint firstItem="iRk-Connect-Label" firstAttribute="centerY" secondItem="RPC-CONFIG-Cell-Connect-Content" secondAttribute="centerY" id="RPC-CONFIG-Connect-LabelCenterY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="RPC-CONFIG-1" id="RPC-CONFIG-DataSource"/>
+                            <outlet property="delegate" destination="RPC-CONFIG-1" id="RPC-CONFIG-Delegate"/>
+                            <outletCollection property="gestureRecognizers" destination="RPC-CONFIG-TapGesture" appends="YES" id="RPC-CONFIG-GestureCollection"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="RPC 接続" id="RPC-CONFIG-Navigation"/>
+                    <connections>
+                        <outlet property="audioEnabledSwitch" destination="RPC-CONFIG-Audio-Switch" id="RPC-CONFIG-Outlet-Audio"/>
+                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="RPC-CONFIG-Camera-Segmented" id="RPC-CONFIG-Outlet-Camera"/>
+                        <outlet property="channelIdTextField" destination="RPC-CONFIG-Channel-TextField" id="RPC-CONFIG-Outlet-Channel"/>
+                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="RPC-CONFIG-IgnoreDisconnect-Segmented" id="RPC-CONFIG-Outlet-IgnoreDisconnect"/>
+                        <outlet property="roleSegmentedControl" destination="RPC-CONFIG-Role-Segmented" id="RPC-CONFIG-Outlet-Role"/>
+                        <outlet property="simulcastEnabledSwitch" destination="RPC-CONFIG-Simulcast-Switch" id="RPC-CONFIG-Outlet-Simulcast"/>
+                        <outlet property="simulcastRidSegmentedControl" destination="RPC-CONFIG-SimulcastRid-Segmented" id="RPC-CONFIG-Outlet-SimulcastRid"/>
+                        <outlet property="spotlightEnabledSwitch" destination="RPC-CONFIG-Spotlight-Switch" id="RPC-CONFIG-Outlet-Spotlight"/>
+                        <outlet property="spotlightFocusRidSegmentedControl" destination="RPC-CONFIG-SpotlightFocus-Segmented" id="RPC-CONFIG-Outlet-SpotlightFocus"/>
+                        <outlet property="spotlightNumberSegmentedControl" destination="RPC-CONFIG-SpotlightNumber-Segmented" id="RPC-CONFIG-Outlet-SpotlightNumber"/>
+                        <outlet property="spotlightUnfocusRidSegmentedControl" destination="RPC-CONFIG-SpotlightUnfocus-Segmented" id="RPC-CONFIG-Outlet-SpotlightUnfocus"/>
+                        <outlet property="videoCodecSegmentedControl" destination="RPC-CONFIG-VideoCodec-Segmented" id="RPC-CONFIG-Outlet-VideoCodec"/>
+                        <outlet property="videoEnabledSwitch" destination="RPC-CONFIG-Video-Switch" id="RPC-CONFIG-Outlet-Video"/>
+                        <segue destination="RPC-ROOM-1" kind="show" identifier="Connect" id="RPC-CONFIG-ConnectSegue"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RPC-CONFIG-FirstResponder" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer cancelsTouchesInView="NO" id="RPC-CONFIG-TapGesture">
+                    <connections>
+                        <action selector="onTapTableView:" destination="RPC-CONFIG-1" id="RPC-CONFIG-TapAction"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="964" y="166"/>
+        </scene>
+        <!--RPC Room-->
+        <scene sceneID="RPC-ROOM-Scene">
+            <objects>
+                <viewController id="RPC-ROOM-1" customClass="RPCRoomViewController" customModule="SamplesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RPC-ROOM-View">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLine" rowHeight="-1" estimatedRowHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-ROOM-Table">
+                                <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RPCLogCell" textLabel="RPC-ROOM-LogText" detailTextLabel="RPC-ROOM-LogDetail" style="IBUITableViewCellStyleSubtitle" id="RPC-ROOM-LogCell">
+                                        <rect key="frame" x="0.0" y="50" width="440" height="54"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RPC-ROOM-LogCell" id="RPC-ROOM-LogCell-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="440" height="54"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" id="RPC-ROOM-LogText">
+                                                    <rect key="frame" x="20" y="10" width="400" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" id="RPC-ROOM-LogDetail">
+                                                    <rect key="frame" x="20" y="32" width="400" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-ROOM-VideoContainer">
+                                <rect key="frame" x="0.0" y="478" width="440" height="478"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Resolution: -" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPC-ROOM-ResolutionLabel">
+                                        <rect key="frame" x="12" y="12" width="120" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="RPC-ROOM-ResolutionLabel" firstAttribute="leading" secondItem="RPC-ROOM-VideoContainer" secondAttribute="leading" constant="12" id="RPC-ROOM-ResolutionLeading"/>
+                                    <constraint firstItem="RPC-ROOM-ResolutionLabel" firstAttribute="top" secondItem="RPC-ROOM-VideoContainer" secondAttribute="top" constant="12" id="RPC-ROOM-ResolutionTop"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="RPC-ROOM-Table" firstAttribute="leading" secondItem="RPC-ROOM-View" secondAttribute="leading" id="RPC-ROOM-Table-Leading"/>
+                            <constraint firstAttribute="trailing" secondItem="RPC-ROOM-Table" secondAttribute="trailing" id="RPC-ROOM-Table-Trailing"/>
+                            <constraint firstItem="RPC-ROOM-Table" firstAttribute="top" secondItem="RPC-ROOM-View" secondAttribute="top" id="RPC-ROOM-Table-Top"/>
+                            <constraint firstItem="RPC-ROOM-VideoContainer" firstAttribute="top" secondItem="RPC-ROOM-Table" secondAttribute="bottom" id="RPC-ROOM-Table-To-Video"/>
+                            <constraint firstItem="RPC-ROOM-VideoContainer" firstAttribute="leading" secondItem="RPC-ROOM-View" secondAttribute="leading" id="RPC-ROOM-Video-Leading"/>
+                            <constraint firstAttribute="trailing" secondItem="RPC-ROOM-VideoContainer" secondAttribute="trailing" id="RPC-ROOM-Video-Trailing"/>
+                            <constraint firstAttribute="bottom" secondItem="RPC-ROOM-VideoContainer" secondAttribute="bottom" id="RPC-ROOM-Video-Bottom"/>
+                            <constraint firstItem="RPC-ROOM-VideoContainer" firstAttribute="height" secondItem="RPC-ROOM-View" secondAttribute="height" multiplier="0.5" id="RPC-ROOM-Video-Height"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="RPC" id="RPC-ROOM-Navigation">
+                        <barButtonItem key="rightBarButtonItem" image="mic" catalog="system" id="RPC-ROOM-MicMuteButton" userLabel="MuteMicButton">
+                            <connections>
+                                <action selector="onMicMuteButton:" destination="RPC-ROOM-1" id="RPC-ROOM-MicMuteAction"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="RPC-ROOM-ExitButton">
+                            <connections>
+                                <action selector="onExitButton:" destination="RPC-ROOM-1" id="RPC-ROOM-ExitAction"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="historyTableView" destination="RPC-ROOM-Table" id="RPC-ROOM-Outlet-History"/>
+                        <outlet property="memberListView" destination="RPC-ROOM-VideoContainer" id="RPC-ROOM-Outlet-MemberList"/>
+                        <outlet property="micMuteButton" destination="RPC-ROOM-MicMuteButton" id="RPC-ROOM-Outlet-MicMute"/>
+                        <outlet property="resolutionLabel" destination="RPC-ROOM-ResolutionLabel" id="RPC-ROOM-Outlet-Resolution"/>
+                        <segue destination="RPC-ROOM-Exit" kind="unwind" identifier="Exit" unwindAction="onUnwindToConfig:" id="RPC-ROOM-Unwind"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RPC-ROOM-FirstResponder" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="RPC-ROOM-Exit" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1840" y="166"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="mic" catalog="system" width="110" height="128"/>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
