@@ -78,6 +78,8 @@
   - @t-miya
 - [FIX] DataChannel Sample にて画面回転時にセルフビューが表示されなくなる不具合を修正する
   - @t-miya
+- [FIX] SamplesApp のアプリ表示名を `ビデオチャット` から `Sora Samples` に修正する
+  - @zztkm
 
 ### misc
 
