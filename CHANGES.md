@@ -9,7 +9,7 @@
 - FIX
   - バグ修正
 
-## 2025.3
+## 2026.1
 
 - [CHANGE] 全てのサンプルを SamplesApp に統合する
   - SamplesApp 起動後にメインメニューから DataChannel、DecoStreaming、ScreenCast、Simulcast、Spotlight、VideoChat の各サンプル機能に遷移できるようにする
