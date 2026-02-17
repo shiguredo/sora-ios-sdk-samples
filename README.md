@@ -19,7 +19,7 @@ Please read https://github.com/shiguredo/oss before use.
 - iOS 15 以降
 - アーキテクチャ arm64 (シミュレーターの動作は未保証)
 - macOS 15.0 以降
-- Xcode 26.1.1
+- Xcode 26.2
 - Swift 5.10
 - WebRTC SFU Sora 2025.2.0 以降
 
