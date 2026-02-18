@@ -34,7 +34,7 @@
   - DataChannel、Simulcast、Spotlight、VideoChat それぞれの映像ソフトミュート処理に適用する
   - @t-miya
 - [UPDATE] システム条件を変更する
-  - Xcode 26.1.1
+  - Xcode 26.2
   - WebRTC SFU Sora 2025.2.0 以降
   - @zztkm
 - [UPDATE] ロギングを NSLog から os.Logger に置き換える
