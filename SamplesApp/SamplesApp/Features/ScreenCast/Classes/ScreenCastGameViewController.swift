@@ -1,4 +1,4 @@
-import ReplayKit
+import CoreMedia
 import Sora
 import UIKit
 
@@ -108,86 +108,91 @@ class ScreenCastGameViewController: UIViewController {
   @IBAction
   func onUnwindByConnect(_ segue: UIStoryboardSegue) {
     // 接続が完了して配信設定画面から戻ってきたので、画面録画を開始して配信をスタートします。
-    // 画面録画のコールバックでは、受け取ったsampleBufferをそのままSoraSDKに渡して配信を行っています。
+    // 画面録画の開始 / 停止は Sora iOS SDK の API を利用します。
     //
-    // ReplayKitのカメラを使用することもできますが、ここでは使用していません。
-    // 使用する場合にはisCameraEnabledを指定した上で、RPScreenRecorder.shared().cameraPreviewViewを画面上に配置してください。
-    // またWebRTCのマイクとコンフリクトするため、基本的にはReplayKitのマイクは使用しないでください。
+    // SDK は `RPSampleBufferType.video` のみ送信します。
+    // ReplayKit のマイク / カメラ入力は利用できません。
     //
     // 現在、SoraのVideoCodecにH.264を指定して配信すると、配信が途中で止まるバグがあります。
-    // (Soraとの接続が遮断されたわけでも、ReplayKitが止まったわけでもないのに、sendしたフレームが配信されない)
+    // (Soraとの接続が遮断されたわけでも、ReplayKitが止まったわけでもないのに、送信したフレームが配信されない)
     // これはデバイスに一つしか無いH.264ハードウェアエンコーダ/デコーダをReplayKitとWebRTCが同時に奪い合うためではないかと思われますが、詳細は不明です。
     // 現在のところはVP9など他のエンコード形式を使用することで回避してください。
-    RPScreenRecorder.shared().isCameraEnabled = false
-    RPScreenRecorder.shared().isMicrophoneEnabled = false
-    RPScreenRecorder.shared().startCapture(
-      handler: { sampleBuffer, sampleBufferType, error in
-        guard sampleBufferType == .video else {
-          return
-        }
-        guard error == nil else {
-          return
-        }
-        guard let currentMediaChannel = SoraSDKManager.shared.currentMediaChannel,
-          let senderStream = currentMediaChannel.senderStream
-        else {
-          return
-        }
-
-        // H.264 の場合リサイズ
-        var bufferToSend = sampleBuffer
-        if currentMediaChannel.configuration.videoCodec == .h264 {
-          if let resizedBuffer = resizeSampleBuffer(
-            sampleBuffer,
-            scale: 0.5,
-            ciContext: self.ciContext!)
-          {
-            bufferToSend = resizedBuffer
-          }
-        }
-        senderStream.send(videoFrame: VideoFrame(from: bufferToSend))
-      },
-      completionHandler: { [weak self] error in
-        if let error {
-          // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
-          // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
-          logger.warning("[sample] Error while RPScreenRecorder.shared().startCapture: \(error)")
-          self?.handleDisconnect()
-        } else if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-          // サーバーから切断されたときのコールバックを設定します。
-          mediaChannel.handlers.onDisconnect = { [weak self] event in
-            guard let self = self else { return }
-            switch event {
-            case .ok(let code, let reason):
-              logger.info(
-                "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-            case .error(let error):
-              logger.error(
-                "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-            }
-
-            self.handleDisconnect()
-          }
-        }
-      })
     updateBarButtonItems()
+
+    Task { [weak self] in
+      guard let self = self else { return }
+      guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
+        return
+      }
+
+      let captureSettings = ScreenCaptureSettings(
+        videoSampleBufferTransformer: { [weak self] sampleBuffer in
+          guard let self = self else {
+            return sampleBuffer
+          }
+
+          guard mediaChannel.configuration.videoCodec == .h264 else {
+            return sampleBuffer
+          }
+
+          guard let ciContext = self.ciContext else {
+            return sampleBuffer
+          }
+
+          return resizeSampleBuffer(sampleBuffer, scale: 0.5, ciContext: ciContext) ?? sampleBuffer
+        },
+        onRuntimeError: { [weak self] error in
+          logger.warning("[sample] Error while mediaChannel.startScreenCapture(runtime): \(error)")
+          self?.handleDisconnect()
+        }
+      )
+
+      do {
+        try await mediaChannel.startScreenCapture(settings: captureSettings)
+      } catch {
+        // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
+        // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
+        logger.warning("[sample] Error while mediaChannel.startScreenCapture: \(error)")
+        self.handleDisconnect()
+        return
+      }
+
+      // サーバーから切断されたときのコールバックを設定します。
+      mediaChannel.handlers.onDisconnect = { [weak self] event in
+        guard let self = self else { return }
+        switch event {
+        case .ok(let code, let reason):
+          logger.info(
+            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
+        case .error(let error):
+          logger.error(
+            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
+        }
+
+        self.handleDisconnect()
+      }
+    }
   }
 
   /// 接続が切断されたときに呼び出されるべき処理をまとめています。
   /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
   /// いずれの場合も含めます。
   private func handleDisconnect() {
-    // 画面録画中であれば録画を停止して、配信を切断し、ボタンの状態を更新します。
-    if RPScreenRecorder.shared().isRecording {
-      RPScreenRecorder.shared().stopCapture { _ in
-        // エラー時処理を行う必要が無いので、無視します。
-      }
-    }
+    Task { [weak self] in
+      guard let self = self else { return }
 
-    // 明示的に配信をストップしてから、画面を閉じるようにしています。
-    SoraSDKManager.shared.disconnect()
-    DispatchQueue.main.async { [weak self] in
-      self?.updateBarButtonItems()
+      // 画面録画を停止します。切断時にもSDK側で停止されますが、明示的に停止しておきます。
+      if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+        // 重複して切断ハンドラが呼ばれないように解除します。
+        mediaChannel.handlers.onDisconnect = nil
+        await mediaChannel.stopScreenCapture()
+      }
+
+      // 明示的に配信をストップしてから、画面を閉じるようにしています。
+      SoraSDKManager.shared.disconnect()
+      await MainActor.run {
+        self.updateBarButtonItems()
+      }
     }
   }
 

@@ -11,6 +11,11 @@
 
 ## 2026.2
 
+- [UPDATE] ScreenCast での画面キャプチャは SDK の `MediaChannel.startScreenCapture` を利用するようにする
+  - 画面キャプチャ停止時は `MediaChannel.stopScreenCapture` を利用する
+  - SDK 側でも ReplayKit を利用しているので挙動は同様となる
+  - @t-miya
+
 ## 2026.1
 
 - [CHANGE] 全てのサンプルを SamplesApp に統合する

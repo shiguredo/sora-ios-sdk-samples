@@ -54,9 +54,9 @@ class ScreenCastConfigViewController: UITableViewController {
     }
 
     // 入力された設定を元にSoraへ接続を行います。
-    // この画面からは配信側に接続を行うため、role引数には .publisher を指定しています。
+    // この画面からは配信側に接続を行うため、role引数には .sendonly を指定しています。
     // また今回のサンプルアプリでは、デフォルトのカメラ映像のキャプチャではなく、ReplayKit経由で取得したスクリーンキャストを使用したいため、
-    // videoCapturerOptionをカスタムに設定しておきます。
+    // ScreenCastEnvironment 側で `cameraSettings.isEnabled = false` を設定しています。
     let configuration = ScreenCastEnvironment.makeConfiguration(
       channelId: channelId,
       role: .sendonly,
