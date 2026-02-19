@@ -97,6 +97,8 @@ class RPCConfigViewController: UITableViewController {
     // 前の画面から戻ってきても、特に処理は何も行いません。
   }
 
+  // RPCRoomViewController を表示する直前に、接続中に受け取った
+  // offer の rpc_methods を渡して初期表示に使えるようにする。
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     guard segue.identifier == "Connect",
       let roomViewController = segue.destination as? RPCRoomViewController
