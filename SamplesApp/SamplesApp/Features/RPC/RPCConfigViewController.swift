@@ -21,6 +21,22 @@ class RPCConfigViewController: UITableViewController {
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
+  // onReceiveSignaling と prepare(for:sender:) が異なるスレッドで呼ばれる可能性があるため、
+  // offerRPCMethods へのアクセスは stateQueue 経由に限定する。
+  private let stateQueue = DispatchQueue(label: "jp.shiguredo.samples.rpc-config.state")
+  private var _offerRPCMethods: [String]?
+  private var offerRPCMethods: [String]? {
+    get {
+      stateQueue.sync {
+        _offerRPCMethods
+      }
+    }
+    set {
+      stateQueue.sync {
+        _offerRPCMethods = newValue
+      }
+    }
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -42,8 +58,15 @@ class RPCConfigViewController: UITableViewController {
       return
     }
     isConnecting = true
+    offerRPCMethods = nil
 
-    let configuration = makeConfiguration(channelId: channelId)
+    var configuration = makeConfiguration(channelId: channelId)
+    configuration.mediaChannelHandlers.onReceiveSignaling = { [weak self] signaling in
+      guard case .offer(let offer) = signaling else {
+        return
+      }
+      self?.offerRPCMethods = offer.rpcMethods
+    }
 
     SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       guard let self = self else { return }
@@ -72,6 +95,17 @@ class RPCConfigViewController: UITableViewController {
 
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
+  }
+
+  // RPCRoomViewController を表示する直前に、接続中に受け取った
+  // offer の rpc_methods を渡して初期表示に使えるようにする。
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    guard segue.identifier == "Connect",
+      let roomViewController = segue.destination as? RPCRoomViewController
+    else {
+      return
+    }
+    roomViewController.offerRPCMethods = offerRPCMethods
   }
 
   @IBAction func onTapTableView(_ sender: UITapGestureRecognizer) {
