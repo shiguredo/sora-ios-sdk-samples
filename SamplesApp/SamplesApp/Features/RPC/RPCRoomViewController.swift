@@ -325,7 +325,7 @@ class RPCRoomViewController: UIViewController {
       preferredStyle: .actionSheet
     )
 
-    availableMethods.forEach { method in
+    for method in availableMethods {
       let isSelected = method == selectedMethod
       let title = isSelected ? "✓ \(method.displayName)" : method.displayName
       let action = UIAlertAction(title: title, style: .default) { [weak self] _ in
