@@ -68,31 +68,29 @@ class RPCConfigViewController: UITableViewController {
       self?.offerRPCMethods = offer.rpcMethods
     }
 
-    SoraSDKManager.shared.connect(
-      configuration: configuration,
-      completionHandler: { [weak self] error in
-        guard let self = self else { return }
-        self.isConnecting = false
+    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
+      guard let self = self else { return }
+      self.isConnecting = false
 
-        if let error {
-          logger.warning("SoraSDKManager connection error: \(error)")
-          DispatchQueue.main.async {
-            let alertController = UIAlertController(
-              title: "接続に失敗しました",
-              message: error.localizedDescription,
-              preferredStyle: .alert)
-            alertController.addAction(
-              UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-          }
-          return
-        }
-
-        logger.info("SoraSDKManager connected.")
+      if let error {
+        logger.warning("SoraSDKManager connection error: \(error)")
         DispatchQueue.main.async {
-          self.performSegue(withIdentifier: "Connect", sender: self)
+          let alertController = UIAlertController(
+            title: "接続に失敗しました",
+            message: error.localizedDescription,
+            preferredStyle: .alert)
+          alertController.addAction(
+            UIAlertAction(title: "OK", style: .cancel, handler: nil))
+          self.present(alertController, animated: true, completion: nil)
         }
-      })
+        return
+      }
+
+      logger.info("SoraSDKManager connected.")
+      DispatchQueue.main.async {
+        self.performSegue(withIdentifier: "Connect", sender: self)
+      }
+    }
   }
 
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
