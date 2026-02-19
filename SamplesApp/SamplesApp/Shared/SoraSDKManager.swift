@@ -40,9 +40,7 @@ final class SoraSDKManager {
       return
     }
 
-    configuration.mediaChannelHandlers.onReceiveSignaling = { signaling in
-      onReceiveSignaling?(signaling)
-    }
+    configuration.mediaChannelHandlers.onReceiveSignaling = onReceiveSignaling
 
     _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
       self?.currentMediaChannel = mediaChannel

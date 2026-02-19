@@ -21,7 +21,20 @@ class RPCConfigViewController: UITableViewController {
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
-  private var offerRPCMethods: [String]?
+  private let stateQueue = DispatchQueue(label: "jp.shiguredo.samples.rpc-config.state")
+  private var _offerRPCMethods: [String]?
+  private var offerRPCMethods: [String]? {
+    get {
+      stateQueue.sync {
+        _offerRPCMethods
+      }
+    }
+    set {
+      stateQueue.sync {
+        _offerRPCMethods = newValue
+      }
+    }
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()

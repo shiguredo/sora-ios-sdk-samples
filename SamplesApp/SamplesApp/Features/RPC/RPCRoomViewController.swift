@@ -234,6 +234,8 @@ class RPCRoomViewController: UIViewController {
   private var metadataItemValueRowView: UIView?
   private var downstreamVideoView: ResolutionVideoView?
   private var allowedRPCMethodNames: Set<String>?
+  /// RPCConfigViewController が接続中に受信した offer の rpc_methods を、
+  /// 画面遷移時に prepare(for:sender:) で受け取るためのプロパティです。
   var offerRPCMethods: [String]?
 
   private let metadataPresset = """
