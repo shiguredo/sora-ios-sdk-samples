@@ -21,6 +21,8 @@ class RPCConfigViewController: UITableViewController {
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
+  // onReceiveSignaling と prepare(for:sender:) が異なるスレッドで呼ばれる可能性があるため、
+  // offerRPCMethods へのアクセスは stateQueue 経由に限定する。
   private let stateQueue = DispatchQueue(label: "jp.shiguredo.samples.rpc-config.state")
   private var _offerRPCMethods: [String]?
   private var offerRPCMethods: [String]? {
@@ -59,20 +61,21 @@ class RPCConfigViewController: UITableViewController {
     offerRPCMethods = nil
 
     let configuration = makeConfiguration(channelId: channelId)
+    SoraSDKManager.shared.onReceiveSignaling = { [weak self] signaling in
+      guard case .offer(let offer) = signaling else {
+        return
+      }
+      self?.offerRPCMethods = offer.rpcMethods
+    }
 
     SoraSDKManager.shared.connect(
       configuration: configuration,
-      onReceiveSignaling: { [weak self] signaling in
-        guard case .offer(let offer) = signaling else {
-          return
-        }
-        self?.offerRPCMethods = offer.rpcMethods
-      },
       completionHandler: { [weak self] error in
         guard let self = self else { return }
         self.isConnecting = false
 
         if let error {
+          SoraSDKManager.shared.onReceiveSignaling = nil
           logger.warning("SoraSDKManager connection error: \(error)")
           DispatchQueue.main.async {
             let alertController = UIAlertController(
