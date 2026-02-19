@@ -10,8 +10,6 @@ final class SoraSDKManager {
 
   /// 現在接続中の Sora SDK の MediaChannel です。
   private(set) var currentMediaChannel: MediaChannel?
-  /// シグナリング受信時に呼び出すコールバックです。
-  var onReceiveSignaling: ((Signaling) -> Void)?
 
   private init() {
     // SDK のログを表示します。
@@ -40,8 +38,6 @@ final class SoraSDKManager {
       return
     }
 
-    configuration.mediaChannelHandlers.onReceiveSignaling = onReceiveSignaling
-
     _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
       self?.currentMediaChannel = mediaChannel
       completionHandler?(error)
@@ -58,6 +54,5 @@ final class SoraSDKManager {
     }
     mediaChannel.disconnect(error: nil)
     currentMediaChannel = nil
-    onReceiveSignaling = nil
   }
 }

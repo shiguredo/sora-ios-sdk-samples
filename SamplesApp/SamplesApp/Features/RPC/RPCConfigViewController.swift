@@ -60,8 +60,8 @@ class RPCConfigViewController: UITableViewController {
     isConnecting = true
     offerRPCMethods = nil
 
-    let configuration = makeConfiguration(channelId: channelId)
-    SoraSDKManager.shared.onReceiveSignaling = { [weak self] signaling in
+    var configuration = makeConfiguration(channelId: channelId)
+    configuration.mediaChannelHandlers.onReceiveSignaling = { [weak self] signaling in
       guard case .offer(let offer) = signaling else {
         return
       }
@@ -75,7 +75,6 @@ class RPCConfigViewController: UITableViewController {
         self.isConnecting = false
 
         if let error {
-          SoraSDKManager.shared.onReceiveSignaling = nil
           logger.warning("SoraSDKManager connection error: \(error)")
           DispatchQueue.main.async {
             let alertController = UIAlertController(
