@@ -49,6 +49,21 @@ private enum RPCMethod {
       return "PutSignalingNotifyMetadataItem"
     }
   }
+
+  var rpcMethodName: String {
+    switch self {
+    case .requestSimulcastRid:
+      return RequestSimulcastRid.name
+    case .requestSpotlightRid:
+      return RequestSpotlightRid.name
+    case .resetSpotlightRid:
+      return ResetSpotlightRid.name
+    case .putSignalingNotifyMetadata:
+      return PutSignalingNotifyMetadata<[String: AnyCodable]>.name
+    case .putSignalingNotifyMetadataItem:
+      return PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name
+    }
+  }
 }
 
 private struct RPCLogItem {
@@ -154,7 +169,6 @@ class RPCRoomViewController: UIViewController {
   private let metadataTextView = UITextView()
   private let metadataItemKeyTextField = UITextField()
   private let metadataItemValueTextView = UITextView()
-  private let rpcMethodsLabel = UILabel()
   private let sendRequestButton = UIButton(type: .system)
   private let sendNotificationButton = UIButton(type: .system)
   private var headerView: UIView?
@@ -165,6 +179,8 @@ class RPCRoomViewController: UIViewController {
   private var metadataItemKeyRowView: UIView?
   private var metadataItemValueRowView: UIView?
   private var downstreamVideoView: ResolutionVideoView?
+  private var allowedRPCMethodNames: Set<String>?
+  var offerRPCMethods: [String]?
 
   private let metadataPresset = """
     {
@@ -200,11 +216,10 @@ class RPCRoomViewController: UIViewController {
     historyTableView.estimatedRowHeight = 60
 
     setupHeaderView()
-    setupMethodMenu()
     updateMethodUI()
     updateMicButtonAppearance()
 
-    rpcMethodsLabel.text = "未取得"
+    updateAllowedRPCMethods(with: offerRPCMethods)
     resolutionLabel.text = "Resolution: -"
     metadataTextView.text = ""
   }
@@ -302,16 +317,36 @@ class RPCRoomViewController: UIViewController {
     metadataTextView.endEditing(true)
   }
 
-  private func setupMethodMenu() {
-    let actions = availableMethods.map { method in
-      UIAction(title: method.displayName, state: method == selectedMethod ? .on : .off) {
-        [weak self] _ in
+  @objc private func onMethodButtonTapped(_ sender: UIButton) {
+    // .disabled だと項目を選択できないため、ActionSheet で見た目のみグレーアウトする。
+    let alertController = UIAlertController(
+      title: "RPC Method",
+      message: nil,
+      preferredStyle: .actionSheet
+    )
+
+    availableMethods.forEach { method in
+      let isSelected = method == selectedMethod
+      let title = isSelected ? "✓ \(method.displayName)" : method.displayName
+      let action = UIAlertAction(title: title, style: .default) { [weak self] _ in
         self?.selectedMethod = method
         self?.updateMethodUI()
       }
+
+      let isAllowed = allowedRPCMethodNames?.contains(method.rpcMethodName) ?? true
+      if !isAllowed {
+        // 未許可メソッドは視覚的に区別するが、送信可否は制御しない。
+        action.setValue(UIColor.secondaryLabel, forKey: "titleTextColor")
+      }
+      alertController.addAction(action)
     }
-    methodButton.menu = UIMenu(title: "RPC Method", children: actions)
-    methodButton.showsMenuAsPrimaryAction = true
+
+    alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    if let popover = alertController.popoverPresentationController {
+      popover.sourceView = sender
+      popover.sourceRect = sender.bounds
+    }
+    present(alertController, animated: true)
   }
 
   private func updateMethodUI() {
@@ -348,7 +383,9 @@ class RPCRoomViewController: UIViewController {
     }
 
     methodButton.setTitle(selectedMethod.displayName, for: .normal)
-    setupMethodMenu()
+    let isAllowed = allowedRPCMethodNames?.contains(selectedMethod.rpcMethodName) ?? true
+    // 選択中メソッドの許可状態をボタン色に反映（UI 表示のみ）。
+    methodButton.setTitleColor(isAllowed ? .systemBlue : .secondaryLabel, for: .normal)
     refreshHeaderLayout()
   }
 
@@ -576,14 +613,14 @@ class RPCRoomViewController: UIViewController {
     guard case .offer(let offer) = signaling else {
       return
     }
-    if let rpcMethods = offer.rpcMethods, !rpcMethods.isEmpty {
-      DispatchQueue.main.async {
-        self.rpcMethodsLabel.text = rpcMethods.joined(separator: ", ")
-      }
-    } else {
-      DispatchQueue.main.async {
-        self.rpcMethodsLabel.text = "未取得"
-      }
+    updateAllowedRPCMethods(with: offer.rpcMethods)
+  }
+
+  private func updateAllowedRPCMethods(with rpcMethods: [String]?) {
+    DispatchQueue.main.async {
+      self.allowedRPCMethodNames = rpcMethods.map(Set.init)
+      // 許可状態の更新は表示にのみ反映し、選択と送信は常に許可する。
+      self.updateMethodUI()
     }
   }
 
@@ -694,6 +731,7 @@ class RPCRoomViewController: UIViewController {
 
     methodButton.setTitle(selectedMethod.displayName, for: .normal)
     methodButton.contentHorizontalAlignment = .leading
+    methodButton.addTarget(self, action: #selector(onMethodButtonTapped(_:)), for: .touchUpInside)
 
     simulcastRidSegmentedControl.selectedSegmentIndex = 0
 
@@ -716,9 +754,6 @@ class RPCRoomViewController: UIViewController {
     metadataItemValueTextView.layer.cornerRadius = 6
     metadataItemValueTextView.font = UIFont.preferredFont(forTextStyle: .body)
     metadataItemValueTextView.isScrollEnabled = false
-
-    rpcMethodsLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
-    rpcMethodsLabel.numberOfLines = 0
 
     sendRequestButton.setTitle("Send Request", for: .normal)
     sendNotificationButton.setTitle("Send Notification", for: .normal)
@@ -787,8 +822,6 @@ class RPCRoomViewController: UIViewController {
     sendButtonsRow.distribution = .fillEqually
     stack.addArrangedSubview(sendButtonsRow)
 
-    stack.addArrangedSubview(labeledInfoRow(title: "rpc_methods", valueLabel: rpcMethodsLabel))
-
     headerView = header
     historyTableView.tableHeaderView = header
 
@@ -839,19 +872,6 @@ class RPCRoomViewController: UIViewController {
     return row
   }
 
-  private func labeledInfoRow(title: String, valueLabel: UILabel) -> UIView {
-    let label = UILabel()
-    label.text = title
-    label.font = UIFont.preferredFont(forTextStyle: .footnote)
-    label.textColor = .secondaryLabel
-    label.setContentHuggingPriority(.required, for: .horizontal)
-
-    let row = UIStackView(arrangedSubviews: [label, valueLabel])
-    row.axis = .horizontal
-    row.spacing = 12
-    row.alignment = .top
-    return row
-  }
 }
 
 extension RPCRoomViewController: UITableViewDataSource, UITableViewDelegate {

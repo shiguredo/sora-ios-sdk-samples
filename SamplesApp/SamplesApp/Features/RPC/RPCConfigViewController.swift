@@ -21,6 +21,7 @@ class RPCConfigViewController: UITableViewController {
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
+  private var offerRPCMethods: [String]?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -42,10 +43,19 @@ class RPCConfigViewController: UITableViewController {
       return
     }
     isConnecting = true
+    offerRPCMethods = nil
 
     let configuration = makeConfiguration(channelId: channelId)
 
-    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
+    SoraSDKManager.shared.connect(
+      configuration: configuration,
+      onReceiveSignaling: { [weak self] signaling in
+        guard case .offer(let offer) = signaling else {
+          return
+        }
+        self?.offerRPCMethods = offer.rpcMethods
+      }
+    ) { [weak self] error in
       guard let self = self else { return }
       self.isConnecting = false
 
@@ -72,6 +82,15 @@ class RPCConfigViewController: UITableViewController {
 
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
+  }
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    guard segue.identifier == "Connect",
+      let roomViewController = segue.destination as? RPCRoomViewController
+    else {
+      return
+    }
+    roomViewController.offerRPCMethods = offerRPCMethods
   }
 
   @IBAction func onTapTableView(_ sender: UITapGestureRecognizer) {

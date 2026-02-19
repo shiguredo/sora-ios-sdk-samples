@@ -25,9 +25,11 @@ final class SoraSDKManager {
   ///
   /// - Parameters:
   ///   - configuration: 接続時設定です。各サンプルごとに必要なパラメータを指定します
+  ///   - onReceiveSignaling: シグナリング受信時のコールバックです
   ///   - completionHandler: 接続結果のコールバックです
   func connect(
     configuration: Configuration,
+    onReceiveSignaling: ((Signaling) -> Void)? = nil,
     completionHandler: ((Error?) -> Void)? = nil
   ) {
     // currentMediaChannel が存在する場合は既に接続済み
@@ -36,6 +38,10 @@ final class SoraSDKManager {
         "[sample] SoraSDKManager.connect ignored: already connected. channelId: \(currentMediaChannel?.configuration.channelId ?? "-")"
       )
       return
+    }
+
+    configuration.mediaChannelHandlers.onReceiveSignaling = { signaling in
+      onReceiveSignaling?(signaling)
     }
 
     _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
