@@ -74,6 +74,60 @@ private struct RPCLogItem {
   let detail: String
 }
 
+private final class RPCMethodSelectionViewController: UITableViewController {
+  struct Item {
+    let method: RPCMethod
+    let isAllowed: Bool
+    let isSelected: Bool
+  }
+
+  var items: [Item] = []
+  var onSelect: ((RPCMethod) -> Void)?
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    title = "RPC Method"
+    navigationItem.rightBarButtonItem = UIBarButtonItem(
+      barButtonSystemItem: .close,
+      target: self,
+      action: #selector(onCloseButton)
+    )
+    tableView.register(UITableViewCell.self, forCellReuseIdentifier: "RPCMethodCell")
+    tableView.rowHeight = 44
+    tableView.tableFooterView = UIView()
+    preferredContentSize = CGSize(width: 320, height: min(CGFloat(items.count * 44 + 16), 320))
+  }
+
+  @objc private func onCloseButton() {
+    dismiss(animated: true)
+  }
+
+  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    items.count
+  }
+
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+    -> UITableViewCell
+  {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "RPCMethodCell", for: indexPath)
+    let item = items[indexPath.row]
+
+    var content = cell.defaultContentConfiguration()
+    content.text = item.method.displayName
+    content.textProperties.color = item.isAllowed ? .label : .secondaryLabel
+    cell.contentConfiguration = content
+    cell.accessoryType = item.isSelected ? .checkmark : .none
+    return cell
+  }
+
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let method = items[indexPath.row].method
+    onSelect?(method)
+    dismiss(animated: true)
+  }
+}
+
 // MARK: - Video View helper
 
 private final class ResolutionVideoView: UIView, VideoRenderer {
@@ -318,35 +372,38 @@ class RPCRoomViewController: UIViewController {
   }
 
   @objc private func onMethodButtonTapped(_ sender: UIButton) {
-    // .disabled だと項目を選択できないため、ActionSheet で見た目のみグレーアウトする。
-    let alertController = UIAlertController(
-      title: "RPC Method",
-      message: nil,
-      preferredStyle: .actionSheet
-    )
-
+    let selectionViewController = RPCMethodSelectionViewController(style: .plain)
+    var items: [RPCMethodSelectionViewController.Item] = []
     for method in availableMethods {
-      let isSelected = method == selectedMethod
-      let title = isSelected ? "✓ \(method.displayName)" : method.displayName
-      let action = UIAlertAction(title: title, style: .default) { [weak self] _ in
-        self?.selectedMethod = method
-        self?.updateMethodUI()
-      }
-
       let isAllowed = allowedRPCMethodNames?.contains(method.rpcMethodName) ?? true
-      if !isAllowed {
-        // 未許可メソッドは視覚的に区別するが、送信可否は制御しない。
-        action.setValue(UIColor.secondaryLabel, forKey: "titleTextColor")
-      }
-      alertController.addAction(action)
+      items.append(
+        RPCMethodSelectionViewController.Item(
+          method: method,
+          isAllowed: isAllowed,
+          isSelected: method == selectedMethod
+        )
+      )
+    }
+    selectionViewController.items = items
+    selectionViewController.onSelect = { [weak self] method in
+      self?.selectedMethod = method
+      self?.updateMethodUI()
     }
 
-    alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-    if let popover = alertController.popoverPresentationController {
-      popover.sourceView = sender
-      popover.sourceRect = sender.bounds
+    let navigationController = UINavigationController(rootViewController: selectionViewController)
+    if traitCollection.userInterfaceIdiom == .pad {
+      navigationController.modalPresentationStyle = .popover
+      if let popover = navigationController.popoverPresentationController {
+        popover.sourceView = sender
+        popover.sourceRect = sender.bounds
+      }
+    } else {
+      navigationController.modalPresentationStyle = .pageSheet
+      if let sheet = navigationController.sheetPresentationController {
+        sheet.detents = [.medium()]
+      }
     }
-    present(alertController, animated: true)
+    present(navigationController, animated: true)
   }
 
   private func updateMethodUI() {
