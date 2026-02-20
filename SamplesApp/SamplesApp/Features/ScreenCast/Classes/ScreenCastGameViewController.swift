@@ -13,6 +13,14 @@ private func randomCGFloat() -> CGFloat {
 
 /// 配信されるゲーム画面です。
 class ScreenCastGameViewController: UIViewController {
+  private enum BoundaryIdentifier {
+    static let floor = "Floor"
+    static let void = "Void"
+  }
+
+  private static let boxSize: CGFloat = 64
+  private static let platformHeightRatio: CGFloat = 0.5
+
   /// 配信開始ボタンです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet private var cameraButton: UIBarButtonItem!
   /// 配信停止ボタンです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
@@ -28,6 +36,9 @@ class ScreenCastGameViewController: UIViewController {
   private var dynamicProperties: UIDynamicItemBehavior!
 
   private var ciContext: CIContext?
+  private let platformView = UIView()
+  private var gameAreaFrame: CGRect = .zero
+  private var floorY: CGFloat = 0
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -38,14 +49,6 @@ class ScreenCastGameViewController: UIViewController {
     gravity = UIGravityBehavior(items: [])
 
     collision = UICollisionBehavior(items: [])
-    collision.addBoundary(
-      withIdentifier: "Floor" as NSString,
-      from: CGPoint(x: 0, y: view.bounds.height),
-      to: CGPoint(x: view.bounds.width, y: view.bounds.height))
-    collision.addBoundary(
-      withIdentifier: "Void" as NSString,
-      from: CGPoint(x: -9999, y: view.bounds.height + 10),
-      to: CGPoint(x: 9999, y: view.bounds.height + 10))
     collision.collisionDelegate = self
 
     dynamicProperties = UIDynamicItemBehavior(items: [])
@@ -57,6 +60,10 @@ class ScreenCastGameViewController: UIViewController {
     animator.addBehavior(collision)
     animator.addBehavior(dynamicProperties)
 
+    platformView.backgroundColor = .black
+    platformView.isUserInteractionEnabled = false
+    view.addSubview(platformView)
+
     // 画面タッチ時のアクションを定義します。
     let tapGR = UITapGestureRecognizer(target: self, action: #selector(onViewTapped(_:)))
     view.addGestureRecognizer(tapGR)
@@ -65,6 +72,11 @@ class ScreenCastGameViewController: UIViewController {
     updateBarButtonItems()
 
     ciContext = CIContext()
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    updateGameAreaBoundariesIfNeeded()
   }
 
   // MARK: - Action
@@ -193,7 +205,22 @@ class ScreenCastGameViewController: UIViewController {
 
   /// ゲーム用の実装です。指定された地点に箱を追加します。
   private func addBox(at point: CGPoint) {
-    let box = UIView(frame: CGRect(x: point.x, y: point.y, width: 64, height: 64))
+    let gameArea = gameAreaFrame == .zero ? currentGameAreaFrame() : gameAreaFrame
+    let platformHeight = Self.boxSize * Self.platformHeightRatio
+    let currentFloorY = floorY == 0 ? gameArea.maxY - platformHeight : floorY
+    let halfSize = Self.boxSize / 2
+    let clampedCenterX = min(max(point.x, gameArea.minX + halfSize), gameArea.maxX - halfSize)
+    let clampedCenterY = min(
+      max(point.y, gameArea.minY + halfSize),
+      currentFloorY - halfSize
+    )
+    let box = UIView(
+      frame: CGRect(
+        x: clampedCenterX - halfSize,
+        y: clampedCenterY - halfSize,
+        width: Self.boxSize,
+        height: Self.boxSize
+      ))
     box.backgroundColor = UIColor(
       hue: randomCGFloat(), saturation: randomCGFloat(), brightness: randomCGFloat(),
       alpha: 1.0)
@@ -220,6 +247,53 @@ class ScreenCastGameViewController: UIViewController {
       navigationItem.rightBarButtonItems = [cameraButton]
     }
   }
+
+  private func currentGameAreaFrame() -> CGRect {
+    let safeFrame = view.safeAreaLayoutGuide.layoutFrame
+    if safeFrame.isEmpty {
+      return view.bounds
+    }
+    return safeFrame
+  }
+
+  private func updateGameAreaBoundariesIfNeeded() {
+    let newFrame = currentGameAreaFrame()
+    guard !newFrame.isEmpty else {
+      return
+    }
+    guard newFrame != gameAreaFrame else {
+      return
+    }
+
+    gameAreaFrame = newFrame
+    collision.removeAllBoundaries()
+
+    // 土台は左右にブロック1個分の余白を設けます。
+    let floorStartX = newFrame.minX + Self.boxSize
+    let floorEndX = newFrame.maxX - Self.boxSize
+    let floorMinX = min(floorStartX, floorEndX)
+    let floorMaxX = max(floorStartX, floorEndX)
+    let platformHeight = Self.boxSize * Self.platformHeightRatio
+    floorY = newFrame.maxY - platformHeight
+
+    platformView.frame = CGRect(
+      x: floorMinX,
+      y: floorY,
+      width: floorMaxX - floorMinX,
+      height: platformHeight
+    )
+
+    collision.addBoundary(
+      withIdentifier: BoundaryIdentifier.floor as NSString,
+      from: CGPoint(x: floorMinX, y: floorY),
+      to: CGPoint(x: floorMaxX, y: floorY))
+
+    // 浮動小数誤差などで床をすり抜けた個体を破棄する保険境界です。
+    collision.addBoundary(
+      withIdentifier: BoundaryIdentifier.void as NSString,
+      from: CGPoint(x: newFrame.minX - 1000, y: newFrame.maxY + 10),
+      to: CGPoint(x: newFrame.maxX + 1000, y: newFrame.maxY + 10))
+  }
 }
 
 // MARK: - UICollisionBehaviorDelegate
@@ -235,7 +309,7 @@ extension ScreenCastGameViewController: UICollisionBehaviorDelegate {
       fatalError()
     }
     switch boundaryName {
-    case "Void":
+    case BoundaryIdentifier.void:
       if let box = item as? UIView {
         removeBox(box)
       }
