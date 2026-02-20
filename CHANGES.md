@@ -98,9 +98,7 @@
 - [UPDATE] `Claude Assistant` の `claude-response` を `ubuntu-slim` に移行する
   - @zztkm
 
-## sora-ios-sdk-2025.2.0
-
-**リリース日**: 2025-09-18
+## 2025.2
 
 - [CHANGE] マルチストリーム設定を廃止する
   - レガシーストリーム機能は 2025 年 6 月リリースの Sora にて廃止されたため、サンプルアプリケーションでもマルチストリーム設定を廃止する
