@@ -11,6 +11,9 @@ enum ScreenCastEnvironment {
   // type: connect に含めるメタデータ
   static var signalingConnectMetadata: Encodable? { Environment.signalingConnectMetadata }
 
+  // 画面キャプチャの目標 FPS
+  static var screenCaptureTargetFPS: Int = 15
+
   static func makeConfiguration(
     channelId: String,
     role: Role,

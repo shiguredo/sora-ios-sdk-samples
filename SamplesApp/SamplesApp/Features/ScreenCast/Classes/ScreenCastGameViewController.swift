@@ -126,21 +126,7 @@ class ScreenCastGameViewController: UIViewController {
       }
 
       let captureSettings = ScreenCaptureSettings(
-        videoSampleBufferTransformer: { [weak self] sampleBuffer in
-          guard let self = self else {
-            return sampleBuffer
-          }
-
-          guard mediaChannel.configuration.videoCodec == .h264 else {
-            return sampleBuffer
-          }
-
-          guard let ciContext = self.ciContext else {
-            return sampleBuffer
-          }
-
-          return resizeSampleBuffer(sampleBuffer, scale: 0.5, ciContext: ciContext) ?? sampleBuffer
-        },
+        targetFPS: ScreenCastEnvironment.screenCaptureTargetFPS,
         onRuntimeError: { [weak self] error in
           logger.warning("[sample] Error while mediaChannel.startScreenCapture(runtime): \(error)")
           self?.handleDisconnect()
