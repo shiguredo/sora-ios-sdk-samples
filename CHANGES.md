@@ -11,6 +11,11 @@
 
 ## 2026.2
 
+- [UPDATE] ScreenCast での画面キャプチャは SDK の `MediaChannel.startScreenCapture` を利用するようにする
+  - 画面キャプチャ停止時は `MediaChannel.stopScreenCapture` を利用する
+  - 配信時に FPS を指定できるようにする
+  - @t-miya
+
 ## 2026.1
 
 - [CHANGE] 全てのサンプルを SamplesApp に統合する

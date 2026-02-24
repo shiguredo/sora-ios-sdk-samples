@@ -9,6 +9,8 @@ class ScreenCastConfigViewController: UITableViewController {
   @IBOutlet var channelIdTextField: UITextField!
   /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
+  /// 画面キャプチャのFPSを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var targetFPSSegmentedControl: UISegmentedControl!
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
@@ -18,6 +20,11 @@ class ScreenCastConfigViewController: UITableViewController {
     super.viewDidLoad()
 
     channelIdTextField.text = ScreenCastEnvironment.channelId
+    if let index = [15, 30, 60].firstIndex(of: ScreenCastEnvironment.screenCaptureTargetFPS) {
+      targetFPSSegmentedControl.selectedSegmentIndex = index
+    } else {
+      targetFPSSegmentedControl.selectedSegmentIndex = 0
+    }
   }
 
   /// 行がタップされたときの処理を記述します。
@@ -54,14 +61,15 @@ class ScreenCastConfigViewController: UITableViewController {
     }
 
     // 入力された設定を元にSoraへ接続を行います。
-    // この画面からは配信側に接続を行うため、role引数には .publisher を指定しています。
+    // この画面からは配信側に接続を行うため、role引数には .sendonly を指定しています。
     // また今回のサンプルアプリでは、デフォルトのカメラ映像のキャプチャではなく、ReplayKit経由で取得したスクリーンキャストを使用したいため、
-    // videoCapturerOptionをカスタムに設定しておきます。
+    // ScreenCastEnvironment 側で `cameraSettings.isEnabled = false` を設定しています。
     let configuration = ScreenCastEnvironment.makeConfiguration(
       channelId: channelId,
       role: .sendonly,
       videoCodec: videoCodec
     )
+    ScreenCastEnvironment.screenCaptureTargetFPS = selectedTargetFPS()
     SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
       // 接続処理が終了したので false にします。
       self?.isConnecting = false
@@ -93,6 +101,15 @@ class ScreenCastConfigViewController: UITableViewController {
           self?.performSegue(withIdentifier: "Connect", sender: self)
         }
       }
+    }
+  }
+
+  private func selectedTargetFPS() -> Int {
+    switch targetFPSSegmentedControl.selectedSegmentIndex {
+    case 0: return 15
+    case 1: return 30
+    case 2: return 60
+    default: fatalError()
     }
   }
 }
