@@ -124,11 +124,6 @@ class ScreenCastGameViewController: UIViewController {
     //
     // SDK は `RPSampleBufferType.video` のみ送信します。
     // ReplayKit のマイク / カメラ入力は利用できません。
-    //
-    // 現在、SoraのVideoCodecにH.264を指定して配信すると、配信が途中で止まるバグがあります。
-    // (Soraとの接続が遮断されたわけでも、ReplayKitが止まったわけでもないのに、送信したフレームが配信されない)
-    // これはデバイスに一つしか無いH.264ハードウェアエンコーダ/デコーダをReplayKitとWebRTCが同時に奪い合うためではないかと思われますが、詳細は不明です。
-    // 現在のところはVP9など他のエンコード形式を使用することで回避してください。
     updateBarButtonItems()
 
     Task { [weak self] in
