@@ -139,7 +139,7 @@ final class ScreenCastConnectionManager {
     isCameraConnectionRequested = false
     isConnecting = false
     logger.info("[sample] disconnected: \(screenLabel)")
-    if hadCameraChannel || !wasCameraConnectionRequested {
+    if hadCameraChannel || wasCameraConnectionRequested {
       logger.info("[sample] disconnected: \(cameraLabel)")
     }
   }

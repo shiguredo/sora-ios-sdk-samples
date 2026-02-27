@@ -144,9 +144,6 @@ class ScreenCastGameViewController: UIViewController {
 
       do {
         try await mediaChannel.startScreenCapture(settings: captureSettings)
-        await MainActor.run {
-          self.setupCameraThumbnail()
-        }
       } catch {
         // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
         // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。

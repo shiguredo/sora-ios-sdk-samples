@@ -22,6 +22,7 @@ class ScreenCastConfigViewController: UITableViewController {
     super.viewDidLoad()
 
     channelIdTextField.text = ScreenCastEnvironment.channelId
+    cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex = 0
     if let index = [15, 30, 60].firstIndex(of: ScreenCastEnvironment.screenCaptureTargetFPS) {
       targetFPSSegmentedControl.selectedSegmentIndex = index
     } else {
