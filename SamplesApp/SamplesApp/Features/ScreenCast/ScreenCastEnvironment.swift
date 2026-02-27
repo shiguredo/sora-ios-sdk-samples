@@ -32,7 +32,8 @@ final class ScreenCastConnectionManager {
 
   private(set) var screenMediaChannel: MediaChannel?
   private(set) var cameraMediaChannel: MediaChannel?
-  private(set) var isCameraConnectionEnabled = true
+  // 現在の接続セッションでカメラ接続を要求したかどうか
+  private(set) var isCameraConnectionRequested = false
   private var isConnecting = false
 
   var isConnected: Bool {
@@ -62,7 +63,7 @@ final class ScreenCastConnectionManager {
       return
     }
     isConnecting = true
-    isCameraConnectionEnabled = isCameraEnabled
+    isCameraConnectionRequested = isCameraEnabled
 
     let screenConfiguration = ScreenCastEnvironment.makeScreenCastConfiguration(
       channelId: channelId,
@@ -126,7 +127,7 @@ final class ScreenCastConnectionManager {
     let screenLabel = logLabel(for: .screen)
     let cameraLabel = logLabel(for: .camera)
     let hadCameraChannel = cameraMediaChannel != nil
-    let wasCameraConnectionEnabled = isCameraConnectionEnabled
+    let wasCameraConnectionRequested = isCameraConnectionRequested
     if let screenMediaChannel {
       screenMediaChannel.disconnect(error: nil)
     }
@@ -135,10 +136,10 @@ final class ScreenCastConnectionManager {
     }
     screenMediaChannel = nil
     cameraMediaChannel = nil
-    isCameraConnectionEnabled = true
+    isCameraConnectionRequested = false
     isConnecting = false
     logger.info("[sample] disconnected: \(screenLabel)")
-    if hadCameraChannel || !wasCameraConnectionEnabled {
+    if hadCameraChannel || !wasCameraConnectionRequested {
       logger.info("[sample] disconnected: \(cameraLabel)")
     }
   }
@@ -154,9 +155,10 @@ final class ScreenCastConnectionManager {
     }
 
     let channelId = mediaChannel?.configuration.channelId ?? "-"
-    let cameraEnabled = kind == .camera ? "\(isCameraConnectionEnabled)" : "true"
+    let cameraRequested = kind == .camera ? "\(isCameraConnectionRequested)" : "true"
+    let cameraConnected = kind == .camera ? "\(cameraMediaChannel != nil)" : "true"
     return
-      "connection_label=\(kind.rawValue), channel_id=\(channelId), camera_enabled=\(cameraEnabled)"
+      "connection_label=\(kind.rawValue), channel_id=\(channelId), camera_requested=\(cameraRequested), camera_connected=\(cameraConnected)"
   }
 
   private func complete(_ completionHandler: ((Error?) -> Void)?, error: Error?) {
