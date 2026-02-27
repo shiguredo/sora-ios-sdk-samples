@@ -98,7 +98,8 @@ final class ScreenCastConnectionManager {
         role: .sendonly,
         videoCodec: videoCodec
       )
-      _ = Sora.shared.connect(configuration: cameraConfiguration) { [weak self] mediaChannel, error in
+      _ = Sora.shared.connect(configuration: cameraConfiguration) {
+        [weak self] mediaChannel, error in
         guard let self else { return }
         self.isConnecting = false
         if let error {
@@ -155,7 +156,8 @@ final class ScreenCastConnectionManager {
     let channelId = mediaChannel?.configuration.channelId ?? "-"
     let connectionId = "-"
     let cameraEnabled = kind == .camera ? "\(isCameraConnectionEnabled)" : "true"
-    return "connection_label=\(kind.rawValue), channel_id=\(channelId), connection_id=\(connectionId), camera_enabled=\(cameraEnabled)"
+    return
+      "connection_label=\(kind.rawValue), channel_id=\(channelId), connection_id=\(connectionId), camera_enabled=\(cameraEnabled)"
   }
 
   private func complete(_ completionHandler: ((Error?) -> Void)?, error: Error?) {
