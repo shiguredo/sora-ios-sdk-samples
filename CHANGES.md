@@ -15,6 +15,9 @@
   - 画面キャプチャ停止時は `MediaChannel.stopScreenCapture` を利用する
   - 配信時に FPS を指定できるようにする
   - @t-miya
+- [ADD] ScreenCast で前面カメラによる配信者映像も配信できるようにする
+  - ゲーム画面とは別の接続を確立してカメラの映像を配信する
+  - @t-miya
 
 ## 2026.1
 

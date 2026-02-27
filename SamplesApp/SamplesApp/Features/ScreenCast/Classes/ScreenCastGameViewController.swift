@@ -39,6 +39,7 @@ class ScreenCastGameViewController: UIViewController {
   private let platformView = UIView()
   private var gameAreaFrame: CGRect = .zero
   private var floorY: CGFloat = 0
+  private var cameraThumbnailView: VideoView?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -77,6 +78,7 @@ class ScreenCastGameViewController: UIViewController {
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     updateGameAreaBoundariesIfNeeded()
+    layoutCameraThumbnail()
   }
 
   // MARK: - Action
@@ -92,7 +94,7 @@ class ScreenCastGameViewController: UIViewController {
   /// 配信開始ボタンが押されたときの挙動を定義します。
   @IBAction
   func onCameraButton(_ sender: UIBarButtonItem) {
-    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = ScreenCastConnectionManager.shared.isActive
     if isConnected {
       // 既に配信中なので何もしなくて良いです。ボタンの状態だけ更新します。
       updateBarButtonItems()
@@ -106,7 +108,7 @@ class ScreenCastGameViewController: UIViewController {
   /// 配信停止ボタンが押されたときの挙動を定義します。
   @IBAction
   func onPauseButton(_ sender: UIBarButtonItem) {
-    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = ScreenCastConnectionManager.shared.isActive
     if isConnected {
       handleDisconnect()
     } else {
@@ -124,11 +126,13 @@ class ScreenCastGameViewController: UIViewController {
     //
     // SDK は `RPSampleBufferType.video` のみ送信します。
     // ReplayKit のマイク / カメラ入力は利用できません。
+    configureDisconnectHandlers()
+    setupCameraThumbnail()
     updateBarButtonItems()
 
     Task { [weak self] in
       guard let self = self else { return }
-      guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
+      guard let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel else {
         return
       }
 
@@ -149,21 +153,6 @@ class ScreenCastGameViewController: UIViewController {
         self.handleDisconnect()
         return
       }
-
-      // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { [weak self] event in
-        guard let self = self else { return }
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-        }
-
-        self.handleDisconnect()
-      }
     }
   }
 
@@ -175,14 +164,16 @@ class ScreenCastGameViewController: UIViewController {
       guard let self = self else { return }
 
       // 画面録画を停止します。切断時にもSDK側で停止されますが、明示的に停止しておきます。
-      if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+      if let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel {
         // 重複して切断ハンドラが呼ばれないように解除します。
         mediaChannel.handlers.onDisconnect = nil
         await mediaChannel.stopScreenCapture()
       }
+      ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onDisconnect = nil
+      teardownCameraThumbnail()
 
       // 明示的に配信をストップしてから、画面を閉じるようにしています。
-      SoraSDKManager.shared.disconnect()
+      ScreenCastConnectionManager.shared.disconnect()
       await MainActor.run {
         self.updateBarButtonItems()
       }
@@ -220,6 +211,9 @@ class ScreenCastGameViewController: UIViewController {
       hue: randomCGFloat(), saturation: randomCGFloat(), brightness: randomCGFloat(),
       alpha: 1.0)
     view.addSubview(box)
+    if let cameraThumbnailView {
+      view.bringSubviewToFront(cameraThumbnailView)
+    }
     gravity.addItem(box)
     collision.addItem(box)
     dynamicProperties.addItem(box)
@@ -235,7 +229,7 @@ class ScreenCastGameViewController: UIViewController {
 
   /// 現在の配信状態に応じてナビゲーションバーのボタンの状態を更新します。
   private func updateBarButtonItems() {
-    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = ScreenCastConnectionManager.shared.isActive
     if isConnected {
       navigationItem.rightBarButtonItems = [pauseButton]
     } else {
@@ -288,6 +282,91 @@ class ScreenCastGameViewController: UIViewController {
       withIdentifier: BoundaryIdentifier.void as NSString,
       from: CGPoint(x: newFrame.minX - 1000, y: newFrame.maxY + 10),
       to: CGPoint(x: newFrame.maxX + 1000, y: newFrame.maxY + 10))
+  }
+
+  private func configureDisconnectHandlers() {
+    ScreenCastConnectionManager.shared.screenMediaChannel?.handlers.onDisconnect = {
+      [weak self] event in
+      guard let self else { return }
+      switch event {
+      case .ok(let code, let reason):
+        logger.info(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .screen)), code: \(code), reason: \(reason)"
+        )
+      case .error(let error):
+        logger.error(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .screen)), error: \(error.localizedDescription)"
+        )
+      }
+
+      self.handleDisconnect()
+    }
+
+    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onDisconnect = {
+      [weak self] event in
+      guard let self else { return }
+      switch event {
+      case .ok(let code, let reason):
+        logger.info(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .camera)), code: \(code), reason: \(reason)"
+        )
+      case .error(let error):
+        logger.error(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .camera)), error: \(error.localizedDescription)"
+        )
+      }
+
+      self.handleDisconnect()
+    }
+  }
+
+  private func setupCameraThumbnail() {
+    guard
+      let cameraMediaChannel = ScreenCastConnectionManager.shared.cameraMediaChannel,
+      let senderStream = cameraMediaChannel.senderStream
+    else {
+      teardownCameraThumbnail()
+      return
+    }
+
+    let thumbnailView: VideoView
+    if let cameraThumbnailView {
+      thumbnailView = cameraThumbnailView
+    } else {
+      let videoView = VideoView(frame: .zero)
+      videoView.contentMode = .scaleAspectFill
+      videoView.layer.borderColor = UIColor.white.cgColor
+      videoView.layer.borderWidth = 1.0
+      videoView.layer.cornerRadius = 8.0
+      videoView.clipsToBounds = true
+      videoView.connectionMode = .manual
+      videoView.start()
+      view.addSubview(videoView)
+      cameraThumbnailView = videoView
+      thumbnailView = videoView
+    }
+
+    senderStream.videoRenderer = thumbnailView
+    layoutCameraThumbnail()
+    view.bringSubviewToFront(thumbnailView)
+  }
+
+  private func layoutCameraThumbnail() {
+    guard let cameraThumbnailView else { return }
+    let margin: CGFloat = 12
+    let width = min(120, max(96, view.bounds.width * 0.28))
+    let height = width * 1.5
+    let x = view.bounds.width - view.safeAreaInsets.right - width - margin
+    let y = view.safeAreaInsets.top + margin
+    cameraThumbnailView.frame = CGRect(x: x, y: y, width: width, height: height)
+  }
+
+  private func teardownCameraThumbnail() {
+    if let senderStream = ScreenCastConnectionManager.shared.cameraMediaChannel?.senderStream {
+      senderStream.videoRenderer = nil
+    }
+    cameraThumbnailView?.removeFromSuperview()
+    cameraThumbnailView = nil
   }
 }
 

@@ -116,7 +116,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデックと配信 FPS を選択します。" id="ocv-Ju-I1p">
+                            <tableViewSection headerTitle="配信設定" footerTitle="使用するビデオコーデック、配信 FPS、カメラ配信有無を選択します。" id="ocv-Ju-I1p">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Wzi-jE-Ww3">
                                         <rect key="frame" x="0.0" y="163" width="375" height="44"/>
@@ -178,12 +178,42 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="4Qm-Hp-6Ku">
+                                        <rect key="frame" x="0.0" y="251" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4Qm-Hp-6Ku" id="ebQ-zj-SV4">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="カメラ配信" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oKa-T5-7tN">
+                                                    <rect key="frame" x="20" y="11.5" width="85" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="R7h-hx-MGJ">
+                                                    <rect key="frame" x="233" y="6.5" width="122" height="32"/>
+                                                    <segments>
+                                                        <segment title="ON"/>
+                                                        <segment title="OFF"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="oKa-T5-7tN" firstAttribute="leading" secondItem="ebQ-zj-SV4" secondAttribute="leading" constant="20" id="6Le-4K-MxL"/>
+                                                <constraint firstItem="oKa-T5-7tN" firstAttribute="centerY" secondItem="ebQ-zj-SV4" secondAttribute="centerY" id="7R8-Vo-7RH"/>
+                                                <constraint firstItem="R7h-hx-MGJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="oKa-T5-7tN" secondAttribute="trailing" constant="12" id="HT5-Ik-7OU"/>
+                                                <constraint firstAttribute="trailing" secondItem="R7h-hx-MGJ" secondAttribute="trailing" constant="20" id="T8v-VP-b8y"/>
+                                                <constraint firstItem="R7h-hx-MGJ" firstAttribute="centerY" secondItem="ebQ-zj-SV4" secondAttribute="centerY" id="nA8-Vm-B4x"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="0K7-Gv-Cld">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RWd-Sd-Ae5">
-                                        <rect key="frame" x="0.0" y="255.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="343.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RWd-Sd-Ae5" id="7mB-C2-N5q">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -219,6 +249,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="cameraEnabledOnConnectSegmentedControl" destination="R7h-hx-MGJ" id="jlwm-hg-zI8"/>
                         <outlet property="channelIdTextField" destination="vqy-RN-mcL" id="MND-pd-Jbn"/>
                         <outlet property="targetFPSSegmentedControl" destination="TkM-z2-g7X" id="W07-kf-K3R"/>
                         <outlet property="videoCodecSegmentedControl" destination="LWj-Kb-ulw" id="fKI-gG-gFn"/>
