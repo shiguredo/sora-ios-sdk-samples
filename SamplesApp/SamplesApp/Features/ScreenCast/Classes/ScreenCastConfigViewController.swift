@@ -62,6 +62,9 @@ class ScreenCastConfigViewController: UITableViewController {
     default: fatalError()
     }
 
+    // 画面キャプチャ開始時に利用する目標 FPS を更新します。
+    ScreenCastEnvironment.screenCaptureTargetFPS = selectedTargetFPS()
+
     let isCameraEnabledOnConnect = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
 
     // 入力された設定を元に、スクリーンキャスト接続と(必要に応じて)カメラ接続を作成します。
