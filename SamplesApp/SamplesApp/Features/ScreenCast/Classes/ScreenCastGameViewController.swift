@@ -1,4 +1,3 @@
-import CoreMedia
 import Sora
 import UIKit
 
@@ -144,6 +143,9 @@ class ScreenCastGameViewController: UIViewController {
 
       do {
         try await mediaChannel.startScreenCapture(settings: captureSettings)
+        await MainActor.run {
+          self.setupCameraThumbnail()
+        }
       } catch {
         // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
         // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
@@ -168,6 +170,8 @@ class ScreenCastGameViewController: UIViewController {
         await mediaChannel.stopScreenCapture()
       }
       ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onDisconnect = nil
+      ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onAddStream = nil
+      ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onRemoveStream = nil
       teardownCameraThumbnail()
 
       // 明示的に配信をストップしてから、画面を閉じるようにしています。
@@ -316,6 +320,16 @@ class ScreenCastGameViewController: UIViewController {
 
       self.handleDisconnect()
     }
+    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onAddStream = { [weak self] _ in
+      DispatchQueue.main.async {
+        self?.setupCameraThumbnail()
+      }
+    }
+    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onRemoveStream = { [weak self] _ in
+      DispatchQueue.main.async {
+        self?.setupCameraThumbnail()
+      }
+    }
   }
 
   private func setupCameraThumbnail() {
@@ -389,100 +403,4 @@ extension ScreenCastGameViewController: UICollisionBehaviorDelegate {
       break
     }
   }
-}
-
-// https://github.com/shiguredo/sora-ios-sdk/issues/34
-// https://fromatom.hatenablog.com/entry/2019/10/28/172628
-private func resizeSampleBuffer(
-  _ sampleBuffer: CMSampleBuffer,
-  scale: CGFloat,
-  ciContext: CIContext
-) -> CMSampleBuffer? {
-  // CMSampleTimingInfo を取得する
-  // リサイズ後の CMSampleBuffer の生成に使う
-  let presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-  let duration = CMSampleBufferGetDuration(sampleBuffer)
-  let decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer)
-  var timingInfo = CMSampleTimingInfo(
-    duration: duration,
-    presentationTimeStamp: presentationTimeStamp,
-    decodeTimeStamp: decodeTimeStamp)
-
-  // CIImage をリサイズする
-  guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-    logger.error("cannot get pixel buffer")
-    return nil
-  }
-  let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-
-  guard let filter = CIFilter(name: "CILanczosScaleTransform") else {
-    logger.error("not found filter")
-    return nil
-  }
-  filter.setDefaults()
-  filter.setValue(ciImage, forKey: kCIInputImageKey)
-  filter.setValue(scale, forKey: kCIInputScaleKey)
-  guard let resizedCIImage = filter.outputImage else {
-    logger.error("resize CIImage failed")
-    return nil
-  }
-
-  // リサイズした CIImage を使って CVPixelBuffer を生成する
-  let attrs =
-    [
-      kCVPixelFormatCGImageCompatibility: kCFBooleanTrue,
-      kCVPixelFormatCGBitmapContextCompatibility: kCFBooleanTrue,
-    ] as CFDictionary
-  var newPixelBuffer: CVPixelBuffer!
-  var status = CVPixelBufferCreate(
-    nil,
-    Int(resizedCIImage.extent.size.width),
-    Int(resizedCIImage.extent.size.height),
-    kCVPixelFormatType_32BGRA,
-    attrs,
-    &newPixelBuffer)
-  guard status == kCVReturnSuccess else {
-    logger.error("cannot create new pixel buffer \(status)")
-    return nil
-  }
-  ciContext.render(
-    resizedCIImage,
-    to: newPixelBuffer,
-    bounds: resizedCIImage.extent,
-    colorSpace: CGColorSpaceCreateDeviceRGB())
-  status = CVPixelBufferLockBaseAddress(newPixelBuffer, .readOnly)
-  guard status == kCVReturnSuccess else {
-    logger.error("cannot render to new pixel buffer \(status)")
-    return nil
-  }
-
-  // CVPixelBuffer から CMSampleBuffer を生成する
-  // 最初に取得しておいた CMSampleTimingInfo を使う
-  var newSampleBuffer: CMSampleBuffer!
-  var videoInfo: CMVideoFormatDescription!
-
-  status = CMVideoFormatDescriptionCreateForImageBuffer(
-    allocator: nil,
-    imageBuffer: newPixelBuffer,
-    formatDescriptionOut: &videoInfo)
-  guard status == errSecSuccess else {
-    logger.error("cannot create video format description \(status)")
-    return nil
-  }
-
-  status = CMSampleBufferCreateForImageBuffer(
-    allocator: nil,
-    imageBuffer: newPixelBuffer,
-    dataReady: true,
-    makeDataReadyCallback: nil,
-    refcon: nil,
-    formatDescription: videoInfo,
-    sampleTiming: &timingInfo,
-    sampleBufferOut: &newSampleBuffer)
-  guard status == errSecSuccess else {
-    logger.error("cannot create new sample buffer \(status)")
-    return nil
-  }
-
-  return newSampleBuffer
 }

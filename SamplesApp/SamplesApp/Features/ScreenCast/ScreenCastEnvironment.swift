@@ -154,10 +154,9 @@ final class ScreenCastConnectionManager {
     }
 
     let channelId = mediaChannel?.configuration.channelId ?? "-"
-    let connectionId = "-"
     let cameraEnabled = kind == .camera ? "\(isCameraConnectionEnabled)" : "true"
     return
-      "connection_label=\(kind.rawValue), channel_id=\(channelId), connection_id=\(connectionId), camera_enabled=\(cameraEnabled)"
+      "connection_label=\(kind.rawValue), channel_id=\(channelId), camera_enabled=\(cameraEnabled)"
   }
 
   private func complete(_ completionHandler: ((Error?) -> Void)?, error: Error?) {
