@@ -38,6 +38,7 @@ class ScreenCastGameViewController: UIViewController {
   private var gameAreaFrame: CGRect = .zero
   private var floorY: CGFloat = 0
   private var cameraThumbnailView: VideoView?
+  private var isDisconnecting = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -162,6 +163,7 @@ class ScreenCastGameViewController: UIViewController {
   private func handleDisconnect() {
     Task { [weak self] in
       guard let self = self else { return }
+      guard await self.beginDisconnectIfNeeded() else { return }
 
       // 画面録画を停止します。切断時にもSDK側で停止されますが、明示的に停止しておきます。
       if let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel {
@@ -177,6 +179,7 @@ class ScreenCastGameViewController: UIViewController {
       // 明示的に配信をストップしてから、画面を閉じるようにしています。
       ScreenCastConnectionManager.shared.disconnect()
       await MainActor.run {
+        self.isDisconnecting = false
         self.updateBarButtonItems()
       }
     }
@@ -380,6 +383,15 @@ class ScreenCastGameViewController: UIViewController {
     }
     cameraThumbnailView?.removeFromSuperview()
     cameraThumbnailView = nil
+  }
+
+  @MainActor
+  private func beginDisconnectIfNeeded() -> Bool {
+    if isDisconnecting {
+      return false
+    }
+    isDisconnecting = true
+    return true
   }
 }
 
