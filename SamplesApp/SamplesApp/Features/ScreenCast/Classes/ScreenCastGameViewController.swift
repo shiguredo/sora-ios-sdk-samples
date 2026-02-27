@@ -35,7 +35,6 @@ class ScreenCastGameViewController: UIViewController {
   /// サンプルゲーム自体の実装のために使用します。UI Dynamicsという仕組みを使用しています。
   private var dynamicProperties: UIDynamicItemBehavior!
 
-  private var ciContext: CIContext?
   private let platformView = UIView()
   private var gameAreaFrame: CGRect = .zero
   private var floorY: CGFloat = 0
@@ -72,7 +71,6 @@ class ScreenCastGameViewController: UIViewController {
     // ナビゲーションバーのボタンの状態を更新します。
     updateBarButtonItems()
 
-    ciContext = CIContext()
   }
 
   override func viewDidLayoutSubviews() {
