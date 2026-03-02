@@ -328,7 +328,7 @@ class ScreenCastGameViewController: UIViewController {
     ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onRemoveStream = {
       [weak self] _ in
       DispatchQueue.main.async {
-        self?.setupCameraThumbnail()
+        self?.teardownCameraThumbnail()
       }
     }
   }
