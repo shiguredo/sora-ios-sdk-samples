@@ -1,4 +1,3 @@
-import CoreMedia
 import Sora
 import UIKit
 
@@ -35,10 +34,11 @@ class ScreenCastGameViewController: UIViewController {
   /// サンプルゲーム自体の実装のために使用します。UI Dynamicsという仕組みを使用しています。
   private var dynamicProperties: UIDynamicItemBehavior!
 
-  private var ciContext: CIContext?
   private let platformView = UIView()
   private var gameAreaFrame: CGRect = .zero
   private var floorY: CGFloat = 0
+  private var cameraThumbnailView: VideoView?
+  private var isDisconnecting = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -71,12 +71,12 @@ class ScreenCastGameViewController: UIViewController {
     // ナビゲーションバーのボタンの状態を更新します。
     updateBarButtonItems()
 
-    ciContext = CIContext()
   }
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     updateGameAreaBoundariesIfNeeded()
+    layoutCameraThumbnail()
   }
 
   // MARK: - Action
@@ -92,7 +92,7 @@ class ScreenCastGameViewController: UIViewController {
   /// 配信開始ボタンが押されたときの挙動を定義します。
   @IBAction
   func onCameraButton(_ sender: UIBarButtonItem) {
-    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = ScreenCastConnectionManager.shared.isActive
     if isConnected {
       // 既に配信中なので何もしなくて良いです。ボタンの状態だけ更新します。
       updateBarButtonItems()
@@ -106,7 +106,7 @@ class ScreenCastGameViewController: UIViewController {
   /// 配信停止ボタンが押されたときの挙動を定義します。
   @IBAction
   func onPauseButton(_ sender: UIBarButtonItem) {
-    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = ScreenCastConnectionManager.shared.isActive
     if isConnected {
       handleDisconnect()
     } else {
@@ -124,11 +124,13 @@ class ScreenCastGameViewController: UIViewController {
     //
     // SDK は `RPSampleBufferType.video` のみ送信します。
     // ReplayKit のマイク / カメラ入力は利用できません。
+    configureDisconnectHandlers()
+    setupCameraThumbnail()
     updateBarButtonItems()
 
     Task { [weak self] in
       guard let self = self else { return }
-      guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
+      guard let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel else {
         return
       }
 
@@ -149,21 +151,6 @@ class ScreenCastGameViewController: UIViewController {
         self.handleDisconnect()
         return
       }
-
-      // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { [weak self] event in
-        guard let self = self else { return }
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-        }
-
-        self.handleDisconnect()
-      }
     }
   }
 
@@ -173,17 +160,23 @@ class ScreenCastGameViewController: UIViewController {
   private func handleDisconnect() {
     Task { [weak self] in
       guard let self = self else { return }
+      guard await self.beginDisconnectIfNeeded() else { return }
 
       // 画面録画を停止します。切断時にもSDK側で停止されますが、明示的に停止しておきます。
-      if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
+      if let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel {
         // 重複して切断ハンドラが呼ばれないように解除します。
         mediaChannel.handlers.onDisconnect = nil
         await mediaChannel.stopScreenCapture()
       }
+      ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onDisconnect = nil
+      ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onAddStream = nil
+      ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onRemoveStream = nil
+      teardownCameraThumbnail()
 
       // 明示的に配信をストップしてから、画面を閉じるようにしています。
-      SoraSDKManager.shared.disconnect()
+      ScreenCastConnectionManager.shared.disconnect()
       await MainActor.run {
+        self.isDisconnecting = false
         self.updateBarButtonItems()
       }
     }
@@ -220,6 +213,9 @@ class ScreenCastGameViewController: UIViewController {
       hue: randomCGFloat(), saturation: randomCGFloat(), brightness: randomCGFloat(),
       alpha: 1.0)
     view.addSubview(box)
+    if let cameraThumbnailView {
+      view.bringSubviewToFront(cameraThumbnailView)
+    }
     gravity.addItem(box)
     collision.addItem(box)
     dynamicProperties.addItem(box)
@@ -235,7 +231,7 @@ class ScreenCastGameViewController: UIViewController {
 
   /// 現在の配信状態に応じてナビゲーションバーのボタンの状態を更新します。
   private func updateBarButtonItems() {
-    let isConnected = (SoraSDKManager.shared.currentMediaChannel != nil)
+    let isConnected = ScreenCastConnectionManager.shared.isActive
     if isConnected {
       navigationItem.rightBarButtonItems = [pauseButton]
     } else {
@@ -289,6 +285,111 @@ class ScreenCastGameViewController: UIViewController {
       from: CGPoint(x: newFrame.minX - 1000, y: newFrame.maxY + 10),
       to: CGPoint(x: newFrame.maxX + 1000, y: newFrame.maxY + 10))
   }
+
+  private func configureDisconnectHandlers() {
+    ScreenCastConnectionManager.shared.screenMediaChannel?.handlers.onDisconnect = {
+      [weak self] event in
+      guard let self else { return }
+      switch event {
+      case .ok(let code, let reason):
+        logger.info(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .screen)), code: \(code), reason: \(reason)"
+        )
+      case .error(let error):
+        logger.error(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .screen)), error: \(error.localizedDescription)"
+        )
+      }
+
+      self.handleDisconnect()
+    }
+
+    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onDisconnect = {
+      [weak self] event in
+      guard let self else { return }
+      switch event {
+      case .ok(let code, let reason):
+        logger.info(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .camera)), code: \(code), reason: \(reason)"
+        )
+      case .error(let error):
+        logger.error(
+          "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .camera)), error: \(error.localizedDescription)"
+        )
+      }
+
+      self.handleDisconnect()
+    }
+    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onAddStream = { [weak self] _ in
+      DispatchQueue.main.async {
+        self?.setupCameraThumbnail()
+      }
+    }
+    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onRemoveStream = {
+      [weak self] _ in
+      DispatchQueue.main.async {
+        self?.teardownCameraThumbnail()
+      }
+    }
+  }
+
+  private func setupCameraThumbnail() {
+    guard
+      let cameraMediaChannel = ScreenCastConnectionManager.shared.cameraMediaChannel,
+      let senderStream = cameraMediaChannel.senderStream
+    else {
+      teardownCameraThumbnail()
+      return
+    }
+
+    let thumbnailView: VideoView
+    if let cameraThumbnailView {
+      thumbnailView = cameraThumbnailView
+    } else {
+      let videoView = VideoView(frame: .zero)
+      videoView.contentMode = .scaleAspectFill
+      videoView.layer.borderColor = UIColor.white.cgColor
+      videoView.layer.borderWidth = 1.0
+      videoView.layer.cornerRadius = 8.0
+      videoView.clipsToBounds = true
+      videoView.connectionMode = .manual
+      videoView.start()
+      view.addSubview(videoView)
+      cameraThumbnailView = videoView
+      thumbnailView = videoView
+    }
+
+    senderStream.videoRenderer = thumbnailView
+    layoutCameraThumbnail()
+    view.bringSubviewToFront(thumbnailView)
+  }
+
+  private func layoutCameraThumbnail() {
+    guard let cameraThumbnailView else { return }
+    let margin: CGFloat = 12
+    let width = min(120, max(96, view.bounds.width * 0.28))
+    let height = width * 1.5
+    let x = view.bounds.width - view.safeAreaInsets.right - width - margin
+    let y = view.safeAreaInsets.top + margin
+    cameraThumbnailView.frame = CGRect(x: x, y: y, width: width, height: height)
+  }
+
+  private func teardownCameraThumbnail() {
+    if let senderStream = ScreenCastConnectionManager.shared.cameraMediaChannel?.senderStream {
+      senderStream.videoRenderer = nil
+    }
+    cameraThumbnailView?.removeFromSuperview()
+    cameraThumbnailView = nil
+  }
+
+  @MainActor
+  private func beginDisconnectIfNeeded() -> Bool {
+    if isDisconnecting {
+      return false
+    }
+    isDisconnecting = true
+    return true
+  }
 }
 
 // MARK: - UICollisionBehaviorDelegate
@@ -312,100 +413,4 @@ extension ScreenCastGameViewController: UICollisionBehaviorDelegate {
       break
     }
   }
-}
-
-// https://github.com/shiguredo/sora-ios-sdk/issues/34
-// https://fromatom.hatenablog.com/entry/2019/10/28/172628
-private func resizeSampleBuffer(
-  _ sampleBuffer: CMSampleBuffer,
-  scale: CGFloat,
-  ciContext: CIContext
-) -> CMSampleBuffer? {
-  // CMSampleTimingInfo を取得する
-  // リサイズ後の CMSampleBuffer の生成に使う
-  let presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-  let duration = CMSampleBufferGetDuration(sampleBuffer)
-  let decodeTimeStamp = CMSampleBufferGetDecodeTimeStamp(sampleBuffer)
-  var timingInfo = CMSampleTimingInfo(
-    duration: duration,
-    presentationTimeStamp: presentationTimeStamp,
-    decodeTimeStamp: decodeTimeStamp)
-
-  // CIImage をリサイズする
-  guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-    logger.error("cannot get pixel buffer")
-    return nil
-  }
-  let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-
-  guard let filter = CIFilter(name: "CILanczosScaleTransform") else {
-    logger.error("not found filter")
-    return nil
-  }
-  filter.setDefaults()
-  filter.setValue(ciImage, forKey: kCIInputImageKey)
-  filter.setValue(scale, forKey: kCIInputScaleKey)
-  guard let resizedCIImage = filter.outputImage else {
-    logger.error("resize CIImage failed")
-    return nil
-  }
-
-  // リサイズした CIImage を使って CVPixelBuffer を生成する
-  let attrs =
-    [
-      kCVPixelFormatCGImageCompatibility: kCFBooleanTrue,
-      kCVPixelFormatCGBitmapContextCompatibility: kCFBooleanTrue,
-    ] as CFDictionary
-  var newPixelBuffer: CVPixelBuffer!
-  var status = CVPixelBufferCreate(
-    nil,
-    Int(resizedCIImage.extent.size.width),
-    Int(resizedCIImage.extent.size.height),
-    kCVPixelFormatType_32BGRA,
-    attrs,
-    &newPixelBuffer)
-  guard status == kCVReturnSuccess else {
-    logger.error("cannot create new pixel buffer \(status)")
-    return nil
-  }
-  ciContext.render(
-    resizedCIImage,
-    to: newPixelBuffer,
-    bounds: resizedCIImage.extent,
-    colorSpace: CGColorSpaceCreateDeviceRGB())
-  status = CVPixelBufferLockBaseAddress(newPixelBuffer, .readOnly)
-  guard status == kCVReturnSuccess else {
-    logger.error("cannot render to new pixel buffer \(status)")
-    return nil
-  }
-
-  // CVPixelBuffer から CMSampleBuffer を生成する
-  // 最初に取得しておいた CMSampleTimingInfo を使う
-  var newSampleBuffer: CMSampleBuffer!
-  var videoInfo: CMVideoFormatDescription!
-
-  status = CMVideoFormatDescriptionCreateForImageBuffer(
-    allocator: nil,
-    imageBuffer: newPixelBuffer,
-    formatDescriptionOut: &videoInfo)
-  guard status == errSecSuccess else {
-    logger.error("cannot create video format description \(status)")
-    return nil
-  }
-
-  status = CMSampleBufferCreateForImageBuffer(
-    allocator: nil,
-    imageBuffer: newPixelBuffer,
-    dataReady: true,
-    makeDataReadyCallback: nil,
-    refcon: nil,
-    formatDescription: videoInfo,
-    sampleTiming: &timingInfo,
-    sampleBufferOut: &newSampleBuffer)
-  guard status == errSecSuccess else {
-    logger.error("cannot create new sample buffer \(status)")
-    return nil
-  }
-
-  return newSampleBuffer
 }

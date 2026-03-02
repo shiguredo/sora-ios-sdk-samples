@@ -11,6 +11,8 @@ class ScreenCastConfigViewController: UITableViewController {
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
   /// 画面キャプチャのFPSを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var targetFPSSegmentedControl: UISegmentedControl!
+  /// 接続時にカメラ配信を有効にするか指定するためのコントロールです。
+  @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
@@ -20,6 +22,7 @@ class ScreenCastConfigViewController: UITableViewController {
     super.viewDidLoad()
 
     channelIdTextField.text = ScreenCastEnvironment.channelId
+    cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex = 0
     if let index = [15, 30, 60].firstIndex(of: ScreenCastEnvironment.screenCaptureTargetFPS) {
       targetFPSSegmentedControl.selectedSegmentIndex = index
     } else {
@@ -60,17 +63,18 @@ class ScreenCastConfigViewController: UITableViewController {
     default: fatalError()
     }
 
-    // 入力された設定を元にSoraへ接続を行います。
-    // この画面からは配信側に接続を行うため、role引数には .sendonly を指定しています。
-    // また今回のサンプルアプリでは、デフォルトのカメラ映像のキャプチャではなく、ReplayKit経由で取得したスクリーンキャストを使用したいため、
-    // ScreenCastEnvironment 側で `cameraSettings.isEnabled = false` を設定しています。
-    let configuration = ScreenCastEnvironment.makeConfiguration(
-      channelId: channelId,
-      role: .sendonly,
-      videoCodec: videoCodec
-    )
+    // 画面キャプチャ開始時に利用する目標 FPS を更新します。
     ScreenCastEnvironment.screenCaptureTargetFPS = selectedTargetFPS()
-    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
+
+    let isCameraEnabledOnConnect = cameraEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+
+    // 入力された設定を元に、スクリーンキャスト接続と(必要に応じて)カメラ接続を作成します。
+    ScreenCastConnectionManager.shared.connect(
+      channelId: channelId,
+      videoCodec: videoCodec,
+      isCameraEnabled: isCameraEnabledOnConnect
+    ) {
+      [weak self] error in
       // 接続処理が終了したので false にします。
       self?.isConnecting = false
 
@@ -79,7 +83,7 @@ class ScreenCastConfigViewController: UITableViewController {
         // この場合は、エラー表示をユーザーに返すのが親切です。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
         // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        logger.warning("[sample] SoraSDKManager connection error: \(error)")
+        logger.warning("[sample] ScreenCastConnectionManager connection error: \(error)")
         DispatchQueue.main.async {
           let alertController = UIAlertController(
             title: "接続に失敗しました",
@@ -91,7 +95,14 @@ class ScreenCastConfigViewController: UITableViewController {
         }
       } else {
         // errorがnilの場合は、接続に成功しています。
-        logger.info("[sample] SoraSDKManager connected.")
+        logger.info(
+          "[sample] ScreenCastConnectionManager connected. \(ScreenCastConnectionManager.shared.logLabel(for: .screen))"
+        )
+        if isCameraEnabledOnConnect {
+          logger.info(
+            "[sample] ScreenCastConnectionManager connected. \(ScreenCastConnectionManager.shared.logLabel(for: .camera))"
+          )
+        }
 
         // 接続が完了したので、ゲーム画面に戻ります。
         // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
