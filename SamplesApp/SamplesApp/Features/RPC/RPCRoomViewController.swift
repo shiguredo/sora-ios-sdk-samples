@@ -299,8 +299,8 @@ class RPCRoomViewController: UIViewController {
         }
       }
 
-      mediaChannel.handlers.onReceiveSignaling = { [weak self] signaling in
-        self?.handleSignaling(signaling)
+      mediaChannel.handlers.onReceiveSignalingJSON = { [weak self] json in
+        self?.handleSignalingJSON(json)
       }
 
       mediaChannel.handlers.onRemoveStream = { [weak self] _ in
@@ -336,7 +336,7 @@ class RPCRoomViewController: UIViewController {
       mediaChannel.handlers.onDataChannelMessage = nil
       mediaChannel.handlers.onAddStream = nil
       mediaChannel.handlers.onRemoveStream = nil
-      mediaChannel.handlers.onReceiveSignaling = nil
+      mediaChannel.handlers.onReceiveSignalingJSON = nil
       mediaChannel.handlers.onDisconnect = nil
     }
   }
@@ -668,11 +668,11 @@ class RPCRoomViewController: UIViewController {
     }
   }
 
-  private func handleSignaling(_ signaling: Signaling) {
-    guard case .offer(let offer) = signaling else {
+  private func handleSignalingJSON(_ json: String) {
+    guard let rpcMethods = RPCSignalingParser.parseOfferRPCMethods(from: json) else {
       return
     }
-    updateAllowedRPCMethods(with: offer.rpcMethods)
+    updateAllowedRPCMethods(with: rpcMethods)
   }
 
   private func updateAllowedRPCMethods(with rpcMethods: [String]?) {
