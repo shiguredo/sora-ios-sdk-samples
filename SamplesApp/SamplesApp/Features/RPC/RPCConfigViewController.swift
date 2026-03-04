@@ -62,7 +62,7 @@ class RPCConfigViewController: UITableViewController {
 
     var configuration = makeConfiguration(channelId: channelId)
     configuration.mediaChannelHandlers.onReceiveSignalingJSON = { [weak self] json in
-      guard let rpcMethods = RPCSignalingParser.parseOfferRPCMethods(from: json) else {
+      guard let rpcMethods = parseOfferRPCMethods(from: json) else {
         return
       }
       self?.offerRPCMethods = rpcMethods

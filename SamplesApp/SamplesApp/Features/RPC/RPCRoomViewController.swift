@@ -669,7 +669,7 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func handleSignalingJSON(_ json: String) {
-    guard let rpcMethods = RPCSignalingParser.parseOfferRPCMethods(from: json) else {
+    guard let rpcMethods = parseOfferRPCMethods(from: json) else {
       return
     }
     updateAllowedRPCMethods(with: rpcMethods)
