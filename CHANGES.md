@@ -11,6 +11,9 @@
 
 ## 2026.2
 
+- [UPDATE] Sora iOS SDK を 2026.2.0-canary.2 に上げる
+  - RPC サンプルで `MediaChannelHandlers.onReceiveSignaling` から `MediaChannelHandlers.onReceiveSignalingJSON` に移行する
+  - @zztkm
 - [UPDATE] ScreenCast での画面キャプチャは SDK の `MediaChannel.startScreenCapture` を利用するようにする
   - 画面キャプチャ停止時は `MediaChannel.stopScreenCapture` を利用する
   - 配信時に FPS を指定できるようにする
