@@ -3,27 +3,41 @@ import UIKit
 
 private let logger = SamplesLogger.tagged("VideoChatConfig")
 
+struct H265Params: Encodable {
+  let profileId: Int
+  let levelId: Int
+  let tierFlag: Int
+  let txMode: String
+
+  enum CodingKeys: String, CodingKey {
+    case profileId = "profile_id"
+    case levelId = "level_id"
+    case tierFlag = "tier_flag"
+    case txMode = "tx_mode"
+  }
+}
+
 /// チャット接続設定画面です。
 class VideoChatConfigViewController: UITableViewController {
-  /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// チャンネルIDを入力させる欄です。
   @IBOutlet var channelIdTextField: UITextField!
 
-  /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// 動画のコーデックを指定するためのコントロールです。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
-  /// 映像ビットレートを選択するためのセルです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// 映像ビットレートを選択するためのセルです。
   @IBOutlet var videoBitRatePickerCell: VideoBitRatePickerTableViewCell!
 
-  /// 接続時のカメラ有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// 接続時のカメラ有効設定を切り替えるためのコントロールです。
   @IBOutlet var cameraEnabledOnConnectSegmentedControl: UISegmentedControl!
 
-  /// 開始時のマイク有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// 開始時のマイク有効設定を切り替えるためのコントロールです。
   @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
 
-  /// データチャンネルシグナリング機能を有効にするためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// データチャンネルシグナリング機能を有効にするためのコントロールです。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
 
-  /// データチャンネルシグナリング機能を有効時に WebSoket 切断を許容するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  /// データチャンネルシグナリング機能を有効時に WebSocket 切断を許容するためのコントロールです。
   @IBOutlet var ignoreDisconnectWebSocketSegmentedControl: UISegmentedControl!
 
   @IBOutlet var vp9ProfileIdSegmentedControl: UISegmentedControl!
@@ -31,6 +45,26 @@ class VideoChatConfigViewController: UITableViewController {
   @IBOutlet var av1ProfileSegmentedControl: UISegmentedControl!
 
   @IBOutlet var h264ProfileLevelIdTextField: UITextField!
+
+  /// H.265 プロファイル詳細設定を有効にするためのコントロールです。
+  @IBOutlet var h265ParamsEnabledSegmentedControl: UISegmentedControl!
+
+  /// H.265 の profile_id を指定するためのコントロールです。
+  @IBOutlet var h265ProfileIdSegmentedControl: UISegmentedControl!
+
+  /// H.265 の level_id を指定するためのコントロールです。
+  @IBOutlet var h265LevelIdSegmentedControl: UISegmentedControl!
+
+  /// H.265 の tier_flag を指定するためのコントロールです。
+  @IBOutlet var h265TierFlagSegmentedControl: UISegmentedControl!
+
+  /// H.265 の tx_mode を指定するためのコントロールです。
+  @IBOutlet var h265TxModeSegmentedControl: UISegmentedControl!
+
+  /// H.265 詳細パラメータ行を表示するかどうかを返す
+  private var h265DetailsVisible: Bool {
+    h265ParamsEnabledSegmentedControl.selectedSegmentIndex == 1
+  }
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
@@ -131,7 +165,44 @@ class VideoChatConfigViewController: UITableViewController {
 
     let videoH264Params =
       h264ProfileLevelId != nil ? ["profile_level_id": h264ProfileLevelId!] : nil
+    let videoH265Params: Encodable?
+    if h265DetailsVisible {
+      let profileId: Int
+      switch h265ProfileIdSegmentedControl.selectedSegmentIndex {
+      case 0: profileId = 1  // 既定値
+      case 1: profileId = 1
+      default: fatalError()
+      }
+      let levelId: Int
+      switch h265LevelIdSegmentedControl.selectedSegmentIndex {
+      case 0: levelId = 93  // 既定値
+      case 1: levelId = 90
+      case 2: levelId = 120
+      case 3: levelId = 150
+      default: fatalError()
+      }
+      let tierFlag: Int
+      switch h265TierFlagSegmentedControl.selectedSegmentIndex {
+      case 0: tierFlag = 0  // 既定値
+      case 1: tierFlag = 0
+      default: fatalError()
+      }
+      let txMode: String
+      switch h265TxModeSegmentedControl.selectedSegmentIndex {
+      case 0: txMode = "SRST"  // 既定値
+      case 1: txMode = "SRST"
+      default: fatalError()
+      }
+      videoH265Params = H265Params(
+        profileId: profileId,
+        levelId: levelId,
+        tierFlag: tierFlag,
+        txMode: txMode)
+    } else {
+      videoH265Params = nil
+    }
     configuration.videoH264Params = videoH264Params
+    configuration.videoH265Params = videoH265Params
 
     // 接続時カメラ有効設定UIの値から開始時カメラ有効を設定します
     configuration.initialCameraEnabled =
@@ -191,15 +262,37 @@ class VideoChatConfigViewController: UITableViewController {
   /// 配信画面からのUnwind Segueの着地地点として定義してあります。
   /// 詳細はMain.storyboardの設定をご確認ください。
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
-    // 前の画面から戻ってきても、特に処理は何も行いません。
   }
 
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    guard segue.identifier == "Connect",
-      let roomViewController = segue.destination as? VideoChatRoomViewController
-    else {
-      return
+  /// H.265 プロファイル詳細設定の有効/無効が切り替えられたときの処理です。
+  @IBAction func onH265ParamsEnabledChanged(_ sender: UISegmentedControl) {
+    if sender.selectedSegmentIndex == 0 {
+      h265ProfileIdSegmentedControl.selectedSegmentIndex = 0
+      h265LevelIdSegmentedControl.selectedSegmentIndex = 0
+      h265TierFlagSegmentedControl.selectedSegmentIndex = 0
+      h265TxModeSegmentedControl.selectedSegmentIndex = 0
     }
+    tableView.beginUpdates()
+    tableView.endUpdates()
+  }
+
+  // MARK: - H.265 詳細行の折りたたみ制御
+
+  /// 映像コーデックプロファイル設定セクションのインデックス
+  private let codecProfileSection = 3
+  /// H.265 詳細行（profile_id, level_id, tier_flag, tx_mode）の行インデックス
+  private let h265DetailRowIndices = IndexSet(4...7)
+
+  override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)
+    -> CGFloat
+  {
+    if indexPath.section == codecProfileSection
+      && h265DetailRowIndices.contains(indexPath.row)
+      && !h265DetailsVisible
+    {
+      return 0
+    }
+    return super.tableView(tableView, heightForRowAt: indexPath)
   }
 
 }
