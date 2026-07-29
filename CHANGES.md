@@ -9,6 +9,23 @@
 - FIX
   - バグ修正
 
+## 2026.2
+
+- [UPDATE] Sora iOS SDK を 2026.2.0 に上げる
+  - @zztkm @t-miya
+- [UPDATE] RPC サンプルで `MediaChannelHandlers.onReceiveSignaling` から `MediaChannelHandlers.onReceiveSignalingJSON` に移行する
+  - @zztkm
+- [UPDATE] ScreenCast での画面キャプチャは SDK の `MediaChannel.startScreenCapture` を利用するようにする
+  - 画面キャプチャ停止時は `MediaChannel.stopScreenCapture` を利用する
+  - 配信時に FPS を指定できるようにする
+  - @t-miya
+- [ADD] VideoChatSample の接続設定に H.265 映像コーデックプロファイル設定を追加する
+  - @t-miya
+- [ADD] ScreenCast でカメラによる映像も配信できるようにする
+  - ゲーム画面とは別の接続を確立してカメラの映像を配信する
+  - デフォルトでは前面カメラを使用し、配信者の姿を配信する想定
+  - @t-miya
+
 ## 2026.1
 
 - [CHANGE] 全てのサンプルを SamplesApp に統合する

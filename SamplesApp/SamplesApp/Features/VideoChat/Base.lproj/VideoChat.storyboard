@@ -377,12 +377,187 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="H51-en-0AA">
+                                        <rect key="frame" x="0.0" y="551.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H51-en-0AA" id="H52-en-0AA">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="H.265" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H53-en-0AA">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="H5c-en-0AA"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="H54-en-0AA" userLabel="H265 Params Enabled Segmented Control">
+                                                    <rect key="frame" x="163" y="6.5" width="196" height="32"/>
+                                                    <segments>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                    <connections>
+                                                        <action selector="onH265ParamsEnabledChanged:" destination="XQ9-0y-Y6c" eventType="valueChanged" id="H5R-en-0AA"/>
+                                                    </connections>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="H53-en-0AA" firstAttribute="leading" secondItem="H52-en-0AA" secondAttribute="leadingMargin" id="H55-en-0AA"/>
+                                                <constraint firstItem="H53-en-0AA" firstAttribute="centerY" secondItem="H52-en-0AA" secondAttribute="centerY" id="H56-en-0AA"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="H54-en-0AA" secondAttribute="trailing" id="H57-en-0AA"/>
+                                                <constraint firstItem="H53-en-0AA" firstAttribute="top" secondItem="H52-en-0AA" secondAttribute="top" id="H58-en-0AA"/>
+                                                <constraint firstItem="H54-en-0AA" firstAttribute="centerY" secondItem="H52-en-0AA" secondAttribute="centerY" id="H59-en-0AA"/>
+                                                <constraint firstItem="H54-en-0AA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H53-en-0AA" secondAttribute="trailing" id="H5a-en-0AA"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="H5B-pi-0BB">
+                                        <rect key="frame" x="0.0" y="595.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H5B-pi-0BB" id="H5C-pi-0BB">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="profile_id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H5D-pi-0BB">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="H5E-pi-0BB"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="H5F-pi-0BB" userLabel="H265 Profile ID Segmented Control">
+                                                    <rect key="frame" x="163" y="6.5" width="196" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="1"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="H5D-pi-0BB" firstAttribute="leading" secondItem="H5C-pi-0BB" secondAttribute="leadingMargin" id="H5G-pi-0BB"/>
+                                                <constraint firstItem="H5D-pi-0BB" firstAttribute="centerY" secondItem="H5C-pi-0BB" secondAttribute="centerY" id="H5H-pi-0BB"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="H5F-pi-0BB" secondAttribute="trailing" id="H5I-pi-0BB"/>
+                                                <constraint firstItem="H5D-pi-0BB" firstAttribute="top" secondItem="H5C-pi-0BB" secondAttribute="top" id="H5J-pi-0BB"/>
+                                                <constraint firstItem="H5F-pi-0BB" firstAttribute="centerY" secondItem="H5C-pi-0BB" secondAttribute="centerY" id="H5K-pi-0BB"/>
+                                                <constraint firstItem="H5F-pi-0BB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H5D-pi-0BB" secondAttribute="trailing" id="H5L-pi-0BB"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="H6B-li-0CC">
+                                        <rect key="frame" x="0.0" y="639.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H6B-li-0CC" id="H6C-li-0CC">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="level_id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6D-li-0CC">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="H6E-li-0CC"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="H6F-li-0CC" userLabel="H265 Level ID Segmented Control">
+                                                    <rect key="frame" x="163" y="6.5" width="196" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="90"/>
+                                                        <segment title="120"/>
+                                                        <segment title="150"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="H6D-li-0CC" firstAttribute="leading" secondItem="H6C-li-0CC" secondAttribute="leadingMargin" id="H6G-li-0CC"/>
+                                                <constraint firstItem="H6D-li-0CC" firstAttribute="centerY" secondItem="H6C-li-0CC" secondAttribute="centerY" id="H6H-li-0CC"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="H6F-li-0CC" secondAttribute="trailing" id="H6I-li-0CC"/>
+                                                <constraint firstItem="H6D-li-0CC" firstAttribute="top" secondItem="H6C-li-0CC" secondAttribute="top" id="H6J-li-0CC"/>
+                                                <constraint firstItem="H6F-li-0CC" firstAttribute="centerY" secondItem="H6C-li-0CC" secondAttribute="centerY" id="H6K-li-0CC"/>
+                                                <constraint firstItem="H6F-li-0CC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H6D-li-0CC" secondAttribute="trailing" id="H6L-li-0CC"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="H7B-tf-0DD">
+                                        <rect key="frame" x="0.0" y="683.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H7B-tf-0DD" id="H7C-tf-0DD">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="tier_flag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H7D-tf-0DD">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="H7E-tf-0DD"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="H7F-tf-0DD" userLabel="H265 Tier Flag Segmented Control">
+                                                    <rect key="frame" x="163" y="6.5" width="196" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="0"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="H7D-tf-0DD" firstAttribute="leading" secondItem="H7C-tf-0DD" secondAttribute="leadingMargin" id="H7G-tf-0DD"/>
+                                                <constraint firstItem="H7D-tf-0DD" firstAttribute="centerY" secondItem="H7C-tf-0DD" secondAttribute="centerY" id="H7H-tf-0DD"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="H7F-tf-0DD" secondAttribute="trailing" id="H7I-tf-0DD"/>
+                                                <constraint firstItem="H7D-tf-0DD" firstAttribute="top" secondItem="H7C-tf-0DD" secondAttribute="top" id="H7J-tf-0DD"/>
+                                                <constraint firstItem="H7F-tf-0DD" firstAttribute="centerY" secondItem="H7C-tf-0DD" secondAttribute="centerY" id="H7K-tf-0DD"/>
+                                                <constraint firstItem="H7F-tf-0DD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H7D-tf-0DD" secondAttribute="trailing" id="H7L-tf-0DD"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="H8B-tm-0EE">
+                                        <rect key="frame" x="0.0" y="727.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H8B-tm-0EE" id="H8C-tm-0EE">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="tx_mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H8D-tm-0EE">
+                                                    <rect key="frame" x="16" y="0.0" width="122" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="H8E-tm-0EE"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="H8F-tm-0EE" userLabel="H265 Tx Mode Segmented Control">
+                                                    <rect key="frame" x="163" y="6.5" width="196" height="32"/>
+                                                    <segments>
+                                                        <segment title="none"/>
+                                                        <segment title="SRST"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="H8D-tm-0EE" firstAttribute="leading" secondItem="H8C-tm-0EE" secondAttribute="leadingMargin" id="H8G-tm-0EE"/>
+                                                <constraint firstItem="H8D-tm-0EE" firstAttribute="centerY" secondItem="H8C-tm-0EE" secondAttribute="centerY" id="H8H-tm-0EE"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="H8F-tm-0EE" secondAttribute="trailing" id="H8I-tm-0EE"/>
+                                                <constraint firstItem="H8D-tm-0EE" firstAttribute="top" secondItem="H8C-tm-0EE" secondAttribute="top" id="H8J-tm-0EE"/>
+                                                <constraint firstItem="H8F-tm-0EE" firstAttribute="centerY" secondItem="H8C-tm-0EE" secondAttribute="centerY" id="H8K-tm-0EE"/>
+                                                <constraint firstItem="H8F-tm-0EE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H8D-tm-0EE" secondAttribute="trailing" id="H8L-tm-0EE"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="2mW-ks-9Aa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zhW-aa-tin">
-                                        <rect key="frame" x="0.0" y="587.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="807.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zhW-aa-tin" id="FHd-dF-Glf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -420,6 +595,11 @@
 	                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="tOw-iP-1q2" id="xYM-Gk-rTD"/>
                         <outlet property="videoBitRatePickerCell" destination="5h9-Ze-g2f" id="Gje-8A-cqW"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
+                        <outlet property="h265ParamsEnabledSegmentedControl" destination="H54-en-0AA" id="H5P-en-0AA"/>
+                        <outlet property="h265ProfileIdSegmentedControl" destination="H5F-pi-0BB" id="H5Q-pi-0BB"/>
+                        <outlet property="h265LevelIdSegmentedControl" destination="H6F-li-0CC" id="H6Q-li-0CC"/>
+                        <outlet property="h265TierFlagSegmentedControl" destination="H7F-tf-0DD" id="H7Q-tf-0DD"/>
+                        <outlet property="h265TxModeSegmentedControl" destination="H8F-tm-0EE" id="H8Q-tm-0EE"/>
                         <outlet property="vp9ProfileIdSegmentedControl" destination="Z2i-ih-FxO" id="Ibx-Tx-Aah"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
