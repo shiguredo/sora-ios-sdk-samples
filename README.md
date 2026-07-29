@@ -133,8 +133,8 @@ DataChannel 経由のシグナリング利用時に JSON-RPC 2.0 over DataChanne
 Apache License 2.0
 
 ```
-Copyright 2017-2018, Masashi Ono (akisute)
-Copyright 2017-2023, Shiguredo Inc.
+Copyright 2017 Masashi Ono (akisute)
+Copyright 2017 Shiguredo Inc.
 
 
 Licensed under the Apache License, Version 2.0 (the "License");
