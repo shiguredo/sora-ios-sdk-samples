@@ -550,6 +550,9 @@ class RPCRoomViewController: UIViewController {
     // 借用・MainActor 領域の値をそのまま渡すと "sending ... risks causing data races" になる。
     // ここでは取得後すぐに単発の rpc 呼び出しのみで使用することが直列化されているため、
     // nonisolated(unsafe) で扱う (SDK 本体の nonisolated(unsafe) と同じ運用)。
+    // このメソッドは MainActor 上で実行されるため rpc 呼び出しは逐次に行われ、
+    // SDK 側の RPCChannel も内部のバリア同期キューで排他されているため、
+    // 実際のデータ競合は発生しない。
     guard let channel = SoraSDKManager.shared.currentMediaChannel else {
       throw SoraError.mediaChannelError(reason: "currentMediaChannel is nil")
     }

@@ -49,6 +49,9 @@ final class SoraSDKManager {
       // "sending 'mediaChannel' risks causing data races" になる。
       // このコールバックは接続試行ごとに一度だけ呼ばれ、以降 mediaChannel を使わないため
       // nonisolated(unsafe) で渡す。
+      // 呼び出し後は Task クロージャー内で MainActor へ移すだけであり、
+      // 接続完了コールバックの直後まで SDK が mediaChannel を別スレッドから
+      // 並行に変更することもないため、実際のデータ競合は発生しない。
       nonisolated(unsafe) let channel = mediaChannel
       //
       // Sora SDK のコールバックは任意のスレッド (webrtc の signaling スレッド等) から
