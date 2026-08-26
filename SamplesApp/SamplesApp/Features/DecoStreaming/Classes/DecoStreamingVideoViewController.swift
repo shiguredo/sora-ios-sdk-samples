@@ -71,8 +71,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
       navigationItem.title = "配信中: \(mediaChannel.configuration.channelId)"
 
       // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { [weak self] event in
-        guard let self = self else { return }
+      mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
         switch event {
         case .ok(let code, let reason):
           logger.info(
@@ -82,8 +81,8 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
             "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
         }
 
-        DispatchQueue.main.async {
-          self.onExitButton(nil)
+        Task { @MainActor in
+          self?.onExitButton(nil)
         }
       }
     }

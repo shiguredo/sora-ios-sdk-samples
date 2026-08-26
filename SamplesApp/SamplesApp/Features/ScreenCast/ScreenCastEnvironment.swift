@@ -1,5 +1,5 @@
 import Foundation
-import Sora
+@preconcurrency import Sora
 
 private let logger = SamplesLogger.tagged("ScreenCastConnection")
 
@@ -50,7 +50,7 @@ final class ScreenCastConnectionManager {
     channelId: String,
     videoCodec: VideoCodec,
     isCameraEnabled: Bool = true,
-    completionHandler: ((Error?) -> Void)? = nil
+    completionHandler: (@Sendable (Error?) -> Void)? = nil
   ) {
     // 接続確立中かチェックします
     guard !isConnecting else {
@@ -70,55 +70,78 @@ final class ScreenCastConnectionManager {
       role: .sendonly,
       videoCodec: videoCodec
     )
-    _ = Sora.shared.connect(configuration: screenConfiguration) { [weak self] mediaChannel, error in
-      guard let self else { return }
-      if let error {
-        self.isConnecting = false
-        self.complete(completionHandler, error: error)
-        return
-      }
-      guard let mediaChannel else {
-        self.isConnecting = false
-        self.complete(
-          completionHandler,
-          error: ScreenCastConnectionError.missingMediaChannel(connection: "スクリーンキャスト")
-        )
-        return
-      }
-      self.screenMediaChannel = mediaChannel
-      logger.info("[sample] connected: \(self.logLabel(for: .screen))")
-      guard isCameraEnabled else {
-        self.isConnecting = false
-        logger.info("[sample] camera connection skipped: \(self.logLabel(for: .camera))")
-        self.complete(completionHandler, error: nil)
-        return
-      }
-
-      let cameraConfiguration = ScreenCastEnvironment.makeCameraConfiguration(
-        channelId: channelId,
-        role: .sendonly,
-        videoCodec: videoCodec
-      )
-      _ = Sora.shared.connect(configuration: cameraConfiguration) {
-        [weak self] mediaChannel, error in
-        guard let self else { return }
-        self.isConnecting = false
+    _ = Sora.shared.connect(configuration: screenConfiguration) {
+      @Sendable [weak self] mediaChannel, error in
+      // このクロージャーはデフォルトのアクター隔離 (MainActor) を継承してしまうため、
+      // @Sendable にしてアクター隔離を外す。
+      // (@Sendable にしないと、SDK がシグナリングスレッドから呼び出した瞬間に
+      // Swift 6 の実行時隔離チェックが trap して EXC_BREAKPOINT になる)
+      //
+      // MediaChannel は非 Sendable のため、Task クロージャーへ送信すると
+      // "sending 'mediaChannel' risks causing data races" になる。
+      // このコールバックは接続試行ごとに一度だけ呼ばれ、以降 mediaChannel を使わないため
+      // nonisolated(unsafe) で渡す。
+      nonisolated(unsafe) let channel = mediaChannel
+      //
+      // Sora SDK のコールバックは任意のスレッド (webrtc の signaling スレッド等) から
+      // 呼ばれるため、MainActor へ束ねてから状態を更新する
+      Task { @MainActor in
+        guard let self = self else { return }
         if let error {
-          self.disconnect()
+          self.isConnecting = false
           self.complete(completionHandler, error: error)
           return
         }
-        guard let mediaChannel else {
-          self.disconnect()
+        guard let channel else {
+          self.isConnecting = false
           self.complete(
             completionHandler,
-            error: ScreenCastConnectionError.missingMediaChannel(connection: "カメラ")
+            error: ScreenCastConnectionError.missingMediaChannel(connection: "スクリーンキャスト")
           )
           return
         }
-        self.cameraMediaChannel = mediaChannel
-        logger.info("[sample] connected: \(self.logLabel(for: .camera))")
-        self.complete(completionHandler, error: nil)
+        self.screenMediaChannel = channel
+        logger.info("[sample] connected: \(self.logLabel(for: .screen))")
+        guard isCameraEnabled else {
+          self.isConnecting = false
+          logger.info("[sample] camera connection skipped: \(self.logLabel(for: .camera))")
+          self.complete(completionHandler, error: nil)
+          return
+        }
+
+        let cameraConfiguration = ScreenCastEnvironment.makeCameraConfiguration(
+          channelId: channelId,
+          role: .sendonly,
+          videoCodec: videoCodec
+        )
+        _ = Sora.shared.connect(configuration: cameraConfiguration) {
+          @Sendable [weak self] mediaChannel, error in
+          // MediaChannel は非 Sendable のため、Task クロージャーへ送信すると
+          // "sending 'mediaChannel' risks causing data races" になる。
+          // このコールバックは接続試行ごとに一度だけ呼ばれ、以降 mediaChannel を使わないため
+          // nonisolated(unsafe) で渡す。
+          nonisolated(unsafe) let channel = mediaChannel
+          Task { @MainActor in
+            guard let self = self else { return }
+            self.isConnecting = false
+            if let error {
+              self.disconnect()
+              self.complete(completionHandler, error: error)
+              return
+            }
+            guard let channel else {
+              self.disconnect()
+              self.complete(
+                completionHandler,
+                error: ScreenCastConnectionError.missingMediaChannel(connection: "カメラ")
+              )
+              return
+            }
+            self.cameraMediaChannel = channel
+            logger.info("[sample] connected: \(self.logLabel(for: .camera))")
+            self.complete(completionHandler, error: nil)
+          }
+        }
       }
     }
   }
@@ -161,7 +184,7 @@ final class ScreenCastConnectionManager {
       "connection_label=\(kind.rawValue), channel_id=\(channelId), camera_requested=\(cameraRequested), camera_connected=\(cameraConnected)"
   }
 
-  private func complete(_ completionHandler: ((Error?) -> Void)?, error: Error?) {
+  private func complete(_ completionHandler: (@Sendable (Error?) -> Void)?, error: Error?) {
     DispatchQueue.main.async {
       completionHandler?(error)
     }

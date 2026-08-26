@@ -223,37 +223,40 @@ class VideoChatConfigViewController: UITableViewController {
     // 入力された設定を元にSoraへ接続を行います。
     // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
     // role 引数には .sendrecv を指定します。
-    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
-      // 接続処理が終了したので false にします。
-      self?.isConnecting = false
+    SoraSDKManager.shared.connect(configuration: configuration) { @Sendable [weak self] error in
+      // SoraSDKManager のコールバックは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
+      Task { @MainActor in
+        // 接続処理が終了したので false にします。
+        self?.isConnecting = false
 
-      if let error {
-        // errorがnilでないばあいは、接続に失敗しています。
-        // この場合は、エラー表示をユーザーに返すのが親切です。
-        // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
-        // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        logger.warning("[sample] SoraSDKManager connection error: \(error)")
-        DispatchQueue.main.async {
-          let alertController = UIAlertController(
-            title: "接続に失敗しました",
-            message: error.localizedDescription,
-            preferredStyle: .alert)
-          alertController.addAction(
-            UIAlertAction(title: "OK", style: .cancel, handler: nil))
-          self?.present(alertController, animated: true, completion: nil)
-        }
-      } else {
-        // errorがnilの場合は、接続に成功しています。
-        logger.info("[sample] SoraSDKManager connected.")
+        if let error {
+          // errorがnilでないばあいは、接続に失敗しています。
+          // この場合は、エラー表示をユーザーに返すのが親切です。
+          // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
+          // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
+          logger.warning("[sample] SoraSDKManager connection error: \(error)")
+          DispatchQueue.main.async {
+            let alertController = UIAlertController(
+              title: "接続に失敗しました",
+              message: error.localizedDescription,
+              preferredStyle: .alert)
+            alertController.addAction(
+              UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self?.present(alertController, animated: true, completion: nil)
+          }
+        } else {
+          // errorがnilの場合は、接続に成功しています。
+          logger.info("[sample] SoraSDKManager connected.")
 
-        // 次の配信画面に遷移します。
-        // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
-        // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        DispatchQueue.main.async {
-          guard let self else { return }
+          // 次の配信画面に遷移します。
+          // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
+          // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
+          DispatchQueue.main.async {
+            guard let self else { return }
 
-          // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-          self.performSegue(withIdentifier: "Connect", sender: self)
+            // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+            self.performSegue(withIdentifier: "Connect", sender: self)
+          }
         }
       }
     }
