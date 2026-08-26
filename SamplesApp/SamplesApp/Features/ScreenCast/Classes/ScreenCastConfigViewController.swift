@@ -74,42 +74,46 @@ class ScreenCastConfigViewController: UITableViewController {
       videoCodec: videoCodec,
       isCameraEnabled: isCameraEnabledOnConnect
     ) {
-      [weak self] error in
-      // 接続処理が終了したので false にします。
-      self?.isConnecting = false
+      @Sendable [weak self] error in
+      // ScreenCastConnectionManager のコールバックは任意のスレッドから呼ばれるため、
+      // MainActor へ束ねてから実行する
+      Task { @MainActor in
+        // 接続処理が終了したので false にします。
+        self?.isConnecting = false
 
-      if let error {
-        // errorがnilでないばあいは、接続に失敗しています。
-        // この場合は、エラー表示をユーザーに返すのが親切です。
-        // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
-        // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        logger.warning("[sample] ScreenCastConnectionManager connection error: \(error)")
-        DispatchQueue.main.async {
-          let alertController = UIAlertController(
-            title: "接続に失敗しました",
-            message: error.localizedDescription,
-            preferredStyle: .alert)
-          alertController.addAction(
-            UIAlertAction(title: "OK", style: .cancel, handler: nil))
-          self?.present(alertController, animated: true, completion: nil)
-        }
-      } else {
-        // errorがnilの場合は、接続に成功しています。
-        logger.info(
-          "[sample] ScreenCastConnectionManager connected. \(ScreenCastConnectionManager.shared.logLabel(for: .screen))"
-        )
-        if isCameraEnabledOnConnect {
+        if let error {
+          // errorがnilでないばあいは、接続に失敗しています。
+          // この場合は、エラー表示をユーザーに返すのが親切です。
+          // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
+          // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
+          logger.warning("[sample] ScreenCastConnectionManager connection error: \(error)")
+          DispatchQueue.main.async {
+            let alertController = UIAlertController(
+              title: "接続に失敗しました",
+              message: error.localizedDescription,
+              preferredStyle: .alert)
+            alertController.addAction(
+              UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self?.present(alertController, animated: true, completion: nil)
+          }
+        } else {
+          // errorがnilの場合は、接続に成功しています。
           logger.info(
-            "[sample] ScreenCastConnectionManager connected. \(ScreenCastConnectionManager.shared.logLabel(for: .camera))"
+            "[sample] ScreenCastConnectionManager connected. \(ScreenCastConnectionManager.shared.logLabel(for: .screen))"
           )
-        }
+          if isCameraEnabledOnConnect {
+            logger.info(
+              "[sample] ScreenCastConnectionManager connected. \(ScreenCastConnectionManager.shared.logLabel(for: .camera))"
+            )
+          }
 
-        // 接続が完了したので、ゲーム画面に戻ります。
-        // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
-        // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
-        DispatchQueue.main.async {
-          // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
-          self?.performSegue(withIdentifier: "Connect", sender: self)
+          // 接続が完了したので、ゲーム画面に戻ります。
+          // なお、このコールバックはメインスレッド以外のスレッドから呼び出される可能性があるので、
+          // UI操作を行う際には必ずDispatchQueue.main.asyncを使用してメインスレッドでUI処理を呼び出すようにしてください。
+          DispatchQueue.main.async {
+            // ConnectセグエはMain.storyboard内で定義されているので、そちらをご確認ください。
+            self?.performSegue(withIdentifier: "Connect", sender: self)
+          }
         }
       }
     }

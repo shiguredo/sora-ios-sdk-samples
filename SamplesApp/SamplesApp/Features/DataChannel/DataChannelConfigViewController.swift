@@ -102,27 +102,29 @@ class DataChannelConfigViewController: UITableViewController {
     let configuration = makeConfiguration(channelId: channelId)
 
     // Sora 接続処理を実行し、配信画面に遷移します
-    SoraSDKManager.shared.connect(configuration: configuration) { [weak self] error in
-      guard let self = self else { return }
-      self.isConnecting = false
+    SoraSDKManager.shared.connect(configuration: configuration) { @Sendable [weak self] error in
+      // SoraSDKManager のコールバックは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
+      Task { @MainActor in
+        self?.isConnecting = false
 
-      if let error {
-        logger.warning("SoraSDKManager connection error: \(error)")
-        DispatchQueue.main.async {
-          let alertController = UIAlertController(
-            title: "接続に失敗しました",
-            message: error.localizedDescription,
-            preferredStyle: .alert)
-          alertController.addAction(
-            UIAlertAction(title: "OK", style: .cancel, handler: nil))
-          self.present(alertController, animated: true, completion: nil)
+        if let error {
+          logger.warning("SoraSDKManager connection error: \(error)")
+          DispatchQueue.main.async {
+            let alertController = UIAlertController(
+              title: "接続に失敗しました",
+              message: error.localizedDescription,
+              preferredStyle: .alert)
+            alertController.addAction(
+              UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self?.present(alertController, animated: true, completion: nil)
+          }
+          return
         }
-        return
-      }
 
-      logger.warning("SoraSDKManager connected.")
-      DispatchQueue.main.async {
-        self.performSegue(withIdentifier: "Connect", sender: self)
+        logger.warning("SoraSDKManager connected.")
+        DispatchQueue.main.async {
+          self?.performSegue(withIdentifier: "Connect", sender: self)
+        }
       }
     }
   }

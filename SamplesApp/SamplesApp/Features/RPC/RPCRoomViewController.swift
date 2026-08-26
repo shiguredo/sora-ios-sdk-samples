@@ -289,28 +289,31 @@ class RPCRoomViewController: UIViewController {
       let urlText = mediaChannel.connectedUrl?.absoluteString ?? "-"
       connectedUrlLabel.text = "Connected URL: \(urlText)"
 
-      mediaChannel.handlers.onDataChannelMessage = { [weak self] _, label, data in
-        self?.handleDataChannelMessage(label: label, data: data)
+      mediaChannel.handlers.onDataChannelMessage = { @Sendable [weak self] _, label, data in
+        Task { @MainActor in
+          self?.handleDataChannelMessage(label: label, data: data)
+        }
       }
 
-      mediaChannel.handlers.onAddStream = { [weak self] _ in
-        DispatchQueue.main.async {
+      mediaChannel.handlers.onAddStream = { @Sendable [weak self] _ in
+        Task { @MainActor in
           self?.handleUpdateStreams()
         }
       }
 
-      mediaChannel.handlers.onReceiveSignalingJSON = { [weak self] json in
-        self?.handleSignalingJSON(json)
+      mediaChannel.handlers.onReceiveSignalingJSON = { @Sendable [weak self] json in
+        Task { @MainActor in
+          self?.handleSignalingJSON(json)
+        }
       }
 
-      mediaChannel.handlers.onRemoveStream = { [weak self] _ in
-        DispatchQueue.main.async {
+      mediaChannel.handlers.onRemoveStream = { @Sendable [weak self] _ in
+        Task { @MainActor in
           self?.handleUpdateStreams()
         }
       }
 
-      mediaChannel.handlers.onDisconnect = { [weak self] event in
-        guard let self = self else { return }
+      mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
         switch event {
         case .ok(let code, let reason):
           logger.info(
@@ -320,8 +323,8 @@ class RPCRoomViewController: UIViewController {
             "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
         }
 
-        DispatchQueue.main.async {
-          self.handleDisconnect()
+        Task { @MainActor in
+          self?.handleDisconnect()
         }
       }
 
@@ -463,10 +466,6 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func sendRPC(isNotification: Bool) {
-    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
-      return
-    }
-
     Task {
       do {
         switch selectedMethod {
@@ -476,7 +475,6 @@ class RPCRoomViewController: UIViewController {
             senderConnectionId: trimmedSenderConnectionId()
           )
           try await sendRPCAndLog(
-            mediaChannel: mediaChannel,
             method: RequestSimulcastRid.self,
             params: params,
             methodName: RequestSimulcastRid.name,
@@ -490,7 +488,6 @@ class RPCRoomViewController: UIViewController {
             spotlightUnfocusRid: selectedSpotlightUnfocusRid()
           )
           try await sendRPCAndLog(
-            mediaChannel: mediaChannel,
             method: RequestSpotlightRid.self,
             params: params,
             methodName: RequestSpotlightRid.name,
@@ -502,7 +499,6 @@ class RPCRoomViewController: UIViewController {
             sendConnectionId: trimmedSenderConnectionId()
           )
           try await sendRPCAndLog(
-            mediaChannel: mediaChannel,
             method: ResetSpotlightRid.self,
             params: params,
             methodName: ResetSpotlightRid.name,
@@ -516,7 +512,6 @@ class RPCRoomViewController: UIViewController {
             push: pushSwitch.isOn ? true : nil
           )
           try await sendRPCAndLog(
-            mediaChannel: mediaChannel,
             method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
             params: params,
             methodName: PutSignalingNotifyMetadata<[String: AnyCodable]>.name,
@@ -531,7 +526,6 @@ class RPCRoomViewController: UIViewController {
             push: pushSwitch.isOn ? true : nil
           )
           try await sendRPCAndLog(
-            mediaChannel: mediaChannel,
             method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
             params: params,
             methodName: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
@@ -545,13 +539,25 @@ class RPCRoomViewController: UIViewController {
     }
   }
 
+  @MainActor
   private func sendRPCAndLog<Method: RPCMethodProtocol>(
-    mediaChannel: MediaChannel,
     method: Method.Type,
     params: Method.Params,
     methodName: String,
     isNotification: Bool
   ) async throws {
+    // Sora SDK の MediaChannel は非 Sendable であり、rpc は @concurrent な async メソッドのため、
+    // 借用・MainActor 領域の値をそのまま渡すと "sending ... risks causing data races" になる。
+    // ここでは取得後すぐに単発の rpc 呼び出しのみで使用することが直列化されているため、
+    // nonisolated(unsafe) で扱う (SDK 本体の nonisolated(unsafe) と同じ運用)。
+    // このメソッドは MainActor 上で実行されるため rpc 呼び出しは逐次に行われ、
+    // SDK 側の RPCChannel も内部のバリア同期キューで排他されているため、
+    // 実際のデータ競合は発生しない。
+    guard let channel = SoraSDKManager.shared.currentMediaChannel else {
+      throw SoraError.mediaChannelError(reason: "currentMediaChannel is nil")
+    }
+    nonisolated(unsafe) let mediaChannel = channel
+    nonisolated(unsafe) let params = params
     let summary = selectedMethod.displayName
     let detail = makeRequestDetail(
       method: methodName,

@@ -35,9 +35,14 @@ class VideoBitRatePickerTableViewCell: UITableViewCell, UIPickerViewDelegate,
     VideoBitRateOptions.list[selectedIndex].value
   }
 
-  override func awakeFromNib() {
+  // UIKit の awakeFromNib() は nonisolated であるため、
+  // デフォルト MainActor 隔離の下でも override を nonisolated にする必要がある。
+  // awakeFromNib() は main thread で呼ばれるため、MainActor.assumeIsolated で移行する。
+  nonisolated override func awakeFromNib() {
     super.awakeFromNib()
-    configurePicker()
+    MainActor.assumeIsolated {
+      configurePicker()
+    }
   }
 
   /// セルがタップされた際に picker を表示するために呼び出されます。
