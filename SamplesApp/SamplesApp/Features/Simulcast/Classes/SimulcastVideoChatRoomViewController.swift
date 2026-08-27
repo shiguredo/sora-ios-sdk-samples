@@ -532,9 +532,10 @@ extension SimulcastVideoChatRoomViewController {
       return
     }
 
-    CameraVideoCapturer.flip(current) { error in
-      if let error {
-        logger.error(error.localizedDescription)
+    CameraVideoCapturer.flip(current) { @Sendable error in
+      guard let message = error?.localizedDescription else { return }
+      Task { @MainActor in
+        logger.error(message)
       }
     }
   }
