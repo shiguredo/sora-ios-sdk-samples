@@ -136,9 +136,17 @@ class ScreenCastGameViewController: UIViewController {
     }
     let captureSettings = ScreenCaptureSettings(
       targetFPS: ScreenCastEnvironment.screenCaptureTargetFPS,
-      onRuntimeError: { [weak self] error in
-        logger.warning("[sample] Error while mediaChannel.startScreenCapture(runtime): \(error)")
-        self?.handleDisconnect()
+      onRuntimeError: { @Sendable [weak self] error in
+        // このクロージャーはデフォルトのアクター隔離 (MainActor) を継承してしまうため、
+        // @Sendable にしてアクター隔離を外す。
+        // (@Sendable にしないと、ReplayKit の startCapture ハンドラから呼び出された瞬間に
+        // Swift 6 の実行時隔離チェックが trap して EXC_BREAKPOINT になる)
+        Task { @MainActor in
+          logger.warning(
+            "[sample] Error while mediaChannel.startScreenCapture(runtime): \(error)"
+          )
+          self?.handleDisconnect()
+        }
       }
     )
 
