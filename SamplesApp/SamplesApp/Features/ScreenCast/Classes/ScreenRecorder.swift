@@ -4,7 +4,10 @@ import Sora
 import UIKit
 import WebRTC
 
-class ScreenRecorder {
+// CADisplayLink のコールバック (main thread) と frameRendererQueue から扱われるレンダラーです。
+// 内部でフレームレンダリングの排他制御 (frameRendererSemaphore) と専用キュー
+// (frameRendererQueue) を行っているため、@unchecked Sendable を付与します。
+nonisolated final class ScreenRecorder: @unchecked Sendable {
   let frameRendererQueue = DispatchQueue(
     label: "ScreenCastSample.ScreenRenderer.frameRendererQueue", qos: .userInteractive)
   var frameRendererSemaphore = DispatchSemaphore(value: 1)
@@ -94,15 +97,25 @@ class ScreenRecorder {
       let time = CMTimeMakeWithSeconds(elapsed, preferredTimescale: 1000)
 
       // UIWindowヒエラルキーをメインスレッド上でレンダリングさせ、その結果を待ちます。
+      // main.sync のクロージャへ non-Sendable な CGContext を渡すため、
+      // 受け渡し用の箱 (@unchecked Sendable) に包む。
+      // 箱へのアクセスは main.sync 内のみで、同時アクセスが起きない前提に依存する
+      struct ContextThroughBox: @unchecked Sendable {
+        let value: CGContext
+      }
+      let contextBox = ContextThroughBox(value: bitmapContext)
       DispatchQueue.main.sync {
-        UIGraphicsPushContext(bitmapContext)
-        defer {
-          UIGraphicsPopContext()
-        }
-        for window in UIApplication.shared.windows {
-          window.drawHierarchy(
-            in: CGRect(origin: .zero, size: self.inputViewSize),
-            afterScreenUpdates: false)
+        // クロージャは main thread 上で実行されるため、MainActor 隔離の UIKit API へ移行します
+        MainActor.assumeIsolated {
+          UIGraphicsPushContext(contextBox.value)
+          defer {
+            UIGraphicsPopContext()
+          }
+          for window in UIApplication.shared.windows {
+            window.drawHierarchy(
+              in: CGRect(origin: .zero, size: self.inputViewSize),
+              afterScreenUpdates: false)
+          }
         }
       }
 

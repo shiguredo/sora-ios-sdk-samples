@@ -1,4 +1,4 @@
-import Sora
+@preconcurrency import Sora
 import UIKit
 
 private let logger = SamplesLogger.tagged("SimulcastVideoChatRoom")
@@ -90,22 +90,21 @@ class SimulcastVideoChatRoomViewController: UIViewController {
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
     // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
     if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-      mediaChannel.handlers.onAddStream = { [weak self] _ in
+      mediaChannel.handlers.onAddStream = { @Sendable [weak self] _ in
         logger.info("[sample] mediaChannel.handlers.onAddStream")
-        DispatchQueue.main.async {
+        Task { @MainActor in
           self?.handleUpdateStreams()
         }
       }
-      mediaChannel.handlers.onRemoveStream = { [weak self] _ in
+      mediaChannel.handlers.onRemoveStream = { @Sendable [weak self] _ in
         logger.info("[sample] mediaChannel.handlers.onRemoveStream")
-        DispatchQueue.main.async {
+        Task { @MainActor in
           self?.handleUpdateStreams()
         }
       }
 
       // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { [weak self] event in
-        guard let self = self else { return }
+      mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
         switch event {
         case .ok(let code, let reason):
           logger.info(
@@ -115,8 +114,8 @@ class SimulcastVideoChatRoomViewController: UIViewController {
             "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
         }
 
-        DispatchQueue.main.async {
-          self.handleDisconnect()
+        Task { @MainActor in
+          self?.handleDisconnect()
         }
       }
     }
@@ -377,8 +376,8 @@ extension SimulcastVideoChatRoomViewController {
         toMuteState = .softMuted
       }
       cameraMuteController.updateButton(to: toMuteState)
-      upstream.handlers.onSwitchVideo = { [weak self] isEnabled in
-        DispatchQueue.main.async {
+      upstream.handlers.onSwitchVideo = { @Sendable [weak self] isEnabled in
+        Task { @MainActor in
           self?.handleUpstreamVideoSwitch(isEnabled: isEnabled)
         }
       }
@@ -398,8 +397,8 @@ extension SimulcastVideoChatRoomViewController {
         : (audioMuteController.currentState == .hardMuted ? .hardMuted : .softMuted)
       audioMuteController.updateButton(to: nextState)
       applyInitialMicrophoneStateIfNeeded(mediaChannel: mediaChannel)
-      upstream.handlers.onSwitchAudio = { [weak self] isEnabled in
-        DispatchQueue.main.async {
+      upstream.handlers.onSwitchAudio = { @Sendable [weak self] isEnabled in
+        Task { @MainActor in
           self?.handleUpstreamAudioSwitch(isEnabled: isEnabled)
         }
       }
@@ -425,9 +424,15 @@ extension SimulcastVideoChatRoomViewController {
   // stop と restart は CameraVideoCapturer の API を利用するため非同期かつ、エラーハンドリングが必要となります。
   private func applyCameraMuteStateTransition(
     to nextState: CameraMuteState,
-    mediaChannel: MediaChannel,
     upstream _: MediaStream
   ) {
+    // SoraSDKManager は MainActor 隔離であり、currentMediaChannel は MainActor 領域に
+    // 閉じている。ここで取得した参照は MainActor に所有されるため、
+    // Task 内で await する setVideoHardMute などの async 呼び出しへ転送しても
+    // データレースにならない (メソッド引数の借用参照を Task へ渡すと
+    // "sending ... risks causing data races" になる)
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else { return }
+
     let previousState = cameraMuteState
 
     switch nextState {
@@ -527,11 +532,10 @@ extension SimulcastVideoChatRoomViewController {
       return
     }
 
-    CameraVideoCapturer.flip(current) { error in
-      if let error {
-        logger.error(error.localizedDescription)
-      }
-    }
+    CameraVideoCapturer.flip(
+      current,
+      completionHandler: makeCameraFlipCompletionHandler(loggerTag: "SimulcastVideoChatRoom")
+    )
   }
 
   /// カメラミュートボタンを押したときの挙動を定義します。
@@ -543,7 +547,7 @@ extension SimulcastVideoChatRoomViewController {
     }
 
     let nextState = cameraMuteState.next()
-    applyCameraMuteStateTransition(to: nextState, mediaChannel: mediaChannel, upstream: upstream)
+    applyCameraMuteStateTransition(to: nextState, upstream: upstream)
   }
 
   /// マイクミュートボタンを押したときの挙動を定義します。

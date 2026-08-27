@@ -1,5 +1,5 @@
 import Foundation
-import Sora
+@preconcurrency import Sora
 import WebRTC
 
 private let logger = SamplesLogger.tagged("SoraSDKManager")
@@ -28,7 +28,7 @@ final class SoraSDKManager {
   ///   - completionHandler: 接続結果のコールバックです
   func connect(
     configuration: Configuration,
-    completionHandler: ((Error?) -> Void)? = nil
+    completionHandler: (@Sendable (Error?) -> Void)? = nil
   ) {
     // currentMediaChannel が存在する場合は既に接続済み
     guard currentMediaChannel == nil else {
@@ -38,9 +38,31 @@ final class SoraSDKManager {
       return
     }
 
-    _ = Sora.shared.connect(configuration: configuration) { [weak self] mediaChannel, error in
-      self?.currentMediaChannel = mediaChannel
-      completionHandler?(error)
+    _ = Sora.shared.connect(configuration: configuration) {
+      @Sendable [weak self] mediaChannel, error in
+      // このクロージャーはデフォルトのアクター隔離 (MainActor) を継承してしまうため、
+      // @Sendable にしてアクター隔離を外す。
+      // (@Sendable にしないと、SDK がシグナリングスレッドから呼び出した瞬間に
+      // Swift 6 の実行時隔離チェックが trap して EXC_BREAKPOINT になる)
+      //
+      // MediaChannel は非 Sendable のため、Task クロージャーへ送信すると
+      // "sending 'mediaChannel' risks causing data races" になる。
+      // このコールバックは接続試行ごとに一度だけ呼ばれ、以降 mediaChannel を使わないため
+      // nonisolated(unsafe) で渡す。
+      // 呼び出し後は Task クロージャー内で MainActor へ移すだけであり、
+      // 接続完了コールバックの直後まで SDK が mediaChannel を別スレッドから
+      // 並行に変更することもないため、実際のデータ競合は発生しない。
+      nonisolated(unsafe) let channel = mediaChannel
+      //
+      // Sora SDK のコールバックは任意のスレッド (webrtc の signaling スレッド等) から
+      // 呼ばれるため、MainActor へ束ねてから状態を更新する
+      Task { @MainActor in
+        guard let self else { return }
+        if let channel {
+          self.currentMediaChannel = channel
+        }
+        completionHandler?(error)
+      }
     }
   }
 
