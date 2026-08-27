@@ -532,12 +532,10 @@ extension SimulcastVideoChatRoomViewController {
       return
     }
 
-    CameraVideoCapturer.flip(current) { @Sendable error in
-      guard let message = error?.localizedDescription else { return }
-      Task { @MainActor in
-        logger.error(message)
-      }
-    }
+    CameraVideoCapturer.flip(
+      current,
+      completionHandler: makeCameraFlipCompletionHandler(loggerTag: "SimulcastVideoChatRoom")
+    )
   }
 
   /// カメラミュートボタンを押したときの挙動を定義します。

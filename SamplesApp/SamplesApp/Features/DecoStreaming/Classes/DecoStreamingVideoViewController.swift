@@ -1,8 +1,92 @@
 import AVFoundation
-import Sora
+@preconcurrency import Sora
 import UIKit
 
 private let logger = SamplesLogger.tagged("DecoStreamingVideoChatRoom")
+
+// AVCaptureVideoDataOutput のコールバックは captureSessionQueue 上で呼び出されます。
+// UIViewController は MainActor 隔離されるため、デリゲートを別の nonisolated な型に分けます。
+// mediaStream と CIFilter の参照は、画面側から更新される可能性があるためロックで保護します。
+nonisolated final class DecoStreamingVideoCaptureDelegate: NSObject,
+  AVCaptureVideoDataOutputSampleBufferDelegate, @unchecked Sendable
+{
+  private let stateLock = NSLock()
+  private var mediaStream: MediaStream?
+  private var filterName: String?
+  private var filter: CIFilter?
+
+  func update(mediaStream: MediaStream?) {
+    stateLock.lock()
+    defer { stateLock.unlock() }
+    self.mediaStream = mediaStream
+  }
+
+  func update(filterName: String?) {
+    stateLock.lock()
+    defer { stateLock.unlock() }
+    guard self.filterName != filterName else { return }
+    self.filterName = filterName
+    filter = nil
+  }
+
+  private func captureState() -> (mediaStream: MediaStream?, filter: CIFilter?) {
+    stateLock.lock()
+    defer { stateLock.unlock() }
+    if filter == nil, let filterName {
+      filter = CIFilter(name: filterName)
+    }
+    return (mediaStream, filter)
+  }
+
+  /// ビデオキャプチャが、新しいフレームをキャプチャしたときに呼び出されます。
+  ///
+  /// このサンプルアプリでは、キャプチャされたフレームを適切に変換してSora SDKのmediaStreamに流すことで、配信を行っています。
+  /// 注意点として、このdelegate methodはパフォーマンス維持のため、
+  /// メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
+  func captureOutput(
+    _ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer,
+    from connection: AVCaptureConnection
+  ) {
+    let state = captureState()
+    guard let mediaStream = state.mediaStream else {
+      return
+    }
+
+    if let filter = state.filter {
+      // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
+      //
+      // フィルタの実装方法について:
+      // ここでは一番簡単なCore Imageを使ったフィルタリングを実装しています。
+      // 大本のビデオフレームバッファ (CMSampleBuffer) から画像フレームバッファ (CVPixelBuffer) を取りだし、
+      // Core ImageのCIImageに変換して、フィルタをかけます。
+      // 最後にフィルタリングされたCIImageをCIContext経由で元々の画像フレームバッファ領域に上書きレンダリングしています。
+      // 元々の画像フレームバッファ領域に直接上書きしているので、大本のビデオフレームバッファをそのまま引き続き使用することができ、
+      // 最終的にはこのビデオフレームバッファをSora SDKの提供するVideoFrameに変換して配信することができます。
+      guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+        return
+      }
+      let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
+      filter.setValue(cameraImage, forKey: kCIInputImageKey)
+      guard let filteredImage = filter.outputImage else {
+        return
+      }
+      let context = CIContext(options: nil)
+      context.render(filteredImage, to: pixelBuffer)
+      mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+    } else {
+      // フィルタが選択されていないので、キャプチャした動画をそのまま配信させます。
+      mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
+    }
+  }
+
+  /// ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
+  func captureOutput(
+    _ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer,
+    from connection: AVCaptureConnection
+  ) {
+    // このサンプルアプリでは何もしません。
+  }
+}
 
 /// 実際に動画を配信する画面です。
 class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
@@ -13,21 +97,14 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
 
   @IBOutlet weak var filterPickerViewHeightArchorPad: NSLayoutConstraint!
   /// 動画に適応できるフィルタの一覧です。ユーザーが選択できるように、事前に定義してあります。
-  private static let allFilters: [(String, CIFilter?)] = {
-    let sepiaFilter = CIFilter(name: "CISepiaTone")
-    let motionBlurFilter = CIFilter(name: "CIMotionBlur")
-    let colorInvertFilter = CIFilter(name: "CIColorInvert")
-    let colorMonochromeFilter = CIFilter(name: "CIColorMonochrome")
-    let comicFilter = CIFilter(name: "CIComicEffect")
-    return [
-      ("フィルタなし", nil),
-      ("モーションブラー", motionBlurFilter),
-      ("色反転", colorInvertFilter),
-      ("モノクロ", colorMonochromeFilter),
-      ("セピア調", sepiaFilter),
-      ("マンガ調", comicFilter),
-    ]
-  }()
+  private static let allFilters: [(String, String?)] = [
+    ("フィルタなし", nil),
+    ("モーションブラー", "CIMotionBlur"),
+    ("色反転", "CIColorInvert"),
+    ("モノクロ", "CIColorMonochrome"),
+    ("セピア調", "CISepiaTone"),
+    ("マンガ調", "CIComicEffect"),
+  ]
 
   /// 配信者側の動画を画面に表示するためのビューです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet private var videoView: VideoView!
@@ -35,11 +112,10 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
   private let captureSessionQueue = DispatchQueue(
     label: "captureSessionQueue", qos: .userInitiated, attributes: DispatchQueue.Attributes())
   private let captureSession = AVCaptureSession()
+  private let captureDelegate = DecoStreamingVideoCaptureDelegate()
   private var authorizationStatus: AVAuthorizationStatus?
   private var configurationFinished: Bool = false
   private var captureDevicePosition: AVCaptureDevice.Position = .front
-
-  private var currentFilter: CIFilter?
 
   // MARK: UIViewController
 
@@ -69,6 +145,10 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
     // 配信画面に遷移する直前に、配信画面のタイトルを現在のチャンネルIDを使用して書き換えています。
     if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
       navigationItem.title = "配信中: \(mediaChannel.configuration.channelId)"
+
+      // senderStream はキャプチャキュー上で使うため、MainActor の値をデリゲートへ渡します。
+      nonisolated(unsafe) let mediaStream = mediaChannel.senderStream
+      captureDelegate.update(mediaStream: mediaStream)
 
       // サーバーから切断されたときのコールバックを設定します。
       mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
@@ -117,6 +197,11 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
       }
     }
 
+    // 接続完了直後は senderStream がまだ設定されていない可能性があるため、表示直前にも更新します。
+    nonisolated(unsafe) let mediaStream =
+      SoraSDKManager.shared.currentMediaChannel?.senderStream
+    captureDelegate.update(mediaStream: mediaStream)
+
     // captureSessionをセットアップしたのち、映像キャプチャを開始します。
     // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
     // これによって、ユーザーから許可を得るまでの間、処理を効果的に一時停止することができます。
@@ -133,6 +218,10 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+
+    // キャプチャ停止後に古い MediaStream やフィルタを使わないようにします。
+    captureDelegate.update(mediaStream: nil)
+    captureDelegate.update(filterName: nil)
 
     // captureSessionを停止します。
     captureSessionQueue.async { [weak self] in
@@ -180,9 +269,9 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
   @IBAction func onFilterButton(_ sender: UIBarButtonItem) {
     let alertController = UIAlertController(
       title: "フィルタを選択", message: nil, preferredStyle: .actionSheet)
-    for (name, filter) in DecoStreamingVideoViewController.allFilters {
+    for (name, filterName) in DecoStreamingVideoViewController.allFilters {
       let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
-        self?.currentFilter = filter
+        self?.captureDelegate.update(filterName: filterName)
       }
       alertController.addAction(action)
     }
@@ -236,7 +325,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
 
     // 出力側のセットアップを行い、captureSessionに設定します。
     let videoDataOutput = AVCaptureVideoDataOutput()
-    videoDataOutput.setSampleBufferDelegate(self, queue: captureSessionQueue)
+    videoDataOutput.setSampleBufferDelegate(captureDelegate, queue: captureSessionQueue)
     for output in captureSession.outputs {
       captureSession.removeOutput(output)
     }
@@ -317,60 +406,6 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
   }
 
   func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-    currentFilter = DecoStreamingVideoViewController.allFilters[row].1
-  }
-}
-
-// MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
-
-extension DecoStreamingVideoViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-  /// ビデオキャプチャが、新しいフレームをキャプチャしたときに呼び出されます。
-  ///
-  /// このサンプルアプリでは、キャプチャされたフレームを適切に変換してSora SDKのmediaStreamに流すことで、配信を行っています。
-  /// 注意点として、このdelegate methodはパフォーマンス維持のため、
-  /// メインスレッド以外のスレッド (具体的にはcaptureSessionQueue上) にて呼び出されます。
-  /// したがってメインスレッド上で直接操作する必要があるコードを呼び出す場合は注意が必要です。
-  func captureOutput(
-    _ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer,
-    from connection: AVCaptureConnection
-  ) {
-    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-      let mediaStream = mediaChannel.senderStream
-    else {
-      return
-    }
-    if let filter = currentFilter {
-      // フィルタが選択されているので、キャプチャした動画にフィルタをかけて配信させます。
-      //
-      // フィルタの実装方法について:
-      // ここでは一番簡単なCore Imageを使ったフィルタリングを実装しています。
-      // 大本のビデオフレームバッファ (CMSampleBuffer) から画像フレームバッファ (CVPixelBuffer) を取りだし、
-      // Core ImageのCIImageに変換して、フィルタをかけます。
-      // 最後にフィルタリングされたCIImageをCIContext経由で元々の画像フレームバッファ領域に上書きレンダリングしています。
-      // 元々の画像フレームバッファ領域に直接上書きしているので、大本のビデオフレームバッファをそのまま引き続き使用することができ、
-      // 最終的にはこのビデオフレームバッファをSora SDKの提供するVideoFrameに変換して配信することができます。
-      guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-        return
-      }
-      let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
-      filter.setValue(cameraImage, forKey: kCIInputImageKey)
-      guard let filteredImage = filter.outputImage else {
-        return
-      }
-      let context = CIContext(options: nil)
-      context.render(filteredImage, to: pixelBuffer)
-      mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
-    } else {
-      // フィルタが選択されていないので、キャプチャした動画をそのまま配信させます。
-      mediaStream.send(videoFrame: VideoFrame(from: sampleBuffer))
-    }
-  }
-
-  /// ビデオキャプチャが、何らかの理由でフレーム落ちしたときに呼び出されます。
-  func captureOutput(
-    _ captureOutput: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer,
-    from connection: AVCaptureConnection
-  ) {
-    // このサンプルアプリでは何もしません。
+    captureDelegate.update(filterName: DecoStreamingVideoViewController.allFilters[row].1)
   }
 }

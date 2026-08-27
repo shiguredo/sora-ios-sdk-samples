@@ -3,6 +3,24 @@ import AVFoundation
 import Sora
 import UIKit
 
+/// CameraVideoCapturer のコールバックを、呼び出し元の MainActor 隔離から切り離します。
+///
+/// カメラ切り替え完了コールバックは WebRTC のキャプチャキューから呼び出されます。
+/// UIViewController のメソッド内で直接クロージャーを作ると MainActor 隔離が継承され、
+/// Xcode 26 の実行時チェックでトラップするため、nonisolated な関数で生成します。
+nonisolated func makeCameraFlipCompletionHandler(
+  loggerTag: String,
+  messagePrefix: String = ""
+) -> @Sendable (Error?) -> Void {
+  { error in
+    guard let message = error?.localizedDescription else { return }
+    let logMessage = messagePrefix + message
+    Task { @MainActor in
+      SamplesLogger.tagged(loggerTag).error(logMessage)
+    }
+  }
+}
+
 /// カメラのミュート状態を管理する Enum です
 enum CameraMuteState {
   case recording
