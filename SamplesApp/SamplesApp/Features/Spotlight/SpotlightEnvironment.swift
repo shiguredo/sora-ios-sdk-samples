@@ -13,6 +13,7 @@ enum SpotlightEnvironment {
 
   static func makeConfiguration(
     channelId: String,
+    role: Role,
     videoCodec: VideoCodec,
     spotlightFocusRid: SpotlightRid,
     spotlightUnfocusRid: SpotlightRid,
@@ -22,7 +23,7 @@ enum SpotlightEnvironment {
     ignoreDisconnectWebSocket: Bool?,
     videoBitRate: Int?
   ) -> Configuration {
-    var configuration = Configuration(urlCandidates: urls, channelId: channelId, role: .sendrecv)
+    var configuration = Configuration(urlCandidates: urls, channelId: channelId, role: role)
     configuration.videoCodec = videoCodec
     configuration.spotlightFocusRid = spotlightFocusRid
     configuration.spotlightUnfocusRid = spotlightUnfocusRid

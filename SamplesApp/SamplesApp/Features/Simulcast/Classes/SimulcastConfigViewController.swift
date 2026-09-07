@@ -8,6 +8,9 @@ class SimulcastConfigViewController: UITableViewController {
   /// チャンネルIDを入力させる欄です。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var channelIdTextField: UITextField!
 
+  /// ロールを選択するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var roleSegmentedControl: UISegmentedControl!
+
   /// 動画のコーデックを指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
@@ -64,10 +67,9 @@ class SimulcastConfigViewController: UITableViewController {
     isConnecting = true
 
     // 入力された設定を元にSoraへ接続を行います。
-    // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
-    // role 引数には .sendrecv を指定します。
     var configuration = SimulcastEnvironment.makeConfiguration(
       channelId: channelId,
+      role: selectedRole(),
       videoCodec: selectedVideoCodec(),
       simulcastRequestRid: selectedSimulcastRequestRid(),
       dataChannelSignaling: selectedDataChannelSignaling(),
@@ -137,6 +139,10 @@ class SimulcastConfigViewController: UITableViewController {
       return nil
     }
     return text
+  }
+
+  private func selectedRole() -> Role {
+    value(from: [.sendonly, .recvonly, .sendrecv], control: roleSegmentedControl)
   }
 
   private func selectedVideoCodec() -> VideoCodec {
