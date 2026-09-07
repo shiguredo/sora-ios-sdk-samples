@@ -62,6 +62,40 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="SMC-Role-Cell">
+                                        <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SMC-Role-Cell" id="SMC-Role-Cell-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ロール" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SMC-Role-Label">
+                                                    <rect key="frame" x="20" y="0.0" width="64" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="SMC-Role-Label-Width"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="SMC-Role-Segmented">
+                                                    <rect key="frame" x="96" y="6.5" width="259" height="32"/>
+                                                    <segments>
+                                                        <segment title="送信のみ"/>
+                                                        <segment title="受信のみ"/>
+                                                        <segment title="双方向"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="SMC-Role-Label" firstAttribute="centerY" secondItem="SMC-Role-Cell-Content" secondAttribute="centerY" id="SMC-Role-Label-CenterY"/>
+                                                <constraint firstItem="SMC-Role-Segmented" firstAttribute="centerY" secondItem="SMC-Role-Cell-Content" secondAttribute="centerY" id="SMC-Role-Segmented-CenterY"/>
+                                                <constraint firstItem="SMC-Role-Label" firstAttribute="leading" secondItem="SMC-Role-Cell-Content" secondAttribute="leading" constant="20" id="SMC-Role-Label-Leading"/>
+                                                <constraint firstItem="SMC-Role-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SMC-Role-Label" secondAttribute="trailing" constant="12" id="SMC-Role-Label-Spacing"/>
+                                                <constraint firstAttribute="trailing" secondItem="SMC-Role-Segmented" secondAttribute="trailing" constant="20" id="SMC-Role-Trailing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="映像コーデック" footerTitle="使用する映像コーデックを選択します。" id="fXu-bU-AWH">
@@ -335,6 +369,7 @@
 	                        <outlet property="channelIdTextField" destination="ShA-Zi-CkT" id="FYM-h6-rVG"/>
 	                        <outlet property="dataChannelSignalingSegmentedControl" destination="Yin-69-X2b" id="QVt-3j-ztI"/>
 	                        <outlet property="ignoreDisconnectWebSocketSegmentedControl" destination="xJE-0n-qMR" id="2UT-ca-FfM"/>
+	                        <outlet property="roleSegmentedControl" destination="SMC-Role-Segmented" id="SMC-Role-Outlet"/>
 	                        <outlet property="simulcastRequestRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
                         <outlet property="videoBitRatePickerCell" destination="ubp-Ic-GE0" id="zzH-QH-NHn"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>

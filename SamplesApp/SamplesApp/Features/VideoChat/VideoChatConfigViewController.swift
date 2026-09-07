@@ -22,6 +22,9 @@ class VideoChatConfigViewController: UITableViewController {
   /// チャンネルIDを入力させる欄です。
   @IBOutlet var channelIdTextField: UITextField!
 
+  /// ロールを選択するためのコントロールです。
+  @IBOutlet var roleSegmentedControl: UISegmentedControl!
+
   /// 動画のコーデックを指定するためのコントロールです。
   @IBOutlet var videoCodecSegmentedControl: UISegmentedControl!
 
@@ -152,7 +155,10 @@ class VideoChatConfigViewController: UITableViewController {
       h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces).isEmpty
       ? nil : h264ProfileLevelIdTextField.text!.trimmingCharacters(in: .whitespaces)
     var configuration = Configuration(
-      urlCandidates: VideoChatEnvironment.urls, channelId: channelId, role: .sendrecv)
+      urlCandidates: VideoChatEnvironment.urls,
+      channelId: channelId,
+      role: selectedRole()
+    )
     configuration.videoCodec = videoCodec
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
@@ -221,8 +227,6 @@ class VideoChatConfigViewController: UITableViewController {
     configuration.signalingConnectMetadata = VideoChatEnvironment.signalingConnectMetadata
 
     // 入力された設定を元にSoraへ接続を行います。
-    // ビデオチャットアプリでは複数のユーザーが同時に配信を行う必要があるため、
-    // role 引数には .sendrecv を指定します。
     SoraSDKManager.shared.connect(configuration: configuration) { @Sendable [weak self] error in
       // SoraSDKManager のコールバックは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
       Task { @MainActor in
@@ -259,6 +263,16 @@ class VideoChatConfigViewController: UITableViewController {
           }
         }
       }
+    }
+  }
+
+  /// 選択されているロールを返します。
+  private func selectedRole() -> Role {
+    switch roleSegmentedControl.selectedSegmentIndex {
+    case 0: return .sendonly
+    case 1: return .recvonly
+    case 2: return .sendrecv
+    default: fatalError()
     }
   }
 
