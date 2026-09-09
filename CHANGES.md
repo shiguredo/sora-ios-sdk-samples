@@ -18,7 +18,7 @@
   - MainActor 領域から非 Sendable な MediaChannel を async 呼び出しへ転送する際の診断対応 (MainActor 領域での取得・`nonisolated(unsafe)`)
   - UIKit の `awakeFromNib()` の `nonisolated` 扱いや ScreenRecorder の `nonisolated` 化などその他の Swift 6 並行性対応
   - @t-miya
-- [UPDATE] Sora iOS SDK を 2026.2.0 に上げる
+- [UPDATE] Sora iOS SDK を 2026.2.1 に上げる
   - @zztkm @t-miya
 - [UPDATE] RPC サンプルで `MediaChannelHandlers.onReceiveSignaling` から `MediaChannelHandlers.onReceiveSignalingJSON` に移行する
   - @zztkm
