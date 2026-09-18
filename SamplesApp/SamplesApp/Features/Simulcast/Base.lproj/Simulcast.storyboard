@@ -227,6 +227,40 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="SMC-Stereo-Cell">
+                                        <rect key="frame" x="0.0" y="339" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SMC-Stereo-Cell" id="SMC-Stereo-Cell-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ステレオ音声出力" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SMC-Stereo-Label">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="SMC-Stereo-Label-Width"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SMC-Stereo-Segmented" userLabel="Audio Stereo Output Enabled Segmented Control">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="SMC-Stereo-Label" firstAttribute="leading" secondItem="SMC-Stereo-Cell-Content" secondAttribute="leadingMargin" id="SMC-Stereo-Label-Leading"/>
+                                                <constraint firstItem="SMC-Stereo-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SMC-Stereo-Label" secondAttribute="trailing" id="SMC-Stereo-Spacing"/>
+                                                <constraint firstItem="SMC-Stereo-Label" firstAttribute="centerY" secondItem="SMC-Stereo-Cell-Content" secondAttribute="centerY" id="SMC-Stereo-Label-CenterY"/>
+                                                <constraint firstItem="SMC-Stereo-Label" firstAttribute="top" secondItem="SMC-Stereo-Cell-Content" secondAttribute="top" id="SMC-Stereo-Label-Top"/>
+                                                <constraint firstItem="SMC-Stereo-Segmented" firstAttribute="centerY" secondItem="SMC-Stereo-Cell-Content" secondAttribute="centerY" id="SMC-Stereo-Segmented-CenterY"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="SMC-Stereo-Segmented" secondAttribute="trailing" id="SMC-Stereo-Trailing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="映像の種類" footerTitle="配信開始時に受信する映像の種類を選択します。" id="PNL-Rl-ZYX">
@@ -373,6 +407,7 @@
 	                        <outlet property="simulcastRequestRidSegmentedControl" destination="d7C-wH-w61" id="5T2-Ym-WhE"/>
                         <outlet property="videoBitRatePickerCell" destination="ubp-Ic-GE0" id="zzH-QH-NHn"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
+                        <outlet property="audioStereoOutputEnabledSegmentedControl" destination="SMC-Stereo-Segmented" id="SMC-Stereo-Outlet"/>
                         <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
                     </connections>
                 </tableViewController>
