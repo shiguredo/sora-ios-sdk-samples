@@ -21,6 +21,7 @@ enum SpotlightEnvironment {
     simulcast: Bool,
     dataChannelSignaling: Bool?,
     ignoreDisconnectWebSocket: Bool?,
+    audioStereoOutputEnabled: Bool,
     videoBitRate: Int?
   ) -> Configuration {
     var configuration = Configuration(urlCandidates: urls, channelId: channelId, role: role)
@@ -32,6 +33,7 @@ enum SpotlightEnvironment {
     configuration.dataChannelSignaling = dataChannelSignaling
     configuration.ignoreDisconnectWebSocket = ignoreDisconnectWebSocket
     configuration.cameraSettings.isEnabled = true
+    configuration.audioStereoOutputEnabled = audioStereoOutputEnabled
     configuration.signalingConnectMetadata = signalingConnectMetadata
     configuration.bundleId = UUID().uuidString
     configuration.spotlightEnabled = .enabled
