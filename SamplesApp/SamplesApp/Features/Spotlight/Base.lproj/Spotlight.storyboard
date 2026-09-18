@@ -227,6 +227,40 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="SPL-Stereo-Cell">
+                                        <rect key="frame" x="0.0" y="339" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SPL-Stereo-Cell" id="SPL-Stereo-Cell-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ステレオ音声出力" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SPL-Stereo-Label">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="SPL-Stereo-Label-Width"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SPL-Stereo-Segmented" userLabel="Audio Stereo Output Enabled Segmented Control">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="SPL-Stereo-Label" firstAttribute="leading" secondItem="SPL-Stereo-Cell-Content" secondAttribute="leadingMargin" id="SPL-Stereo-Label-Leading"/>
+                                                <constraint firstItem="SPL-Stereo-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="SPL-Stereo-Label" secondAttribute="trailing" id="SPL-Stereo-Spacing"/>
+                                                <constraint firstItem="SPL-Stereo-Label" firstAttribute="centerY" secondItem="SPL-Stereo-Cell-Content" secondAttribute="centerY" id="SPL-Stereo-Label-CenterY"/>
+                                                <constraint firstItem="SPL-Stereo-Label" firstAttribute="top" secondItem="SPL-Stereo-Cell-Content" secondAttribute="top" id="SPL-Stereo-Label-Top"/>
+                                                <constraint firstItem="SPL-Stereo-Segmented" firstAttribute="centerY" secondItem="SPL-Stereo-Cell-Content" secondAttribute="centerY" id="SPL-Stereo-Segmented-CenterY"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="SPL-Stereo-Segmented" secondAttribute="trailing" id="SPL-Stereo-Trailing"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="アクティブ配信数" footerTitle="配信される発声者の最大人数を選択します。" id="PNL-Rl-ZYX">
@@ -494,6 +528,7 @@
 	                        <outlet property="roleSegmentedControl" destination="SPL-Role-Segmented" id="SPL-Role-Outlet"/>
 	                        <outlet property="videoBitRatePickerCell" destination="iCB-yx-RbE" id="GfV-wC-a9B"/>
 	                        <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
+	                        <outlet property="audioStereoOutputEnabledSegmentedControl" destination="SPL-Stereo-Segmented" id="SPL-Stereo-Outlet"/>
 	                        <segue destination="iOn-KG-Rc0" kind="show" identifier="Connect" id="fwL-7C-azF"/>
 	                    </connections>
                 </tableViewController>

@@ -23,6 +23,9 @@ class SimulcastConfigViewController: UITableViewController {
   /// 開始時のマイク有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
 
+  /// ステレオ音声出力の有効設定を切り替えるためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
+  @IBOutlet var audioStereoOutputEnabledSegmentedControl: UISegmentedControl!
+
   /// 配信開始時に受信するサイマルキャストの映像の種類 (SimulcastRequestRid) を指定するためのコントロールです。Main.storyboardから設定されていますので、詳細はそちらをご確認ください。
   @IBOutlet var simulcastRequestRidSegmentedControl: UISegmentedControl!
 
@@ -74,6 +77,7 @@ class SimulcastConfigViewController: UITableViewController {
       simulcastRequestRid: selectedSimulcastRequestRid(),
       dataChannelSignaling: selectedDataChannelSignaling(),
       ignoreDisconnectWebSocket: selectedIgnoreDisconnectWebSocket(),
+      audioStereoOutputEnabled: selectedAudioStereoOutputEnabled(),
       videoBitRate: videoBitRatePickerCell.selectedBitRate
     )
     // 開始時カメラ有効の入力値を configuration に渡します
@@ -165,6 +169,10 @@ class SimulcastConfigViewController: UITableViewController {
 
   private func selectedIgnoreDisconnectWebSocket() -> Bool? {
     optionalValue(from: [nil, false, true], control: ignoreDisconnectWebSocketSegmentedControl)
+  }
+
+  private func selectedAudioStereoOutputEnabled() -> Bool {
+    value(from: [false, true], control: audioStereoOutputEnabledSegmentedControl)
   }
 
   private func value<T>(from values: [T], control: UISegmentedControl) -> T {

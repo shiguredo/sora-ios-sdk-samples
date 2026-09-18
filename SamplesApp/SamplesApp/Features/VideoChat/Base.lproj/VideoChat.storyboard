@@ -229,6 +229,40 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="VCC-Stereo-Cell">
+                                        <rect key="frame" x="0.0" y="339" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VCC-Stereo-Cell" id="VCC-Stereo-Cell-Content">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ステレオ音声出力" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VCC-Stereo-Label">
+                                                    <rect key="frame" x="16" y="0.0" width="147" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="122" id="VCC-Stereo-Label-Width"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VCC-Stereo-Segmented" userLabel="Audio Stereo Output Enabled Segmented Control">
+                                                    <rect key="frame" x="206" y="6.5" width="153" height="32"/>
+                                                    <segments>
+                                                        <segment title="無効"/>
+                                                        <segment title="有効"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="VCC-Stereo-Segmented" secondAttribute="trailing" id="VCC-Stereo-Trailing"/>
+                                                <constraint firstItem="VCC-Stereo-Label" firstAttribute="leading" secondItem="VCC-Stereo-Cell-Content" secondAttribute="leadingMargin" id="VCC-Stereo-Label-Leading"/>
+                                                <constraint firstItem="VCC-Stereo-Segmented" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="VCC-Stereo-Label" secondAttribute="trailing" id="VCC-Stereo-Spacing"/>
+                                                <constraint firstItem="VCC-Stereo-Label" firstAttribute="centerY" secondItem="VCC-Stereo-Cell-Content" secondAttribute="centerY" id="VCC-Stereo-Label-CenterY"/>
+                                                <constraint firstItem="VCC-Stereo-Label" firstAttribute="top" secondItem="VCC-Stereo-Cell-Content" secondAttribute="top" id="VCC-Stereo-Label-Top"/>
+                                                <constraint firstItem="VCC-Stereo-Segmented" firstAttribute="centerY" secondItem="VCC-Stereo-Cell-Content" secondAttribute="centerY" id="VCC-Stereo-Segmented-CenterY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="データチャンネルシグナリング設定" id="dEy-Xn-hbH">
@@ -630,6 +664,7 @@
 	                        <outlet property="roleSegmentedControl" destination="VCC-Role-Segmented" id="VCC-Role-Outlet"/>
                         <outlet property="videoBitRatePickerCell" destination="5h9-Ze-g2f" id="Gje-8A-cqW"/>
                         <outlet property="videoCodecSegmentedControl" destination="jHA-3S-8CN" id="ftz-Zn-7Ji"/>
+                        <outlet property="audioStereoOutputEnabledSegmentedControl" destination="VCC-Stereo-Segmented" id="VCC-Stereo-Outlet"/>
                         <outlet property="h265ParamsEnabledSegmentedControl" destination="H54-en-0AA" id="H5P-en-0AA"/>
                         <outlet property="h265ProfileIdSegmentedControl" destination="H5F-pi-0BB" id="H5Q-pi-0BB"/>
                         <outlet property="h265LevelIdSegmentedControl" destination="H6F-li-0CC" id="H6Q-li-0CC"/>
