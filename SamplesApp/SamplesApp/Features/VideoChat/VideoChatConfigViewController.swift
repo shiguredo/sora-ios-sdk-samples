@@ -37,6 +37,9 @@ class VideoChatConfigViewController: UITableViewController {
   /// 開始時のマイク有効設定を切り替えるためのコントロールです。
   @IBOutlet var microphoneEnabledOnConnectSegmentedControl: UISegmentedControl!
 
+  /// ステレオ音声出力の有効設定を切り替えるためのコントロールです。
+  @IBOutlet var audioStereoOutputEnabledSegmentedControl: UISegmentedControl!
+
   /// データチャンネルシグナリング機能を有効にするためのコントロールです。
   @IBOutlet var dataChannelSignalingSegmentedControl: UISegmentedControl!
 
@@ -219,6 +222,10 @@ class VideoChatConfigViewController: UITableViewController {
     // 開始時マイク有効の入力値を configuration に渡します
     configuration.initialMicrophoneEnabled =
       microphoneEnabledOnConnectSegmentedControl.selectedSegmentIndex == 0
+
+    // ステレオ音声出力の入力値を configuration に渡します
+    configuration.audioStereoOutputEnabled =
+      audioStereoOutputEnabledSegmentedControl.selectedSegmentIndex == 1
 
     if let videoBitRateValue = videoBitRatePickerCell.selectedBitRate {
       configuration.videoBitRate = videoBitRateValue

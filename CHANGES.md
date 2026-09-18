@@ -2,12 +2,21 @@
 
 - CHANGE
   - 下位互換のない変更
-- UPDATE
-  - 下位互換がある変更
 - ADD
   - 下位互換がある追加
+- UPDATE
+  - 下位互換がある変更
 - FIX
   - バグ修正
+
+## 2026.3
+
+- [ADD] VideoChat、Simulcast、Spotlight の接続設定にステレオ音声出力を追加する
+  - `Configuration.audioStereoOutputEnabled` を指定できるようにする
+  - デフォルトは無効とする
+  - @t-miya
+- [UPDATE] Sora iOS SDK を 2026.3.0 に上げる
+  - @t-miya
 
 ## 2026.2
 
