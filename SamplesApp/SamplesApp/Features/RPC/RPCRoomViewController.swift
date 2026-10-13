@@ -59,9 +59,9 @@ private enum RPCMethod {
     case .resetSpotlightRid:
       return ResetSpotlightRid.name
     case .putSignalingNotifyMetadata:
-      return PutSignalingNotifyMetadata<[String: AnyCodable]>.name
+      return SendablePutSignalingNotifyMetadata<[String: AnyCodable]>.name
     case .putSignalingNotifyMetadataItem:
-      return PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name
+      return SendablePutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name
     }
   }
 }
@@ -237,6 +237,8 @@ class RPCRoomViewController: UIViewController {
   /// RPCConfigViewController が接続中に受信した offer の rpc_methods を、
   /// 画面遷移時に prepare(for:sender:) で受け取るためのプロパティです。
   var offerRPCMethods: [String]?
+  // MediaChannel のイベント購読タスクです。画面遷移ごとに作り直します。
+  private var mediaChannelEventTask: Task<Void, Never>?
 
   private let metadataPresset = """
     {
@@ -289,44 +291,8 @@ class RPCRoomViewController: UIViewController {
       let urlText = mediaChannel.connectedUrl?.absoluteString ?? "-"
       connectedUrlLabel.text = "Connected URL: \(urlText)"
 
-      mediaChannel.handlers.onDataChannelMessage = { @Sendable [weak self] _, label, data in
-        Task { @MainActor in
-          self?.handleDataChannelMessage(label: label, data: data)
-        }
-      }
-
-      mediaChannel.handlers.onAddStream = { @Sendable [weak self] _ in
-        Task { @MainActor in
-          self?.handleUpdateStreams()
-        }
-      }
-
-      mediaChannel.handlers.onReceiveSignalingJSON = { @Sendable [weak self] json in
-        Task { @MainActor in
-          self?.handleSignalingJSON(json)
-        }
-      }
-
-      mediaChannel.handlers.onRemoveStream = { @Sendable [weak self] _ in
-        Task { @MainActor in
-          self?.handleUpdateStreams()
-        }
-      }
-
-      mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-        }
-
-        Task { @MainActor in
-          self?.handleDisconnect()
-        }
-      }
+      // メッセージやシグナリング、入退室、切断のイベントは購読 API で受けます。
+      startMediaChannelEventSubscription(mediaChannel)
 
       handleUpdateStreams()
     }
@@ -335,12 +301,43 @@ class RPCRoomViewController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
-    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-      mediaChannel.handlers.onDataChannelMessage = nil
-      mediaChannel.handlers.onAddStream = nil
-      mediaChannel.handlers.onRemoveStream = nil
-      mediaChannel.handlers.onReceiveSignalingJSON = nil
-      mediaChannel.handlers.onDisconnect = nil
+    // viewWillAppearで開始した購読を、対になるここで終了します。
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = nil
+  }
+
+  /// MediaChannel のイベント購読を開始します。
+  private func startMediaChannelEventSubscription(_ mediaChannel: MediaChannel) {
+    // 購読を開始してから Task で受信します (購読を開始する前に配送されたイベントは届きません)。
+    // buffer は既定で 256 件のため、メッセージを大量に受信する場合は
+    // subscribeEvents(bufferingPolicy:) で buffer を指定します (あふれると古いイベントから破棄されます)。
+    let events = mediaChannel.subscribeEvents()
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = Task { [weak self] in
+      for await event in events {
+        guard let self else { return }
+        switch event.kind {
+        case .dataChannelMessage:
+          guard let label = event.dataChannelLabel, let data = event.dataChannelMessage else {
+            break
+          }
+          self.handleDataChannelMessage(label: label, data: data)
+        case .streamAdded:
+          self.handleUpdateStreams()
+        case .streamRemoved:
+          self.handleUpdateStreams()
+        case .signalingReceivedJSON:
+          guard let json = event.signalingJSON else {
+            break
+          }
+          self.handleSignalingJSON(json)
+        case .disconnected:
+          logMediaChannelDisconnected(event, logger: logger)
+          self.handleDisconnect()
+        default:
+          break
+        }
+      }
     }
   }
 
@@ -477,7 +474,6 @@ class RPCRoomViewController: UIViewController {
           try await sendRPCAndLog(
             method: RequestSimulcastRid.self,
             params: params,
-            methodName: RequestSimulcastRid.name,
             isNotification: isNotification
           )
 
@@ -490,7 +486,6 @@ class RPCRoomViewController: UIViewController {
           try await sendRPCAndLog(
             method: RequestSpotlightRid.self,
             params: params,
-            methodName: RequestSpotlightRid.name,
             isNotification: isNotification
           )
 
@@ -501,7 +496,6 @@ class RPCRoomViewController: UIViewController {
           try await sendRPCAndLog(
             method: ResetSpotlightRid.self,
             params: params,
-            methodName: ResetSpotlightRid.name,
             isNotification: isNotification
           )
 
@@ -512,9 +506,8 @@ class RPCRoomViewController: UIViewController {
             push: pushSwitch.isOn ? true : nil
           )
           try await sendRPCAndLog(
-            method: PutSignalingNotifyMetadata<[String: AnyCodable]>.self,
+            method: SendablePutSignalingNotifyMetadata<[String: AnyCodable]>.self,
             params: params,
-            methodName: PutSignalingNotifyMetadata<[String: AnyCodable]>.name,
             isNotification: isNotification
           )
 
@@ -526,9 +519,8 @@ class RPCRoomViewController: UIViewController {
             push: pushSwitch.isOn ? true : nil
           )
           try await sendRPCAndLog(
-            method: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
+            method: SendablePutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.self,
             params: params,
-            methodName: PutSignalingNotifyMetadataItem<AnyCodable, AnyCodable>.name,
             isNotification: isNotification
           )
         }
@@ -540,27 +532,26 @@ class RPCRoomViewController: UIViewController {
   }
 
   @MainActor
-  private func sendRPCAndLog<Method: RPCMethodProtocol>(
-    method: Method.Type,
+  private func sendRPCAndLog<Method: SendableRPCMethodProtocol>(
+    // SDK の sendableRPC は method を sending 引数として受け取らないため、MainActor 隔離された
+    // メタタイプをそのまま渡すと "sending 'method' risks causing data races" になります。
+    // 呼び出し側で sending を指定して渡します。
+    method: sending Method.Type,
     params: Method.Params,
-    methodName: String,
     isNotification: Bool
   ) async throws {
-    // Sora SDK の MediaChannel は非 Sendable であり、rpc は @concurrent な async メソッドのため、
-    // 借用・MainActor 領域の値をそのまま渡すと "sending ... risks causing data races" になる。
-    // ここでは取得後すぐに単発の rpc 呼び出しのみで使用することが直列化されているため、
-    // nonisolated(unsafe) で扱う (SDK 本体の nonisolated(unsafe) と同じ運用)。
-    // このメソッドは MainActor 上で実行されるため rpc 呼び出しは逐次に行われ、
-    // SDK 側の RPCChannel も内部のバリア同期キューで排他されているため、
-    // 実際のデータ競合は発生しない。
+    // MediaChannel は Sendable ではないため、SDK が nonisolated な非同期メソッドとして宣言して
+    // いる (コンパイラの診断では @concurrent と表示される) sendableRPC へ参照を渡すには
+    // nonisolated(unsafe) が必要になる。ここではパラメータと結果が Sendable な
+    // SendableRPCMethodProtocol だけを扱い、SDK 側の RPCChannel が内部のバリア同期キューで
+    // 排他するため、実際のデータ競合は発生しない。
     guard let channel = SoraSDKManager.shared.currentMediaChannel else {
       throw SoraError.mediaChannelError(reason: "currentMediaChannel is nil")
     }
     nonisolated(unsafe) let mediaChannel = channel
-    nonisolated(unsafe) let params = params
     let summary = selectedMethod.displayName
     let detail = makeRequestDetail(
-      method: methodName,
+      method: Method.name,
       params: paramsDictionary(from: params)
     )
 
@@ -572,13 +563,14 @@ class RPCRoomViewController: UIViewController {
     )
 
     if isNotification {
-      try await mediaChannel.rpc(
+      // notification では Sora からのレスポンスを待たないため戻り値は nil になる
+      _ = try await mediaChannel.sendableRPC(
         method: method,
         params: params,
         isNotificationRequest: true
       )
     } else {
-      let response = try await mediaChannel.rpc(
+      let response = try await mediaChannel.sendableRPC(
         method: method,
         params: params
       )
@@ -742,6 +734,10 @@ class RPCRoomViewController: UIViewController {
   }
 
   private func handleDisconnect() {
+    // MediaChannel のイベント購読を終了します
+    // (通常は起こらないが切断後に古いイベントが送られる可能性が0でないため)
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = nil
     downstreamVideoView?.removeFromSuperview()
     downstreamVideoView = nil
     resolutionLabel.text = "Resolution: -"
