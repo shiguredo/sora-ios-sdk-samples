@@ -21,22 +21,14 @@ class RPCConfigViewController: UITableViewController {
 
   /// 接続試行中かどうかを表します。
   var isConnecting = false
-  // onReceiveSignalingJSON と prepare(for:sender:) が異なるスレッドで呼ばれる可能性があるため、
-  // offerRPCMethods へのアクセスは stateQueue 経由に限定する。
-  private let stateQueue = DispatchQueue(label: "jp.shiguredo.samples.rpc-config.state")
-  private var _offerRPCMethods: [String]?
-  private var offerRPCMethods: [String]? {
-    get {
-      stateQueue.sync {
-        _offerRPCMethods
-      }
-    }
-    set {
-      stateQueue.sync {
-        _offerRPCMethods = newValue
-      }
-    }
-  }
+  /// 接続中に受信した offer の rpc_methods です。
+  ///
+  /// 書き込みは購読タスク、読み出しは `prepare(for:sender:)` で、どちらも MainActor 上で動くため
+  /// 排他は不要です。
+  private var offerRPCMethods: [String]?
+  // 接続と MediaChannel のイベント購読タスクです。接続のたびに作り直します。
+  private var soraEventTask: Task<Void, Never>?
+  private var mediaChannelEventTask: Task<Void, Never>?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -60,47 +52,96 @@ class RPCConfigViewController: UITableViewController {
     isConnecting = true
     offerRPCMethods = nil
 
-    var configuration = makeConfiguration(channelId: channelId)
-    configuration.mediaChannelHandlers.onReceiveSignalingJSON = { @Sendable [weak self] json in
-      // SDK のハンドラは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
-      Task { @MainActor in
-        guard let rpcMethods = parseOfferRPCMethods(from: json) else {
-          return
-        }
-        self?.offerRPCMethods = rpcMethods
-      }
-    }
+    let configuration = makeConfiguration(channelId: channelId)
+
+    // offer の rpc_methods は接続中に受信するため、接続を開始する前に購読を開始します。
+    startSignalingEventSubscription()
 
     SoraSDKManager.shared.connect(configuration: configuration) { @Sendable [weak self] error in
-      // SoraSDKManager のコールバックは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
+      // コールバックは MainActor 上で呼ばれるが、クロージャーが @Sendable のため MainActor 隔離を
+      // 継承しない。MainActor へ束ねてから実行する。
       Task { @MainActor in
         guard let self = self else { return }
         self.isConnecting = false
 
         if let error {
           logger.warning("SoraSDKManager connection error: \(error)")
-          DispatchQueue.main.async {
-            let alertController = UIAlertController(
-              title: "接続に失敗しました",
-              message: error.localizedDescription,
-              preferredStyle: .alert)
-            alertController.addAction(
-              UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-          }
+          let alertController = UIAlertController(
+            title: "接続に失敗しました",
+            message: error.localizedDescription,
+            preferredStyle: .alert)
+          alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+          self.present(alertController, animated: true, completion: nil)
           return
         }
 
         logger.info("SoraSDKManager connected.")
-        DispatchQueue.main.async {
-          self.performSegue(withIdentifier: "Connect", sender: self)
-        }
+        self.performSegue(withIdentifier: "Connect", sender: self)
       }
     }
   }
 
   @IBAction func onUnwindToConfig(_ segue: UIStoryboardSegue) {
     // 前の画面から戻ってきても、特に処理は何も行いません。
+  }
+
+  /// 接続中のシグナリングを受信するための購読を開始します。
+  private func startSignalingEventSubscription() {
+    // MediaChannel は接続の完了前に Sora の管理対象へ追加されるため、
+    // mediaChannelAdded を受けてから MediaChannel のイベントを購読します
+    // (購読を開始する前に配送されたイベントは届きません)。
+    let soraEvents = Sora.shared.subscribeEvents()
+    soraEventTask?.cancel()
+    soraEventTask = Task { [weak self] in
+      for await event in soraEvents {
+        guard let self else { return }
+        switch event.kind {
+        case .mediaChannelAdded:
+          // イベントは MediaChannel の実体も接続 ID も運ばないため、接続を試行中の
+          // MediaChannel を管理対象の末尾から取る (追加順は SDK の公開ドキュメントには
+          // 記載が無く実装依存。接続が直列化されているため取り違えは起きない)。
+          guard let mediaChannel = Sora.shared.mediaChannels.last else {
+            break
+          }
+          self.startSignalingJSONSubscription(mediaChannel)
+        default:
+          break
+        }
+      }
+    }
+  }
+
+  /// offer の rpc_methods を取り出すために、MediaChannel のシグナリングを購読します。
+  private func startSignalingJSONSubscription(_ mediaChannel: MediaChannel) {
+    let events = mediaChannel.subscribeEvents()
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = Task { [weak self] in
+      for await event in events {
+        guard let self else { return }
+        switch event.kind {
+        case .signalingReceivedJSON:
+          guard let json = event.signalingJSON,
+            let rpcMethods = parseOfferRPCMethods(from: json)
+          else {
+            break
+          }
+          self.offerRPCMethods = rpcMethods
+        default:
+          break
+        }
+      }
+    }
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+
+    // 画面遷移の直前に開始した購読を終了します (offer の rpc_methods は
+    // prepare(for:sender:) で既に受け渡し済みです)。
+    soraEventTask?.cancel()
+    soraEventTask = nil
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = nil
   }
 
   // RPCRoomViewController を表示する直前に、接続中に受け取った

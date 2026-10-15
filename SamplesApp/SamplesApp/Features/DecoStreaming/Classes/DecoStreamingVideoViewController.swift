@@ -1,5 +1,5 @@
 import AVFoundation
-@preconcurrency import Sora
+import Sora
 import UIKit
 
 private let logger = SamplesLogger.tagged("DecoStreamingVideoChatRoom")
@@ -116,6 +116,8 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
   private var authorizationStatus: AVAuthorizationStatus?
   private var configurationFinished: Bool = false
   private var captureDevicePosition: AVCaptureDevice.Position = .front
+  // MediaChannel のイベント購読タスクです。画面遷移ごとに作り直します。
+  private var mediaChannelEventTask: Task<Void, Never>?
 
   // MARK: UIViewController
 
@@ -147,22 +149,27 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
       navigationItem.title = "配信中: \(mediaChannel.configuration.channelId)"
 
       // senderStream はキャプチャキュー上で使うため、MainActor の値をデリゲートへ渡します。
-      nonisolated(unsafe) let mediaStream = mediaChannel.senderStream
-      captureDelegate.update(mediaStream: mediaStream)
+      captureDelegate.update(mediaStream: mediaChannel.senderStream)
 
-      // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-        }
+      // サーバーから切断されたときのイベントを購読します。
+      startMediaChannelEventSubscription(mediaChannel)
+    }
+  }
 
-        Task { @MainActor in
-          self?.onExitButton(nil)
+  /// MediaChannel のイベント購読を開始します。
+  private func startMediaChannelEventSubscription(_ mediaChannel: MediaChannel) {
+    // 購読を開始してから Task で受信します (購読を開始する前に配送されたイベントは届きません)。
+    let events = mediaChannel.subscribeEvents()
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = Task { [weak self] in
+      for await event in events {
+        guard let self else { return }
+        switch event.kind {
+        case .disconnected:
+          logMediaChannelDisconnected(event, logger: logger)
+          self.onExitButton(nil)
+        default:
+          break
         }
       }
     }
@@ -198,9 +205,7 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
     }
 
     // 接続完了直後は senderStream がまだ設定されていない可能性があるため、表示直前にも更新します。
-    nonisolated(unsafe) let mediaStream =
-      SoraSDKManager.shared.currentMediaChannel?.senderStream
-    captureDelegate.update(mediaStream: mediaStream)
+    captureDelegate.update(mediaStream: SoraSDKManager.shared.currentMediaChannel?.senderStream)
 
     // captureSessionをセットアップしたのち、映像キャプチャを開始します。
     // これはcaptureSessionQueue内で実行されるため、captureSessionQueueが停止されている間は処理が先に進みません。
@@ -218,6 +223,10 @@ class DecoStreamingVideoViewController: UIViewController, UIPickerViewDelegate,
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+
+    // viewWillAppearで開始した購読を、対になるここで終了します。
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = nil
 
     // キャプチャ停止後に古い MediaStream やフィルタを使わないようにします。
     captureDelegate.update(mediaStream: nil)

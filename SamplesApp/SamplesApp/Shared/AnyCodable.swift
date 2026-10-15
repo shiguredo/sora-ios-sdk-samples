@@ -3,7 +3,16 @@ import Foundation
 /// Any 型の値を JSON エンコード/デコード可能にするラッパー型です。
 ///
 /// 動的な JSON を扱う場合に利用します。
-struct AnyCodable: Codable {
+///
+/// `@unchecked Sendable` の根拠は、`value` が不変 (`let`) であり、このサンプルでは
+/// `JSONSerialization` が返す JSON の値 (String / Int / Double / Bool / NSNull / 配列 / 辞書)
+/// だけを保持する点です。JSON 以外の値を保持しないでください。RPC のパラメータと結果を
+/// actor 境界を越えて受け渡すために `Sendable` が必要です。
+///
+/// `Codable` への準拠が MainActor 隔離にならないように `nonisolated` を付けます
+/// (既定のアクター隔離が MainActor の場合、Sendable な型パラメータの要件を
+/// 満たせなくなるため)。
+nonisolated struct AnyCodable: Codable, @unchecked Sendable {
   let value: Any
 
   init(_ value: Any) {

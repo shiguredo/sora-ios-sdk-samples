@@ -1,4 +1,4 @@
-@preconcurrency import Sora
+import Sora
 import UIKit
 
 private let logger = SamplesLogger.tagged("ScreenCastGame")
@@ -39,6 +39,9 @@ class ScreenCastGameViewController: UIViewController {
   private var floorY: CGFloat = 0
   private var cameraThumbnailView: VideoView?
   private var isDisconnecting = false
+  // 画面キャプチャとカメラのイベント購読タスクです。接続ごとに作り直します。
+  private var screenEventTask: Task<Void, Never>?
+  private var cameraEventTask: Task<Void, Never>?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -124,17 +127,29 @@ class ScreenCastGameViewController: UIViewController {
     //
     // SDK は `RPSampleBufferType.video` のみ送信します。
     // ReplayKit のマイク / カメラ入力は利用できません。
-    configureDisconnectHandlers()
+    startMediaChannelEventSubscriptions()
     setupCameraThumbnail()
     updateBarButtonItems()
 
-    // MainActor 領域で取得した参照を Task へ持ち込む。
-    // (Task 内で取得して await する startScreenCapture へ転送すると
-    // "sending ... risks causing data races" になる)
-    guard let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel else {
+    // 画面録画の開始は非同期で行います。
+    Task { [weak self] in
+      await self?.startScreenCapture()
+    }
+  }
+
+  /// 画面録画を開始します。
+  ///
+  /// `startScreenCapture` は SDK が nonisolated な非同期メソッドとして宣言しているため、
+  /// 呼び出し元の actor では実行されない (コンパイラの診断では @concurrent と表示される)。
+  /// `@MainActor` の文脈から MainActor 領域の MediaChannel と ScreenCaptureSettings をそのまま
+  /// 渡すと `sending ... risks causing data races` になるため、nonisolated(unsafe) にして
+  /// 隔離を外す (SDK のドキュメントのパターン)。
+  private func startScreenCapture() async {
+    guard let channel = ScreenCastConnectionManager.shared.screenMediaChannel else {
       return
     }
-    let captureSettings = ScreenCaptureSettings(
+    nonisolated(unsafe) let mediaChannel = channel
+    nonisolated(unsafe) let captureSettings = ScreenCaptureSettings(
       targetFPS: ScreenCastEnvironment.screenCaptureTargetFPS,
       onRuntimeError: { @Sendable [weak self] error in
         // このクロージャーはデフォルトのアクター隔離 (MainActor) を継承してしまうため、
@@ -150,17 +165,13 @@ class ScreenCastGameViewController: UIViewController {
       }
     )
 
-    Task { [weak self, mediaChannel, captureSettings] in
-      guard let self = self else { return }
-      do {
-        try await mediaChannel.startScreenCapture(settings: captureSettings)
-      } catch {
-        // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
-        // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
-        logger.warning("[sample] Error while mediaChannel.startScreenCapture: \(error)")
-        self.handleDisconnect()
-        return
-      }
+    do {
+      try await mediaChannel.startScreenCapture(settings: captureSettings)
+    } catch {
+      // エラーが発生して画面録画が開始できなかった場合は、Soraへの配信を停止する必要があります。
+      // 例えばユーザーが画面録画を許可しなかった場合などもこのエラーが発生します。
+      logger.warning("[sample] Error while mediaChannel.startScreenCapture: \(error)")
+      handleDisconnect()
     }
   }
 
@@ -168,33 +179,31 @@ class ScreenCastGameViewController: UIViewController {
   /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
   /// いずれの場合も含めます。
   private func handleDisconnect() {
-    // MainActor 領域で取得した参照を Task へ持ち込む。
-    // (Task 内で取得して await する stopScreenCapture へ転送すると
-    // "sending ... risks causing data races" になる)
-    let mediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel
-    let cameraMediaChannel = ScreenCastConnectionManager.shared.cameraMediaChannel
-    Task { [weak self, mediaChannel, cameraMediaChannel] in
+    Task { [weak self] in
       guard let self = self else { return }
-      guard await self.beginDisconnectIfNeeded() else { return }
+      guard self.beginDisconnectIfNeeded() else { return }
 
       // 画面録画を停止します。切断時にもSDK側で停止されますが、明示的に停止しておきます。
-      if let mediaChannel {
-        // 重複して切断ハンドラが呼ばれないように解除します。
-        mediaChannel.handlers.onDisconnect = nil
-        await mediaChannel.stopScreenCapture()
-      }
-      cameraMediaChannel?.handlers.onDisconnect = nil
-      cameraMediaChannel?.handlers.onAddStream = nil
-      cameraMediaChannel?.handlers.onRemoveStream = nil
+      await self.stopScreenCapture()
       teardownCameraThumbnail()
 
       // 明示的に配信をストップしてから、画面を閉じるようにしています。
       ScreenCastConnectionManager.shared.disconnect()
-      await MainActor.run {
-        self.isDisconnecting = false
-        self.updateBarButtonItems()
-      }
+      self.isDisconnecting = false
+      self.updateBarButtonItems()
     }
+  }
+
+  /// 画面録画を停止します。
+  ///
+  /// `stopScreenCapture` も nonisolated な非同期メソッドのため、`startScreenCapture` と同じ理由で
+  /// nonisolated(unsafe) にして隔離を外します。
+  private func stopScreenCapture() async {
+    guard let channel = ScreenCastConnectionManager.shared.screenMediaChannel else {
+      return
+    }
+    nonisolated(unsafe) let mediaChannel = channel
+    await mediaChannel.stopScreenCapture()
   }
 
   /// 配信設定画面からのUnwind Segueの着地地点として定義してあります。
@@ -301,52 +310,52 @@ class ScreenCastGameViewController: UIViewController {
       to: CGPoint(x: newFrame.maxX + 1000, y: newFrame.maxY + 10))
   }
 
-  private func configureDisconnectHandlers() {
-    ScreenCastConnectionManager.shared.screenMediaChannel?.handlers.onDisconnect = {
-      @Sendable [weak self] event in
-      // Sora SDK のハンドラは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
-      Task { @MainActor in
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .screen)), code: \(code), reason: \(reason)"
-          )
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .screen)), error: \(error.localizedDescription)"
-          )
+  private func startMediaChannelEventSubscriptions() {
+    // 画面キャプチャとカメラの切断、カメラのストリームの追加と削除は購読 API で受けます。
+    // 購読を開始してから Task で受信します (購読を開始する前に配送されたイベントは届きません)。
+    if let screenMediaChannel = ScreenCastConnectionManager.shared.screenMediaChannel {
+      let events = screenMediaChannel.subscribeEvents()
+      screenEventTask?.cancel()
+      screenEventTask = Task { [weak self] in
+        for await event in events {
+          guard let self else { return }
+          switch event.kind {
+          case .disconnected:
+            logMediaChannelDisconnected(
+              event,
+              logger: logger,
+              label: ScreenCastConnectionManager.shared.logLabel(for: .screen)
+            )
+            self.handleDisconnect()
+          default:
+            break
+          }
         }
-        self?.handleDisconnect()
       }
     }
 
-    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onDisconnect = {
-      @Sendable [weak self] event in
-      // Sora SDK のハンドラは任意のスレッドから呼ばれるため、MainActor へ束ねてから実行する
-      Task { @MainActor in
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .camera)), code: \(code), reason: \(reason)"
-          )
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: \(ScreenCastConnectionManager.shared.logLabel(for: .camera)), error: \(error.localizedDescription)"
-          )
+    if let cameraMediaChannel = ScreenCastConnectionManager.shared.cameraMediaChannel {
+      let events = cameraMediaChannel.subscribeEvents()
+      cameraEventTask?.cancel()
+      cameraEventTask = Task { [weak self] in
+        for await event in events {
+          guard let self else { return }
+          switch event.kind {
+          case .disconnected:
+            logMediaChannelDisconnected(
+              event,
+              logger: logger,
+              label: ScreenCastConnectionManager.shared.logLabel(for: .camera)
+            )
+            self.handleDisconnect()
+          case .streamAdded:
+            self.setupCameraThumbnail()
+          case .streamRemoved:
+            self.teardownCameraThumbnail()
+          default:
+            break
+          }
         }
-        self?.handleDisconnect()
-      }
-    }
-    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onAddStream = {
-      @Sendable [weak self] _ in
-      Task { @MainActor in
-        self?.setupCameraThumbnail()
-      }
-    }
-    ScreenCastConnectionManager.shared.cameraMediaChannel?.handlers.onRemoveStream = {
-      @Sendable [weak self] _ in
-      Task { @MainActor in
-        self?.teardownCameraThumbnail()
       }
     }
   }
@@ -400,12 +409,18 @@ class ScreenCastGameViewController: UIViewController {
     cameraThumbnailView = nil
   }
 
-  @MainActor
+  /// 切断処理を開始してよいかを返します。
+  ///
+  /// 重複して切断処理が呼ばれないように、開始できる場合だけイベントの購読を終了します。
   private func beginDisconnectIfNeeded() -> Bool {
     if isDisconnecting {
       return false
     }
     isDisconnecting = true
+    screenEventTask?.cancel()
+    screenEventTask = nil
+    cameraEventTask?.cancel()
+    cameraEventTask = nil
     return true
   }
 }
