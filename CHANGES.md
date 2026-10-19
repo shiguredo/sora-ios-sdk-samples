@@ -16,7 +16,7 @@
     - SwiftPM 6.3 未満 (Xcode 26.6 未満) ではパッケージを解決できない
   - macOS は Xcode 26.6 の動作要件に合わせて 26.2 以降とする
   - @t-miya
-- [UPDATE] Sora iOS SDK を 2026.4.0-canary.3 に上げる
+- [UPDATE] Sora iOS SDK を 2026.4.0-canary.4 に上げる
   - Swift 6 言語モードの暫定対応 (`@preconcurrency import Sora`) を撤去し、イベント購読 API (`Sora.subscribeEvents` / `MediaChannel.subscribeEvents`) を利用するようにする
   - 非 Sendable な値 (`MediaChannel` / `ScreenCaptureSettings`) を SDK の非同期メソッド (`setVideoHardMute` / `startScreenCapture` / `sendableRPC` など) へ渡す箇所は `nonisolated(unsafe)` とし、その理由をコメントに記載する
   - RPC サンプルは `MediaChannel.sendableRPC` を利用するようにし、動的メタデータの型 `AnyCodable` を `Sendable` に対応させる
