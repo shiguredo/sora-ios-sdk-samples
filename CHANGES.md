@@ -9,6 +9,31 @@
 - FIX
   - バグ修正
 
+## develop
+
+## 2026.4
+
+- [CHANGE] システム条件を変更する
+  - Sora iOS SDK が SwiftPM 6.3 以降を必要とするため、Xcode 26.6 以降とする
+    - SwiftPM 6.3 未満 (Xcode 26.6 未満) ではパッケージを解決できない
+  - macOS は Xcode 26.6 の動作要件に合わせて 26.2 以降とする
+  - @t-miya
+- [UPDATE] Sora iOS SDK を 2026.4.0 に上げる
+  - Swift 6 言語モードの暫定対応 (`@preconcurrency import Sora`) を撤去し、イベント購読 API (`Sora.subscribeEvents` / `MediaChannel.subscribeEvents`) を利用するようにする
+  - 非 Sendable な値 (`MediaChannel` / `ScreenCaptureSettings`) を SDK の非同期メソッド (`setVideoHardMute` / `startScreenCapture` / `sendableRPC` など) へ渡す箇所は `nonisolated(unsafe)` とし、その理由をコメントに記載する
+  - RPC サンプルは `MediaChannel.sendableRPC` を利用するようにし、動的メタデータの型 `AnyCodable` を `Sendable` に対応させる
+  - 接続済み・接続試行中に接続を要求された場合は、接続結果のコールバックへエラーを返すようにする
+  - 接続試行中に切断した場合は、接続試行をキャンセルするようにする
+  - ScreenCast サンプルは接続結果の帰属を分けるため、専用の Sora インスタンスを利用するようにする
+  - @t-miya
+
+### misc
+
+- [UPDATE] GitHub Actions のビルド環境を更新する
+  - XCODE を Xcode 26.6 に変更
+  - XCODE_SDK を iphoneos26.5 に変更
+  - @t-miya
+
 ## 2026.3
 
 - [ADD] VideoChat、Simulcast、Spotlight の接続設定にステレオ音声出力を追加する

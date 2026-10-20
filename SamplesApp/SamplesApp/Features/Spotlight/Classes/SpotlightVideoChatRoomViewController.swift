@@ -1,4 +1,4 @@
-@preconcurrency import Sora
+import Sora
 import UIKit
 
 private let logger = SamplesLogger.tagged("SpotlightVideoChatRoom")
@@ -12,8 +12,10 @@ class SpotlightVideoChatRoomViewController: UIViewController {
 
   /// ビデオチャットの、配信者自身の映像を表示するためのViewです。
   private var upstreamVideoView: VideoView?
-  // 最後にハンドラ登録した Upstream を覚えておくためのプロパティ
+  // 映像と音声の有効フラグの変更が送信ストリームのものか判定するために覚えておくプロパティ
   private weak var observedUpstream: MediaStream?
+  // MediaChannel のイベント購読タスクです。画面遷移ごとに作り直します。
+  private var mediaChannelEventTask: Task<Void, Never>?
   // レイアウトの再計算を必要な時のみ行うために View サイズをキャッシュします。
   // View サイズが変わった場合のみレイアウト再計算を行うために使用します。
   private var lastLaidOutVideoViewsSize: CGSize = .zero
@@ -70,12 +72,6 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     }
   }
 
-  /// カメラのソフトミュート状態です。
-  private var isCameraSoftMuted: Bool = false
-
-  /// マイクのミュート状態です。
-  private var isMicSoftMuted: Bool = false
-
   // 接続開始時のカメラの状態適用を行なったかを管理するフラグ
   private var didApplyInitialCameraState = false
   // 接続開始時のマイクの状態適用を行なったかを管理するフラグ
@@ -94,50 +90,60 @@ class SpotlightVideoChatRoomViewController: UIViewController {
     super.viewDidAppear(animated)
 
     // このビデオチャットではチャット中に別のクライアントが入室したり退室したりする可能性があります。
-    // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのためのコールバックを設定します。
-    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-      mediaChannel.handlers.onAddStream = { @Sendable [weak self] _ in
-        logger.info("[sample] mediaChannel.handlers.onAddStream")
-        Task { @MainActor in
-          self?.handleUpdateStreams()
-        }
-      }
-      mediaChannel.handlers.onRemoveStream = { @Sendable [weak self] _ in
-        logger.info("[sample] mediaChannel.handlers.onRemoveStream")
-        Task { @MainActor in
-          self?.handleUpdateStreams()
-        }
-      }
+    // 入室退室が発生したら都度動画の表示を更新しなければなりませんので、そのための購読を開始します。
+    startMediaChannelEventSubscription()
 
-      // サーバーから切断されたときのコールバックを設定します。
-      mediaChannel.handlers.onDisconnect = { @Sendable [weak self] event in
-        switch event {
-        case .ok(let code, let reason):
-          logger.info(
-            "[sample] mediaChannel.handlers.onDisconnect: code: \(code), reason: \(reason)")
-        case .error(let error):
-          logger.error(
-            "[sample] mediaChannel.handlers.onDisconnect: error: \(error.localizedDescription)")
-        }
-
-        Task { @MainActor in
-          self?.handleDisconnect()
-        }
-      }
-    }
-
-    // その後、動画の表示を初回更新します。次回以降の更新は直前に設定したコールバックが行います。
+    // その後、動画の表示を初回更新します。次回以降の更新は購読したイベントが行います。
     handleUpdateStreams()
   }
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
-    // viewDidAppearで設定したコールバックを、対になるここで削除します。
-    if let mediaChannel = SoraSDKManager.shared.currentMediaChannel {
-      mediaChannel.handlers.onAddStream = nil
-      mediaChannel.handlers.onRemoveStream = nil
-      mediaChannel.handlers.onDisconnect = nil
+    // viewDidAppearで開始した購読を、対になるここで終了します。
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = nil
+  }
+
+  /// MediaChannel のイベント購読を開始します。
+  private func startMediaChannelEventSubscription() {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else { return }
+
+    // 購読を開始してから Task で受信します (購読を開始する前に配送されたイベントは届きません)。
+    let events = mediaChannel.subscribeEvents()
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = Task { [weak self] in
+      for await event in events {
+        guard let self else { return }
+        switch event.kind {
+        case .streamAdded:
+          logger.info("[sample] mediaChannel.subscribeEvents: streamAdded")
+          self.handleUpdateStreams()
+        case .streamRemoved:
+          logger.info("[sample] mediaChannel.subscribeEvents: streamRemoved")
+          self.handleUpdateStreams()
+        case .videoEnabledChanged:
+          // 送信ストリーム (自分の映像) の変更だけを UI に反映します。
+          guard let isEnabled = event.isEnabled,
+            event.streamId == self.observedUpstream?.streamId
+          else {
+            break
+          }
+          self.handleUpstreamVideoSwitch(isEnabled: isEnabled)
+        case .audioEnabledChanged:
+          guard let isEnabled = event.isEnabled,
+            event.streamId == self.observedUpstream?.streamId
+          else {
+            break
+          }
+          self.handleUpstreamAudioSwitch(isEnabled: isEnabled)
+        case .disconnected:
+          logMediaChannelDisconnected(event, logger: logger)
+          self.handleDisconnect()
+        default:
+          break
+        }
+      }
     }
   }
 
@@ -261,7 +267,7 @@ class SpotlightVideoChatRoomViewController: UIViewController {
   }
 
   private func handleUpstreamAudioSwitch(isEnabled: Bool) {
-    // onSwitchAudio は enabled/disabled のみ通知されるため、disabled 時は現在状態から推測します
+    // audioEnabledChanged は enabled/disabled のみ通知されるため、disabled 時は現在状態から推測します
     if isEnabled {
       audioMuteController.updateButton(to: .enabled)
     } else if audioMuteController.currentState == .hardMuted {
@@ -308,16 +314,14 @@ extension SpotlightVideoChatRoomViewController {
   /// 接続されている配信者の数が変化したときに呼び出されるべき処理をまとめています。
   private func handleUpdateStreams() {
     // まずはmediaPublisherのmediaStreamを取得します。
-    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel,
-      mediaChannel.streams != nil
-    else {
+    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else {
       return
     }
 
     // mediaStreamを端末とそれ以外のユーザーのリストに分けます。
     // CameraVideoCapturer が管理するストリームと同一の ID であれば端末の配信ストリームです。
     let upstream = mediaChannel.senderStream
-    let downstreams = mediaChannel.receiverStreams ?? []
+    let downstreams = mediaChannel.receiverStreams
 
     // 同室の他のユーザーの配信を見るためのVideoViewを設定します。
     if downstreamVideoViews.count < downstreams.count {
@@ -360,6 +364,9 @@ extension SpotlightVideoChatRoomViewController {
     }
     upstream?.videoRenderer = upstreamVideoView
 
+    // 映像と音声の有効フラグの変更が送信ストリームのものか判定するために覚えておきます。
+    observedUpstream = upstream
+
     // カメラミュートの状態に応じてボタン等の UI を更新します。
     isCameraMuteButtonAvailable = upstream != nil
     if let upstream {
@@ -374,11 +381,6 @@ extension SpotlightVideoChatRoomViewController {
         toMuteState = .softMuted
       }
       cameraMuteController.updateButton(to: toMuteState)
-      upstream.handlers.onSwitchVideo = { @Sendable [weak self] isEnabled in
-        Task { @MainActor in
-          self?.handleUpstreamVideoSwitch(isEnabled: isEnabled)
-        }
-      }
     } else {
       // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの recording にしておく
       cameraMuteController.updateButton(to: .recording)
@@ -395,11 +397,6 @@ extension SpotlightVideoChatRoomViewController {
         : (audioMuteController.currentState == .hardMuted ? .hardMuted : .softMuted)
       audioMuteController.updateButton(to: nextState)
       applyInitialMicrophoneStateIfNeeded(mediaChannel: mediaChannel)
-      upstream.handlers.onSwitchAudio = { @Sendable [weak self] isEnabled in
-        Task { @MainActor in
-          self?.handleUpstreamAudioSwitch(isEnabled: isEnabled)
-        }
-      }
     } else {
       // アップストリームがない場合、処理は不要だがミュート状態はデフォルトの enabled にしておく
       audioMuteController.updateButton(to: .enabled)
@@ -411,7 +408,7 @@ extension SpotlightVideoChatRoomViewController {
 
   private func handleUpstreamVideoSwitch(isEnabled: Bool) {
     // 映像ハードミュートは内部的にソフトミュート実行しており videoEnabled が切り替わるため、
-    // このコールバックが来ても UI は維持します
+    // このイベントを受けても UI は維持します
     guard cameraMuteState != .hardMuted else { return }
     let nextState: CameraMuteState = isEnabled ? .recording : .softMuted
     cameraMuteController.updateButton(to: nextState)
@@ -424,12 +421,13 @@ extension SpotlightVideoChatRoomViewController {
     to nextState: CameraMuteState,
     upstream _: MediaStream
   ) {
-    // SoraSDKManager は MainActor 隔離であり、currentMediaChannel は MainActor 領域に
-    // 閉じている。ここで取得した参照は MainActor に所有されるため、
-    // Task 内で await する setVideoHardMute などの async 呼び出しへ転送しても
-    // データレースにならない (メソッド引数の借用参照を Task へ渡すと
-    // "sending ... risks causing data races" になる)
-    guard let mediaChannel = SoraSDKManager.shared.currentMediaChannel else { return }
+    // setVideoHardMute は SDK が nonisolated な非同期メソッドとして宣言しているため、呼び出し元の
+    // actor では実行されない (コンパイラの診断では @concurrent と表示される)。
+    // MainActor 領域に閉じている MediaChannel の参照をそのまま渡すと
+    // "sending 'mediaChannel' risks causing data races" になる。
+    // SDK 側は VideoHardMuteActor で操作を直列化するため nonisolated(unsafe) で扱う。
+    guard let channel = SoraSDKManager.shared.currentMediaChannel else { return }
+    nonisolated(unsafe) let mediaChannel = channel
 
     let previousState = cameraMuteState
 
@@ -443,7 +441,6 @@ extension SpotlightVideoChatRoomViewController {
         return
       }
       isCameraMuteOperationInProgress = true
-      // setVideoHardMute は async メソッドのため Task 内で実行します
       Task { [weak self] in
         do {
           // setVideoHardMute は async メソッドのため Task 内で実行します
@@ -504,10 +501,10 @@ extension SpotlightVideoChatRoomViewController {
   /// この切断は、能動的にこちらから切断した場合も、受動的に何らかのエラーなどが原因で切断されてしまった場合も、
   /// いずれの場合も含めます。
   private func handleDisconnect() {
-    // ハンドラを明示的に解除する
-    // 通常は起こらないが古いストリームからのコールバックが送られる可能性が0でないため
-    observedUpstream?.handlers.onSwitchVideo = nil
-    observedUpstream?.handlers.onSwitchAudio = nil
+    // 映像と音声の有効フラグの変更を購読しているタスクを終了します
+    // (通常は起こらないが古いストリームからのイベントが送られる可能性が0でないため)
+    mediaChannelEventTask?.cancel()
+    mediaChannelEventTask = nil
     observedUpstream = nil
     // カメラミュート関連の処理は中断するようにフラグ等を更新します
     cameraCapture = nil
