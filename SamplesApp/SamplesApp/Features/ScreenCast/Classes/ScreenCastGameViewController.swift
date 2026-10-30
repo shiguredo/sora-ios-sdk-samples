@@ -82,6 +82,24 @@ class ScreenCastGameViewController: UIViewController {
     layoutCameraThumbnail()
   }
 
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+
+    // メインメニューに戻るときなどに配信が継続しないように、接続中または接続試行中の
+    // 場合は切断します。配信設定画面を開くときはまだ接続していないため、
+    // 設定画面を表示してもここで切断されることはありません。
+    guard ScreenCastConnectionManager.shared.isActive else {
+      return
+    }
+    guard beginDisconnectIfNeeded() else {
+      return
+    }
+
+    // 閉じた画面は解放されるため、切断を非同期処理に預けず、ここで完了させます。
+    // 画面録画の停止は MediaChannel の切断処理でも行われるため、ここでは待ちません。
+    disconnectSession()
+  }
+
   // MARK: - Action
 
   /// 画面タッチ時のアクションを定義します。
@@ -185,13 +203,16 @@ class ScreenCastGameViewController: UIViewController {
 
       // 画面録画を停止します。切断時にもSDK側で停止されますが、明示的に停止しておきます。
       await self.stopScreenCapture()
-      teardownCameraThumbnail()
-
-      // 明示的に配信をストップしてから、画面を閉じるようにしています。
-      ScreenCastConnectionManager.shared.disconnect()
-      self.isDisconnecting = false
-      self.updateBarButtonItems()
+      self.disconnectSession()
     }
+  }
+
+  /// 明示的に配信をストップし、切断後の状態にします。
+  private func disconnectSession() {
+    teardownCameraThumbnail()
+    ScreenCastConnectionManager.shared.disconnect()
+    isDisconnecting = false
+    updateBarButtonItems()
   }
 
   /// 画面録画を停止します。
