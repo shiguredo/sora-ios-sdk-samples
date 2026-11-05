@@ -11,7 +11,7 @@
 
 ## develop
 
-- [UPDATE] Sora iOS SDK を 2026.5.0-canary.0 に上げる
+- [UPDATE] Sora iOS SDK を 2026.5.0 に上げる
   - @t-miya
 - [FIX] ScreenCast サンプルで配信中にサンプル画面を閉じても配信が切断されない不具合を修正する
   - 配信中にサンプル一覧画面に戻った場合に配信が切断されるようにする
