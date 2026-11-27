@@ -47,6 +47,11 @@ struct MainMenuView: View {
       subtitle: "DataChannel RPC",
       storyboardName: "RPC"
     ),
+    SampleItem(
+      title: "CallKit Sample",
+      subtitle: "システム通話 UI による音声通話",
+      storyboardName: "CallKit"
+    ),
   ]
 
   var body: some View {

@@ -11,10 +11,20 @@
 
 ## develop
 
+- [ADD] CallKit を利用した音声通話サンプルを追加する
+  - CallKit のシステム標準通話 UI から Sora に音声で発信する
+  - 着信には対応しない
+  - CallKit のミュートと保留に対応する
+  - SamplesApp 全体の `UIBackgroundModes` に `audio` と `voip` を追加する
+  - @t-miya
 - [UPDATE] Sora iOS SDK を 2026.5.1 に上げる
   - @t-miya
 - [FIX] ScreenCast サンプルで配信中にサンプル画面を閉じても配信が切断されない不具合を修正する
   - 配信中にサンプル一覧画面に戻った場合に配信が切断されるようにする
+  - @t-miya
+- [FIX] カメラとマイクの purpose string を `Info.plist` に追加する
+  - App Store Connect の ITMS-90683 (Missing Purpose String) の指摘に対応する
+  - `InfoPlist.strings` の purpose string を削除する
   - @t-miya
 
 ## 2026.4
